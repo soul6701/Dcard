@@ -34,8 +34,9 @@ class RecentPostCell: UITableViewCell {
         } else {
             _lbExcerpt.isHidden = true
             thumbnailImageView.isHidden = true
-            lbExcerpt.text = post.excerpt
+            lbExcerpt.text = post.title + "\n" + post.excerpt
         }
+        print("aaa: \(post.mediaMeta.count)")
         lbForumAndSchool.text = post.forumName + " " + (post.school ?? "匿名")
         LikeAndcommentCount.text = "❤️\(post.likeCount) 回應: \(post.commentCount)"
     }

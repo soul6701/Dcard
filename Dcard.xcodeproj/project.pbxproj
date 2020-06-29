@@ -11,6 +11,7 @@
 		2205D17E24A772C8004A4F41 /* RecentPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2205D17C24A772C8004A4F41 /* RecentPostCell.xib */; };
 		2205D18024A79C83004A4F41 /* RecentPostVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2205D17F24A79C83004A4F41 /* RecentPostVM.swift */; };
 		2205D18224A79E04004A4F41 /* PostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2205D18124A79E04004A4F41 /* PostRepository.swift */; };
+		2205D18524A98D07004A4F41 /* Extension_NavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2205D18424A98D07004A4F41 /* Extension_NavBar.swift */; };
 		221ADAF42499F0A100C25BD1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF32499F0A100C25BD1 /* AppDelegate.swift */; };
 		221ADAF62499F0A100C25BD1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */; };
 		221ADAF82499F0A100C25BD1 /* RecentPostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF72499F0A100C25BD1 /* RecentPostVC.swift */; };
@@ -22,6 +23,7 @@
 		221ADB262499F5C300C25BD1 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADB252499F5C300C25BD1 /* Post.swift */; };
 		227FD590249F409C00BC185C /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227FD58F249F409C00BC185C /* APIManager.swift */; };
 		227FD592249F43CC00BC185C /* APIInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227FD591249F43CC00BC185C /* APIInfo.swift */; };
+		228D419924AA49080077D29E /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D419824AA49080077D29E /* PostVC.swift */; };
 		934A0551A1012375356ACBFD /* Pods_Dcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,7 @@
 		2205D17C24A772C8004A4F41 /* RecentPostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecentPostCell.xib; sourceTree = "<group>"; };
 		2205D17F24A79C83004A4F41 /* RecentPostVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentPostVM.swift; sourceTree = "<group>"; };
 		2205D18124A79E04004A4F41 /* PostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRepository.swift; sourceTree = "<group>"; };
+		2205D18424A98D07004A4F41 /* Extension_NavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_NavBar.swift; sourceTree = "<group>"; };
 		221ADAF02499F0A100C25BD1 /* Dcard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dcard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		221ADAF32499F0A100C25BD1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -64,6 +67,7 @@
 		221ADB252499F5C300C25BD1 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		227FD58F249F409C00BC185C /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		227FD591249F43CC00BC185C /* APIInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIInfo.swift; sourceTree = "<group>"; };
+		228D419824AA49080077D29E /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dcard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		94CD125306D27448D8A0CBAD /* Pods-Dcard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dcard.debug.xcconfig"; path = "Target Support Files/Pods-Dcard/Pods-Dcard.debug.xcconfig"; sourceTree = "<group>"; };
 		B2E0A8FC2B2910AA863AA7DC /* Pods-Dcard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dcard.release.xcconfig"; path = "Target Support Files/Pods-Dcard/Pods-Dcard.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,8 +113,17 @@
 			children = (
 				2205D17B24A772C8004A4F41 /* RecentPostCell.swift */,
 				2205D17C24A772C8004A4F41 /* RecentPostCell.xib */,
+				228D419824AA49080077D29E /* PostVC.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		2205D18324A98CEA004A4F41 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				2205D18424A98D07004A4F41 /* Extension_NavBar.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		221ADAE72499F0A100C25BD1 = {
@@ -138,6 +151,7 @@
 		221ADAF22499F0A100C25BD1 /* Dcard */ = {
 			isa = PBXGroup;
 			children = (
+				2205D18324A98CEA004A4F41 /* Helper */,
 				2205D17A24A7725E004A4F41 /* View */,
 				221ADB242499F58A00C25BD1 /* Model */,
 				221ADB232499F19300C25BD1 /* Storyboard */,
@@ -146,7 +160,6 @@
 				221ADAF72499F0A100C25BD1 /* RecentPostVC.swift */,
 				2205D17F24A79C83004A4F41 /* RecentPostVM.swift */,
 				2205D18124A79E04004A4F41 /* PostRepository.swift */,
-				221ADAF92499F0A100C25BD1 /* Index.storyboard */,
 				221ADAFC2499F0A300C25BD1 /* Assets.xcassets */,
 				221ADAFE2499F0A300C25BD1 /* LaunchScreen.storyboard */,
 				221ADB012499F0A300C25BD1 /* Info.plist */,
@@ -175,6 +188,7 @@
 		221ADB232499F19300C25BD1 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				221ADAF92499F0A100C25BD1 /* Index.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -378,10 +392,12 @@
 				221ADAF42499F0A100C25BD1 /* AppDelegate.swift in Sources */,
 				227FD592249F43CC00BC185C /* APIInfo.swift in Sources */,
 				227FD590249F409C00BC185C /* APIManager.swift in Sources */,
+				2205D18524A98D07004A4F41 /* Extension_NavBar.swift in Sources */,
 				221ADAF62499F0A100C25BD1 /* SceneDelegate.swift in Sources */,
 				221ADB262499F5C300C25BD1 /* Post.swift in Sources */,
 				2205D18224A79E04004A4F41 /* PostRepository.swift in Sources */,
 				2205D18024A79C83004A4F41 /* RecentPostVM.swift in Sources */,
+				228D419924AA49080077D29E /* PostVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

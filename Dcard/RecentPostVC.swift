@@ -39,7 +39,8 @@ class RecentPostVC: UIViewController {
             }).disposed(by: disposeBag)
         viewModel.whysoserious.observeOn(MainScheduler.instance).subscribe(onNext: { posts in
             self.postList = posts
-            self.showList = self.postList.filter({$0.gender == "F"})
+//            self.showList = self.postList.filter({$0.school.contains("弘光")})
+            self.showList = self.postList
             self.tableView.reloadData()
         }, onError: { error in
             print(error)
@@ -60,6 +61,12 @@ extension RecentPostVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = self.storyboard?.instantiateViewController(identifier: "PostVC") as! PostVC
+        vc.setContent(post: showList[indexPath.row])
+        vc.navigationItem.title = showList[indexPath.row].title
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

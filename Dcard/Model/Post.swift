@@ -23,7 +23,7 @@ public struct Post {
 //    let department:
     let mediaMeta: [MediaMeta]
     
-    init(id: String, title: String, excerpt: String, createdAt: String, commentCount: String, likeCount: String, forumName: String, gender: String, school: String, mediaMeta: [MediaMeta]?) {
+    init(id: String, title: String, excerpt: String, createdAt: String, commentCount: String, likeCount: String, forumName: String, gender: String, school: String, mediaMeta: [MediaMeta]) {
         self.id = id
         self.title = title
         self.excerpt = excerpt
@@ -33,7 +33,7 @@ public struct Post {
         self.forumName = forumName
         self.gender = gender
         self.school = school
-        self.mediaMeta = [MediaMeta]()
+        self.mediaMeta = mediaMeta
     }
 }
 public struct MediaMeta {

@@ -38,6 +38,7 @@ extension APIManager {
                     }
                 }
             }
+            print("\(_urlString)")
             guard let url = URL(string: _urlString) else {
                 printError(title: "url錯誤", error: "", content: _urlString)
                 return Disposables.create()
@@ -67,12 +68,16 @@ extension APIManager {
     }
 }
 extension APIManager {
-    func getPost(limit: Int) -> Observable<APIResult> {
+    func getPost(limit: String) -> Observable<APIResult> {
         let body = ["limit": limit]
         return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.post, body: body)
     }
-    func getWhysoserious(limit: Int) -> Observable<APIResult> {
+    func getWhysoserious(limit: String) -> Observable<APIResult> {
         let body = ["limit": limit]
+        return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.whysoserious, body: body)
+    }
+    func getBeforePost(id: String) -> Observable<APIResult> {
+        let body = ["limit": "100", "before": id] as [String : Any]
         return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.whysoserious, body: body)
     }
 }

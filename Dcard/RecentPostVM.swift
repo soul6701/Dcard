@@ -34,14 +34,14 @@ extension RecentPostVM: RecentPostInterface {
         return _recentPost
     }
     func getRecentPost() {
-        postRepository.getRecentPost(limit: 10).subscribe(onNext: { post in
+        postRepository.getRecentPost(limit: "10").subscribe(onNext: { post in
             self._recentPost.onNext(post)
         }, onError: { error in
             self._recentPost.onError(error)
             }).disposed(by: disposeBag)
     }
     func getWhysoserious() {
-        postRepository.getWhysoserious(limit: 100).subscribe(onNext: { post in
+        postRepository.getWhysoserious(limit: "100").subscribe(onNext: { post in
             self._whysoserious.onNext(post)
         }, onError: { error in
             self._whysoserious.onError(error)

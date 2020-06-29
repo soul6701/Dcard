@@ -12,27 +12,27 @@ import RxSwift
 
 
 protocol PostRepositoryInterface {
-    func getRecentPost(limit: Int) -> Observable<[Post]>
-    func getWhysoserious(limit: Int) -> Observable<[Post]>
+    func getRecentPost(limit: String) -> Observable<[Post]>
+    func getWhysoserious(limit: String) -> Observable<[Post]>
 }
 class PostRepository {
     public static let shared = PostRepository()
     private let disposeBag = DisposeBag()
-    
+    private var posts = [Post]()
     let apiManager: APIManager
     init(apiManager: APIManager = APIManager.shared) {
         self.apiManager = apiManager
     }
 }
 extension PostRepository: PostRepositoryInterface {
-    func getRecentPost(limit: Int) -> Observable<[Post]> {
+    func getRecentPost(limit: String) -> Observable<[Post]> {
         let subject = PublishSubject<[Post]>()
         APIManager.shared.getPost(limit: limit).subscribe(onNext: { result in
             guard let count = result.json?.arrayObject?.count else {
                 print("JSON分析錯誤")
                 return
             }
-            var posts = [Post]()
+            self.posts = [Post]()
             for index in 0..<count {
                 let id = result.json![index]["id"].stringValue
                 let title = result.json![index]["title"].stringValue
@@ -48,23 +48,22 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, school: school, mediaMeta: mediaMeta))
+                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, school: school, mediaMeta: mediaMeta))
             }
-            subject.onNext(posts)
+            subject.onNext(self.posts)
         }, onError: { error in
             subject.onError(error)
         }).disposed(by: disposeBag)
         
         return subject.asObserver()
     }
-    func getWhysoserious(limit: Int) -> Observable<[Post]> {
+    func getWhysoserious(limit: String) -> Observable<[Post]> {
         let subject = PublishSubject<[Post]>()
         APIManager.shared.getWhysoserious(limit: limit).subscribe(onNext: { result in
             guard let count = result.json?.arrayObject?.count else {
                 print("JSON分析錯誤")
                 return
             }
-            var posts = [Post]()
             for index in 0..<count {
                 let id = result.json![index]["id"].stringValue
                 let title = result.json![index]["title"].stringValue
@@ -80,13 +79,41 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, school: school, mediaMeta: mediaMeta))
+                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, school: school, mediaMeta: mediaMeta))
             }
-            subject.onNext(posts)
+//            for _ in 0..<10 {
+//                self.getBeforePost(id: self.posts[self.posts.count - 1].id)
+//            }
+            subject.onNext(self.posts)
         }, onError: { error in
             subject.onError(error)
         }).disposed(by: disposeBag)
         
         return subject.asObserver()
+    }
+    private func getBeforePost(id: String) {
+        APIManager.shared.getBeforePost(id: id).subscribe(onNext: { result in
+            guard let count = result.json?.arrayObject?.count else {
+                print("JSON分析錯誤")
+                return
+            }
+            for index in 0..<count {
+                let id = result.json![index]["id"].stringValue
+                let title = result.json![index]["title"].stringValue
+                let excerpt = result.json![index]["excerpt"].stringValue
+                let createdAt = result.json![index]["createdAt"].stringValue
+                let commentCount = result.json![index]["commentCount"].stringValue
+                let likeCount = result.json![index]["likeCount"].stringValue
+                let forumName = result.json![index]["forumName"].stringValue
+                let gender = result.json![index]["gender"].stringValue
+                let school = result.json![index]["school"].stringValue
+                var mediaMeta = [MediaMeta]()
+                let list = result.json![index]["mediaMeta"].arrayValue
+                for mediaMetaJson in list {
+                    mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
+                }
+                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, school: school, mediaMeta: mediaMeta))
+            }
+        }).disposed(by: disposeBag)
     }
 }
