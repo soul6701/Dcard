@@ -11,5 +11,6 @@ pod 'SwiftyGif'#, '4.1.0'
 pod ‘FSPagerView‘, '~> 0.8.3'
 pod 'MarqueeLabel'
 pod 'IQKeyboardManagerSwift', '~> 6.4.2'
+pod 'Kingfisher'
 
 end

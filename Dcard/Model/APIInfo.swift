@@ -18,7 +18,8 @@ enum HttpMethod: String {
 class APIInfo {
     static var ServiceDomain = "https://dcard.tw/"
     static var URL_Domain: String {
-        return "\(ServiceDomain)_api"
+        return "\(ServiceDomain)_api/"
     }
-    static var limit = 100
+    static var post = "posts"
+    static var whysoserious = "forums/whysoserious/posts"
 }

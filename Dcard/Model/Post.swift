@@ -9,18 +9,21 @@
 import UIKit
 
 public struct Post {
-    let id: Int
+    let id: String
     let title: String
     let excerpt: String
     let createdAt: String
-    let commentCount: Int
-    let likeCount: Int
+    let commentCount: String
+    let likeCount: String
     let forumName: String
     let gender: String
-    let school: String?
+//    let anonymousSchool: Bool
+//    let anonymousDepartment: Bool
+    let school: String
+//    let department:
     let mediaMeta: [MediaMeta]
     
-    init(id: Int, title: String, excerpt: String, createdAt: String, commentCount: Int, likeCount: Int, forumName: String, gender: String, school: String, mediaMeta: [MediaMeta]) {
+    init(id: String, title: String, excerpt: String, createdAt: String, commentCount: String, likeCount: String, forumName: String, gender: String, school: String, mediaMeta: [MediaMeta]?) {
         self.id = id
         self.title = title
         self.excerpt = excerpt

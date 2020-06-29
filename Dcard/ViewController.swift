@@ -8,15 +8,19 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class RecentPostVC: UIViewController {
 
+    @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        NSLog("123")
-        
+        confiTableView()
+    }
+    func confiTableView() {
+        tableView.register(RecentPostCell.self, forCellReuseIdentifier: "cell")
+        tableView.delegate = self
     }
 
-
 }
+extension RecentPostVC
 

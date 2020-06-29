@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2205D17D24A772C8004A4F41 /* RecentPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2205D17B24A772C8004A4F41 /* RecentPostCell.swift */; };
+		2205D17E24A772C8004A4F41 /* RecentPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2205D17C24A772C8004A4F41 /* RecentPostCell.xib */; };
+		2205D18024A79C83004A4F41 /* RecentPostVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2205D17F24A79C83004A4F41 /* RecentPostVM.swift */; };
+		2205D18224A79E04004A4F41 /* PostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2205D18124A79E04004A4F41 /* PostRepository.swift */; };
 		221ADAF42499F0A100C25BD1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF32499F0A100C25BD1 /* AppDelegate.swift */; };
 		221ADAF62499F0A100C25BD1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */; };
-		221ADAF82499F0A100C25BD1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF72499F0A100C25BD1 /* ViewController.swift */; };
+		221ADAF82499F0A100C25BD1 /* RecentPostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF72499F0A100C25BD1 /* RecentPostVC.swift */; };
 		221ADAFB2499F0A100C25BD1 /* Index.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 221ADAF92499F0A100C25BD1 /* Index.storyboard */; };
 		221ADAFD2499F0A300C25BD1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 221ADAFC2499F0A300C25BD1 /* Assets.xcassets */; };
 		221ADB002499F0A300C25BD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 221ADAFE2499F0A300C25BD1 /* LaunchScreen.storyboard */; };
@@ -39,10 +43,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2205D17B24A772C8004A4F41 /* RecentPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentPostCell.swift; sourceTree = "<group>"; };
+		2205D17C24A772C8004A4F41 /* RecentPostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecentPostCell.xib; sourceTree = "<group>"; };
+		2205D17F24A79C83004A4F41 /* RecentPostVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentPostVM.swift; sourceTree = "<group>"; };
+		2205D18124A79E04004A4F41 /* PostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRepository.swift; sourceTree = "<group>"; };
 		221ADAF02499F0A100C25BD1 /* Dcard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dcard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		221ADAF32499F0A100C25BD1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		221ADAF72499F0A100C25BD1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		221ADAF72499F0A100C25BD1 /* RecentPostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentPostVC.swift; sourceTree = "<group>"; };
 		221ADAFA2499F0A100C25BD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Index.storyboard; sourceTree = "<group>"; };
 		221ADAFC2499F0A300C25BD1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		221ADAFF2499F0A300C25BD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -96,6 +104,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		2205D17A24A7725E004A4F41 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2205D17B24A772C8004A4F41 /* RecentPostCell.swift */,
+				2205D17C24A772C8004A4F41 /* RecentPostCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		221ADAE72499F0A100C25BD1 = {
 			isa = PBXGroup;
 			children = (
@@ -121,11 +138,14 @@
 		221ADAF22499F0A100C25BD1 /* Dcard */ = {
 			isa = PBXGroup;
 			children = (
+				2205D17A24A7725E004A4F41 /* View */,
 				221ADB242499F58A00C25BD1 /* Model */,
 				221ADB232499F19300C25BD1 /* Storyboard */,
 				221ADAF32499F0A100C25BD1 /* AppDelegate.swift */,
 				221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */,
-				221ADAF72499F0A100C25BD1 /* ViewController.swift */,
+				221ADAF72499F0A100C25BD1 /* RecentPostVC.swift */,
+				2205D17F24A79C83004A4F41 /* RecentPostVM.swift */,
+				2205D18124A79E04004A4F41 /* PostRepository.swift */,
 				221ADAF92499F0A100C25BD1 /* Index.storyboard */,
 				221ADAFC2499F0A300C25BD1 /* Assets.xcassets */,
 				221ADAFE2499F0A300C25BD1 /* LaunchScreen.storyboard */,
@@ -285,6 +305,7 @@
 			files = (
 				221ADB002499F0A300C25BD1 /* LaunchScreen.storyboard in Resources */,
 				221ADAFD2499F0A300C25BD1 /* Assets.xcassets in Resources */,
+				2205D17E24A772C8004A4F41 /* RecentPostCell.xib in Resources */,
 				221ADAFB2499F0A100C25BD1 /* Index.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -352,12 +373,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				221ADAF82499F0A100C25BD1 /* ViewController.swift in Sources */,
+				221ADAF82499F0A100C25BD1 /* RecentPostVC.swift in Sources */,
+				2205D17D24A772C8004A4F41 /* RecentPostCell.swift in Sources */,
 				221ADAF42499F0A100C25BD1 /* AppDelegate.swift in Sources */,
 				227FD592249F43CC00BC185C /* APIInfo.swift in Sources */,
 				227FD590249F409C00BC185C /* APIManager.swift in Sources */,
 				221ADAF62499F0A100C25BD1 /* SceneDelegate.swift in Sources */,
 				221ADB262499F5C300C25BD1 /* Post.swift in Sources */,
+				2205D18224A79E04004A4F41 /* PostRepository.swift in Sources */,
+				2205D18024A79C83004A4F41 /* RecentPostVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
