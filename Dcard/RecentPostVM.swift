@@ -13,38 +13,47 @@ import RxSwift
 protocol RecentPostInterface {
     var recentPost: PublishSubject<[Post]> { get }
     var whysoserious: PublishSubject<[Post]> { get }
+    var comment: PublishSubject<([Comment], Int)> { get }
     func getRecentPost()
     func getWhysoserious()
+    func getComment(list: [Post], index: Int)
 }
-class RecentPostVM {
+class HomeVM {
     private let _recentPost = PublishSubject<[Post]>()
     private let _whysoserious = PublishSubject<[Post]>()
-    private let postRepository: PostRepositoryInterface
+    private let _comment = PublishSubject<([Comment], Int)>()
+    private let postRepository = PostRepository.shared
     private let disposeBag = DisposeBag()
-    
-    init(postRepository: PostRepositoryInterface = PostRepository.shared) {
-        self.postRepository = postRepository
-    }
 }
-extension RecentPostVM: RecentPostInterface {
+extension HomeVM: RecentPostInterface {
     var whysoserious: PublishSubject<[Post]> {
         return _whysoserious
     }
     var recentPost: PublishSubject<[Post]> {
         return _recentPost
     }
+    var comment: PublishSubject<([Comment], Int)> {
+        return _comment
+    }
     func getRecentPost() {
-        postRepository.getRecentPost(limit: "10").subscribe(onNext: { post in
-            self._recentPost.onNext(post)
+        postRepository.getRecentPost(limit: "10").subscribe(onNext: { posts in
+            self._recentPost.onNext(posts)
         }, onError: { error in
             self._recentPost.onError(error)
             }).disposed(by: disposeBag)
     }
     func getWhysoserious() {
-        postRepository.getWhysoserious(limit: "100").subscribe(onNext: { post in
-            self._whysoserious.onNext(post)
+        postRepository.getWhysoserious(limit: "100").subscribe(onNext: { posts in
+            self._whysoserious.onNext(posts)
         }, onError: { error in
             self._whysoserious.onError(error)
+            }).disposed(by: disposeBag)
+    }
+    func getComment(list: [Post], index: Int) {
+        postRepository.getComment(id: list[index].id).subscribe(onNext: { comments in
+            self._comment.onNext((comments, index))
+        }, onError: { error in
+        self._comment.onError(error)
             }).disposed(by: disposeBag)
     }
 }

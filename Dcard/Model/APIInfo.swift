@@ -20,6 +20,8 @@ class APIInfo {
     static var URL_Domain: String {
         return "\(ServiceDomain)_api/"
     }
-    static var post = "posts"
+    static var posts = "posts"
+    static var comments = "comments"
     static var whysoserious = "forums/whysoserious/posts"
+    static var forums = "forums"
 }

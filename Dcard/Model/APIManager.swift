@@ -22,9 +22,8 @@ class APIManager {
 extension APIManager {
     static func loadAPI(httpMethod: HttpMethod = .GET, urlString: String, body: [String:Any]?) -> Observable<APIResult> {
         return Observable.create { (observer) -> Disposable in
-            var _body = (body?.filter { $0.value != nil } ?? [:]) as [String:Any]
+            let _body = (body?.filter { $0.value != nil } ?? [:]) as [String:Any]
             var _urlString = urlString
-            let jsonData = try? JSONSerialization.data(withJSONObject: body)
             if httpMethod == .GET {
                 for (index, key) in _body.keys.enumerated() {
                     guard let value = _body[key] else {continue}
@@ -38,7 +37,7 @@ extension APIManager {
                     }
                 }
             }
-            print("\(_urlString)")
+            print("API: \(_urlString)")
             guard let url = URL(string: _urlString) else {
                 printError(title: "url錯誤", error: "", content: _urlString)
                 return Disposables.create()
@@ -70,15 +69,25 @@ extension APIManager {
 extension APIManager {
     func getPost(limit: String) -> Observable<APIResult> {
         let body = ["limit": limit]
-        return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.post, body: body)
+        return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.posts, body: body)
     }
     func getWhysoserious(limit: String) -> Observable<APIResult> {
         let body = ["limit": limit]
         return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.whysoserious, body: body)
     }
     func getBeforePost(id: String) -> Observable<APIResult> {
-        let body = ["limit": "100", "before": id] as [String : Any]
+        let body = ["limit": "100", "before": id]
         return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.whysoserious, body: body)
+    }
+    func getComment(id: String) -> Observable<APIResult> {
+        return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.posts + "/\(id)/" + APIInfo.comments, body: nil)
+    }
+    func getForums() -> Observable<APIResult> {
+        return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.forums, body: nil)
+    }
+    func getPosts(alias: String, limit: String) -> Observable<APIResult> {
+        let body = ["limit": limit]
+        return APIManager.loadAPI(urlString: APIInfo.URL_Domain + APIInfo.forums + "/\(alias)/" + APIInfo.posts, body: body)
     }
 }
 
