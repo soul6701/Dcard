@@ -11,16 +11,16 @@ import UIKit
 enum PageType: String {
     case Home = "Home"
     case Catalog = "Catalog"
-    case Card = "Card"
+    case Game = "Game"
     case Notify = "Notify"
     case Profile = "Profile"
 }
-protocol setupPageDelegate {
-    func setupPage(vc: UIViewController)
+protocol ToolbarViewDelegate {
+    func setupPage(_ page: PageType?)
 }
 class ToolbarView: UIView {
     private static var _shared: ToolbarView?
-    private static var delegate: setupPageDelegate?
+    private var delegate: ToolbarViewDelegate?
     
     static var shared: ToolbarView {
         if _shared == nil {
@@ -28,24 +28,27 @@ class ToolbarView: UIView {
         }
         return _shared!
     }
-        
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-    @IBAction func toHome(_ sender: UIButton) {
-        setPage(.Home)
-    }
-    @IBAction func toCatalog(_ sender: UIButton) {
-        setPage(.Catalog)
-    }
-    @IBAction func toGame(_ sender: UIButton) {
-        setPage(.Card)
-    }
-    @IBAction func toNotify(_ sender: UIButton) {
-        setPage(.Notify)
-    }
-    @IBAction func toProfile(_ sender: UIButton) {
-        setPage(.Profile)
+    @IBAction func didClickPageButton(_ sender: UIButton) {
+        var page: PageType?
+        switch sender.tag {
+        case 0:
+            page = .Home
+        case 1:
+            page = .Catalog
+        case 2:
+            page = .Game
+        case 3:
+            page = .Notify
+        case 4:
+            page = .Profile
+        default:
+            break
+        }
+        self.delegate?.setupPage(page)
     }
     
     func show(_ willShow: Bool) {
@@ -61,23 +64,7 @@ class ToolbarView: UIView {
             removeFromSuperview()
         }
     }
-    func setDelegate(delegate: setupPageDelegate?) {
-        ToolbarView.delegate = delegate
-    }
-    private func setPage(_ page: PageType) {
-        var vc: UIViewController!
-        
-        switch page {
-        case .Card:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! GameVC
-        case .Catalog:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! CatalogVC
-        case .Home:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! HomeVC
-        case .Notify:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! NotifyVC
-        case .Profile:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! ProfileVC
-        }
+    func setDelegate(delegate: ToolbarViewDelegate?) {
+        self.delegate = delegate
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -21,39 +21,39 @@
                             <color key="backgroundColor" red="0.48172624143835618" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" backgroundImage="home"/>
                             <connections>
-                                <action selector="toHome:" destination="iN0-l3-epB" eventType="touchUpInside" id="zhv-4x-bVf"/>
+                                <action selector="didClickPageButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="zhv-4x-bVf"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ict-TD-gfk">
+                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ict-TD-gfk">
                             <rect key="frame" x="130.5" y="0.0" width="127.5" height="138"/>
                             <color key="backgroundColor" red="0.48172624143835618" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" backgroundImage="puzzle"/>
                             <connections>
-                                <action selector="toCatalog:" destination="iN0-l3-epB" eventType="touchUpInside" id="W0r-X7-ify"/>
+                                <action selector="didClickPageButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="Fu3-Su-eLi"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lk3-pk-ZjS">
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lk3-pk-ZjS">
                             <rect key="frame" x="261" y="0.0" width="127" height="138"/>
                             <color key="backgroundColor" red="0.48172624143835618" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" backgroundImage="card"/>
                             <connections>
-                                <action selector="toGame:" destination="iN0-l3-epB" eventType="touchUpInside" id="vUx-AY-jDu"/>
+                                <action selector="didClickPageButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="hja-Us-7J8"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IBO-84-PWU">
+                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IBO-84-PWU">
                             <rect key="frame" x="391" y="0.0" width="127.5" height="138"/>
                             <color key="backgroundColor" red="0.48172624143835618" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" backgroundImage="ringtone"/>
                             <connections>
-                                <action selector="toNotify:" destination="iN0-l3-epB" eventType="touchUpInside" id="JZe-NT-8fX"/>
+                                <action selector="didClickPageButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="FR1-t4-IGo"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kh9-pb-Teb">
+                        <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kh9-pb-Teb">
                             <rect key="frame" x="521.5" y="0.0" width="127.5" height="138"/>
                             <color key="backgroundColor" red="0.48172624143835618" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" backgroundImage="profile"/>
                             <connections>
-                                <action selector="toProfile:" destination="iN0-l3-epB" eventType="touchUpInside" id="WFs-TV-Ha0"/>
+                                <action selector="didClickPageButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="HeT-0l-Yrv"/>
                             </connections>
                         </button>
                     </subviews>

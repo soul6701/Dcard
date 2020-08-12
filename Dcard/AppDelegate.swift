@@ -16,6 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         print("height: \(UIScreen.main.bounds.height) width: \(UIScreen.main.bounds.width)")
+        let navBar = UINavigationBar.appearance()
+        navBar.barTintColor = .cyan
+        Thread.sleep(forTimeInterval: 1)
+        
+        
         return true
     }
 

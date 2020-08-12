@@ -13,6 +13,7 @@ import RxSwift
 class HomeVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var bottomSpace: NSLayoutConstraint!
     private var viewModel: RecentPostInterface!
     private var disposeBag = DisposeBag()
 //    private var forumArray = [Forum]()
@@ -32,6 +33,7 @@ class HomeVC: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+         self.navigationController?.navigationBar.isHidden = false
         ToolbarView.shared.show(true)
         guard let currentForum = currentForum else {
             viewModel.getForums()
@@ -118,37 +120,39 @@ extension HomeVC {
 }
 extension HomeVC {
     private func initView() {
-        window = UIApplication.shared.windows.first!
+        ToolbarView.shared.setDelegate(delegate: self)
+        self.window = UIApplication.shared.windows.first!
+        self.bottomSpace.constant = 80
         let btnMenu = UIButton()
         btnMenu.setImage(UIImage(named: "menu"), for: .normal)
-        btnMenu.addTarget(self, action: #selector(showMenu), for: .touchUpInside)
+        btnMenu.addTarget(self, action: #selector(self.showMenu), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: btnMenu)
     }
     private func confiTableView() {
-        tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
-        tableView.delegate = self
-        tableView.dataSource = self
+        self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
     }
     private func confiDrawer(_ forums: [Forum]) {
         guard let insets = UIApplication.shared.windows.first?.safeAreaInsets else {
             return
         }
-        viewMenu = UINib(nibName: "Drawer", bundle: nil).instantiate(withOwner: nil, options: nil).first as? Drawer
-        viewMenu?.frame = CGRect(x: -self.view.bounds.width / 3, y: insets.top, width: 200, height: self.view.bounds.height - insets.top)
-        viewMenu?.layer.zPosition = 7
-        viewMenu?.setContent(forumList: forums)
-        viewMenu?.setDelegate(delegate: self)
+        self.viewMenu = UINib(nibName: "Drawer", bundle: nil).instantiate(withOwner: nil, options: nil).first as? Drawer
+        self.viewMenu?.frame = CGRect(x: -self.view.bounds.width / 3, y: insets.top, width: 200, height: self.view.bounds.height - insets.top)
+        self.viewMenu?.layer.zPosition = 7
+        self.viewMenu?.setContent(forumList: forums)
+        self.viewMenu?.setDelegate(delegate: self)
         
-        btnBg.layer.zPosition = 6
-        btnBg.frame = view.frame
-        btnBg.backgroundColor = .black
-        btnBg.alpha = 0.5
-        btnBg.addTarget(self, action: #selector(close), for: .touchUpInside)
+        self.btnBg.layer.zPosition = 6
+        self.btnBg.frame = view.frame
+        self.btnBg.backgroundColor = .black
+        self.btnBg.alpha = 0.5
+        self.btnBg.addTarget(self, action: #selector(self.close), for: .touchUpInside)
     }
     @objc private func showMenu() {
-        window.addSubview(btnBg)
-        if let viewMenu = viewMenu {
-            window.addSubview(viewMenu)
+        self.window.addSubview(btnBg)
+        if let viewMenu = self.viewMenu {
+            self.window.addSubview(viewMenu)
             UIView.animate(withDuration: 1, animations: {
                 viewMenu.frame.origin.x += self.view.bounds.width / 3
             })
@@ -167,8 +171,31 @@ extension HomeVC: DrawerDelegate {
     func checkOutPage(page: Forum) {
         self.currentForum = page
         self.navigationItem.title = page.name
-        close()
+        self.close()
         viewModel.getPosts(alias: page.alias)
+    }
+}
+extension HomeVC: ToolbarViewDelegate {
+    func setupPage(_ page: PageType?) {
+        
+        var vc = UIViewController()
+        guard let page = page else {
+            return
+        }
+        switch page {
+        case .Game:
+            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! GameVC
+        case .Catalog:
+            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! CatalogVC
+        case .Home:
+            self.navigationController?.popToRootViewController(animated: false)
+            return
+        case .Notify:
+            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! NotifyVC
+        case .Profile:
+            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! ProfileVC
+        }
+        self.navigationController?.pushViewController(vc, animated: false)
     }
 }
 
