@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("height: \(UIScreen.main.bounds.height) width: \(UIScreen.main.bounds.width)")
         let navBar = UINavigationBar.appearance()
         navBar.barTintColor = .cyan
-        Thread.sleep(forTimeInterval: 1)
+        Thread.sleep(forTimeInterval: 0.6)
         
         
         return true

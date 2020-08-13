@@ -58,7 +58,7 @@ class ToolbarView: UIView {
             window.addSubview(self)
             
             translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([leadingAnchor.constraint(equalTo: window.leadingAnchor), bottomAnchor.constraint(equalTo: window.bottomAnchor), heightAnchor.constraint(equalToConstant: Size.screenWidth / 5), widthAnchor.constraint(equalToConstant: Size.screenWidth)])
+            NSLayoutConstraint.activate([leadingAnchor.constraint(equalTo: window.leadingAnchor), bottomAnchor.constraint(equalTo: window.bottomAnchor), heightAnchor.constraint(equalToConstant: 80), widthAnchor.constraint(equalToConstant: Size.screenWidth)])
             print("screenHeight: \(Size.screenHeight) screenWidth: \(Size.screenWidth)")
         } else {
             removeFromSuperview()

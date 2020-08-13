@@ -9,81 +9,45 @@
 import UIKit
 import UIView_Shake
 
+enum SegmentedControlType: Int {
+    case calculator = 0
+    case skitch = 1
+}
 class GameVC: UIViewController {
-    
-    @IBOutlet weak var lbResult: UILabel!
-    @IBOutlet weak var lbRecord: UILabel!
-    
-    var num = ""
-    var record = ""
-    var formatter: NumberFormatter?
-    var firstNum: Double?
-    var secondNum: Double?
-    var operation: String?
+    @IBOutlet weak var viewSeg: UISegmentedControl!
+    var viewPrintVC: UIViewController!
+    var selectedVC: UIViewController?
+    var selected = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
-        self.formatter = NumberFormatter()
+        initView()
     }
     
-    @IBAction func onClickNum(_ sender: UIButton) {
-        self.num += "\(sender.tag)"
-        self.record += "\(sender.tag)"
-       
-        let _num = self.formatter?.number(from: self.num) as! Double
-        if self.operation == nil {
-            self.firstNum = _num
-            self.record = self.num
-        } else {
-            self.secondNum = _num
+    @IBAction func onClickSeg(_ sender: UISegmentedControl) {
+        if selected != viewSeg.selectedSegmentIndex || selectedVC == nil {
+            selected = viewSeg.selectedSegmentIndex
+            
+            selectedVC?.removeFromParent()
+            selectedVC?.view.removeFromSuperview()
+            
+            var vc: UIViewController!
+            let type: SegmentedControlType = SegmentedControlType.init(rawValue: selected)!
+            switch type {
+            case .calculator:
+                vc = CalculatorVC()
+            case .skitch:
+                vc = SkitchVC()
+            }
+            self.addChild(vc)
+            self.view.insertSubview(vc.view, at: 0)
+            vc.didMove(toParent: self)
+            selectedVC = vc
         }
-        self.lbResult.text = self.num
-        self.lbRecord.text = self.record
     }
-    @IBAction func onClickClear(_ sender: UIButton) {
-        self.num = ""
-        self.record = ""
-        self.operation = nil
-        self.lbResult.text = "0"
-        self.lbRecord.text = ""
-    }
-    @IBAction func onClickCal(_ sender: UIButton) {
-        if let operation = self.operation, let n1 = self.firstNum, let n2 = self.secondNum {
-            var temp = 0.0
-            switch operation {
-            case "+":
-                temp = n1 + n2
-            case "-":
-                temp = n1 - n2
-            case "x":
-                temp = n1 * n2
-            case "/":
-                temp = n1 / n2
-            default:
-                break
-            }
-            self.firstNum = temp
-            var str = "\(temp)"
-            //若為整數移除小數點
-            if floor(temp) == temp {
-                str = "\((Int)(temp))"
-            }
-            //限制數字字數
-            if str.count > 8 {
-                str = String(str.prefix(8))
-            }
-            self.lbResult.text = str
-        }
-        self.num = ""
-        if sender.titleLabel?.text != "=" {
-            self.operation = sender.titleLabel?.text
-            self.record += sender.titleLabel?.text ?? ""
-        } else {
-            self.view.shake(10, withDelta: 5)
-            self.operation = nil
-            self.record = "\(self.firstNum!)"
-        }
-        self.lbRecord.text = self.record
+    func initView() {
+        self.onClickSeg(viewSeg)
+        self.viewSeg.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 25), NSAttributedString.Key.foregroundColor: UIColor.red], for: .selected)
     }
 }

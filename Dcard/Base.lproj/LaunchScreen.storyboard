@@ -21,7 +21,7 @@
                                     <constraint firstAttribute="width" secondItem="oxi-zd-1Q7" secondAttribute="height" multiplier="1:1" id="HV5-wQ-amT"/>
                                 </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchName" translatesAutoresizingMaskIntoConstraints="NO" id="hY7-1s-ucB">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hY7-1s-ucB">
                                 <rect key="frame" x="0.0" y="674" width="414" height="128"/>
                             </imageView>
                         </subviews>
@@ -47,7 +47,6 @@
         <!--Navigation Controller-->
         <scene sceneID="ffI-ma-tGD">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kGj-39-vBn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="CoR-ag-RzN" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wZn-dk-cnQ">
@@ -60,12 +59,12 @@
                         <segue destination="01J-lp-oVM" kind="relationship" relationship="rootViewController" id="REQ-V7-ve3"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kGj-39-vBn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-529" y="127"/>
         </scene>
     </scenes>
     <resources>
-        <image name="launchName" width="500" height="200"/>
         <image name="launchPhoto" width="717" height="614"/>
     </resources>
 </document>

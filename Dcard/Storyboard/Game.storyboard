@@ -15,279 +15,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="duu-0j-qDj">
-                                <rect key="frame" x="0.0" y="313" width="414" height="469"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Tal-mf-Bfo">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="89"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NWm-tv-frD">
-                                                <rect key="frame" x="0.0" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="C">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickClear:" destination="PER-pR-sN8" eventType="touchUpInside" id="v5P-go-aG3"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zkd-8h-zhe">
-                                                <rect key="frame" x="105" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vES-2D-Wgl">
-                                                <rect key="frame" x="210" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7lH-Dn-cXE">
-                                                <rect key="frame" x="315" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="/">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickCal:" destination="PER-pR-sN8" eventType="touchUpInside" id="rBg-wo-PhD"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="WUd-7t-dRG">
-                                        <rect key="frame" x="0.0" y="95" width="414" height="89"/>
-                                        <subviews>
-                                            <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pbT-1e-nMH">
-                                                <rect key="frame" x="0.0" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="7">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="Y8J-Xo-seq"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zYY-8K-pKh">
-                                                <rect key="frame" x="105" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="8">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="j8b-c2-u1w"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTn-Rp-T0o">
-                                                <rect key="frame" x="210" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="9">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="Ytg-KX-4nC"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gV3-xe-WUr">
-                                                <rect key="frame" x="315" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="x">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickCal:" destination="PER-pR-sN8" eventType="touchUpInside" id="RYH-vr-VIU"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="BmQ-6D-7YM">
-                                        <rect key="frame" x="0.0" y="190" width="414" height="89"/>
-                                        <subviews>
-                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1H9-Xa-X7P">
-                                                <rect key="frame" x="0.0" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="4">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="VeV-Be-36R"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jle-Jd-vg2">
-                                                <rect key="frame" x="105" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="5">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="utL-o4-p5t"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VYY-Bb-tfw">
-                                                <rect key="frame" x="210" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="6">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="hYn-l5-dJJ"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Zm-kp-r3a">
-                                                <rect key="frame" x="315" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="-">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickCal:" destination="PER-pR-sN8" eventType="touchUpInside" id="AHf-tz-T5O"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="4Z1-pV-efH">
-                                        <rect key="frame" x="0.0" y="285" width="414" height="89"/>
-                                        <subviews>
-                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCc-5S-PT9">
-                                                <rect key="frame" x="0.0" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="1">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="Ua5-6A-fEX"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yaQ-x4-fHV">
-                                                <rect key="frame" x="105" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="2">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="jdN-Kl-61O"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ihu-Rg-6Zs">
-                                                <rect key="frame" x="210" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="3">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="fu7-sR-jhi"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u75-Rh-CUS">
-                                                <rect key="frame" x="315" y="0.0" width="99" height="89"/>
-                                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="+">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickCal:" destination="PER-pR-sN8" eventType="touchUpInside" id="Yix-VY-GgO"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="8CF-Vp-Qyq">
-                                        <rect key="frame" x="0.0" y="380" width="414" height="89"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G2m-y7-vsW">
-                                                <rect key="frame" x="0.0" y="0.0" width="204" height="89"/>
-                                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                <state key="normal" title="0">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onClickNum:" destination="PER-pR-sN8" eventType="touchUpInside" id="Kze-Ct-DWt"/>
-                                                </connections>
-                                            </button>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="TeC-Sv-TYI">
-                                                <rect key="frame" x="210" y="0.0" width="204" height="89"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1wG-ih-2e6">
-                                                        <rect key="frame" x="0.0" y="0.0" width="99" height="89"/>
-                                                        <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QsK-JQ-YFa">
-                                                        <rect key="frame" x="105" y="0.0" width="99" height="89"/>
-                                                        <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="30"/>
-                                                        <state key="normal" title="=">
-                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="onClickCal:" destination="PER-pR-sN8" eventType="touchUpInside" id="xst-jb-d5a"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lF1-3C-S1V">
+                                <rect key="frame" x="107" y="54" width="200" height="81"/>
+                                <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="WUd-7t-dRG" firstAttribute="leading" secondItem="duu-0j-qDj" secondAttribute="leading" id="0y2-La-7Vn"/>
-                                    <constraint firstAttribute="trailing" secondItem="Tal-mf-Bfo" secondAttribute="trailing" id="1NV-ha-IrA"/>
-                                    <constraint firstAttribute="trailing" secondItem="4Z1-pV-efH" secondAttribute="trailing" id="1qZ-dd-9Jg"/>
-                                    <constraint firstItem="8CF-Vp-Qyq" firstAttribute="leading" secondItem="duu-0j-qDj" secondAttribute="leading" id="CyN-rw-iya"/>
-                                    <constraint firstAttribute="trailing" secondItem="BmQ-6D-7YM" secondAttribute="trailing" id="DFr-u9-6qD"/>
-                                    <constraint firstItem="4Z1-pV-efH" firstAttribute="leading" secondItem="duu-0j-qDj" secondAttribute="leading" id="M8U-N2-0MF"/>
-                                    <constraint firstItem="Tal-mf-Bfo" firstAttribute="leading" secondItem="duu-0j-qDj" secondAttribute="leading" id="XFE-GZ-yZj"/>
-                                    <constraint firstAttribute="trailing" secondItem="WUd-7t-dRG" secondAttribute="trailing" id="jf4-Db-1vr"/>
-                                    <constraint firstItem="BmQ-6D-7YM" firstAttribute="leading" secondItem="duu-0j-qDj" secondAttribute="leading" id="ukU-pk-wIj"/>
-                                    <constraint firstAttribute="trailing" secondItem="8CF-Vp-Qyq" secondAttribute="trailing" id="x8q-rB-K0U"/>
+                                    <constraint firstAttribute="height" constant="80" id="CM6-d0-3hG"/>
+                                    <constraint firstAttribute="width" constant="200" id="Y9T-EK-CnD"/>
                                 </constraints>
-                            </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BoJ-cn-Z47">
-                                <rect key="frame" x="16" y="222" width="382" height="81"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="81" id="lj8-pE-dvg"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="70"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="860-t2-A3E">
-                                <rect key="frame" x="16" y="106.5" width="382" height="81"/>
-                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="20"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <segments>
+                                    <segment title="計算機"/>
+                                    <segment title="塗鴉"/>
+                                </segments>
+                                <color key="selectedSegmentTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="aa:" destination="PER-pR-sN8" eventType="touchUpInside" id="dTH-fB-BUf"/>
+                                    <action selector="onClickSeg:" destination="PER-pR-sN8" eventType="valueChanged" id="Hrz-RU-981"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Kkc-4x-LiY" firstAttribute="trailing" secondItem="duu-0j-qDj" secondAttribute="trailing" id="8M7-MN-saL"/>
-                            <constraint firstItem="Kkc-4x-LiY" firstAttribute="trailing" secondItem="BoJ-cn-Z47" secondAttribute="trailing" constant="16" id="K3q-cg-5wp"/>
-                            <constraint firstItem="860-t2-A3E" firstAttribute="trailing" secondItem="BoJ-cn-Z47" secondAttribute="trailing" id="NbQ-m7-sUn"/>
-                            <constraint firstItem="860-t2-A3E" firstAttribute="leading" secondItem="BoJ-cn-Z47" secondAttribute="leading" id="OIx-bt-Nyr"/>
-                            <constraint firstItem="BoJ-cn-Z47" firstAttribute="leading" secondItem="Kkc-4x-LiY" secondAttribute="leading" constant="16" id="Ws3-VM-TOW"/>
-                            <constraint firstItem="duu-0j-qDj" firstAttribute="leading" secondItem="Kkc-4x-LiY" secondAttribute="leading" id="Ybh-sG-lzo"/>
-                            <constraint firstItem="duu-0j-qDj" firstAttribute="top" secondItem="BoJ-cn-Z47" secondAttribute="bottom" constant="10" id="Zy3-gI-NN4"/>
-                            <constraint firstItem="BoJ-cn-Z47" firstAttribute="firstBaseline" secondItem="860-t2-A3E" secondAttribute="baseline" constant="103.5" id="bcg-pL-g8v"/>
-                            <constraint firstItem="Kkc-4x-LiY" firstAttribute="bottom" secondItem="duu-0j-qDj" secondAttribute="bottom" constant="80" id="hY7-H4-p89"/>
-                            <constraint firstItem="860-t2-A3E" firstAttribute="height" secondItem="BoJ-cn-Z47" secondAttribute="height" id="iTy-mY-wlQ"/>
-                            <constraint firstItem="duu-0j-qDj" firstAttribute="height" secondItem="ay3-K9-DrC" secondAttribute="height" multiplier="469:896" id="yOY-KG-9hk"/>
+                            <constraint firstItem="lF1-3C-S1V" firstAttribute="centerX" secondItem="ay3-K9-DrC" secondAttribute="centerX" id="Xqz-ZC-DU9"/>
+                            <constraint firstItem="lF1-3C-S1V" firstAttribute="top" secondItem="Kkc-4x-LiY" secondAttribute="top" constant="10" id="cnY-47-ZMZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Kkc-4x-LiY"/>
                     </view>
                     <connections>
-                        <outlet property="lbRecord" destination="860-t2-A3E" id="c3W-uo-zJL"/>
-                        <outlet property="lbResult" destination="BoJ-cn-Z47" id="COc-RM-y7z"/>
+                        <outlet property="viewSeg" destination="lF1-3C-S1V" id="8xj-u0-gLj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ubg-H3-b6U" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
