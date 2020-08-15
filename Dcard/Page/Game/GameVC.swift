@@ -12,10 +12,10 @@ import UIView_Shake
 enum SegmentedControlType: Int {
     case calculator = 0
     case skitch = 1
+    case calendar = 2
 }
 class GameVC: UIViewController {
     @IBOutlet weak var viewSeg: UISegmentedControl!
-    var viewPrintVC: UIViewController!
     var selectedVC: UIViewController?
     var selected = 0
     
@@ -25,29 +25,46 @@ class GameVC: UIViewController {
         initView()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? MemoVC {
+            vc.setContent(date: (sender as! Date))
+        }
+    }
+    @IBAction func backToGameVC(_ segue: UIStoryboardSegue) {
+        if let _ = segue.destination as? MemoVC {
+            print("123")
+        }
+    }
     @IBAction func onClickSeg(_ sender: UISegmentedControl) {
-        if selected != viewSeg.selectedSegmentIndex || selectedVC == nil {
-            selected = viewSeg.selectedSegmentIndex
+        if self.selected != viewSeg.selectedSegmentIndex || selectedVC == nil {
+            self.selected = viewSeg.selectedSegmentIndex
             
-            selectedVC?.removeFromParent()
-            selectedVC?.view.removeFromSuperview()
+            self.selectedVC?.removeFromParent()
+            self.selectedVC?.view.removeFromSuperview()
             
-            var vc: UIViewController!
             let type: SegmentedControlType = SegmentedControlType.init(rawValue: selected)!
             switch type {
             case .calculator:
-                vc = CalculatorVC()
+                self.selectedVC = CalculatorVC()
             case .skitch:
-                vc = SkitchVC()
+                self.selectedVC = SkitchVC()
+            case .calendar:
+                self.selectedVC = CalendarVC()
+                (self.selectedVC as! CalendarVC).setDelegate(self)
             }
-            self.addChild(vc)
-            self.view.insertSubview(vc.view, at: 0)
-            vc.didMove(toParent: self)
-            selectedVC = vc
+            self.addChild(selectedVC!)
+            self.view.insertSubview(self.selectedVC!.view, at: 0)
+            self.selectedVC!.didMove(toParent: self)
         }
     }
     func initView() {
         self.onClickSeg(viewSeg)
         self.viewSeg.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 25), NSAttributedString.Key.foregroundColor: UIColor.red], for: .selected)
+    }
+}
+
+extension GameVC: CalendarVCDelegate {
+    func toMemo(sender: Date) {
+        self.performSegue(withIdentifier: "memo", sender: sender)
     }
 }
