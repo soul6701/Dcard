@@ -89,66 +89,26 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3ly-zC-6gb">
-                                <rect key="frame" x="0.0" y="99" width="414" height="712"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iQJ-tg-pyN">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="712"/>
-                                    </imageView>
-                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="2tD-mZ-yxZ">
-                                        <rect key="frame" x="187.5" y="652" width="39" height="37"/>
-                                        <color key="pageIndicatorTintColor" red="0.48172624139999998" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </pageControl>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="我可愛嗎 ？😳😳😳" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5J-IA-Ox3">
-                                        <rect key="frame" x="85" y="50" width="244" height="33.5"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
-                                        <color key="textColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="7It-8s-9gp">
-                                        <rect key="frame" x="101.5" y="100" width="211" height="31"/>
-                                        <color key="minimumTrackTintColor" red="0.48172624139999998" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="maximumTrackTintColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <action selector="onClickSlider:" destination="hys-Ep-fzQ" eventType="valueChanged" id="1Ay-8w-bl2"/>
-                                        </connections>
-                                    </slider>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E8u-ms-byX">
-                                        <rect key="frame" x="157" y="135" width="103.5" height="21"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chaichai" translatesAutoresizingMaskIntoConstraints="NO" id="SRb-qg-wbf">
-                                        <rect key="frame" x="114" y="292" width="186" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                </subviews>
+                                <rect key="frame" x="0.0" y="99" width="414" height="763"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstItem="U5J-IA-Ox3" firstAttribute="top" secondItem="3ly-zC-6gb" secondAttribute="top" constant="50" id="35w-yl-0JN"/>
-                                    <constraint firstAttribute="trailing" secondItem="iQJ-tg-pyN" secondAttribute="trailing" id="9ke-tr-feS"/>
-                                    <constraint firstItem="iQJ-tg-pyN" firstAttribute="top" secondItem="3ly-zC-6gb" secondAttribute="top" id="Mn4-p1-79k"/>
-                                    <constraint firstAttribute="bottom" secondItem="iQJ-tg-pyN" secondAttribute="bottom" id="RQx-gm-DRV"/>
-                                    <constraint firstItem="2tD-mZ-yxZ" firstAttribute="centerX" secondItem="3ly-zC-6gb" secondAttribute="centerX" id="VnQ-Qk-dt9"/>
-                                    <constraint firstItem="iQJ-tg-pyN" firstAttribute="leading" secondItem="3ly-zC-6gb" secondAttribute="leading" id="Wfp-yE-0jn"/>
-                                    <constraint firstItem="7It-8s-9gp" firstAttribute="centerX" secondItem="U5J-IA-Ox3" secondAttribute="centerX" id="aiL-ob-2ZX"/>
-                                    <constraint firstItem="E8u-ms-byX" firstAttribute="width" secondItem="7It-8s-9gp" secondAttribute="width" multiplier="1:2" id="day-Ny-bUn"/>
-                                    <constraint firstItem="7It-8s-9gp" firstAttribute="top" secondItem="U5J-IA-Ox3" secondAttribute="bottom" constant="16.5" id="eqG-pd-fDH"/>
-                                    <constraint firstItem="U5J-IA-Ox3" firstAttribute="centerX" secondItem="3ly-zC-6gb" secondAttribute="centerX" id="qjb-aK-bcA"/>
-                                    <constraint firstItem="E8u-ms-byX" firstAttribute="centerX" secondItem="7It-8s-9gp" secondAttribute="centerX" constant="1.5" id="t4V-ac-Ulu"/>
-                                    <constraint firstAttribute="bottom" secondItem="2tD-mZ-yxZ" secondAttribute="bottom" constant="23" id="t7V-WK-DIb"/>
-                                    <constraint firstItem="7It-8s-9gp" firstAttribute="width" secondItem="iQJ-tg-pyN" secondAttribute="width" multiplier="1:2" id="vj2-FO-z1D"/>
-                                    <constraint firstItem="E8u-ms-byX" firstAttribute="top" secondItem="7It-8s-9gp" secondAttribute="bottom" constant="5" id="zcQ-EM-uxM"/>
-                                </constraints>
                             </view>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="2tD-mZ-yxZ">
+                                <rect key="frame" x="182" y="854" width="50" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="cLG-a6-tXp"/>
+                                </constraints>
+                                <color key="pageIndicatorTintColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="0.41845034246575341" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="currentPageIndicatorTintColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </pageControl>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="UOy-t6-UZy" firstAttribute="leading" secondItem="OWq-wi-NME" secondAttribute="leading" id="6Is-Sz-dap"/>
-                            <constraint firstAttribute="bottom" secondItem="3ly-zC-6gb" secondAttribute="bottom" constant="85" id="9RV-5Z-gMC"/>
+                            <constraint firstItem="OWq-wi-NME" firstAttribute="bottom" secondItem="3ly-zC-6gb" secondAttribute="bottom" id="9RV-5Z-gMC"/>
                             <constraint firstItem="UOy-t6-UZy" firstAttribute="top" secondItem="OWq-wi-NME" secondAttribute="top" id="FGd-8h-biU"/>
                             <constraint firstItem="3ly-zC-6gb" firstAttribute="top" secondItem="UOy-t6-UZy" secondAttribute="bottom" constant="5" id="GZf-RR-9co"/>
+                            <constraint firstItem="2tD-mZ-yxZ" firstAttribute="centerX" secondItem="3ly-zC-6gb" secondAttribute="centerX" id="Hmr-MD-IzP"/>
+                            <constraint firstItem="2tD-mZ-yxZ" firstAttribute="bottom" secondItem="U0c-UD-pdg" secondAttribute="bottom" constant="-5" id="Jms-1s-ahX"/>
                             <constraint firstItem="3ly-zC-6gb" firstAttribute="leading" secondItem="OWq-wi-NME" secondAttribute="leading" id="eFp-xz-rfU"/>
                             <constraint firstItem="OWq-wi-NME" firstAttribute="trailing" secondItem="3ly-zC-6gb" secondAttribute="trailing" id="iiJ-RG-p71"/>
                             <constraint firstItem="OWq-wi-NME" firstAttribute="trailing" secondItem="UOy-t6-UZy" secondAttribute="trailing" id="oGa-am-wED"/>
@@ -157,9 +117,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="wyY-Bk-o1p"/>
                     <connections>
-                        <outlet property="_image" destination="SRb-qg-wbf" id="Lzc-zt-lNQ"/>
-                        <outlet property="image" destination="iQJ-tg-pyN" id="9RG-cL-ISM"/>
-                        <outlet property="lbCuteValue" destination="E8u-ms-byX" id="2lB-5x-i7b"/>
                         <outlet property="lbTitle" destination="Ne8-03-QoJ" id="jkU-uv-qJO"/>
                         <outlet property="pageControl" destination="2tD-mZ-yxZ" id="o8j-p0-gVC"/>
                         <outlet property="viewContainer" destination="3ly-zC-6gb" id="bxr-Pl-95w"/>
@@ -171,7 +128,4 @@
             <point key="canvasLocation" x="711.59420289855075" y="-5.3571428571428568"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="chaichai" width="434" height="403"/>
-    </resources>
 </document>

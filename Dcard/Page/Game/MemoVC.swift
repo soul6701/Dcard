@@ -27,13 +27,11 @@ protocol PageViewControllerDelegate: class {
 
 class MemoVC: UIViewController {
 
-    @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var lbTitle: UILabel!
     @IBOutlet weak var viewContainer: UIView!
-    @IBOutlet weak var lbCuteValue: UILabel!
-    @IBOutlet weak var _image: UIImageView!
     
+    private var viewControllerList: [UIViewController] = []
     private var date = Date()
     var pageViewVC: UIPageViewController!
         
@@ -45,20 +43,7 @@ class MemoVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? GameVC, let _vc = vc.selectedVC as? CalendarVC {
             _vc.reloadData()
-        }
-    }
-    @IBAction func onClickSlider(_ sender: UISlider) {
-        lbCuteValue.text = "\(floor(sender.value))"
-        
-        if sender.value == sender.maximumValue {
-            self._image.isHidden = false
-            UIView.animate(withDuration: 2, animations: {
-                self._image.transform = .init(scaleX: 4, y: 4)
-            }) { finished in
-//                if finished {
-//                    self._image.transform = .init(rotationAngle: CGFloat.pi * 2)
-//                }
-            }
+            ToolbarView.shared.show(true)
         }
     }
     func setContent(date: Date) {
@@ -66,35 +51,56 @@ class MemoVC: UIViewController {
     }
 }
 extension MemoVC {
-    func initView() {
+    private func initView() {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         self.lbTitle.text = formatter.string(from: self.date)
+        ToolbarView.shared.show(false)
+        confiPageViewVC()
+    }
+    private func confiPageViewVC() {
+        self.viewControllerList.append(MemoPageOneVC())
+        
+        for i in 0...1 {
+            let vc = UIViewController()
+            vc.view.frame = self.viewContainer.frame
+            if i == 0 {
+                vc.view.backgroundColor = #colorLiteral(red: 0.8446564078, green: 0.5145705342, blue: 1, alpha: 1)
+            } else {
+                vc.view.backgroundColor = #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
+            }
+            self.viewControllerList.append(vc)
+        }
         self.pageViewVC = UIPageViewController()
-        self.pageViewVC.view.backgroundColor = .clear
+        self.pageViewVC.view.backgroundColor = #colorLiteral(red: 0.9994240403, green: 0.9855536819, blue: 0, alpha: 0.4502889555)
         self.pageViewVC.view.frame = self.viewContainer.bounds
-//        self.viewContainer.addSubview(self.pageViewVC.view)
+        self.viewContainer.addSubview(self.pageViewVC.view)
         self.pageViewVC.didMove(toParent: self)
         self.pageViewVC.delegate = self
         self.pageViewVC.dataSource = self
-        self.image.loadGif(name: "柴犬2")
-        self._image.isHidden = true
+        self.pageViewVC.setViewControllers([self.viewControllerList.first!], direction: .forward, animated: true, completion: nil)
+        
+        for gr in self.pageViewVC.view.gestureRecognizers! {
+            gr.delegate = self
+        }
     }
 }
 
 extension MemoVC: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        let vc = UIViewController()
-        vc.view.frame = self.viewContainer.frame
-        vc.view.backgroundColor = #colorLiteral(red: 0.8446564078, green: 0.5145705342, blue: 1, alpha: 1)
-        return vc
+        self.pageControl.currentPage -= 1
+        if self.pageControl.currentPage == 0 {
+            self.pageControl.currentPage = 3
+        }
+        return self.viewControllerList[self.pageControl.currentPage - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        let vc = UIViewController()
-        vc.view.frame = self.viewContainer.frame
-        vc.view.backgroundColor = #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
-        return vc
+        self.pageControl.currentPage += 1
+        if self.pageControl.currentPage == 4 {
+            self.pageControl.currentPage = 1
+        }
+        return self.viewControllerList[self.pageControl.currentPage - 1]
     }
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         
@@ -110,6 +116,14 @@ extension MemoVC: PageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didUpdatePageIndex pageIndex: Int) {
         self.pageControl.currentPage = 1
     }
-    
-    
+}
+
+extension MemoVC: UIGestureRecognizerDelegate {
+    //無效化點擊跳頁
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if type(of: gestureRecognizer) == UITapGestureRecognizer.self {
+            return false
+        }
+        return true
+    }
 }

@@ -198,7 +198,6 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.rowSelected = indexPath.row
-//        collectionView.reloadItems(at: [indexPath])
         let daySelected = Int(dayList[(self.rowSelected)].0.day)
         self.delegate?.toMemo(sender: self.date.setDay(daySelected))
     }

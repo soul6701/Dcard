@@ -16,7 +16,6 @@ class HomeVC: UIViewController {
     @IBOutlet weak var bottomSpace: NSLayoutConstraint!
     private var viewModel: RecentPostInterface!
     private var disposeBag = DisposeBag()
-//    private var forumArray = [Forum]()
     private var currentForum: Forum?
     private var postList = [Post]()
     private var showList = [Post]()
@@ -27,7 +26,7 @@ class HomeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        subscribeSubject()
+        subscribeViewModel()
         confiTableView()
         initView()
     }
@@ -43,6 +42,8 @@ class HomeVC: UIViewController {
         viewModel.getPosts(alias: currentForum.alias)
     }
 }
+
+// MARK: - UITableViewDelegate
 extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return showList.count
@@ -69,8 +70,10 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
 }
+
+// MARK: - subscribeViewModel
 extension HomeVC {
-    private func subscribeSubject() {
+    private func subscribeViewModel() {
         
         viewModel = HomeVM()
         viewModel.recentPostSubject.observeOn(MainScheduler.instance).subscribe(onNext: { posts in
@@ -92,7 +95,6 @@ extension HomeVC {
         }).disposed(by: disposeBag)
         
         viewModel.forumsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { forums in
-//            self.forumArray = forums
             self.confiDrawer(forums)
             if !forums.isEmpty {
                 self.viewModel.getPosts(alias: forums[0].alias)
@@ -118,6 +120,8 @@ extension HomeVC {
         }).disposed(by: disposeBag)
     }
 }
+
+// MARK: - private func
 extension HomeVC {
     private func initView() {
         ToolbarView.shared.setDelegate(delegate: self)
@@ -175,6 +179,7 @@ extension HomeVC: DrawerDelegate {
         viewModel.getPosts(alias: page.alias)
     }
 }
+// MARK: - ToolbarViewDelegate
 extension HomeVC: ToolbarViewDelegate {
     func setupPage(_ page: PageType?) {
         

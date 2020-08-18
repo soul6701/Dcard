@@ -21,7 +21,7 @@ class PostCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        userImageView.layer.cornerRadius = 5
+        self.userImageView.layer.cornerRadius = 5
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -29,32 +29,37 @@ class PostCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        self.backgroundColor = highlighted ? #colorLiteral(red: 0.5818830132, green: 0.2156915367, blue: 1, alpha: 0.4206442637) : .white
+    }
     func setContent(post: Post) {
         if post.mediaMeta.count != 0 {
-            lbExcerpt.isHidden = true
-            _lbExcerpt.text = post.excerpt
-            thumbnailImageView.kf.setImage(with: URL(string: post.mediaMeta[0].thumbnail))
+            self.lbExcerpt.isHidden = true
+            self._lbExcerpt.text = post.excerpt
+            self.thumbnailImageView.kf.setImage(with: URL(string: post.mediaMeta[0].thumbnail))
         } else {
-            _lbExcerpt.isHidden = true
-            thumbnailImageView.isHidden = true
-            lbExcerpt.text = post.excerpt
+            self._lbExcerpt.isHidden = true
+            self.thumbnailImageView.isHidden = true
+            self.lbExcerpt.text = post.excerpt
         }
         let letters = NSCharacterSet.letters
         
-        lbForumAndSchool.text = post.forumName + " " + post.school + (post.department.rangeOfCharacter(from: letters) != nil && !post.withNickname ? " " + post.department : "")
+        self.lbForumAndSchool.text = post.forumName + " " + post.school + (post.department.rangeOfCharacter(from: letters) != nil && !post.withNickname ? " " + post.department : "")
         
         
-        LikeAndcommentCount.text = "❤️\(post.likeCount) 回應: \(post.commentCount)"
-        lbTitle.text = post.title
+        self.LikeAndcommentCount.text = "❤️\(post.likeCount) 回應: \(post.commentCount)"
+        self.lbTitle.text = post.title
         if post.withNickname {
-            let label = UILabel(frame: CGRect(x: 0, y: 0, width: userImageView.bounds.width, height: userImageView.bounds.height))
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.userImageView.bounds.width, height: self.userImageView.bounds.height))
             label.textAlignment = .center
             label.text = "\(post.department.first!)"
             label.textColor = .white
             label.backgroundColor = post.gender == "F" ? .systemPink : .cyan
-            userImageView.addSubview(label)
+            self.userImageView.addSubview(label)
         } else {
-            userImageView.image = post.gender == "F" ? UIImage(named: "pikachu") : UIImage(named: "carbi")
+            self.userImageView.image = post.gender == "F" ? UIImage(named: "pikachu") : UIImage(named: "carbi")
         }
     }
 }
