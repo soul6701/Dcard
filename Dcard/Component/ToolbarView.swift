@@ -38,9 +38,9 @@ class ToolbarView: UIView {
         case 0:
             page = .Home
         case 1:
-            page = .Catalog
-        case 2:
             page = .Game
+        case 2:
+            page = .Catalog
         case 3:
             page = .Notify
         case 4:

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -13,60 +12,55 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ekp-fH-2Ab">
-                    <rect key="frame" x="344" y="0.0" width="50" height="50"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="ekp-fH-2Ab" secondAttribute="height" multiplier="1:1" id="p89-1s-fcm"/>
-                    </constraints>
-                    <connections>
-                        <action selector="onClickAdd:" destination="iN0-l3-epB" eventType="touchUpInside" id="S4x-5w-wtT"/>
-                    </connections>
-                </button>
-                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="esY-x0-zCn">
-                    <rect key="frame" x="10" y="10" width="334" height="50"/>
+                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="esY-x0-zCn">
+                    <rect key="frame" x="10" y="8" width="394" height="34.5"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uAE-Ve-lkr">
-                            <rect key="frame" x="0.0" y="0.0" width="200.5" height="50"/>
+                            <rect key="frame" x="0.0" y="0.0" width="227.5" height="34"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
-                                <action selector="onClickTxtName:" destination="-2" eventType="editingDidBegin" id="856-42-lOA"/>
+                                <action selector="onClickTfName:" destination="-2" eventType="editingDidBegin" id="856-42-lOA"/>
                             </connections>
                         </textField>
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="alW-0H-2E0">
-                            <rect key="frame" x="208.5" y="0.0" width="100" height="50"/>
+                            <rect key="frame" x="235.5" y="0.0" width="100" height="34"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="100" id="GZO-cM-vaj"/>
+                                <constraint firstAttribute="width" constant="100" id="M8o-IW-n9b"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="組" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Csp-XI-yyK">
-                            <rect key="frame" x="316.5" y="0.0" width="17.5" height="50"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="組" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Csp-XI-yyK">
+                            <rect key="frame" x="343.5" y="7" width="17.5" height="20.5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ekp-fH-2Ab">
+                            <rect key="frame" x="369" y="4.5" width="25" height="25"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="ekp-fH-2Ab" secondAttribute="height" multiplier="1:1" id="B2Y-UT-MPc"/>
+                            </constraints>
+                            <connections>
+                                <action selector="onClickAdd:" destination="iN0-l3-epB" eventType="touchUpInside" id="S4x-5w-wtT"/>
+                            </connections>
+                        </button>
                     </subviews>
                 </stackView>
             </subviews>
             <constraints>
-                <constraint firstItem="ekp-fH-2Ab" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="1:1" id="EDT-7E-Xdx"/>
-                <constraint firstItem="esY-x0-zCn" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Irc-tI-pCB"/>
-                <constraint firstItem="esY-x0-zCn" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="QmD-Yd-hvw"/>
-                <constraint firstItem="ekp-fH-2Ab" firstAttribute="leading" secondItem="esY-x0-zCn" secondAttribute="trailing" id="TkX-sq-kpI"/>
-                <constraint firstAttribute="trailing" secondItem="ekp-fH-2Ab" secondAttribute="trailing" constant="20" id="Wrt-Tb-xgk"/>
-                <constraint firstItem="ekp-fH-2Ab" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="bur-Gp-cp6"/>
-                <constraint firstAttribute="top" secondItem="esY-x0-zCn" secondAttribute="top" constant="-10" id="cBd-H2-Neo"/>
-                <constraint firstAttribute="bottom" secondItem="esY-x0-zCn" secondAttribute="bottom" constant="10" id="jaS-qu-QnD"/>
+                <constraint firstItem="esY-x0-zCn" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="UpC-gt-x6y"/>
+                <constraint firstItem="esY-x0-zCn" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="lZ8-ml-U4S"/>
+                <constraint firstAttribute="trailing" secondItem="esY-x0-zCn" secondAttribute="trailing" constant="10" id="vUP-ze-zVd"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="lbTimes" destination="Csp-XI-yyK" id="sZf-TQ-NcS"/>
-                <outlet property="txtName" destination="uAE-Ve-lkr" id="Pta-KO-kIc"/>
-                <outlet property="txtTimes" destination="alW-0H-2E0" id="muy-D2-vvB"/>
+                <outlet property="tfName" destination="uAE-Ve-lkr" id="Pta-KO-kIc"/>
+                <outlet property="tfTimes" destination="alW-0H-2E0" id="muy-D2-vvB"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="152.67857142857142"/>
         </view>

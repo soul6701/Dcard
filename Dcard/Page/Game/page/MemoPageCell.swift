@@ -8,20 +8,10 @@
 
 import UIKit
 
-enum MemoPageCellMode: String {
-    case income = "income"
-    case expend = "expend"
-    case net = "net"
-    case member = "member"
-    case heart = "heart"
-    case book = "book"
-    case mood = "mood"
-    case fitness = "fitness"
-}
 protocol MemoPageCellDelegate {
     func setIncome(money: Int)
     func setExpend(money: Int)
-    func openList(indexPath: IndexPath)
+    func setStar(star: [Bool])
     func showSelection()
 }
 class MemoPageCell: UITableViewCell {
@@ -30,26 +20,22 @@ class MemoPageCell: UITableViewCell {
     @IBOutlet weak var btnOpen: UIButton!
     @IBOutlet weak var pro: NSLayoutConstraint!
     @IBOutlet weak var imageRow: UIImageView!
-    @IBOutlet weak var txtEnter: UITextField!
+    @IBOutlet weak var tfEnter: UITextField!
     @IBOutlet weak var lbRow: UILabel!
     @IBOutlet weak var viewStar: UIStackView!
     @IBOutlet var imageStar: [UIImageView]!
     
-    private var memberList = ["巧虎", "琪琪", "桃樂比", "玲玲"]
-    private var thankList = ["司機大哥推薦道地美食", "早餐店阿姨叫我帥哥", "餐廳額外招待", "系隊贏得比賽"]
-    private var improveList = ["作業遲交", "沈溺手機", "面對主管態度輕浮"]
+    private let itemList: [MemoPageCellConponent] = [MemoPageCellConponent(image: ImageInfo.income, name: "收入"), MemoPageCellConponent(image: ImageInfo.expend, name: "支出"), MemoPageCellConponent(image: ImageInfo.net, name: "淨賺"), MemoPageCellConponent(image: ImageInfo.member, name: "相遇的人"), MemoPageCellConponent(image: ImageInfo.heart, name: "感恩的事"), MemoPageCellConponent(image: ImageInfo.book, name: "可以做得更好"), MemoPageCellConponent(image: ImageInfo.mood, name: "自我評價"), MemoPageCellConponent(image: ImageInfo.fitness, name: "健身")]
     private var fitnessList = [String]()
-    
     private var list = [String]()
     private var starList = [false, false, false, false, false]
-    private var mode: MemoPageCellMode = .income
+    private var mode: MemoPageOneCellMode = .income
     private var delegate: MemoPageCellDelegate?
-    private var indexPath = IndexPath()
     private var fitness = ""
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        // Initialization codeu
         initView()
     }
 
@@ -59,7 +45,7 @@ class MemoPageCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    @IBAction func txtSetValue(_ sender: UITextField) {
+    @IBAction func tfSetValue(_ sender: UITextField) {
         guard let txt = sender.text else {
             return
         }
@@ -70,67 +56,48 @@ class MemoPageCell: UITableViewCell {
             self.delegate?.setExpend(money: num)
         }
     }
-    @IBAction func onClickOpen(_ sender: UIButton) {
-        self.delegate?.openList(indexPath: self.indexPath)
-    }
-    
     func setDelegate(_ delegate: MemoPageCellDelegate) {
         self.delegate = delegate
     }
     
-    func setContent(conponents: MemoPageCellConponent, indexPath: IndexPath) {
-        self.imageRow.image = UIImage(named: conponents.image)
-        self.lbRow.text = conponents.name
-        self.indexPath = indexPath
-        self.tableView.isHidden = !conponents.show
-            
-        self.btnOpen.isHidden = indexPath.section == 0 ? true : false
-        if let mode = MemoPageCellMode.init(rawValue: conponents.image) {
-            self.mode = mode
-            
-            switch mode {
-            case .member:
-                self.list = self.memberList
-            case .heart:
-                self.list = self.thankList
-            case .book:
-                self.list = self.improveList
-            case .fitness:
-                self.list = self.fitnessList
-            default:
-                break
-            }
+    func setContent(data: [Any], mode: MemoPageOneCellMode, show: Bool) {
+        self.mode = mode
+        self.imageRow.image = UIImage(named: itemList[mode.rawValue].image)
+        self.lbRow.text = itemList[mode.rawValue].name
+        self.tableView.isHidden = !show
+        self.btnOpen.isHidden = mode == .income || mode == .expend || mode == .net || mode == .mood
+        if mode == .heart || mode == .book || mode == .member {
+            self.list = (data as! [String])
+        }
+        if mode == .mood {
+            self.starList = (data as! [Bool])
         }
     }
-    func setHideTxt() {
-        self.txtEnter.isHidden = true
+    func setHideTf() {
+        self.tfEnter.isHidden = true
         self.pro.constant = 100
     }
-    func setHideBtn() {
-        self.btnOpen.isHidden = true
-    }
     func setDisabled() {
-        self.txtEnter.isEnabled = false
-        self.txtEnter.placeholder = "0"
+        self.tfEnter.isEnabled = false
+        self.tfEnter.placeholder = "0"
     }
     func setResult(money: Int) {
         if money != 0 {
-            self.txtEnter.text = "\(money)"
+            self.tfEnter.text = "\(money)"
         } else {
-            self.txtEnter.text = ""
+            self.tfEnter.text = ""
         }
     }
     func setHideViewStar() {
         self.viewStar.isHidden = true
     }
     func setFitness(item: String) {
-        self.fitness = item
-        self.tableView.reloadData()
+        (self.tableView.headerView(forSection: 0) as! MemoPageOneHeader).setToFitness(item: item)
     }
 }
 extension MemoPageCell {
     private func initView() {
-        self.txtEnter.delegate = self
+        self.tfEnter.delegate = self
         confiImageStar()
         confiTableview()
     }
@@ -152,9 +119,10 @@ extension MemoPageCell {
     @objc private func setHighlight(_ sender: UIGestureRecognizer) {
         if let tag = sender.view?.tag {
             for i in 0..<tag + 1 {
-                starList[i] = !starList[i]
+                self.starList[i] = !self.starList[i]
             }
         }
+        self.delegate?.setStar(star: self.starList)
         reloadViewStar()
     }
     private func reloadViewStar() {
@@ -172,7 +140,6 @@ extension MemoPageCell: UITableViewDelegate, UITableViewDataSource, UIScrollView
             return 1
         }
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         
@@ -186,7 +153,7 @@ extension MemoPageCell: UITableViewDelegate, UITableViewDataSource, UIScrollView
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "MemoPageOneHeader") as! MemoPageOneHeader
         view.setDelegate(self)
         if mode == .fitness {
-            view.setToFitness(item: self.fitness)
+            view.setToFitness(item: "")
         }
         return view
     }

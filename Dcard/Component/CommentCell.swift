@@ -64,7 +64,7 @@ class CommentCell: UITableViewCell {
             label.backgroundColor = comment.gender == "F" ? .systemPink : .cyan
             photoView.addSubview(label)
         } else {
-            photoView.image = comment.gender == "F" ? UIImage(named: "pikachu") : UIImage(named: "carbi")
+            photoView.image = comment.gender == "F" ? UIImage(named: ImageInfo.pikachu) : UIImage(named: ImageInfo.carbi)
         }
     }
     func setDelegate(delegate: showSettingView?) {

@@ -59,7 +59,7 @@ class PostCell: UITableViewCell {
             label.backgroundColor = post.gender == "F" ? .systemPink : .cyan
             self.userImageView.addSubview(label)
         } else {
-            self.userImageView.image = post.gender == "F" ? UIImage(named: "pikachu") : UIImage(named: "carbi")
+            self.userImageView.image = post.gender == "F" ? UIImage(named: ImageInfo.pikachu) : UIImage(named: ImageInfo.carbi)
         }
     }
 }

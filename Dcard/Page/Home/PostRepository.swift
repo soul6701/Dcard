@@ -188,7 +188,6 @@ extension PostRepository: PostRepositoryInterface {
         
         return subject.asObserver()
     }
-    
     func getBeforePost(id: String) -> Observable<[Post]> {
         var posts = [Post]()
         let subject = PublishSubject<[Post]>()

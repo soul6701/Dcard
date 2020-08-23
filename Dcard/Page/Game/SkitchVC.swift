@@ -28,7 +28,7 @@ class SkitchVC: UIViewController {
     @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet var slideColor: [UISlider]!
     @IBOutlet weak var btnSetColor: UIButton!
-    @IBOutlet var txtColor: [UITextField]!
+    @IBOutlet var tfColor: [UITextField]!
     @IBOutlet weak var viewColor: UIView!
     @IBOutlet weak var viewCanvas: UIView!
     @IBOutlet weak var viewEraser: UIImageView!
@@ -94,15 +94,15 @@ class SkitchVC: UIViewController {
             view.isHidden = false
         }
         for i in 0..<3 {
-            self.txtColor[i].text = "\((Int)(self.currentColorValue[i]))"
+            self.tfColor[i].text = "\((Int)(self.currentColorValue[i]))"
             self.slideColor[i].value = self.currentColorValue[i]
         }
         self.show = !self.show
         self.viewColor.isHidden = !self.show
         self.mode = self.show ? .setColor : .print
         if !self.show {
-            self.txtColor.forEach { (txt) in
-                txt.resignFirstResponder()
+            self.tfColor.forEach { (tf) in
+                tf.resignFirstResponder()
             }
         }
     }
@@ -111,7 +111,7 @@ class SkitchVC: UIViewController {
         self.slideColor[0].maximumValue = 72
         self.slideColor[0].minimumValue = 10
         self.lbTitle.text = "請選擇畫筆/橡皮擦粗細"
-        self.txtColor[0].text = "\(Int(self.currentLineWidth))"
+        self.tfColor[0].text = "\(Int(self.currentLineWidth))"
         self.slideColor[0].value = self.currentLineWidth
         self.rows.forEach { (view) in
             view.isHidden = true
@@ -129,8 +129,8 @@ extension SkitchVC {
         self.btnSetColor.layer.borderWidth = 3
         self.viewColor.layer.cornerRadius = 15
         self.viewColor.isHidden = true
-        self.txtColor.forEach { (txt) in
-            txt.delegate = self
+        self.tfColor.forEach { (tf) in
+            tf.delegate = self
         }
         updateColor()
         updateWidth()
@@ -160,7 +160,7 @@ extension SkitchVC {
         self.linePrintColor = self.btnSetColor.backgroundColor
         if mode == .setColor {
             for i in 0..<3 {
-                self.txtColor[i].text = "\((Int)(self.slideColor[i].value))"
+                self.tfColor[i].text = "\((Int)(self.slideColor[i].value))"
                 self.currentColorValue[i] = self.slideColor[i].value
             }
         }
@@ -168,7 +168,7 @@ extension SkitchVC {
     //更新粗細
     private func updateWidth() {
         self.height.constant = CGFloat(self.currentLineWidth)
-        self.txtColor[0].text = "\((Int)(self.currentLineWidth))"
+        self.tfColor[0].text = "\((Int)(self.currentLineWidth))"
         if mode == .setWidth {
             self.currentLineWidth = self.slideColor[0].value
         }
@@ -191,7 +191,7 @@ extension SkitchVC: UITextFieldDelegate {
         return count <= 3
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let index = self.txtColor.firstIndex(of: textField), let text = textField.text, let num = Float(text) {
+        if let index = self.tfColor.firstIndex(of: textField), let text = textField.text, let num = Float(text) {
             self.slideColor[index].value = num
             updateColor()
         }

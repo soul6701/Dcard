@@ -35,6 +35,7 @@ class HomeVC: UIViewController {
          self.navigationController?.navigationBar.isHidden = false
         ToolbarView.shared.show(true)
         guard let currentForum = currentForum else {
+            LoadingView.shared.show(true)
             viewModel.getForums()
             return
         }
@@ -112,6 +113,7 @@ extension HomeVC {
                 self.showList = self.postList
             }
             self.tableView.reloadData()
+//            LoadingView.shared.show(false)
             if !self.showList.isEmpty {
                 self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
             }
@@ -128,7 +130,7 @@ extension HomeVC {
         self.window = UIApplication.shared.windows.first!
         self.bottomSpace.constant = 80
         let btnMenu = UIButton()
-        btnMenu.setImage(UIImage(named: "menu"), for: .normal)
+        btnMenu.setImage(UIImage(named: ImageInfo.menu), for: .normal)
         btnMenu.addTarget(self, action: #selector(self.showMenu), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: btnMenu)
     }
@@ -198,7 +200,7 @@ extension HomeVC: ToolbarViewDelegate {
         case .Notify:
             vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! NotifyVC
         case .Profile:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! ProfileVC
+            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! ChatRoomVC
         }
         self.navigationController?.pushViewController(vc, animated: false)
     }

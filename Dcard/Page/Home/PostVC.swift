@@ -25,7 +25,7 @@ class PostVC: UIViewController, UITextFieldDelegate {
     
     private var show: Bool! {
         didSet {
-            show ? self.btnShowComment.setBackgroundImage(UIImage(named: "down"), for: .normal) : self.btnShowComment.setBackgroundImage(UIImage(named: "up"), for: .normal)
+            show ? self.btnShowComment.setBackgroundImage(UIImage(named: ImageInfo.down), for: .normal) : self.btnShowComment.setBackgroundImage(UIImage(named: ImageInfo.up), for: .normal)
         }
     }
     override func viewDidLoad() {

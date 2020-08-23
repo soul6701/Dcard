@@ -78,7 +78,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.83216959239999999" green="0.98548370600000001" blue="0.47333085539999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.99143940210000003" blue="1" alpha="0.24055543664383561" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="Ne8-03-QoJ" firstAttribute="centerY" secondItem="UOy-t6-UZy" secondAttribute="centerY" id="1E5-7o-1Vp"/>
                                     <constraint firstItem="Ne8-03-QoJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fm8-TC-VQD" secondAttribute="trailing" constant="5" id="4DE-Y5-zkM"/>
@@ -92,7 +92,7 @@
                                 <rect key="frame" x="0.0" y="99" width="414" height="763"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="2tD-mZ-yxZ">
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" currentPage="1" translatesAutoresizingMaskIntoConstraints="NO" id="2tD-mZ-yxZ">
                                 <rect key="frame" x="182" y="854" width="50" height="37"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="cLG-a6-tXp"/>

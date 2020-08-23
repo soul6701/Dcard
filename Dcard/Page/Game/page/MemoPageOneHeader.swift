@@ -15,41 +15,40 @@ protocol MemoPageOneHeaderDelegate {
 class MemoPageOneHeader: UITableViewHeaderFooterView {
     
     @IBOutlet weak var lbTimes: UILabel!
-    @IBOutlet weak var txtTimes: UITextField!
-    @IBOutlet weak var txtName: UITextField!
+    @IBOutlet weak var tfTimes: UITextField!
+    @IBOutlet weak var tfName: UITextField!
     private var delegate: MemoPageOneHeaderDelegate?
     private var isFitness = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.txtTimes.isHidden = true
+        self.tfTimes.isHidden = true
         self.lbTimes.isHidden = true
     }
     
     @IBAction func onClickAdd(_ sender: UIButton) {
         if self.isFitness {
-            if let name = txtName.text, let times = self.txtTimes.text, !name.isEmpty && !times.isEmpty {
+            if let name = tfName.text, let times = self.tfTimes.text, !name.isEmpty && !times.isEmpty {
                 let txt = name + " " + times + "組"
                 self.delegate?.addMember(name: txt)
             }
         } else {
-            if let name = txtName.text, name != "" {
+            if let name = tfName.text, name != "" {
                 self.delegate?.addMember(name: name)
             }
         }
     }
-
     func setDelegate(_ delegate: MemoPageOneHeaderDelegate) {
         self.delegate = delegate
     }
     func setToFitness(item: String) {
-        self.txtName.text = item
+        self.tfName.text = item
         self.isFitness = true
-        self.txtTimes.isHidden = false
+        self.tfTimes.isHidden = false
         self.lbTimes.isHidden = false
     }
     
-    @IBAction func onClickTxtName(_ sender: UITextField) {
+    @IBAction func onClickTfName(_ sender: UITextField) {
         if self.isFitness {
             self.delegate?.showSelection()
         }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -19,9 +18,9 @@
                 <outlet property="viewEraser" destination="5JV-0h-IIc" id="SdP-U4-zkJ"/>
                 <outletCollection property="rows" destination="Jf0-Wd-Wr3" collectionClass="NSMutableArray" id="YIr-tC-6ub"/>
                 <outletCollection property="rows" destination="zwv-A9-wau" collectionClass="NSMutableArray" id="A8O-ep-azu"/>
-                <outletCollection property="txtColor" destination="Yb3-8u-RyG" collectionClass="NSMutableArray" id="c6f-3v-uBM"/>
-                <outletCollection property="txtColor" destination="yYr-Il-fe1" collectionClass="NSMutableArray" id="SIB-Nn-mNt"/>
-                <outletCollection property="txtColor" destination="Bc1-iv-eom" collectionClass="NSMutableArray" id="gFE-FO-vT5"/>
+                <outletCollection property="tfColor" destination="Yb3-8u-RyG" collectionClass="NSMutableArray" id="c6f-3v-uBM"/>
+                <outletCollection property="tfColor" destination="yYr-Il-fe1" collectionClass="NSMutableArray" id="SIB-Nn-mNt"/>
+                <outletCollection property="tfColor" destination="Bc1-iv-eom" collectionClass="NSMutableArray" id="gFE-FO-vT5"/>
                 <outletCollection property="slideColor" destination="zVl-8c-us8" collectionClass="NSMutableArray" id="iNG-P2-23t"/>
                 <outletCollection property="slideColor" destination="gVi-ht-kri" collectionClass="NSMutableArray" id="EbQ-F3-HEk"/>
                 <outletCollection property="slideColor" destination="BVN-Tv-fCn" collectionClass="NSMutableArray" id="7x8-aU-l1h"/>
@@ -151,14 +150,14 @@
                     </constraints>
                 </view>
                 <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eraser" translatesAutoresizingMaskIntoConstraints="NO" id="5JV-0h-IIc">
-                    <rect key="frame" x="354" y="662" width="50" height="50"/>
+                    <rect key="frame" x="354" y="696" width="50" height="50"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="50" id="Tmf-mV-TVt"/>
                         <constraint firstAttribute="height" constant="50" id="gjL-I9-gnJ"/>
                     </constraints>
                 </imageView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZUn-7b-GRb">
-                    <rect key="frame" x="354" y="54" width="50" height="170"/>
+                    <rect key="frame" x="354" y="10" width="50" height="170"/>
                     <subviews>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vqm-Il-7ET">
                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
