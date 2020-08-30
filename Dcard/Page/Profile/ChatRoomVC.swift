@@ -39,6 +39,7 @@ class ChatRoomVC: UIViewController {
     @IBOutlet weak var btnSend: UIButton!
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet weak var marqueeLabel: MarqueeLabel!
+    @IBOutlet weak var tableViewBottomSpace: NSLayoutConstraint!
     @IBOutlet weak var topSpace: NSLayoutConstraint!
     @IBOutlet weak var bottomSpace: NSLayoutConstraint!
     @IBOutlet weak var tableViewSearchResult: UITableView!
@@ -49,23 +50,23 @@ class ChatRoomVC: UIViewController {
     private var searchMode: ChatRoomContentMode = .message {
         didSet {
             if searchMode == .search {
-                if self.tfMessage.isFirstResponder {
-                    self.tfMessage.resignFirstResponder()
-                }
-                self.searchBar.becomeFirstResponder()
+                self.viewEnterMessage.isHidden = true
                 self.btnDirection.isHidden = true
+                if searchMode == .search {
+                    if self.tfMessage.isFirstResponder {
+                        self.tfMessage.resignFirstResponder()
+                    }
+                    self.searchBar.becomeFirstResponder()
+                }
+                self.tableViewSearchResult.isHidden = false
             } else {
                 self.btnDirection.isHidden = false
                 self.lbNotFound.isHidden = true
                 self.tableView.isHidden = false
                 self.tableViewSearchResult.isHidden = true
                 self.viewEnterMessage.isHidden = false
-            
-                IQKeyboardManager.shared.shouldResignOnTouchOutside = true
                 self.searchBar.text = ""
                 self.tableView.reloadData()
-//                self.searchArray = [ContextMode]()
-//                self.tableViewSearchResult.reloadData()
             }
         }
     }
@@ -73,9 +74,7 @@ class ChatRoomVC: UIViewController {
     private var searchArray = [ContextMode]() {
         didSet {
             self.lbNotFound.isHidden = !self.searchArray.isEmpty || self.searchBar.text?.isEmpty ?? true
-            self.tableViewSearchResult.isHidden = self.searchArray.isEmpty
             self.tableView.isHidden = !self.searchArray.isEmpty || !(self.searchBar.text?.isEmpty ?? true)
-            IQKeyboardManager.shared.shouldResignOnTouchOutside = self.lbNotFound.isHidden
             self.tableViewSearchResult.reloadData()
         }
     }
@@ -85,7 +84,9 @@ class ChatRoomVC: UIViewController {
     private var btnMenu: UIButton!
     private var btnPhone: UIButton!
     private var btnSearch: UIButton!
+    private var currenttableViewInsetTop: CGFloat = 0
     private var currentBottomSpace: CGFloat = 0
+    private var tableViewCurrentBottomSpace: CGFloat = 0
     private var window: UIWindow {
         return UIApplication.shared.windows.first!
     }
@@ -108,7 +109,11 @@ class ChatRoomVC: UIViewController {
         initView()
         addObserverToKeyboard()
         self.currentBottomSpace = self.bottomSpace.constant
-        IQKeyboardManager.shared.enable = true
+        self.tableViewCurrentBottomSpace = self.tableViewBottomSpace.constant
+        IQKeyboardManager.shared.enable = false
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -117,13 +122,14 @@ class ChatRoomVC: UIViewController {
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if self.searchMode == .search {
+        if self.searchMode == .message {
             self.btnDirection.isHidden = self.tableView.contentOffset.y <= 0 && !(self.tableView.contentSize.height > self.tableView.frame.size.height)
             resetButtonState()
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        IQKeyboardManager.shared.enable = true
         removerObserverFromKeyboard()
     }
     @IBAction func didClickBtnSend(_ sender: UIButton) {
@@ -359,30 +365,16 @@ extension ChatRoomVC {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     @objc private func showKeyboard(_ noti: NSNotification) {
-        if noti.name == UIResponder.keyboardWillShowNotification {
-            if self.searchMode == .search {
-//                IQKeyboardManager.shared.shouldResignOnTouchOutside = false
-//                self.searchBar.keyboardDistanceFromTextField = 50
-//                self.viewEnterMessage.isHidden = true
-            } else {
-//                IQKeyboardManager.shared.shouldResignOnTouchOutside = true
-                self.bottomSpace.constant = -self.window.safeAreaInsets.bottom
-                self.view.layoutIfNeeded()
-                self.scrollToBottom()
-                
-            }
+        if let userInfo = noti.userInfo, let keyboard = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.bottomSpace.constant = -self.window.safeAreaInsets.bottom + keyboard.height
+            self.view.layoutIfNeeded()
+            self.scrollToBottom()
+            
         }
     }
     @objc private func hideKeyboard(_ noti: NSNotification) {
-        if noti.name == UIResponder.keyboardWillHideNotification {
-            if self.searchMode == .search {
-//                self.hideSearchBar()
-                self.viewEnterMessage.isHidden = true
-            } else {
-                self.bottomSpace.constant = self.currentBottomSpace
-                self.view.layoutIfNeeded()
-            }
-        }
+        self.bottomSpace.constant = self.currentBottomSpace
+        self.view.layoutIfNeeded()
     }
 }
 // MARK: - UITableViewDelegate
@@ -391,7 +383,8 @@ extension ChatRoomVC: UITableViewDelegate, UITableViewDataSource {
         return self.searchMode == .message && tableView != self.tableViewSearchResult ? self.contextList.count : self.searchArray.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.searchMode == .message && tableView != self.tableViewSearchResult {
+        if (self.searchMode == .message && tableView != self.tableViewSearchResult) ||
+            (self.searchMode == .search && self.searchBar.text?.isEmpty ?? true) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! messageCell
             cell.setContent(context: contextList[indexPath.row].context, mode: contextList[indexPath.row].mode)
             cell.selectionStyle = .none

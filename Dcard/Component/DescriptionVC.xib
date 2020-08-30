@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DescriptionVC" customModule="Dcard" customModuleProvider="target">
+            <connections>
+                <outlet property="imageTitle" destination="wVO-oZ-p8W" id="wRl-ML-8Df"/>
+                <outlet property="lbTitle" destination="vV3-4t-icU" id="FfM-Gb-QbC"/>
+                <outlet property="tvContent" destination="5Ra-67-v8q" id="M5R-fT-ZUh"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5Ra-67-v8q">
+                    <rect key="frame" x="20" y="303" width="374" height="290"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                    <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="description" translatesAutoresizingMaskIntoConstraints="NO" id="wVO-oZ-p8W">
+                    <rect key="frame" x="100" y="144" width="214" height="128"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="128" id="kLu-WV-qCY"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vV3-4t-icU">
+                    <rect key="frame" x="186" y="277" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="vV3-4t-icU" firstAttribute="top" secondItem="wVO-oZ-p8W" secondAttribute="bottom" constant="5" id="3rh-tR-o44"/>
+                <constraint firstItem="5Ra-67-v8q" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Rwv-Ec-a6r"/>
+                <constraint firstItem="5Ra-67-v8q" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="S26-XT-t2m"/>
+                <constraint firstItem="wVO-oZ-p8W" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="100" id="T0k-Go-Suj"/>
+                <constraint firstItem="wVO-oZ-p8W" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="100" id="acp-Yy-2XF"/>
+                <constraint firstItem="wVO-oZ-p8W" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="cG9-JC-m8z"/>
+                <constraint firstItem="vV3-4t-icU" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="cxY-jw-EwN"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="5Ra-67-v8q" secondAttribute="trailing" constant="20" id="j6x-kS-zPP"/>
+                <constraint firstItem="5Ra-67-v8q" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="lbt-r1-8NP"/>
+                <constraint firstItem="vV3-4t-icU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="pyR-FL-M1K"/>
+                <constraint firstItem="5Ra-67-v8q" firstAttribute="top" secondItem="vV3-4t-icU" secondAttribute="bottom" constant="5" id="vn0-x7-VUx"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="139" y="153"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="description" width="452" height="626"/>
+    </resources>
+</document>

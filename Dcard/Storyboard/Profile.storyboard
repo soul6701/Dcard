@@ -151,6 +151,7 @@
                         <outlet property="marqueeLabel" destination="4EC-dX-Umu" id="YeS-bz-OZU"/>
                         <outlet property="searchBar" destination="aJi-bL-8vm" id="ngE-oG-V0h"/>
                         <outlet property="tableView" destination="toX-8b-fRA" id="NXJ-36-0A0"/>
+                        <outlet property="tableViewBottomSpace" destination="HYI-eB-4rb" id="EhZ-8t-SPr"/>
                         <outlet property="tableViewSearchResult" destination="06N-b4-aEm" id="i9H-OO-ua8"/>
                         <outlet property="tfMessage" destination="d7S-Pb-Jbd" id="RMi-gz-nmY"/>
                         <outlet property="topSpace" destination="lyB-bH-0Nn" id="c1a-8l-FFW"/>

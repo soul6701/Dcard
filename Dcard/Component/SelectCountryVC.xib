@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectCountryVC" customModule="Dcard" customModuleProvider="target">
+            <connections>
+                <outlet property="searchBar" destination="Cvz-nX-aTg" id="8go-tH-8K6"/>
+                <outlet property="tableView" destination="6K0-AU-ThZ" id="Mln-dw-IzL"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="50" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6K0-AU-ThZ">
+                    <rect key="frame" x="0.0" y="60" width="414" height="714"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="10z-Db-Ftl">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BKP-1B-BkX">
+                            <rect key="frame" x="0.0" y="59" width="414" height="1"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="QtQ-PY-G1r"/>
+                            </constraints>
+                        </view>
+                        <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="Cvz-nX-aTg">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="59"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </searchBar>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="BKP-1B-BkX" secondAttribute="bottom" id="5R1-Vy-XUo"/>
+                        <constraint firstItem="Cvz-nX-aTg" firstAttribute="leading" secondItem="10z-Db-Ftl" secondAttribute="leading" id="W2x-HV-VdY"/>
+                        <constraint firstItem="BKP-1B-BkX" firstAttribute="top" secondItem="Cvz-nX-aTg" secondAttribute="bottom" id="fcY-94-AWF"/>
+                        <constraint firstAttribute="trailing" secondItem="Cvz-nX-aTg" secondAttribute="trailing" id="guI-ku-Pvb"/>
+                        <constraint firstItem="BKP-1B-BkX" firstAttribute="leading" secondItem="10z-Db-Ftl" secondAttribute="leading" id="hAS-0Y-C4p"/>
+                        <constraint firstAttribute="trailing" secondItem="BKP-1B-BkX" secondAttribute="trailing" id="nb9-5l-rmg"/>
+                        <constraint firstAttribute="height" constant="60" id="vfM-2M-Juq"/>
+                        <constraint firstItem="Cvz-nX-aTg" firstAttribute="top" secondItem="10z-Db-Ftl" secondAttribute="top" id="yl0-4x-Zqb"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="10z-Db-Ftl" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="0k5-Yo-c6f"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="6K0-AU-ThZ" secondAttribute="bottom" id="KAZ-zV-qvK"/>
+                <constraint firstItem="6K0-AU-ThZ" firstAttribute="top" secondItem="10z-Db-Ftl" secondAttribute="bottom" id="M2r-SP-r6L"/>
+                <constraint firstItem="10z-Db-Ftl" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="XYZ-i7-Lcl"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="10z-Db-Ftl" secondAttribute="trailing" id="sLn-UC-1Mr"/>
+                <constraint firstItem="6K0-AU-ThZ" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="t06-V4-9G8"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="6K0-AU-ThZ" secondAttribute="trailing" id="wg7-Wu-9DK"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO"/>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="137.68115942028987" y="152.67857142857142"/>
+        </view>
+    </objects>
+</document>

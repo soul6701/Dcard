@@ -49,4 +49,10 @@ public struct ImageInfo {
     static let alert = "alert"
     static let arrow_down = "arrow_down"
     static let arrow_up = "arrow_up"
+    static let login = "login"
+    static let _login = "_login"
+    static let arrow_open = "arrow_open"
+    static let description = "description"
+    static let checked_radio = "checked_radio"
+    static let unchecked_radio = "unchecked_radio"
 }
