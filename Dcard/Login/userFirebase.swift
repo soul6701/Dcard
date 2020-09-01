@@ -10,6 +10,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Firebase
+import FirebaseFirestore
+import FirebaseStorage
 
 enum LoginType {
     case success
@@ -18,87 +20,209 @@ enum LoginType {
 enum LoginErroType: String {
     case account = "找不到此用戶"
     case password = "密碼錯誤"
+    case phone = "信箱/手機錯誤"
+}
+enum RequirePasswordType {
+    case success(String)
+    case error(LoginErroType)
 }
 protocol UserFirebaseInterface {
-    func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String) -> Observable<Bool>
-//    func readFromUserData(lastName: String, firstName: String, password: String) -> Observable<(User?)>
+    func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) -> Observable<Bool>
     func login(lastName: String, firstName: String, password: String) -> Observable<LoginType>
+    func deleteUserData() -> PublishSubject<DeleteCollectionType>
+    func expectAccount(lastName: String, firstName: String) -> Observable<Bool>
+    func requirePassword(uid: String, phone: String?, address: String?) -> Observable<RequirePasswordType>
 }
 
-class UserFirebase: UserFirebaseInterface {
+class UserFirebase: FirebaseManager, UserFirebaseInterface {
+    
     public static var shared = UserFirebase()
-    private var db: Firestore!
+    private var databaseName = "user"
     
-    init() {
-        db = Firestore.firestore()
-    }
-    
-    func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String) -> Observable<Bool> {
+    // MARK: - 創建帳戶
+    func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) -> Observable<Bool> {
         let subject = PublishSubject<Bool>()
-        db.collection("user").addDocument(data: ["uid": "\(lastName)_\(firstName)", "lastname": lastName, "firstname": firstName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password]) { (error) in
+        let uid = "\(lastName)_\(firstName)"
+        var avatarUrl = ""
+        
+        if let avatar = avatar {
+            let ref = Storage.storage().reference().child(self.databaseName).child(uid + ".png")
+            ref.putData(avatar, metadata: nil) { (metadata, error) in
+                if let error = error {
+                    NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                    subject.onError(error)
+                } else {
+                    subject.onNext(true)
+                    ref.downloadURL { (url, error) in
+                        if let error = error {
+                            subject.onError(error)
+                        }
+                        if let url = url {
+                            avatarUrl = url.absoluteString
+                            self.addDocument(subject: subject, uid: uid, firstName: firstName, lastName: lastName, birthday: birthday, sex: sex, phone: phone, address: address, password: password, avatarUrl: avatarUrl)
+                        }
+                    }
+                }
+            }
+        } else {
+            addDocument(subject: subject, uid: uid, firstName: firstName, lastName: lastName, birthday: birthday, sex: sex, phone: phone, address: address, password: password, avatarUrl: avatarUrl)
+        }
+        
+        return subject.asObserver()
+    }
+    private func addDocument(subject: PublishSubject<Bool>, uid: String, firstName: String, lastName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatarUrl: String) {
+        db.collection(databaseName).addDocument(data: ["uid": uid, "firstname": firstName, "lastname": lastName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password, "avatar": avatarUrl]) { (error) in
             if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             } else {
                 subject.onNext(true)
             }
         }
-        return subject.asObserver()
     }
-//    func readFromUserData(lastName: String, firstName: String, password: String) -> Observable<User?> {
-//        let subject = AsyncSubject<User?>()
-//        db.collection("user").getDocuments { (querySnapshot, error) in
-//            if let error = error {
-//                subject.onError(error)
-//            }
-//            if let querySnapshot = querySnapshot {
-//                querySnapshot.documents.forEach { (queryDocumentSnapshot) in
-//                    if let dir = queryDocumentSnapshot.data() as? [String: String] {
-//                        if dir["uid"] == "\(lastName)_\(firstName)_\(password)" {
-//                            subject.onNext(User(lastName: dir["lastname"] ?? "", firstName: dir["firstname"] ?? "", birthday: dir["birthday"] ?? "", sex: dir["sex"] ?? "", phone: dir["phone"] ?? "", address: dir["address"] ?? "", password: dir["password"] ?? ""))
-//                            subject.onCompleted()
-//                        }
-//                        if dir["lastname"] == lastName && dir["firstname"] == firstName && dir["password"] != password {
-//                            subject.onNext(User(lastName: <#T##String#>, firstName: <#T##String#>, birthday: <#T##String#>, sex: <#T##String#>, phone: <#T##String#>, address: <#T##String#>, password: <#T##String#>))
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
-//        return subject.asObserver()
-//    }
-    func login(lastName: String, firstName: String, password: String) -> Observable<LoginType> {
-        let subject = PublishSubject<LoginType>()
-        
-        db.collection("user").getDocuments { (querySnapshot, error) in
-            
+    // MARK: - 檢查帳號是否重複
+    func expectAccount(lastName: String, firstName: String) -> Observable<Bool> {
+        let subject = PublishSubject<Bool>()
+        let uid = lastName + "_" + firstName
+        var result = true
+        db.collection(databaseName).getDocuments { (querySnapshot, error) in
             if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             }
             if let querySnapshot = querySnapshot {
                 querySnapshot.documents.forEach { (queryDocumentSnapshot) in
                     if let dir = queryDocumentSnapshot.data() as? [String:String] {
-                        if dir["uid"] == "\(lastName)_\(firstName)" && dir["password"] == password {
-                            subject.onNext(.success)
-                        } else if dir["uid"] == "\(lastName)_\(firstName)" {
-                            subject.onNext(.error(.password))
-                        } else {
-                            subject.onNext(.error(.account))
+                        if dir["uid"] == uid {
+                            result = false
                         }
                     }
+                }
+            }
+            subject.onNext(result)
+        }
+        return subject.asObserver()
+    }
+    
+    // MARK: - 刪除所有使用者資料
+    func deleteUserData() -> PublishSubject<DeleteCollectionType> {
+        return deleteCollection(db, self.databaseName)
+    }
+    
+    // MARK: - 登入
+    func login(lastName: String, firstName: String, password: String) -> Observable<LoginType> {
+        let subject = PublishSubject<LoginType>()
+        
+        db.collection(databaseName).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            }
+            if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
+                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+                    if let dir = queryDocumentSnapshot.data() as? [String:String] {
+                        if dir["uid"] == "\(lastName)_\(firstName)" && dir["password"] == password {
+                            return true
+                        }
+                    }
+                    return false
+                }.isEmpty) {
+                    subject.onNext(.success)
+                } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+                    if let dir = queryDocumentSnapshot.data() as? [String:String] {
+                        if dir["uid"] == "\(lastName)_\(firstName)" {
+                            return true
+                        }
+                    }
+                    return false
+                }.isEmpty) {
+                    subject.onNext(.error(.password))
+                } else {
+                    subject.onNext(.error(.account))
+                }
+            } else {
+                subject.onNext(.error(.account))
+            }
+        }
+        return subject.asObserver()
+    }
+    
+    // MARK: - 查詢密碼
+    func requirePassword(uid: String, phone: String?, address: String?) -> Observable<RequirePasswordType> {
+        let subject = PublishSubject<RequirePasswordType>()
+        
+        var successString = ""
+        
+        db.collection(self.databaseName).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            }
+            if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
+                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+                    if let dir = queryDocumentSnapshot.data() as? [String:String] {
+                        if let phone = phone {
+                            let _phone = "243-" + phone
+                            if dir["uid"] == uid && dir["phone"] == _phone {
+                                if let password = dir["password"] {
+                                    successString = password
+                                }
+                                return true
+                            }
+                        }
+                        if let address = address {
+                            if dir["uid"] == uid && dir["address"] == address {
+                                if let password = dir["password"] {
+                                    successString = password
+                                }
+                                return true
+                            }
+                        }
+                    }
+                    return false
+                }.isEmpty) {
+                    subject.onNext(.success(successString))
+                } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+                    if let dir = queryDocumentSnapshot.data() as? [String:String] {
+                        if dir["uid"] == uid {
+                            return true
+                        }
+                    }
+                    return false
+                }.isEmpty) {
+                    subject.onNext(.error(.phone))
+                } else {
+                    subject.onNext(.error(.account))
+                }
+            } else {
+                subject.onNext(.error(.account))
+            }
+        }
+        return subject.asObserver()
+    }
+    
+    // MARK: - 取得使用者資訊
+    func getUserData(uid: String) -> Observable<User> {
+        let subject = PublishSubject<User>()
+    
+        db.collection(self.databaseName).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            }
+            if let querySnapshot = querySnapshot {
+                let document = querySnapshot.documents.first { (queryDocumentSnapshot) -> Bool in
+                    if let dir = queryDocumentSnapshot.data() as? [String:String] {
+                        return dir["uid"] == uid
+                    }
+                    return false
+                }
+                
+                if let document = document, let user = document.data() as? [String:String] {
+                    subject.onNext(User(lastName: (user["lastname"]!) as String, firstName: user["firstname"]!, birthday: user["birthday"]!, sex: user["sex"]!, phone: user["phone"]!, address: user["address"]!, password: user["password"]!, avatar: user["avatar"]!))
                 }
             }
         }
         return subject.asObserver()
     }
-}
-public struct User {
-    
-    public let lastName: String
-    public let firstName: String
-    public let birthday: String
-    public let sex: String
-    public var phone: String
-    public var address: String
-    public let password: String
 }

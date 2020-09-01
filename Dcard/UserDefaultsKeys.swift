@@ -9,35 +9,54 @@
 import UIKit
 
 //登入
-let Login_lastname = "Login_姓氏"
-let Login_firstname = "Login_名字"
+let Login_account = "Login_歷史帳號"
 
-class UserDefaultsKeys {
+public class UserDefaultsKeys {
+    public static var shared = UserDefaultsKeys()
+    public var loginReset = false //未清除
     
-    static var lastname: String {
-        return UserDefaults.standard.string(forKey: Login_lastname) ?? ""
+    static var account: [String:Date] {
+        return UserDefaults.standard.dictionary(forKey: Login_account) as? [String:Date] ?? [:]
     }
-    static var firstname: String {
-        return UserDefaults.standard.string(forKey: Login_firstname) ?? ""
-    }
+    
     //存檔
-    static func setValue(_ value: Any?, forKey key: String) {
-        UserDefaults.standard.set(value, forKey: key)
+    func setValue(_ value: Any?, forKey key: String) {
+        //清除一天前登入資料
+        if key == Login_account {
+            if let _ = UserDefaults.standard.dictionary(forKey: Login_account) {
+                let dir = value as! [String:Date]
+                var _dir = UserDefaultsKeys.account
+                removeKeysByString(prefix: "Login")
+                for key in _dir.keys {
+                    if let date = _dir[key] {
+                        let interval = Date.today.timeIntervalSince(date)
+                        let hours = floor((interval / 3600))
+                        if hours >= 4 {
+                            _dir[key] = nil
+                        }
+                    }
+                }
+                _dir[dir.keys.first!] = dir.values.first!
+                UserDefaults.standard.setValue(_dir, forKey: Login_account)
+            } else {
+                UserDefaults.standard.setValue(value, forKey: Login_account)
+            }
+        } else {
+            UserDefaults.standard.setValue(value, forKey: key)
+        }
     }
     //移除特定暫存紀錄
-    static func removeKeysByString(prefix string: String) {
+    func removeKeysByString(prefix string: String) {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             if key.hasPrefix(string) {
                 UserDefaults.standard.removeObject(forKey: key)
             }
         }
-        UserDefaults.standard.synchronize()
     }
     //移除所有紀錄
-    static func removeAllKeys() {
+    func removeAllKeys() {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
-        UserDefaults.standard.synchronize()
     }
 }

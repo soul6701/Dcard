@@ -13,17 +13,23 @@ import RxCocoa
 
 protocol LoginVMInterface {
     var creartUserDataSubject: PublishSubject<Bool> { get }
-//    var readFromUserDataSubject: AsyncSubject<User?> { get }
+    var deleteUserDataSubject: PublishSubject<DeleteCollectionType> { get }
     var loginSubject: PublishSubject<LoginType> { get }
+    var expectAccountSubject: PublishSubject<Bool> { get }
+    var requirePasswordSubject: PublishSubject<RequirePasswordType> { get }
     
-    func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String)
-//    func readFromUserData(lastName: String, firstName: String, password: String)
+    func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?)
     func login(lastName: String, firstName: String, password: String)
+    func deleteUserData()
+    func expectAccount(lastName: String, firstName: String)
+    func requirePassword(uid: String, phone: String?, address: String?)
 }
-class LoginVM {
-    private let _creartUserDataSubject = PublishSubject<Bool>()
-//    private let _readFromUserDataSubject = AsyncSubject<User?>()
-    private let _loginSubject = PublishSubject<LoginType>()
+class LoginVM: LoginVMInterface {
+    private (set) var requirePasswordSubject = PublishSubject<RequirePasswordType>()
+    private (set) var creartUserDataSubject = PublishSubject<Bool>()
+    private (set) var deleteUserDataSubject = PublishSubject<DeleteCollectionType>()
+    private (set) var loginSubject = PublishSubject<LoginType>()
+    private (set) var expectAccountSubject = PublishSubject<Bool>()
     
     private var userFirebase: UserFirebaseInterface
     private var disposeBag = DisposeBag()
@@ -32,38 +38,41 @@ class LoginVM {
         self.userFirebase = userFirebase
     }
 }
-extension LoginVM: LoginVMInterface {
-    var creartUserDataSubject: PublishSubject<Bool> {
-        return _creartUserDataSubject
-    }
-//    var readFromUserDataSubject: AsyncSubject<User?> {
-//        return _readFromUserDataSubject
-//    }
-    var loginSubject: PublishSubject<LoginType> {
-        return _loginSubject
-    }
+extension LoginVM {
     
-    func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String) {
-        userFirebase.creartUserData(lastName: lastName, firstName: firstName, birthday: birthday, sex: sex, phone: phone, address: address, password: password).subscribe(onNext: { (result) in
-            self._creartUserDataSubject.onNext(result)
+    func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) {
+        userFirebase.creartUserData(lastName: lastName, firstName: firstName, birthday: birthday, sex: sex, phone: phone, address: address, password: password, avatar: avatar).subscribe(onNext: { (result) in
+            self.creartUserDataSubject.onNext(result)
         }, onError: { (error) in
-            self._creartUserDataSubject.onError(error)
+            self.creartUserDataSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
-    
-//    func readFromUserData(lastName: String, firstName: String, password: String) {
-//        userFirebase.readFromUserData(lastName: lastName, firstName: firstName, password: password).subscribe(onNext: { (result) in
-//            self._readFromUserDataSubject.onNext(result)
-//            self._readFromUserDataSubject.onCompleted()
-//        }, onError: { (error) in
-//            self._readFromUserDataSubject.onError(error)
-//        }).disposed(by: self.disposeBag)
-//    }
     func login(lastName: String, firstName: String, password: String) {
         userFirebase.login(lastName: lastName, firstName: firstName, password: password).subscribe(onNext: { (loginType) in
-            self._loginSubject.onNext(loginType)
+            self.loginSubject.onNext(loginType)
         }, onError: { (error) in
-            self._loginSubject.onError(error)
+            self.loginSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func deleteUserData() {
+        userFirebase.deleteUserData().subscribe(onNext: { (result) in
+            self.deleteUserDataSubject.onNext(result)
+        }, onError: { (error) in
+            self.deleteUserDataSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func expectAccount(lastName: String, firstName: String) {
+        userFirebase.expectAccount(lastName: lastName, firstName: firstName).subscribe(onNext: { (result) in
+            self.expectAccountSubject.onNext(result)
+        }, onError: { (error) in
+            self.expectAccountSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func requirePassword(uid: String, phone: String?, address: String?) {
+        userFirebase.requirePassword(uid: uid, phone: phone, address: address).subscribe(onNext: { (result) in
+            self.requirePasswordSubject.onNext(result)
+        }, onError: { (error) in
+            self.requirePasswordSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

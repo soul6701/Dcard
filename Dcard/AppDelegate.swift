@@ -8,7 +8,7 @@
 
 import UIKit
 import IQKeyboardManagerSwift
-import Firebase
+import FirebaseCore
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.disabledToolbarClasses = [ChatRoomVC.self, CreateAccountVC.self, SelectCountryVC.self, SetSexVC.self, SetPasswordVC.self]
         IQKeyboardManager.shared.disabledTouchResignedClasses = [ChatRoomVC.self, SelectCountryVC.self]
         FirebaseApp.configure()
-        let db = Firestore.firestore()
+        
         return true
     }
 

@@ -25,7 +25,7 @@ class SetBirthDayVC: UIViewController {
     private var nav: LoginNAV {
         return self.navigationController as! LoginNAV
     }
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private var pickerView: UIPickerView!
     private var PickerViewIsShowing = true
     private let firstYear = 1900

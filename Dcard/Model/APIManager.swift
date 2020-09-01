@@ -6,7 +6,7 @@
 //  Copyright © 2020 Mason_Lin. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import RxSwift
 import RxCocoa
 import SwiftyJSON

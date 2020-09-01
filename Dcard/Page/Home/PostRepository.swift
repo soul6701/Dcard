@@ -20,7 +20,7 @@ protocol PostRepositoryInterface {
 }
 class PostRepository {
     public static let shared = PostRepository()
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private var posts: [Post]!
     private var comments: [Comment]!
     let apiManager: APIManager
@@ -90,7 +90,7 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                self.comments.append(Comment(id: id, anonymous: anonymous, content: content, createdAt: createdAt, floor: floor, likeCount: likeCount, gender: gender, school: school, mediaMeta: mediaMeta, department: department, host: host, withNickname: withNickname))
+                self.comments.append(Comment(id: id, anonymous: anonymous, content: content, createdAt: createdAt, floor: floor, likeCount: likeCount, gender: gender, department: department, school: school, withNickname: withNickname, host: host, mediaMeta: mediaMeta))
             }
             subject.onNext(self.comments)
         }, onError: { error in

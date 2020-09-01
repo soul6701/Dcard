@@ -27,9 +27,11 @@ class SetPhoneAddressVC: UIViewController {
     private var nav: LoginNAV {
         return self.navigationController as! LoginNAV
     }
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private var phone = ""
     private var address = ""
+    private var code = ""
+    private var alias = ""
     private var mode: SetPhoneAddressVCMode = .phone {
         didSet {
             UIView.animate(withDuration: 0.3, animations: {
@@ -65,13 +67,15 @@ class SetPhoneAddressVC: UIViewController {
     private var leftview: UIView!
     private let lbCountryAlias = UILabel()
     private let lbCountryCode = UILabel()
-    private var country = Country(name: "台灣", alias: "TW", code: "+86")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.phone = self.nav.phone
         self.address = self.nav.address
+        self.code = self.nav.code
+        self.alias = self.nav.alias
+        
         initView()
         subscribe()
     }
@@ -79,6 +83,8 @@ class SetPhoneAddressVC: UIViewController {
         super.viewWillDisappear(animated)
         self.nav.setLoginInfo(phone: self.phone)
         self.nav.setLoginInfo(address: self.address)
+        self.nav.setLoginInfo(alias: self.alias)
+        self.nav.setLoginInfo(code: self.code)
     }
     @IBAction func didClickBtnChange(_ sender: UIButton) {
         self.mode = self.mode == .phone ? .address : .phone
@@ -118,7 +124,7 @@ extension SetPhoneAddressVC {
         leftview.widthAnchor.constraint(equalToConstant: self.tfPhone.bounds.width / 3).isActive = true
         
         self.lbCountryAlias.textAlignment = .center
-        self.lbCountryAlias.text = self.country.alias
+        self.lbCountryAlias.text = self.alias
         
         leftview.addSubview(self.lbCountryAlias)
         self.lbCountryAlias.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -136,7 +142,7 @@ extension SetPhoneAddressVC {
         
         
         self.lbCountryCode.textAlignment = .center
-        self.lbCountryCode.text = self.country.code
+        self.lbCountryCode.text = self.code
 
         let stackView = UIStackView(arrangedSubviews: [self.lbCountryAlias, _view, self.lbCountryCode])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -194,6 +200,11 @@ extension SetPhoneAddressVC {
                 self.btnNext.alpha = text.isEmpty ? 0 : 1
                 self.btnNext.center.y -= 30
             }
+            if self.mode == .phone {
+                self.phone = text
+            } else {
+                self.address = text
+            }
         }).disposed(by: self.disposeBag)
     }
 }
@@ -202,5 +213,7 @@ extension SetPhoneAddressVC: SelectCountryVCDelegate {
     func didSelectCountry(country: Country) {
         self.lbCountryAlias.text = country.alias
         self.lbCountryCode.text = country.code
+        self.code = country.code
+        self.alias = country.alias
     }
 }

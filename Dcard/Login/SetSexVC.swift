@@ -40,7 +40,7 @@ class SetSexVC: UIViewController {
     private var sexOption: Int = 0
     private var sexName: String = ""
     private var sexNameOption: String = ""
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()

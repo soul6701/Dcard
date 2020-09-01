@@ -59,18 +59,5 @@ public struct Comment {
     let host: Bool
     let mediaMeta: [MediaMeta]
     
-    init(id: String, anonymous: Bool, content: String, createdAt: String, floor: Int, likeCount: Int, gender: String, school: String, mediaMeta: [MediaMeta], department: String, host: Bool, withNickname: Bool) {
-        self.id = id
-        self.anonymous = anonymous
-        self.content = content
-        self.createdAt = createdAt
-        self.floor = floor
-        self.likeCount = likeCount
-        self.gender = gender
-        self.school = school
-        self.mediaMeta = mediaMeta
-        self.department = department
-        self.host = host
-        self.withNickname = withNickname
-    }
+    
 }

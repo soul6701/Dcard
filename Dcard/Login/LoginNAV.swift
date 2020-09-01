@@ -14,89 +14,76 @@ protocol LoginInfo {
     var sexName: String { get }
     var sexNameOption: String { get }
     var birthday: String { get }
+    var code: String { get }
+    var alias: String { get }
     var phone: String { get }
     var address: String { get }
     var password: String { get }
+    var avatar: UIImage? { get }
+    var _delegate: LoginVCDelegate? { get }
 }
 import UIKit
 
 class LoginNAV: UINavigationController, LoginInfo {
     
-    var lastName: String {
-        return _lastName
-    }
-    var firstName: String {
-        return _firstName
-    }
-    var sex: String {
-        return _sex
-    }
-    var sexOption: Int {
-        return _sexOption
-    }
-    var sexName: String {
-        return _sexName
-    }
-    var sexNameOption: String {
-        return _sexNameOption
-    }
-    var birthday: String {
-        return _birthday
-    }
-    var phone: String {
-        return _phone
-    }
-    var address: String {
-        return _address
-    }
-    var password: String {
-        return _password
-    }
-    
-    private var _lastName: String = ""
-    private var _firstName: String = ""
-    private var _sex: String = ""
-    private var _sexOption: Int = 0
-    private var _sexName: String = ""
-    private var _sexNameOption: String = ""
-    private var _birthday: String = ""
-    private var _phone: String = ""
-    private var _address: String = ""
-    private var _password: String = ""
+    private(set) var _delegate: LoginVCDelegate?
+    private(set) var lastName: String = ""
+    private(set) var firstName: String = ""
+    private(set) var sex: String = ""
+    private(set) var sexOption: Int = 0
+    private(set) var sexName: String = ""
+    private(set) var sexNameOption: String = ""
+    private(set) var birthday: String = ""
+    private(set) var code: String = "86"
+    private(set) var alias: String = "TW"
+    private(set) var phone: String = ""
+    private(set) var address: String = ""
+    private(set) var password: String = ""
+    private(set) var avatar: UIImage? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     func setLoginInfo(lastname: String) {
-        self._lastName = lastname
+        self.lastName = lastname
     }
     func setLoginInfo(firstName: String) {
-        self._firstName = firstName
+        self.firstName = firstName
     }
     func setLoginInfo(sex: String) {
-        self._sex = sex
+        self.sex = sex
     }
     func setLoginInfo(sexOption: Int) {
-        self._sexOption = sexOption
+        self.sexOption = sexOption
     }
     func setLoginInfo(sexName: String) {
-        self._sexName = sexName
+        self.sexName = sexName
     }
     func setLoginInfo(sexNameOption: String) {
-        self._sexNameOption = sexNameOption
+        self.sexNameOption = sexNameOption
     }
     func setLoginInfo(birthday: String) {
-        self._birthday = birthday
+        self.birthday = birthday
+    }
+    func setLoginInfo(code: String) {
+        self.code = code
+    }
+    func setLoginInfo(alias: String) {
+        self.alias = alias
     }
     func setLoginInfo(phone: String) {
-        self._phone = phone
+        self.phone = phone
     }
     func setLoginInfo(address: String) {
-        self._address = address
+        self.address = address
     }
     func setLoginInfo(password: String) {
-        self._password = password
+        self.password = password
+    }
+    func setLoginInfo(avatar: UIImage) {
+        self.avatar = avatar
+    }
+    func setDelegate(delegate: LoginVCDelegate) {
+        self._delegate = delegate
     }
 }

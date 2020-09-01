@@ -44,7 +44,6 @@ extension SetPasswordVC {
         self.btnNext.layer.cornerRadius = LoginManager.shared.commonCornerRadius
         
         self.tfPassword.text = self.password
-        self.tfPassword.delegate = self
         
         LoginManager.shared.addTapGesture(to: self.viewHaveAccount, disposeBag: self.disposeBag)
         LoginManager.shared.addSwipeGesture(to: self.view, disposeBag: self.disposeBag) {
@@ -70,18 +69,13 @@ extension SetPasswordVC {
         }).disposed(by: self.disposeBag)
         self.tfPassword.rx.controlEvent(.editingDidEnd).asObservable().subscribe(onNext: { (_) in
             let text = self.tfPassword.text ?? ""
-            self.lbHint.isHidden = !text.isEmpty
-            self.btnNext.isHidden = text.isEmpty
+            self.lbHint.isHidden = text.count >= 6
+            self.btnNext.isHidden = !(text.count >= 6)
             UIView.animate(withDuration: 0.3) {
-                self.btnNext.alpha = text.isEmpty ? 0 : 1
+                self.btnNext.alpha = !(text.count >= 6) ? 0 : 1
                 self.btnNext.center.y -= 30
             }
+            self.password = text
         }).disposed(by: self.disposeBag)
-    }
-}
-// MARK: - UITextFieldDelegate
-extension SetPasswordVC: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        self.password = textField.text ?? ""
     }
 }

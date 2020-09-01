@@ -22,11 +22,10 @@ class CreateAccountVC: UIViewController {
     private var nav: LoginNAV {
         return self.navigationController as! LoginNAV
     }
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private var lastName = ""
     private var firstName = ""
-    var lastVC: LoginVC?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,9 +41,16 @@ class CreateAccountVC: UIViewController {
         self.nav.setLoginInfo(firstName: self.firstName)
     }
     @IBAction func didClcikBtnNext(_ sender: UIButton) {
+        self.nav._delegate?.expectAccount(lastName: self.lastName, firstName: self.firstName)
+    }
+    func toNextPage() {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SetBirthDayVC") as? SetBirthDayVC {
             self.navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    func clear() {
+        self.tfLastName.text = ""
+        self.tfFirstName.text = ""
     }
 }
 // MARK: - SetupUI

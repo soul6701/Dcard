@@ -74,6 +74,7 @@ extension SelectCountryVC {
         confiSearchBar()
         confiTableView()
         getCountryList()
+        
     }
     private func confiTableView() {
         self.tableView.delegate = self
@@ -86,15 +87,42 @@ extension SelectCountryVC {
         var _mainCountryList = [Country]()
         var _otherCountryList = [Country]()
         
-        (1...6).forEach { (i) in
-            _mainCountryList.append(Country(name: "台灣", alias: "TW", code: "+86"))
-        }
-        let list = [Country(name: "台中", alias: "TC", code: "+1"), Country(name: "美國", alias: "US", code: "+2"), Country(name: "台南", alias: "TN", code: "+3"), Country(name: "台東", alias: "TD", code: "+4")]
-        (1...100).forEach { (i) in
-            if let random = list.randomElement() {
-                _otherCountryList.append(Country(name: random.name, alias:  random.alias, code: random.code))
+        LoginManager.shared.getCountryCode { (userinfoCountryCode, idToCountrycode) in
+            userinfoCountryCode.keys.forEach { (key) in
+                if key != "0" {
+                    var code = ""
+                    var name = ""
+                    let code_regex = try! NSRegularExpression(pattern: "\\d+")
+                    guard let value = userinfoCountryCode[key], !value.isEmpty else {
+                        return
+                    }
+                    if let first = code_regex.firstMatch(in: value, options: [], range: NSRange(location: 0, length: value.count)) {
+                        print("🐶🐶🐶\(first)🐶🐶🐶")
+                        code = (value as NSString).substring(with: first.range)
+                    }
+                    let name_regex = try! NSRegularExpression(pattern: "\\S+")
+                    if let first = name_regex.firstMatch(in: value, options: [], range: NSRange(location: 0, length: value.count)) {
+                        name = (value as NSString).substring(with: first.range)
+                        print(name)
+                    }
+                    if name == "美國" || name == "台灣" || name == "中國" || name == "韓國" || name == "法國" {
+                        _mainCountryList.append(Country(name: name, alias: key, code: code))
+                    } else {
+                        _otherCountryList.append(Country(name: name, alias: key, code: code))
+                    }
+                }
             }
         }
+        
+//        (1...6).forEach { (i) in
+//            _mainCountryList.append(Country(name: "台灣", alias: "TW", code: "+86"))
+//        }
+//        let list = [Country(name: "台中", alias: "TC", code: "+1"), Country(name: "美國", alias: "US", code: "+2"), Country(name: "台南", alias: "TN", code: "+3"), Country(name: "台東", alias: "TD", code: "+4")]
+//        (1...100).forEach { (i) in
+//            if let random = list.randomElement() {
+//                _otherCountryList.append(Country(name: random.name, alias:  random.alias, code: random.code))
+//            }
+//        }
         self.mainCountryList = _mainCountryList
         self.otherCountryList = _otherCountryList
     }
@@ -179,6 +207,7 @@ extension SelectCountryVC: UISearchBarDelegate {
         self.searchBar.setShowsCancelButton(false, animated: true)
         self.mode = .common
         self.tableView.reloadData()
+        closeKeyboard()
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         var list = [Country]()

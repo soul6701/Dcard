@@ -19,7 +19,7 @@ class SelectPronView: UIView {
     @IBOutlet weak var bottomspace: NSLayoutConstraint!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var view: UIView!
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private lazy var tapGesList: [UITapGestureRecognizer] = {
         var list = [UITapGestureRecognizer]()
         (1...3).forEach { (i) in

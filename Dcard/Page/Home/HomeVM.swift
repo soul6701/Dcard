@@ -15,58 +15,61 @@ protocol RecentPostInterface {
     var postsSubject: PublishSubject<[Post]> { get } //取得話題貼文
     var commentSubject: PublishSubject<([Comment], Int)> { get } //取得留言
     var forumsSubject: PublishSubject<[Forum]> { get } //取得話題
+    var userDataSubject: PublishSubject<User> { get } //取得使用者資訊
+    
     func getRecentPost()
     func getComment(list: [Post], index: Int)
     func getForums()
     func getPosts(alias: String)
+    func getUserData(uid: String)
 }
 class HomeVM {
-    private let _recentPostSubject = PublishSubject<[Post]>()
-    private let _postsSubject = PublishSubject<[Post]>()
-    private let _commentSubject = PublishSubject<([Comment], Int)>()
-    private let _forumsSubject = PublishSubject<[Forum]>()
-    private let postRepository = PostRepository.shared
-    private let disposeBag = DisposeBag()
+    private(set) var recentPostSubject = PublishSubject<[Post]>()
+    private(set) var commentSubject = PublishSubject<([Comment], Int)>()
+    private(set) var forumsSubject = PublishSubject<[Forum]>()
+    private(set) var postsSubject = PublishSubject<[Post]>()
+    private(set) var userDataSubject = PublishSubject<User>()
+    private(set) var disposeBag = DisposeBag()
+    
+    private var postRepository = PostRepository.shared
+    private var userFirebase = UserFirebase.shared
+    
 }
 extension HomeVM: RecentPostInterface {
-    var postsSubject: PublishSubject<[Post]> {
-        return _postsSubject
-    }
-    var recentPostSubject: PublishSubject<[Post]> {
-        return _recentPostSubject
-    }
-    var commentSubject: PublishSubject<([Comment], Int)> {
-        return _commentSubject
-    }
-    var forumsSubject: PublishSubject<[Forum]> {
-        return _forumsSubject
-    }
+    
     func getRecentPost() {
         postRepository.getRecentPost(limit: "10").subscribe(onNext: { posts in
-            self._recentPostSubject.onNext(posts)
+            self.recentPostSubject.onNext(posts)
         }, onError: { error in
-            self._recentPostSubject.onError(error)
+            self.recentPostSubject.onError(error)
             }).disposed(by: disposeBag)
     }
     func getComment(list: [Post], index: Int) {
         postRepository.getComment(id: list[index].id).subscribe(onNext: { comments in
-            self._commentSubject.onNext((comments, index))
+            self.commentSubject.onNext((comments, index))
         }, onError: { error in
-        self._commentSubject.onError(error)
+        self.commentSubject.onError(error)
             }).disposed(by: disposeBag)
     }
     func getForums() {
         postRepository.getForums().subscribe(onNext: { forums in
-            self._forumsSubject.onNext(forums)
+            self.forumsSubject.onNext(forums)
         }, onError: { error in
-        self._forumsSubject.onError(error)
+        self.forumsSubject.onError(error)
             }).disposed(by: disposeBag)
     }
     func getPosts(alias: String) {
         postRepository.getPosts(alias: alias, limit: "100").subscribe(onNext: { posts in
-            self._postsSubject.onNext(posts)
+            self.postsSubject.onNext(posts)
         }, onError: { error in
-            self._postsSubject.onError(error)
+            self.postsSubject.onError(error)
+            }).disposed(by: disposeBag)
+    }
+    func getUserData(uid: String) {
+        userFirebase.getUserData(uid: uid).subscribe(onNext: { user in
+            self.userDataSubject.onNext(user)
+        }, onError: { error in
+            self.userDataSubject.onError(error)
             }).disposed(by: disposeBag)
     }
 }

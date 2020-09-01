@@ -78,7 +78,7 @@ class ChatRoomVC: UIViewController {
             self.tableViewSearchResult.reloadData()
         }
     }
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private var directionMode: ChatRoomDirectionMode = .down
     private var phoneView: MessageView!
     private var btnMenu: UIButton!

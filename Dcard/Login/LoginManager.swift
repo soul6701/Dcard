@@ -10,6 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 import SwiftMessages
+import SwiftyJSON
 
 protocol LoginManagerInterface {
     func showConfirmView(_ vc: UIViewController)
@@ -23,6 +24,8 @@ protocol LoginManagerInterface {
 enum OKMode {
     case login
     case create
+    case delete
+    case required
 }
 class LoginManager: LoginManagerInterface {
     static let shared = LoginManager()
@@ -92,7 +95,18 @@ class LoginManager: LoginManagerInterface {
     }
     func showOKView(mode: OKMode, handler: (() -> Void)?) {
         self.OKconfig.duration = .seconds(seconds: mode == .create ? 2 : 1)
-        self.OKView.configureContent(title: "", body: mode == .create ? "註冊成功" : "成功")
+        var body = ""
+        switch mode {
+        case .create:
+            body = "註冊成功"
+        case .login:
+            body = "登入成功"
+        case .delete:
+            body = "刪除成功"
+        case .required:
+            body = "查詢成功，自動填入"
+        }
+        self.OKView.configureContent(title: "", body: body)
         self.OKconfig.eventListeners = .init(arrayLiteral: { (event) in
             if event == .didHide {
                 SwiftMessages.hide(id: "success")
@@ -107,5 +121,21 @@ class LoginManager: LoginManagerInterface {
             handler?()
         }
         SwiftMessages.show(config: self.alertconfig, view: self.alertView)
+    }
+    func getCountryCode(handler: ([String:String], [String:String]) -> Void) {
+        var userinfo_country_code: [String:String] = [:]
+        var id_to_countrycode: [String:String] = [:]
+        
+        let path = Bundle.main.path(forResource: "country", ofType: "json")
+        if let jsonData = try? NSData(contentsOfFile: path!, options: .mappedIfSafe) {
+            do {
+                let jsonObj = try JSON(data: jsonData as Data)
+                userinfo_country_code = jsonObj["userinfo_country_code"].dictionaryObject as! [String:String]
+                id_to_countrycode = jsonObj["id_to_countrycode"].dictionaryObject as! [String:String]
+            } catch let error {
+                printError(title: "解析JSON失敗", error: error.localizedDescription, content: String(bytes: jsonData, encoding: .utf8))
+            }
+        }
+        handler(userinfo_country_code, id_to_countrycode)
     }
 }

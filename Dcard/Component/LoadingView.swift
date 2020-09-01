@@ -57,4 +57,7 @@ class LoadingView: UIView {
             removeFromSuperview()
         }
     }
+    static func reset() {
+        self._shared = nil
+    }
 }

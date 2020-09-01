@@ -21,6 +21,7 @@ protocol ToolbarViewDelegate {
 class ToolbarView: UIView {
     private static var _shared: ToolbarView?
     private var delegate: ToolbarViewDelegate?
+    @IBOutlet weak var imageAvatar: UIButton!
     
     static var shared: ToolbarView {
         if _shared == nil {
@@ -31,6 +32,12 @@ class ToolbarView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.imageAvatar.imageView?.layer.borderWidth = 1
+        self.imageAvatar.imageView?.layer.borderColor = UIColor.blue.cgColor
+        
+    }
+    override func layoutSubviews() {
+        self.imageAvatar.imageView?.layer.cornerRadius = self.imageAvatar.imageView!.bounds.width / 2
     }
     @IBAction func didClickPageButton(_ sender: UIButton) {
         var page: PageType?
@@ -66,5 +73,8 @@ class ToolbarView: UIView {
     }
     func setDelegate(delegate: ToolbarViewDelegate?) {
         self.delegate = delegate
+    }
+    func setAvatar(url: String) {
+        self.imageAvatar.kf.setImage(with: URL(string: url), for: .normal)
     }
 }
