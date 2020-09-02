@@ -30,6 +30,10 @@ pod 'Firebase/Firestore'
 pod 'Firebase/Database'
 pod 'GoogleSignIn'
 pod 'RxDataSources', '~> 4.0'
+pod 'Firebase/Storage'
+
 pod 'MBRadioCheckboxButton'
+#下拉式選單
+pod 'DropDown'
 
 end
