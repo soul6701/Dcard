@@ -34,18 +34,15 @@ class HomeVC: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-         self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         ToolbarView.shared.show(true)
         guard let currentForum = currentForum else {
-            LoadingView.shared.show(true)
+//            LoadingView.shared.show(true)
             viewModel.getForums()
             return
         }
         //        viewModel.getRecentPost()
         viewModel.getPosts(alias: currentForum.alias)
-    }
-    func setUid(uid: String) {
-        self.uid = uid
     }
 }
 // MARK: - SubscribeViewModel
@@ -110,6 +107,7 @@ extension HomeVC {
 extension HomeVC {
     private func initView() {
         ToolbarView.shared.setDelegate(delegate: self)
+        self.navigationItem.title = "首頁"
         self.window = UIApplication.shared.windows.first!
         self.bottomSpace.constant = 80
         
@@ -175,7 +173,10 @@ extension HomeVC {
 // MARK: - PreloadData
 extension HomeVC {
     private func preloadUserdata() {
-        self.viewModel.getUserData(uid: self.uid)
+        let user = ModelSingleton.shared.userConfig.user
+        if user.firstName != "" {
+            self.viewModel.getUserData(uid: user.uid)
+        }
     }
 }
 // MARK: - UITableViewDelegate
@@ -226,7 +227,7 @@ extension HomeVC: ToolbarViewDelegate {
         case .Game:
             vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! GameVC
         case .Catalog:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! CatalogVC
+            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! CardVC
         case .Home:
             if let nav = self.navigationController {
                 for vc in nav.viewControllers where vc is HomeVC {

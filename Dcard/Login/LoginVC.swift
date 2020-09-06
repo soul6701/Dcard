@@ -46,8 +46,11 @@ class LoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
-        confiViewModel()
-        subsribeViewModel()
+//        confiViewModel()
+//        subsribeViewModel()
+        if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -177,7 +180,6 @@ extension LoginVC {
                     if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
                         self.navigationController?.pushViewController(vc, animated: true)
                         UserDefaultsKeys.shared.setValue([self.tfAccount.text!: Date()], forKey: Login_account)
-                        vc.setUid(uid: self.tfAccount.text!)
                         print("🐶🐶🐶🐶🐶\(UserDefaultsKeys.account)🐶🐶🐶🐶🐶")
                     }
                 }

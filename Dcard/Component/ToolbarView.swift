@@ -75,6 +75,10 @@ class ToolbarView: UIView {
         self.delegate = delegate
     }
     func setAvatar(url: String) {
-        self.imageAvatar.kf.setImage(with: URL(string: url), for: .normal)
+        if url != "" {
+            self.imageAvatar.kf.setImage(with: URL(string: url), for: .normal)
+        } else {
+            self.imageAvatar.setImage(UIImage(named: ImageInfo.profile), for: .normal)
+        }
     }
 }

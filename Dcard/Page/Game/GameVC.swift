@@ -25,7 +25,7 @@ class GameVC: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         ToolbarView.shared.show(true)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -17,6 +17,8 @@ enum DeleteCollectionType {
 }
 
 class FirebaseManager {
+    static var shared = FirebaseManager()
+    
     var db: Firestore = Firestore.firestore()
     
     var deleteCollection = { (db: Firestore, name: String) -> PublishSubject<DeleteCollectionType> in

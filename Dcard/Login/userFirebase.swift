@@ -6,7 +6,7 @@
 //  Copyright © 2020 Mason_Lin. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import RxSwift
 import RxCocoa
 import Firebase
@@ -34,8 +34,7 @@ protocol UserFirebaseInterface {
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<RequirePasswordType>
 }
 
-class UserFirebase: FirebaseManager, UserFirebaseInterface {
-    
+public class UserFirebase: UserFirebaseInterface {
     public static var shared = UserFirebase()
     private var databaseName = "user"
     
@@ -71,7 +70,7 @@ class UserFirebase: FirebaseManager, UserFirebaseInterface {
         return subject.asObserver()
     }
     private func addDocument(subject: PublishSubject<Bool>, uid: String, firstName: String, lastName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatarUrl: String) {
-        db.collection(databaseName).addDocument(data: ["uid": uid, "firstname": firstName, "lastname": lastName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password, "avatar": avatarUrl]) { (error) in
+        FirebaseManager.shared.db.collection(databaseName).addDocument(data: ["uid": uid, "firstname": firstName, "lastname": lastName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password, "avatar": avatarUrl]) { (error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
@@ -85,7 +84,7 @@ class UserFirebase: FirebaseManager, UserFirebaseInterface {
         let subject = PublishSubject<Bool>()
         let uid = lastName + "_" + firstName
         var result = true
-        db.collection(databaseName).getDocuments { (querySnapshot, error) in
+        FirebaseManager.shared.db.collection(databaseName).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
@@ -106,14 +105,14 @@ class UserFirebase: FirebaseManager, UserFirebaseInterface {
     
     // MARK: - 刪除所有使用者資料
     func deleteUserData() -> PublishSubject<DeleteCollectionType> {
-        return deleteCollection(db, self.databaseName)
+        return FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, self.databaseName)
     }
     
     // MARK: - 登入
     func login(lastName: String, firstName: String, password: String) -> Observable<LoginType> {
         let subject = PublishSubject<LoginType>()
         
-        db.collection(databaseName).getDocuments { (querySnapshot, error) in
+        FirebaseManager.shared.db.collection(databaseName).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
@@ -122,6 +121,7 @@ class UserFirebase: FirebaseManager, UserFirebaseInterface {
                 if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
                     if let dir = queryDocumentSnapshot.data() as? [String:String] {
                         if dir["uid"] == "\(lastName)_\(firstName)" && dir["password"] == password {
+                            ModelSingleton.shared.setUserConfig(config: UserConfig(user: User(uid: dir["uid"]!, lastName: dir["lastName"]!, firstName: dir["firstName"]!, birthday: dir["birthday"]!, sex: dir["sex"]!, phone: dir["phone"]!, address: dir["address"]!, password: dir["password"]!, avatar: dir["avatar"]!), cardmode: 0))
                             return true
                         }
                     }
@@ -153,7 +153,7 @@ class UserFirebase: FirebaseManager, UserFirebaseInterface {
         
         var successString = ""
         
-        db.collection(self.databaseName).getDocuments { (querySnapshot, error) in
+        FirebaseManager.shared.db.collection(self.databaseName).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
@@ -205,7 +205,7 @@ class UserFirebase: FirebaseManager, UserFirebaseInterface {
     func getUserData(uid: String) -> Observable<User> {
         let subject = PublishSubject<User>()
     
-        db.collection(self.databaseName).getDocuments { (querySnapshot, error) in
+        FirebaseManager.shared.db.collection(self.databaseName).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
@@ -219,7 +219,7 @@ class UserFirebase: FirebaseManager, UserFirebaseInterface {
                 }
                 
                 if let document = document, let user = document.data() as? [String:String] {
-                    subject.onNext(User(lastName: (user["lastname"]!) as String, firstName: user["firstname"]!, birthday: user["birthday"]!, sex: user["sex"]!, phone: user["phone"]!, address: user["address"]!, password: user["password"]!, avatar: user["avatar"]!))
+                    subject.onNext(User(uid: user["uid"]!, lastName: user["lastname"]!, firstName: user["firstname"]!, birthday: user["birthday"]!, sex: user["sex"]!, phone: user["phone"]!, address: user["address"]!, password: user["password"]!, avatar: user["avatar"]!))
                 }
             }
         }

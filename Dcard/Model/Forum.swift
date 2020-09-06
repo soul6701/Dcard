@@ -14,4 +14,10 @@ public struct Forum {
     let logo: String
     let postCount: Int //最近30天發文數
     
+    public init(alias: String = "", name: String = "", logo: String = "", postCount: Int = 0) {
+        self.alias = alias
+        self.name = name
+        self.logo = logo
+        self.postCount = postCount
+    }
 }
