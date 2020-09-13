@@ -15,9 +15,6 @@ extension Date {
     static var calendar: Calendar {
         return Calendar(identifier: .gregorian)
     }
-    static var today: Date {
-        return Date()
-    }
     
     var FirstDayInMonth: Date {
         let _firstDay: DateComponents = Date.calendar.dateComponents([.year, .month], from: self)

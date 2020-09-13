@@ -9,6 +9,8 @@
 import UIKit
 import IQKeyboardManagerSwift
 import FirebaseCore
+import FirebaseAuth
+import FirebaseDatabase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -31,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         print("height: \(UIScreen.main.bounds.height) width: \(UIScreen.main.bounds.width)")
-//        Thread.sleep(forTimeInterval: 1)
+        Thread.sleep(forTimeInterval: 1)
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
         IQKeyboardManager.shared.enableAutoToolbar = true
@@ -40,6 +42,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.disabledTouchResignedClasses = [ChatRoomVC.self, SelectCountryVC.self]
         FirebaseApp.configure()
         
+        UINavigationBar.appearance().tintColor = UIColor.white
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        
+//        Auth.auth().createUser(withEmail: "soul6701@gmail.com", password: "123456789") { (user, error) in
+//            guard let user = user, error == nil else {
+//                NSLog("\n🔥🔥🔥🔥🔥🔥🔥🔥🔥創建帳戶失敗!" + error!.localizedDescription + "🔥🔥🔥🔥🔥🔥🔥🔥🔥\n")
+//                return
+//            }
+//            let ref: DatabaseReference = Database.database().ref
+//            let full_name = ["First-name": "lin" , "Last-name": "mason"]
+//            ref.child("users").child(user.user.uid).setValue(["username": full_name])
+//            NSLog("😆😆😆😆😆😆😆😆😆創建帳戶成功!😆😆😆😆😆😆😆😆😆")
+//        }
         return true
     }
 

@@ -12,16 +12,24 @@ import RxSwift
 import SwiftMessages
 import SwiftyJSON
 
+enum LoginPageType: String {
+    case CreateAccountVC
+    case SetBirthDayVC
+    case SetPhoneAddressVC
+    case SetSexVC
+    case SetPasswordVC
+    case CompleteRegisterVC
+}
 protocol LoginManagerInterface {
     func showConfirmView(_ vc: UIViewController)
     func addSwipeGesture(to view: UIView, disposeBag: DisposeBag, handler: @escaping () -> Void)
     func addTapGesture(to view: UIView, disposeBag: DisposeBag)
     func confiOKView()
     func confiAlertView()
-    func showOKView(mode: OKMode, handler: (() -> Void)?)
+    func showOKView(mode: LoginOKMode, handler: (() -> Void)?)
     func showAlertView(errorMessage: String, handler: (() -> Void)?)
 }
-enum OKMode {
+enum LoginOKMode {
     case login
     case create
     case delete
@@ -29,9 +37,6 @@ enum OKMode {
 }
 class LoginManager: LoginManagerInterface {
     static let shared = LoginManager()
-    var commonCornerRadius: CGFloat = 5
-    var commonBorderWidth: CGFloat = 1
-    var commonBorderColor = UIColor.lightGray.cgColor
     var OKView: MessageView!
     var OKconfig: SwiftMessages.Config!
     var alertView: MessageView!
@@ -42,16 +47,7 @@ class LoginManager: LoginManagerInterface {
         confiAlertView()
     }
     
-    func showConfirmView(_ vc: UIViewController) {
-        let alertsheet = UIAlertController(title: "", message: "已經有帳號了？", preferredStyle: .actionSheet)
-        let signInAction = UIAlertAction(title: "登入", style: .default) { (_) in
-            vc.dismiss(animated: true, completion: nil)
-        }
-        let continueAction = UIAlertAction(title: "繼續註冊", style: .default)
-        alertsheet.addAction(signInAction)
-        alertsheet.addAction(continueAction)
-        vc.present(alertsheet, animated: true)
-    }
+    //翻頁手勢
     func addSwipeGesture(to view: UIView, disposeBag: DisposeBag, handler: @escaping () -> Void) {
         let swipe = UISwipeGestureRecognizer()
         swipe.direction = .right
@@ -63,6 +59,7 @@ class LoginManager: LoginManagerInterface {
             }).disposed(by: disposeBag)
         view.addGestureRecognizer(swipe)
     }
+    //確認視窗是否繼續註冊 或 回到登入首頁
     func addTapGesture(to view: UIView, disposeBag: DisposeBag) {
         let ges = UITapGestureRecognizer()
         ges.rx.event.asControlEvent().subscribe(onNext: { (tap) in
@@ -72,7 +69,18 @@ class LoginManager: LoginManagerInterface {
             }).disposed(by: disposeBag)
         view.addGestureRecognizer(ges)
     }
+    func showConfirmView(_ vc: UIViewController) {
+        let alertsheet = UIAlertController(title: "", message: "已經有帳號了？", preferredStyle: .actionSheet)
+        let signInAction = UIAlertAction(title: "登入", style: .default) { (_) in
+            vc.dismiss(animated: true, completion: nil)
+        }
+        let continueAction = UIAlertAction(title: "繼續註冊", style: .default)
+        alertsheet.addAction(signInAction)
+        alertsheet.addAction(continueAction)
+        vc.present(alertsheet, animated: true)
+    }
     
+    //成功視窗
     func confiOKView() {
         self.OKView = MessageView.viewFromNib(layout: .centeredView)
         self.OKView.id = "success"
@@ -83,17 +91,7 @@ class LoginManager: LoginManagerInterface {
         self.OKconfig.presentationContext = .window(windowLevel: .normal)
         self.OKconfig.presentationStyle = .center
     }
-    func confiAlertView() {
-        self.alertView = MessageView.viewFromNib(layout: .centeredView)
-        self.alertView.id = "alert"
-        self.alertView.configureTheme(backgroundColor: #colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1), foregroundColor: .black)
-        
-        self.alertconfig = SwiftMessages.Config()
-        self.alertconfig.presentationContext = .window(windowLevel: .alert)
-        self.alertconfig.presentationStyle = .center
-        self.alertconfig.duration = .forever
-    }
-    func showOKView(mode: OKMode, handler: (() -> Void)?) {
+    func showOKView(mode: LoginOKMode, handler: (() -> Void)?) {
         self.OKconfig.duration = .seconds(seconds: mode == .create ? 2 : 1)
         var body = ""
         switch mode {
@@ -115,6 +113,17 @@ class LoginManager: LoginManagerInterface {
         })
         SwiftMessages.show(config: self.OKconfig, view: self.OKView)
     }
+    //警告視窗
+    func confiAlertView() {
+        self.alertView = MessageView.viewFromNib(layout: .centeredView)
+        self.alertView.id = "alert"
+        self.alertView.configureTheme(backgroundColor: #colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1), foregroundColor: .black)
+        
+        self.alertconfig = SwiftMessages.Config()
+        self.alertconfig.presentationContext = .window(windowLevel: .alert)
+        self.alertconfig.presentationStyle = .center
+        self.alertconfig.duration = .forever
+    }
     func showAlertView(errorMessage: String, handler: (() -> Void)?) {
         self.alertView.configureContent(title: "錯誤", body: errorMessage, iconImage: nil, iconText: nil, buttonImage: nil, buttonTitle: "OK") { (btn) in
             SwiftMessages.hide(id: "alert")
@@ -122,6 +131,7 @@ class LoginManager: LoginManagerInterface {
         }
         SwiftMessages.show(config: self.alertconfig, view: self.alertView)
     }
+    //取得國碼
     func getCountryCode(handler: ([String:String], [String:String]) -> Void) {
         var userinfo_country_code: [String:String] = [:]
         var id_to_countrycode: [String:String] = [:]
@@ -137,5 +147,12 @@ class LoginManager: LoginManagerInterface {
             }
         }
         handler(userinfo_country_code, id_to_countrycode)
+    }
+    //跳轉指定頁面
+    func toNextPage(_ currentVC: UINavigationController, next: LoginPageType) {
+        let stroyboard = UIStoryboard(name: "Login", bundle: nil)
+        var nextVC: UIViewController
+        nextVC = stroyboard.instantiateViewController(withIdentifier: next.rawValue)
+        currentVC.pushViewController(nextVC, animated: true)
     }
 }

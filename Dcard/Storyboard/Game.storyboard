@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PER-pR-sN8">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PER-pR-sN8">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -15,6 +15,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ye-2h-yL5">
+                                <rect key="frame" x="0.0" y="114" width="414" height="748"/>
+                            </view>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lF1-3C-S1V">
                                 <rect key="frame" x="119" y="54" width="176" height="61"/>
                                 <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -35,6 +38,10 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="8ye-2h-yL5" firstAttribute="top" secondItem="lF1-3C-S1V" secondAttribute="bottom" id="3qd-Ww-HJW"/>
+                            <constraint firstItem="Kkc-4x-LiY" firstAttribute="bottom" secondItem="8ye-2h-yL5" secondAttribute="bottom" id="64h-V1-0az"/>
+                            <constraint firstItem="Kkc-4x-LiY" firstAttribute="trailing" secondItem="8ye-2h-yL5" secondAttribute="trailing" id="SEz-c6-mqO"/>
+                            <constraint firstItem="8ye-2h-yL5" firstAttribute="leading" secondItem="Kkc-4x-LiY" secondAttribute="leading" id="VuM-q2-EEb"/>
                             <constraint firstItem="lF1-3C-S1V" firstAttribute="centerX" secondItem="ay3-K9-DrC" secondAttribute="centerX" id="Xqz-ZC-DU9"/>
                             <constraint firstItem="lF1-3C-S1V" firstAttribute="top" secondItem="Kkc-4x-LiY" secondAttribute="top" constant="10" id="cnY-47-ZMZ"/>
                             <constraint firstItem="Kkc-4x-LiY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="lF1-3C-S1V" secondAttribute="trailing" constant="65" id="jvw-z2-v0s"/>
@@ -42,6 +49,8 @@
                         <viewLayoutGuide key="safeArea" id="Kkc-4x-LiY"/>
                     </view>
                     <connections>
+                        <outlet property="bottomSpace" destination="64h-V1-0az" id="XfI-f7-QWj"/>
+                        <outlet property="viewContainer" destination="8ye-2h-yL5" id="b3k-Gp-DKq"/>
                         <outlet property="viewSeg" destination="lF1-3C-S1V" id="8xj-u0-gLj"/>
                         <segue destination="hys-Ep-fzQ" kind="presentation" identifier="memo" modalPresentationStyle="fullScreen" id="9Ei-xt-Bx2"/>
                     </connections>

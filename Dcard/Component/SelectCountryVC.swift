@@ -32,6 +32,7 @@ class SelectCountryVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     private var delegate: SelectCountryVCDelegate?
+    private var hideStatusBar = false
     var mode: ContentMode = .common
     var mainCountryList = [Country]() {
         didSet {
@@ -59,8 +60,14 @@ class SelectCountryVC: UIViewController {
         super.viewDidLoad()
         initView()
     }
+    override var prefersStatusBarHidden: Bool {
+        return self.hideStatusBar
+    }
     func setDelegate(delegate: SelectCountryVCDelegate) {
         self.delegate = delegate
+    }
+    func setHideStatusBar(_ hide: Bool) {
+        self.hideStatusBar = hide
     }
 }
 // MARK: - SetupUI

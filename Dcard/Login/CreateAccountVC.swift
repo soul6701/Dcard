@@ -40,13 +40,17 @@ class CreateAccountVC: UIViewController {
         self.nav.setLoginInfo(lastname: self.lastName)
         self.nav.setLoginInfo(firstName: self.firstName)
     }
+    //隱藏最上方狀態欄
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     @IBAction func didClcikBtnNext(_ sender: UIButton) {
+        self.lastName = self.tfLastName.text ?? ""
+        self.firstName = self.tfFirstName.text ?? ""
         self.nav._delegate?.expectAccount(lastName: self.lastName, firstName: self.firstName)
     }
     func toNextPage() {
-        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SetBirthDayVC") as? SetBirthDayVC {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        LoginManager.shared.toNextPage(self.navigationController!, next: .SetBirthDayVC)
     }
     func clear() {
         self.tfLastName.text = ""
@@ -61,14 +65,14 @@ extension CreateAccountVC {
         confiTextfield()
     }
     private func cinfiButton() {
-        self.btnNext.layer.cornerRadius = LoginManager.shared.commonCornerRadius
+        
         self.btnNext.isHidden = true
     }
     private func confiTextfield() {
         self.tfLastName.text = self.lastName
         self.tfFirstName.text = self.firstName
-        self.tfLastName.delegate = self
-        self.tfFirstName.delegate = self
+        self.tfLastName.addRightButtonOnKeyboardWithText("繼續", target: self, action: #selector(didClcikBtnNext))
+        self.tfFirstName.addRightButtonOnKeyboardWithText("繼續", target: self, action: #selector(didClcikBtnNext))
     }
     @objc private func back() {
         LoginManager.shared.showConfirmView(self)
@@ -92,16 +96,5 @@ extension CreateAccountVC {
                 self.lbHint.isHidden = true
             }
         }).disposed(by: self.disposeBag)
-    }
-}
-
-extension CreateAccountVC: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        switch textField {
-        case tfFirstName:
-            self.firstName = textField.text ?? ""
-        default:
-            self.lastName = textField.text ?? ""
-        }
     }
 }

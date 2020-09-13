@@ -32,8 +32,14 @@ class SetPasswordVC: UIViewController {
         super.viewWillDisappear(animated)
         self.nav.setLoginInfo(password: self.password)
     }
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     @IBAction func didClickBtnNext(_ sender: UIButton) {
         toNextPage()
+    }
+    @objc private func toNextPage() {
+        LoginManager.shared.toNextPage(self.navigationController!, next: .CompleteRegisterVC)
     }
 }
 // MARK: - SetupUI
@@ -41,7 +47,6 @@ extension SetPasswordVC {
     private func initView() {
         self.password = self.nav.password
         self.btnNext.isHidden = self.password.isEmpty
-        self.btnNext.layer.cornerRadius = LoginManager.shared.commonCornerRadius
         
         self.tfPassword.text = self.password
         
@@ -49,11 +54,7 @@ extension SetPasswordVC {
         LoginManager.shared.addSwipeGesture(to: self.view, disposeBag: self.disposeBag) {
             self.navigationController?.popViewController(animated: true)
         }
-    }
-    @objc private func toNextPage() {
-        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CompleteRegisterVC") as? CompleteRegisterVC {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        self.tfPassword.addRightButtonOnKeyboardWithText("繼續", target: self, action: #selector(toNextPage))
     }
 }
 // MARK: - SubscribeRX

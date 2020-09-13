@@ -30,7 +30,8 @@ class CalendarVC: UIViewController {
     @IBOutlet var imageYear: [UIImageView]!
     @IBOutlet weak var lbMonth: UILabel!
     @IBOutlet weak var collectionViewDay: UICollectionView!
-
+    
+    @IBOutlet weak var height: NSLayoutConstraint!
     private let monthList = Date.monthList
     private var yearList = [Int]()
     private var dayList = [(Date, Bool, Bool)]() //(日期, 紀錄, 是否為該月日期)
@@ -68,9 +69,12 @@ class CalendarVC: UIViewController {
         self.collectionViewDay.reloadItems(at: [IndexPath(row: self.rowSelected, section: 0)])
     }
 }
+// MARK: - SetupUI
 extension CalendarVC {
+    
     private func initView() {
-        self.date = Date.today
+        self.height.constant = CGFloat(itemSize.height * 6) + collectionPadding * 2 + space * 5 + itemSize.height / 2
+        self.date = Date()
         let thisYear = self.date.year
         for i in (thisYear - 100...thisYear + 100) {
             self.yearList.append(i)
@@ -86,10 +90,8 @@ extension CalendarVC {
         confiCollectionView()
     }
     
-    //PickerView
     private func confiPickerView() {
-        self.pickerYearMonth.layer.cornerRadius = self.pickerYearMonth.bounds.width / 2
-        self.pickerYearMonth.backgroundColor = .white
+        self.pickerYearMonth.backgroundColor = #colorLiteral(red: 0.8374180198, green: 0.8374378085, blue: 0.8374271393, alpha: 1)
         self.pickerYearMonth.delegate = self
         self.pickerYearMonth.dataSource = self
         
@@ -116,13 +118,14 @@ extension CalendarVC {
         default:
             break
         }
+
         self.pickerYearMonth.reloadAllComponents()
         self.viewBackground.isHidden = false
         
         let selected = type == .year ? self.yearList.firstIndex(of: self.date.year) ?? 0 : self.monthList.firstIndex(of: self.date.month.description) ?? 0
         self.pickerYearMonth.selectRow(selected, inComponent: 0, animated: false)
     }
-    //CollectionView
+    
     private func confiCollectionView() {
         self.collectionViewDay.delegate = self
         self.collectionViewDay.dataSource = self
@@ -170,7 +173,7 @@ extension CalendarVC {
 }
 
 // MARK:- UICollectionViewDelegate
-extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 42
     }

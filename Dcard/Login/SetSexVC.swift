@@ -31,6 +31,11 @@ class SetSexVC: UIViewController {
             self.height.constant = isOpening ? 170 : 70
             self.viewShow.isHidden = !isOpening
             self.viewNotShow.isHidden = isOpening
+            if isOpening {
+                self.btnNext.isHidden = self.btnSelect.title(for: .normal) == "選擇人稱代名詞"
+            } else {
+                self.btnNext.isHidden = false
+            }
             self.view.layoutIfNeeded()
         }
     }
@@ -59,14 +64,16 @@ class SetSexVC: UIViewController {
         self.nav.setLoginInfo(sexName: self.sexName)
         self.nav.setLoginInfo(sexNameOption: self.sexNameOption)
     }
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     @IBAction func didClickBtnNext(_ sender: UIButton) {
-        toNextPage()
+        LoginManager.shared.toNextPage(self.navigationController!, next: .SetPhoneAddressVC)
     }
     @IBAction func didClickBtnSelect(_ sender: UIButton) {
         if let view = UINib(nibName: "SelectPronView", bundle: nil).instantiate(withOwner: nil, options: nil).first as? SelectPronView {
-            view.bounds = self.view.frame
             view.setDelegate(delegate: self)
-            self.view.addSubview(view)
+            self.view.setFixedView(view)
             view.show()
         }
     }
@@ -97,7 +104,6 @@ extension SetSexVC {
     }
     private func confiButton() {
         
-        self.btnNext.layer.cornerRadius = LoginManager.shared.commonCornerRadius
         confiGesture()
         
         if let i = lists.firstIndex(of: self.sex) {
@@ -114,11 +120,7 @@ extension SetSexVC {
         self.btnSex.forEach { (btn) in
             btn.isEnabled = false
         }
-        self.btnSelect.layer.borderWidth = LoginManager.shared.commonBorderWidth
-        self.btnSelect.layer.cornerRadius = LoginManager.shared.commonCornerRadius
-        self.btnSelect.layer.borderColor =  LoginManager.shared.commonBorderColor
-        self.btnSelect.setTitle(self.sexName.isEmpty ? "選擇人稱代名詞 v" : self.sexName, for: .normal)
-        
+        self.btnSelect.setTitle(self.sexName.isEmpty ? "選擇人稱代名詞" : self.sexName, for: .normal)
     }
     @objc private func handler(_ sender: UITapGestureRecognizer) {
         guard let view = sender.view, let index = viewSex.firstIndex(of: view) else {
@@ -137,17 +139,12 @@ extension SetSexVC {
         self.sexOption = index
         self.isOpening = index == 2
     }
-    @objc private func toNextPage() {
-        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SetPhoneAddressVC") as? SetPhoneAddressVC {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-    }
 }
-
 extension SetSexVC: SelectPronViewDelegate {
     func setValue(pron: String) {
         self.btnSelect.setTitle("\(pron) v", for: .normal)
         self.sexName = pron
+        self.btnNext.isHidden = false
     }
 }
 extension SetSexVC: UITextFieldDelegate {

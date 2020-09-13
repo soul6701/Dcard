@@ -57,5 +57,4 @@ public struct ImageInfo {
     static let unchecked_radio = "unchecked_radio"
     static let exit = "exit"
     static let dogCard = "dogCard"
-    static let semibold_s = "Semibold-S"
 }

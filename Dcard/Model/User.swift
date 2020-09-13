@@ -19,8 +19,9 @@ public struct User {
     public var address: String
     public let password: String
     public var avatar: String
+    public var friend: [String]
     
-    init(uid: String = "", lastName: String = "", firstName: String = "", birthday: String = "", sex: String = "", phone: String = "", address: String = "", password: String = "", avatar: String = "") {
+    init(uid: String = "", lastName: String = "", firstName: String = "", birthday: String = "", sex: String = "", phone: String = "", address: String = "", password: String = "", avatar: String = "", friend: [String] = [String]()) {
         self.uid = uid
         self.lastName = lastName
         self.firstName = firstName
@@ -30,5 +31,6 @@ public struct User {
         self.address = address
         self.password = password
         self.avatar = avatar
+        self.friend = friend
     }
 }

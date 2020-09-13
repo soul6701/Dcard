@@ -15,7 +15,10 @@ enum DeleteCollectionType {
     case success(String)
     case error(String)
 }
-
+enum DatabaseName: String {
+    case user = "user"
+    case card = "card"
+}
 class FirebaseManager {
     static var shared = FirebaseManager()
     

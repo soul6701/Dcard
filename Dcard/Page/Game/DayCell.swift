@@ -13,10 +13,19 @@ class DayCell: UICollectionViewCell {
     @IBOutlet weak var lbDay: UILabel!
     @IBOutlet weak var imageMemo: UIImageView!
     var _show = false
-    
+    private lazy var shapeLayer: CAShapeLayer = {
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.lineWidth = 2
+        shapeLayer.strokeColor = UIColor.white.cgColor
+        let arcCenter: CGPoint = self.contentView.center
+        let radius: CGFloat = self.contentView.bounds.width / 2
+        let path = UIBezierPath(arcCenter: arcCenter, radius: radius, startAngle: 0, endAngle: CGFloat(2 * Float.pi), clockwise: true)
+        shapeLayer.path = path.cgPath
+        return shapeLayer
+    }()
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     func setContent(date: Date, marked: Bool, inMonth: Bool) {
@@ -27,24 +36,13 @@ class DayCell: UICollectionViewCell {
         self.imageMemo.isHidden = !self._show
         
         if Date.calendar.isDateInToday(date) {
-            drawCircle()
+            self.contentView.layer.addSublayer(self.shapeLayer)
+        } else {
+            self.shapeLayer.removeFromSuperlayer()
         }
     }
     func show() {
         self._show = !self._show
         self.imageMemo.isHidden = !self._show
-    }
-    
-    private func drawCircle() {
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.frame = CGRect(x: 0, y: 0, width: self.contentView.bounds.width * 0.8, height: self.contentView.bounds.width * 0.8)
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.lineWidth = 3
-        shapeLayer.strokeColor = UIColor.white.cgColor
-        let arcCenter: CGPoint = self.contentView.center
-        let radius: CGFloat = self.contentView.bounds.width / 2
-        let path = UIBezierPath(arcCenter: arcCenter, radius: radius, startAngle: 0, endAngle: CGFloat(2 * Float.pi), clockwise: true)
-        shapeLayer.path = path.cgPath
-        self.contentView.layer.addSublayer(shapeLayer)
     }
 }

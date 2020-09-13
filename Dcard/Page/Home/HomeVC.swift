@@ -14,17 +14,26 @@ class HomeVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomSpace: NSLayoutConstraint!
-    private var viewModel: RecentPostInterface!
-    private var disposeBag = DisposeBag()
+    private var viewModel: HomeVMInterface!
+    private let disposeBag = DisposeBag()
     private var currentForum: Forum?
     private var postList = [Post]()
     private var showList = [Post]()
-    private var window: UIWindow!
-    private var btnBg = UIButton()
+    private var window: UIWindow {
+        return UIApplication.shared.windows.first!
+    }
+    private lazy var btnBG: UIButton = {
+        let button = UIButton(frame: self.view.frame)
+        button.layer.zPosition = 6
+        button.backgroundColor = .black
+        button.alpha = 0.5
+        button.addTarget(self, action: #selector(self.close), for: .touchUpInside)
+        return button
+    }()
     private var viewMenu: Drawer?
     private var logoView = [UIImageView]()
-    private var uid: String!
     private var user: User?
+    private var exitTime: Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,11 +47,19 @@ class HomeVC: UIViewController {
         ToolbarView.shared.show(true)
         guard let currentForum = currentForum else {
 //            LoadingView.shared.show(true)
-            viewModel.getForums()
+            self.viewModel.getForums()
             return
         }
+        //第一次進入頁面 或 距上次離開頁面已過60秒
+        if self.exitTime == nil || Date().timeIntervalSince(self.exitTime ?? Date()) > 60 {
+            self.viewModel.getPosts(alias: currentForum.alias)
+        }
         //        viewModel.getRecentPost()
-        viewModel.getPosts(alias: currentForum.alias)
+            
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.exitTime = Date()
     }
 }
 // MARK: - SubscribeViewModel
@@ -71,8 +88,12 @@ extension HomeVC {
         viewModel.forumsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { forums in
             self.confiDrawer(forums)
             if !forums.isEmpty {
-                self.viewModel.getPosts(alias: forums[1].alias)
-                self.currentForum = forums[1]
+//                self.viewModel.getPosts(alias: forums[0].alias)
+//                self.currentForum = forums[0]
+                let forums = forums.first { return $0.name == "穿搭"}
+                self.viewModel.getPosts(alias: forums?.alias ?? "")
+                self.currentForum = forums
+                self.navigationItem.title = forums?.name ?? ""
             }
         }, onError: { error in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
@@ -86,8 +107,9 @@ extension HomeVC {
                 self.showList = self.postList
             }
             self.tableView.reloadData()
-//            LoadingView.shared.show(false)
+            LoadingView.shared.show(false)
             if !self.showList.isEmpty {
+                self.view.layoutIfNeeded()
                 self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
             }
         }, onError: { error in
@@ -100,16 +122,15 @@ extension HomeVC {
         }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
+        
     }
 }
 
 // MARK: - SetupUI
 extension HomeVC {
     private func initView() {
-        ToolbarView.shared.setDelegate(delegate: self)
-        self.navigationItem.title = "首頁"
-        self.window = UIApplication.shared.windows.first!
-        self.bottomSpace.constant = 80
+        ToolbarView.shared.setDelegate(self)
+        self.bottomSpace.constant = Size.bottomSpace
         
         confiTableView()
         confiNavBarItem()
@@ -126,7 +147,7 @@ extension HomeVC {
         btnLogout.contentMode = .scaleAspectFit
         btnLogout.imageEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         btnLogout.addTarget(self, action: #selector(self.exit), for: .touchUpInside)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: btnLogout)
+        navigationItem.setRightBarButtonItems([UIBarButtonItem(customView: btnLogout)], animated: false)
     }
     private func confiTableView() {
         self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
@@ -141,16 +162,10 @@ extension HomeVC {
         self.viewMenu?.frame = CGRect(x: -self.view.bounds.width / 3, y: insets.top, width: 200, height: self.view.bounds.height - insets.top)
         self.viewMenu?.layer.zPosition = 7
         self.viewMenu?.setContent(forumList: forums)
-        self.viewMenu?.setDelegate(delegate: self)
-        
-        self.btnBg.layer.zPosition = 6
-        self.btnBg.frame = view.frame
-        self.btnBg.backgroundColor = .black
-        self.btnBg.alpha = 0.5
-        self.btnBg.addTarget(self, action: #selector(self.close), for: .touchUpInside)
+        self.viewMenu?.setDelegate(self)
     }
     @objc private func showMenu() {
-        self.window.addSubview(btnBg)
+        self.window.addSubview(self.btnBG)
         if let viewMenu = self.viewMenu {
             self.window.addSubview(viewMenu)
             UIView.animate(withDuration: 1, animations: {
@@ -166,7 +181,7 @@ extension HomeVC {
             self.viewMenu?.frame.origin.x -= self.view.bounds.width / 3
         }) { _ in
             self.viewMenu?.removeFromSuperview()
-            self.btnBg.removeFromSuperview()
+            self.btnBG.removeFromSuperview()
         }
     }
 }
@@ -174,7 +189,7 @@ extension HomeVC {
 extension HomeVC {
     private func preloadUserdata() {
         let user = ModelSingleton.shared.userConfig.user
-        if user.firstName != "" {
+        if user.uid != "" {
             self.viewModel.getUserData(uid: user.uid)
         }
     }
@@ -196,15 +211,6 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.getComment(list: showList, index: indexPath.row)
     }
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard let currentForum = currentForum else {
-            return
-        }
-        if scrollView.contentOffset.y < 0 {
-//            viewModel.getWhysoserious()
-            viewModel.getPosts(alias: currentForum.alias)
-        }
-    }
 }
 // MARK: - DrawerDelegate
 extension HomeVC: DrawerDelegate {
@@ -217,30 +223,25 @@ extension HomeVC: DrawerDelegate {
 }
 // MARK: - ToolbarViewDelegate
 extension HomeVC: ToolbarViewDelegate {
-    func setupPage(_ page: PageType?) {
-        
-        var vc = UIViewController()
-        guard let page = page else {
-            return
-        }
+    func setupPage(_ page: PageType) -> PageType {
+        self.navigationController?.popToViewController(self, animated: false)
         switch page {
-        case .Game:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! GameVC
-        case .Catalog:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! CardVC
         case .Home:
-            if let nav = self.navigationController {
-                for vc in nav.viewControllers where vc is HomeVC {
-                    self.navigationController?.popToViewController(vc, animated: false)
-                }
-            }
-            return
+            break
+        case .Game:
+            let vc = UIStoryboard(name: page.name, bundle: nil).instantiateInitialViewController() as! GameVC
+            self.navigationController?.pushViewController(vc, animated: false)
+        case .Card:
+            let vc = UIStoryboard(name: page.name, bundle: nil).instantiateInitialViewController() as! CardVC
+            self.navigationController?.pushViewController(vc, animated: false)
         case .Notify:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! NotifyVC
+            let vc = UIStoryboard(name: page.name, bundle: nil).instantiateInitialViewController() as! NotifyVC
+            self.navigationController?.pushViewController(vc, animated: false)
         case .Profile:
-            vc = UIStoryboard(name: page.rawValue, bundle: nil).instantiateInitialViewController() as! ChatRoomVC
+            let vc = UIStoryboard(name: page.name, bundle: nil).instantiateInitialViewController() as! ProfileVC
+            self.navigationController?.pushViewController(vc, animated: false)
         }
-        self.navigationController?.pushViewController(vc, animated: false)
+        return page
     }
 }
 

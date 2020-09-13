@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -21,20 +21,20 @@
                     </connections>
                 </button>
                 <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Aqh-cC-2VE">
-                    <rect key="frame" x="0.0" y="862" width="414" height="298.5"/>
+                    <rect key="frame" x="0.0" y="862" width="414" height="250"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ySe-C4-MRQ">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="74.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="62.5"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="11J-Mn-J8K">
-                                    <rect key="frame" x="10" y="73.5" width="394" height="1"/>
+                                    <rect key="frame" x="10" y="61.5" width="394" height="1"/>
                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="agI-98-EM3"/>
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WPL-kU-d10">
-                                    <rect key="frame" x="0.0" y="10" width="53.5" height="53.5"/>
+                                    <rect key="frame" x="0.0" y="10" width="41.5" height="41.5"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="WPL-kU-d10" secondAttribute="height" multiplier="1:1" id="lAJ-mP-omJ"/>
                                     </constraints>
@@ -44,7 +44,7 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="選擇人稱代名詞" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kHd-wf-xFE">
-                                    <rect key="frame" x="125.5" y="10" width="163.5" height="53.5"/>
+                                    <rect key="frame" x="125.5" y="10" width="163.5" height="41.5"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -65,20 +65,20 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eDk-1O-Kvv">
-                            <rect key="frame" x="0.0" y="74.5" width="414" height="75"/>
+                            <rect key="frame" x="0.0" y="62.5" width="414" height="62.5"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="fu4-HJ-Q5E">
-                                    <rect key="frame" x="10" y="10" width="394" height="55"/>
+                                    <rect key="frame" x="10" y="10" width="394" height="42.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="她" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FHR-th-ELY">
-                                            <rect key="frame" x="0.0" y="0.0" width="394" height="27.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="394" height="21.5"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="「祝她生日快樂！」" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LRf-C2-dIh">
-                                            <rect key="frame" x="0.0" y="27.5" width="394" height="27.5"/>
+                                            <rect key="frame" x="0.0" y="21.5" width="394" height="21"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -97,20 +97,20 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="atb-g4-MUM">
-                            <rect key="frame" x="0.0" y="149.5" width="414" height="74.5"/>
+                            <rect key="frame" x="0.0" y="125" width="414" height="62.5"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="LzN-8U-TYx">
-                                    <rect key="frame" x="10" y="10" width="394" height="54.5"/>
+                                    <rect key="frame" x="10" y="10" width="394" height="42.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="他" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="151-lo-Cnf">
-                                            <rect key="frame" x="0.0" y="0.0" width="394" height="27"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="394" height="21.5"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="「祝他生日快樂！」" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UcS-o0-XCy">
-                                            <rect key="frame" x="0.0" y="27" width="394" height="27.5"/>
+                                            <rect key="frame" x="0.0" y="21.5" width="394" height="21"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -129,20 +129,20 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ouQ-00-XGZ">
-                            <rect key="frame" x="0.0" y="224" width="414" height="74.5"/>
+                            <rect key="frame" x="0.0" y="187.5" width="414" height="62.5"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="wS2-vj-Ui2">
-                                    <rect key="frame" x="10" y="10" width="394" height="54.5"/>
+                                    <rect key="frame" x="10" y="10" width="394" height="42.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="他們" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34Z-ON-1e9">
-                                            <rect key="frame" x="0.0" y="0.0" width="394" height="27.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="394" height="21.5"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="「祝他們生日快樂！」" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="59e-zd-Zni">
-                                            <rect key="frame" x="0.0" y="27.5" width="394" height="27"/>
+                                            <rect key="frame" x="0.0" y="21.5" width="394" height="21"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -161,6 +161,9 @@
                             </constraints>
                         </view>
                     </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="250" id="z0s-ZQ-jHT"/>
+                    </constraints>
                 </stackView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -170,7 +173,6 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Aqh-cC-2VE" secondAttribute="top" id="SB8-aJ-DWy"/>
                 <constraint firstItem="eoB-Gu-e4N" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Yfe-p6-P9w"/>
                 <constraint firstItem="eoB-Gu-e4N" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="drS-Go-pyP"/>
-                <constraint firstItem="Aqh-cC-2VE" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="1:3" id="it4-a2-HF1"/>
                 <constraint firstItem="Aqh-cC-2VE" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="kn5-et-bTK"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Aqh-cC-2VE" secondAttribute="trailing" id="u7H-Xb-aeb"/>
             </constraints>

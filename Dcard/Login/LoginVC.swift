@@ -46,11 +46,9 @@ class LoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
-//        confiViewModel()
-//        subsribeViewModel()
-        if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        confiViewModel()
+        subsribeViewModel()
+        self.viewModel.login(lastName: "a", firstName: "a", password: "123456")
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -79,9 +77,7 @@ class LoginVC: UIViewController {
     @IBAction func didClcickBtnCreateNewAccount(_ sender: UIButton) {
         if let vc = self.storyboard?.instantiateViewController(identifier: "CreateAccountVC") as? CreateAccountVC {
             nav = LoginNAV(rootViewController: vc)
-            nav.modalPresentationStyle = .fullScreen
             nav.setDelegate(delegate: self)
-            nav.setNavigationBarHidden(true, animated: false)
             self.present(nav, animated: true)
         }
     }
@@ -94,10 +90,6 @@ class LoginVC: UIViewController {
 extension LoginVC {
     private func initView() {
         drawView()
-        confiButton()
-        self.viewWidth.forEach { (height) in
-            height.constant = LoginManager.shared.commonBorderWidth
-        }
         self.newHeight = self.heightImage.constant - 100
         self.oldHeight = self.heightImage.constant
         
@@ -111,16 +103,9 @@ extension LoginVC {
         self.centerLine = UIView(frame: CGRect(x: 0, y: Int(self.viewForTf.bounds.height / 2 - 0.5), width: Int(self.view.bounds.width - 40), height: 1))
         self.centerLine!.backgroundColor = .lightGray
         self.viewForTf.addSubview(self.centerLine!)
-        self.viewForTf.layer.borderColor = LoginManager.shared.commonBorderColor
-        self.viewForTf.layer.borderWidth = LoginManager.shared.commonBorderWidth
-        self.viewForTf.layer.cornerRadius = LoginManager.shared.commonCornerRadius
-    }
-    private func confiButton() {
-        self.btnSignIn.layer.cornerRadius = LoginManager.shared.commonCornerRadius
-        self.btnCreateNewAccount.layer.cornerRadius = LoginManager.shared.commonCornerRadius
     }
 }
-// MARK: - Handler
+// MARK: - Private Fun
 extension LoginVC {
     private func reset(tf: [UITextField]) {
         tf.forEach { (tf) in
@@ -180,7 +165,6 @@ extension LoginVC {
                     if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
                         self.navigationController?.pushViewController(vc, animated: true)
                         UserDefaultsKeys.shared.setValue([self.tfAccount.text!: Date()], forKey: Login_account)
-                        print("🐶🐶🐶🐶🐶\(UserDefaultsKeys.account)🐶🐶🐶🐶🐶")
                     }
                 }
             case .error(let error):

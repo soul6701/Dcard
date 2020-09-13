@@ -34,7 +34,7 @@ class LoginNAV: UINavigationController, LoginInfo {
     private(set) var sexName: String = ""
     private(set) var sexNameOption: String = ""
     private(set) var birthday: String = ""
-    private(set) var code: String = "86"
+    private(set) var code: String = "886"
     private(set) var alias: String = "TW"
     private(set) var phone: String = ""
     private(set) var address: String = ""
@@ -43,6 +43,8 @@ class LoginNAV: UINavigationController, LoginInfo {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.modalPresentationStyle = .fullScreen
+        self.setNavigationBarHidden(true, animated: false)
     }
     func setLoginInfo(lastname: String) {
         self.lastName = lastname
@@ -80,7 +82,7 @@ class LoginNAV: UINavigationController, LoginInfo {
     func setLoginInfo(password: String) {
         self.password = password
     }
-    func setLoginInfo(avatar: UIImage) {
+    func setLoginInfo(avatar: UIImage?) {
         self.avatar = avatar
     }
     func setDelegate(delegate: LoginVCDelegate) {

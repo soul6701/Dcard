@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol ModelSingletonInterface {
     //卡片
@@ -21,10 +22,11 @@ public class ModelSingleton: ModelSingletonInterface {
     private(set) var card = [Card]()
     private(set) var userConfig = UserConfig(user: User(), cardmode: 0)
     
+    
     public func setCard(cards: [Card]) {
         self.card = cards
     }
     func setUserConfig(config: UserConfig) {
-        
+        self.userConfig = config
     }
 }

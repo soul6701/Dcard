@@ -27,7 +27,7 @@ class SkitchVC: UIViewController {
     @IBOutlet var rows: [UIStackView]!
     @IBOutlet weak var height: NSLayoutConstraint!
     @IBOutlet var slideColor: [UISlider]!
-    @IBOutlet weak var btnSetColor: UIButton!
+    @IBOutlet weak var btnSetColor: customButton!
     @IBOutlet var tfColor: [UITextField]!
     @IBOutlet weak var viewColor: UIView!
     @IBOutlet weak var viewCanvas: UIView!
@@ -67,7 +67,11 @@ class SkitchVC: UIViewController {
             self.startPoint = self.touchPoint
         }
     }
-    @IBAction func onClickClear(_ sender: UIButton) {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.btnSetColor.layer.cornerRadius = self.btnSetColor.bounds.width / 2
+    }
+    @IBAction func didClickBtnClear(_ sender: UIButton) {
         if let layers = self.viewCanvas.layer.sublayers {
             layers.forEach { (layer) in
                 layer.removeFromSuperlayer()
@@ -106,7 +110,7 @@ class SkitchVC: UIViewController {
             }
         }
     }
-    @IBAction func onClickSetWidth(_ sender: UIButton) {
+    @IBAction func didClickBtnSetWidth(_ sender: UIButton) {
         self.lbRed.isHidden = true
         self.slideColor[0].maximumValue = 72
         self.slideColor[0].minimumValue = 10
@@ -125,9 +129,7 @@ class SkitchVC: UIViewController {
 extension SkitchVC {
     
     private func initView() {
-        self.btnSetColor.layer.borderColor = UIColor.white.cgColor
-        self.btnSetColor.layer.borderWidth = 3
-        self.viewColor.layer.cornerRadius = 15
+        
         self.viewColor.isHidden = true
         self.tfColor.forEach { (tf) in
             tf.delegate = self

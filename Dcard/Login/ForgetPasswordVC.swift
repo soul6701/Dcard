@@ -54,9 +54,6 @@ extension ForgetPasswordVC {
     private func initView() {
         self.tfAccount.tintColor = .clear
         self.tfAccount.inputView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        self.btnSend.layer.cornerRadius = LoginManager.shared.commonCornerRadius
-        self.btnSend.layer.borderWidth = LoginManager.shared.commonBorderWidth
-        self.btnSend.layer.borderColor = LoginManager.shared.commonBorderColor
     }
 }
 // MARK: - SubscribeRX

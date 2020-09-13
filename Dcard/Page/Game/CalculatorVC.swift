@@ -22,15 +22,15 @@ class CalculatorVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.formatter = NumberFormatter()
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func onClickNum(_ sender: UIButton) {
         self.num += "\(sender.tag)"
         self.record += "\(sender.tag)"
        
-        let _num = self.formatter?.number(from: self.num) as! Double
+        guard let _num = Double(self.num) else {
+            return
+        }
         if self.operation == nil {
             self.firstNum = _num
             self.record = self.num
@@ -49,7 +49,7 @@ class CalculatorVC: UIViewController {
     }
     @IBAction func onClickCal(_ sender: UIButton) {
         if let operation = self.operation, let n1 = self.firstNum, let n2 = self.secondNum {
-            var temp = 0.0
+            var temp: Double = 0.0
             switch operation {
             case "+":
                 temp = n1 + n2
@@ -63,16 +63,7 @@ class CalculatorVC: UIViewController {
                 break
             }
             self.firstNum = temp
-            var str = "\(temp)"
-            //若為整數移除小數點
-            if floor(temp) == temp {
-                str = "\((Int)(temp))"
-            }
-            //限制數字字數
-            if str.count > 8 {
-                str = String(str.prefix(8))
-            }
-            self.lbResult.text = str
+            self.lbResult.text = String(temp)
         }
         self.num = ""
         if sender.titleLabel?.text != "=" {

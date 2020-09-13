@@ -29,7 +29,7 @@ public class UserDefaultsKeys {
                 removeKeysByString(prefix: "Login")
                 for key in _dir.keys {
                     if let date = _dir[key] {
-                        let interval = Date.today.timeIntervalSince(date)
+                        let interval = Date().timeIntervalSince(date)
                         let hours = floor((interval / 3600))
                         if hours >= 4 {
                             _dir[key] = nil

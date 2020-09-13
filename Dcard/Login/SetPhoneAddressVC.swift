@@ -86,6 +86,9 @@ class SetPhoneAddressVC: UIViewController {
         self.nav.setLoginInfo(alias: self.alias)
         self.nav.setLoginInfo(code: self.code)
     }
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     @IBAction func didClickBtnChange(_ sender: UIButton) {
         self.mode = self.mode == .phone ? .address : .phone
     }
@@ -112,12 +115,8 @@ extension SetPhoneAddressVC {
     }
     private func confiButton() {
         self.btnNext.isHidden = self.phone.isEmpty
-        self.btnNext.layer.cornerRadius = LoginManager.shared.commonCornerRadius
         
         self.btnChange.setTitle("使用電子郵件地址", for: .normal)
-        self.btnChange.layer.borderColor = LoginManager.shared.commonBorderColor
-        self.btnChange.layer.borderWidth = LoginManager.shared.commonBorderWidth
-        self.btnChange.layer.cornerRadius = LoginManager.shared.commonCornerRadius
     }
     private func confiLeftViewForTfAddress() {
         self.leftview = UIView()
@@ -169,15 +168,14 @@ extension SetPhoneAddressVC {
     @objc private func open() {
         let vc = SelectCountryVC()
         vc.setDelegate(delegate: self)
+        vc.setHideStatusBar(true)
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         nav.modalTransitionStyle = .crossDissolve
         self.present(nav, animated: true)
     }
     @objc private func toNextPage() {
-        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SetPasswordVC") as? SetPasswordVC {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        LoginManager.shared.toNextPage(self.navigationController!, next: .SetPasswordVC)
     }
 }
 // MARK: - SubscribeRX

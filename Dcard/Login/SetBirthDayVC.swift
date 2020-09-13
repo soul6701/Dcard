@@ -51,7 +51,6 @@ class SetBirthDayVC: UIViewController {
         }
         return list
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -69,8 +68,8 @@ class SetBirthDayVC: UIViewController {
         super.viewWillDisappear(animated)
         self.nav.setLoginInfo(birthday: self.birthday)
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     @IBAction func didClickBtnWhy(_ sender: UIButton) {
         let vc = DescriptionVC()
@@ -88,7 +87,6 @@ extension SetBirthDayVC {
     private func initView() {
         self.lbHint.isHidden = !self.birthday.isEmpty
         self.btnWhy.isHidden = !self.birthday.isEmpty
-        self.btnNext.layer.cornerRadius = LoginManager.shared.commonCornerRadius
         
         LoginManager.shared.addTapGesture(to: self.viewHaveAccount, disposeBag: self.disposeBag)
         LoginManager.shared.addSwipeGesture(to: self.view, disposeBag: self.disposeBag) {
@@ -99,7 +97,7 @@ extension SetBirthDayVC {
     }
     private func confiPickerView() {
         self.pickerView = UIPickerView()
-        self.pickerView.frame.size = CGSize(width: self.view.bounds.width, height: UIScreen.main.bounds.height - self.stackView.frame.maxY - self.pickerView.keyboardToolbar.frame.height - 50)
+        self.pickerView.frame.size = CGSize(width: self.view.bounds.width, height: UIScreen.main.bounds.height - self.stackView.frame.maxY - self.pickerView.keyboardToolbar.frame.height)
         self.pickerView.delegate = self
         
         var row_year = 0
@@ -117,9 +115,9 @@ extension SetBirthDayVC {
                 row_day = date.day - 1
             }
         } else {
-            row_year = Date.today.year - self.firstYear
-            row_month = Date.today.month.number - 1
-            row_day = Date.today.day - 1
+            row_year = Date().year - self.firstYear
+            row_month = Date().month.number - 1
+            row_day = Date().day - 1
         }
         self.pickerView.selectRow(row_year, inComponent: 0, animated: false)
         self.pickerView.selectRow(row_month, inComponent: 1, animated: false)
@@ -142,9 +140,7 @@ extension SetBirthDayVC {
         self.tfBirthday.addRightButtonOnKeyboardWithText("繼續", target: self, action: #selector(toNextPage))
     }
     @objc private func toNextPage() {
-        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "SetSexVC") as? SetSexVC {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        LoginManager.shared.toNextPage(self.navigationController!, next: .SetSexVC)
     }
 }
 // MARK: - SubscribeRX
@@ -158,7 +154,7 @@ extension SetBirthDayVC {
             self.PickerViewIsShowing = true
         }).disposed(by: self.disposeBag)
         self.tfBirthday.rx.controlEvent([.editingDidEnd]).asObservable().subscribe(onNext: { (_) in
-            self.btnNext.isHidden = false
+            self.btnNext.isHidden = self.tfBirthday.text?.isEmpty ?? true
             self.lbHint.isHidden = true
             self.btnWhy.isHidden = true
             self.PickerViewIsShowing = false

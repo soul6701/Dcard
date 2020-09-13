@@ -28,14 +28,14 @@ class SelectPronView: UIView {
         return list
     }()
     private lazy var showAnimaor: UIViewPropertyAnimator = {
-        self.bottomspace.constant += self.bounds.height / 3
+        self.bottomspace.constant += 250
         let animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
             self.layoutIfNeeded()
         }
         return animator
     }()
     private lazy var hideAnimaor: UIViewPropertyAnimator = {
-        self.bottomspace.constant -= self.bounds.height / 3
+        self.bottomspace.constant -= 250
         let animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut) {
             self.layoutIfNeeded()
         }

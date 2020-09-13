@@ -17,4 +17,6 @@ public struct Card {
     public var country: String = ""
     public var school: String = ""
     public var article: String = ""
+    public var birthday: String = ""
+    public var love: String = ""
 }

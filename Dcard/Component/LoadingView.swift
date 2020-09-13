@@ -34,7 +34,7 @@ class LoadingView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.imageProgress.loadGif(name: "熊貓")
-        _ = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true, block: { (timer) in
+        _ = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true, block: { (timer) in
             self.viewProgress.setProgress(Float(self.count) / Float(self.complete), animated: true)
             self.trailingSpace.constant -= 3
             self.count += 1

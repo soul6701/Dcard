@@ -8,15 +8,33 @@
 
 import UIKit
 import SwiftGifOrigin
+import RxCocoa
+import RxSwift
 
 class NotifyVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
-        let image = UIImage.gif(name: "柴犬")
-        let imageView = UIImageView(image: image)
-        imageView.frame = view.frame
-        view.addSubview(imageView)
+        
     }
 }
+extension NotifyVC {
+    private func initView() {
+        
+    }
+}
+extension NotifyVC {
+    private func subscribeViewModel() {
+        
+    }
+}
+//extension NotifyVC: UITableViewDelegate, UITableViewDataSource {
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        //
+//    }
+//    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        <#code#>
+//    }
+//    
+//}

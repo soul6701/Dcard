@@ -31,8 +31,10 @@ class CompleteRegisterVC: UIViewController {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-//        self.nav.setLoginInfo(avatar: self.avatar)
+        self.nav.setLoginInfo(avatar: self.avatar)
+    }
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     @IBAction func didClickBtnConfirm(_ sender: UIButton) {
         self.nav._delegate?.creartUserData(lastName: self.nav.lastName, firstName: self.nav.firstName, birthday: self.nav.birthday, sex: self.nav.sex, phone: "\(self.nav.code)-\(self.nav.phone)", address: self.nav.address, password: self.nav.password, avatar: self.avatar?.pngData())
@@ -54,8 +56,6 @@ extension CompleteRegisterVC {
         } else {
             self.imageAvatar.image = UIImage(named: ImageInfo.profile)!
         }
-        
-        self.btnConfirm.layer.cornerRadius = LoginManager.shared.commonCornerRadius
 
         LoginManager.shared.addTapGesture(to: self.viewHaveAccount, disposeBag: self.disposeBag)
         LoginManager.shared.addSwipeGesture(to: self.view, disposeBag: self.disposeBag) {
