@@ -10,7 +10,7 @@
         <!--LoginVC-->
         <scene sceneID="Vgq-0Y-IUG">
             <objects>
-                <viewController id="5OI-q1-hXF" customClass="LoginVC" customModule="Dcard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="5OI-q1-hXF" customClass="LoginVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yHM-rg-uDB">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -32,7 +32,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sq6-8l-7Na">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="105"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xh2-C9-us4" customClass="customView" customModule="Dcard" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xh2-C9-us4" customClass="customView" customModule="ChiaCard" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="20" width="374" height="80"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="KrN-Yx-Gfm">
@@ -89,7 +89,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GcK-k1-WXf">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
                                                 <subviews>
-                                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NhG-8S-sjK" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NhG-8S-sjK" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                                         <rect key="frame" x="40" y="0.0" width="334" height="40"/>
                                                         <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -169,7 +169,7 @@
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ING-bg-edv">
                                                         <rect key="frame" x="50" y="0.0" width="314" height="120.5"/>
                                                         <subviews>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Guu-UM-pxE" customClass="customView" customModule="Dcard" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Guu-UM-pxE" customClass="customView" customModule="ChiaCard" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="60" width="143" height="1"/>
                                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -190,7 +190,7 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rSS-jU-WWg" customClass="customView" customModule="Dcard" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rSS-jU-WWg" customClass="customView" customModule="ChiaCard" customModuleProvider="target">
                                                                 <rect key="frame" x="171.5" y="60" width="142.5" height="1"/>
                                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -222,7 +222,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jq2-Xo-UWg">
                                                 <rect key="frame" x="0.0" y="280.5" width="414" height="40"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVe-df-K5Y" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVe-df-K5Y" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                                         <rect key="frame" x="40" y="0.0" width="334" height="40"/>
                                                         <color key="backgroundColor" red="0.022270373999999999" green="0.41976428030000001" blue="0.90201145410000005" alpha="0.39584225171232879" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
@@ -298,12 +298,12 @@
         <!--Create AccountVC-->
         <scene sceneID="jgA-6Q-Tzr">
             <objects>
-                <viewController storyboardIdentifier="CreateAccountVC" id="1pj-CE-XY1" customClass="CreateAccountVC" customModule="Dcard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreateAccountVC" id="1pj-CE-XY1" customClass="CreateAccountVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NuW-s4-a2H">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7e6-Ri-nyN" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7e6-Ri-nyN" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                 <rect key="frame" x="10" y="278" width="394" height="40"/>
                                 <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
@@ -428,12 +428,12 @@
         <!--Set Birth DayVC-->
         <scene sceneID="uBE-Vp-qF2">
             <objects>
-                <viewController storyboardIdentifier="SetBirthDayVC" id="vad-KA-o77" customClass="SetBirthDayVC" customModule="Dcard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SetBirthDayVC" id="vad-KA-o77" customClass="SetBirthDayVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Et5-1j-gxv">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iJT-Cd-F4H" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iJT-Cd-F4H" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                 <rect key="frame" x="10" y="278" width="394" height="40"/>
                                 <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
@@ -551,7 +551,7 @@
         <!--Set SexVC-->
         <scene sceneID="ZaF-Rh-2hL">
             <objects>
-                <viewController storyboardIdentifier="SetSexVC" id="hKg-fj-1Xy" customClass="SetSexVC" customModule="Dcard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SetSexVC" id="hKg-fj-1Xy" customClass="SetSexVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3cq-DU-KIu">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -674,7 +674,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lpV-hM-X0D">
                                                         <rect key="frame" x="0.0" y="0.0" width="394" height="50"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jjF-ar-ijg" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jjF-ar-ijg" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="7.5" width="394" height="35"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                                 <state key="normal" title="選擇人稱代名詞 "/>
@@ -838,7 +838,7 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iEx-2L-yo2" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iEx-2L-yo2" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                 <rect key="frame" x="10" y="443" width="394" height="40"/>
                                 <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -932,7 +932,7 @@
         <!--Set Phone AddressVC-->
         <scene sceneID="MkF-Iz-0oO">
             <objects>
-                <viewController storyboardIdentifier="SetPhoneAddressVC" id="EKG-s9-euX" customClass="SetPhoneAddressVC" customModule="Dcard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SetPhoneAddressVC" id="EKG-s9-euX" customClass="SetPhoneAddressVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eD4-hY-ow6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -977,7 +977,7 @@
                                     <constraint firstItem="qhl-WG-BOI" firstAttribute="height" secondItem="vb8-Nc-gvN" secondAttribute="height" id="fwI-C7-SVF"/>
                                 </constraints>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x3T-ck-0d0" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x3T-ck-0d0" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                 <rect key="frame" x="10" y="255" width="394" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="fhP-Kt-zRz"/>
@@ -1030,7 +1030,7 @@
                                     <constraint firstAttribute="height" constant="50" id="uzv-jY-cEt"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="72g-w2-GsV" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="72g-w2-GsV" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                 <rect key="frame" x="10" y="195" width="394" height="40"/>
                                 <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -1093,7 +1093,7 @@
         <!--Set PasswordVC-->
         <scene sceneID="h9w-DO-R4b">
             <objects>
-                <viewController storyboardIdentifier="SetPasswordVC" id="pcz-Nu-kEA" customClass="SetPasswordVC" customModule="Dcard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SetPasswordVC" id="pcz-Nu-kEA" customClass="SetPasswordVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WFF-Un-jKL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1138,7 +1138,7 @@
                                     <constraint firstItem="e58-hu-LGC" firstAttribute="height" secondItem="ezm-YS-7NK" secondAttribute="height" id="WHv-Yd-DAl"/>
                                 </constraints>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uic-S3-eTy" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uic-S3-eTy" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                 <rect key="frame" x="10" y="195" width="394" height="40"/>
                                 <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -1221,7 +1221,7 @@
         <!--Complete RegisterVC-->
         <scene sceneID="dOt-P0-x4t">
             <objects>
-                <viewController storyboardIdentifier="CompleteRegisterVC" id="H0T-YE-pPq" customClass="CompleteRegisterVC" customModule="Dcard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CompleteRegisterVC" id="H0T-YE-pPq" customClass="CompleteRegisterVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kII-ZR-QSD">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1235,7 +1235,7 @@
                                         <color key="textColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gTr-Id-MFt" customClass="customView" customModule="Dcard" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gTr-Id-MFt" customClass="customView" customModule="ChiaCard" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="41.5" width="374" height="150"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="kg0-cz-hQ9">
@@ -1302,7 +1302,7 @@
                                             <constraint firstAttribute="trailing" secondItem="Nlu-Dk-Fpy" secondAttribute="trailing" constant="2" id="c13-rU-mPD"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="elB-2f-cBU" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="elB-2f-cBU" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="327.5" width="374" height="40"/>
                                         <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -1405,7 +1405,7 @@
         <!--Forget PasswordVC-->
         <scene sceneID="28g-kd-1gy">
             <objects>
-                <viewController storyboardIdentifier="ForgetPasswordVC" id="Gv9-RB-9x7" customClass="ForgetPasswordVC" customModule="Dcard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ForgetPasswordVC" id="Gv9-RB-9x7" customClass="ForgetPasswordVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vcu-z7-d41">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1449,7 +1449,7 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ljJ-Hq-bv8" customClass="customButton" customModule="Dcard" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ljJ-Hq-bv8" customClass="customButton" customModule="ChiaCard" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="196.5" width="374" height="50"/>
                                         <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>

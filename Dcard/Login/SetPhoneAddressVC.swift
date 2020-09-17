@@ -175,6 +175,11 @@ extension SetPhoneAddressVC {
         self.present(nav, animated: true)
     }
     @objc private func toNextPage() {
+        if mode == .phone {
+            self.phone = self.tfPhone.text ?? ""
+        } else {
+            self.address = self.tfPhone.text ?? ""
+        }
         LoginManager.shared.toNextPage(self.navigationController!, next: .SetPasswordVC)
     }
 }

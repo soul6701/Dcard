@@ -35,6 +35,15 @@ import UIKit
             layer.borderColor = newValue?.cgColor
         }
     }
+    
+    private lazy var _layer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        layer.frame = self.bounds
+        layer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        layer.endPoint = CGPoint(x: 1.0, y: 0.0)
+        return layer
+    }()
+    
     @IBInspectable var gradientBGEnable: Bool = false {
         didSet {
             setGradientBG()
@@ -52,14 +61,11 @@ import UIKit
     }
     private func setGradientBG() {
         guard gradientBGEnable, let leftColor = leftColor , let rightColor = rightColor else {
+            self._layer.removeFromSuperlayer()
             return
         }
-        let layer = CAGradientLayer()
-        layer.frame = self.bounds
-        layer.startPoint = CGPoint(x: 0.0, y: 0.0)
-        layer.endPoint = CGPoint(x: 1.0, y: 0.0)
-        layer.colors = [leftColor.cgColor , rightColor.cgColor]
-        self.layer.insertSublayer(layer, at: 0)
+        self._layer.colors = [leftColor.cgColor , rightColor.cgColor]
+        self.layer.insertSublayer(self._layer, at: 0)
     }
 }
 
@@ -81,6 +87,15 @@ import UIKit
             layer.borderColor = viewBorderColor?.cgColor
         }
     }
+    
+    private lazy var _layer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        layer.frame = self.bounds
+        layer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        layer.endPoint = CGPoint(x: 1.0, y: 0.0)
+        return layer
+    }()
+    
     @IBInspectable var gradientBGEnable: Bool = false {
         didSet {
             setGradientBG()
@@ -98,13 +113,19 @@ import UIKit
     }
     private func setGradientBG() {
         guard gradientBGEnable, let leftColor = leftColor , let rightColor = rightColor else {
+            self._layer.removeFromSuperlayer()
             return
         }
-        let layer = CAGradientLayer()
-        layer.frame = self.bounds
-        layer.startPoint = CGPoint(x: 0.0, y: 0.0)
-        layer.endPoint = CGPoint(x: 1.0, y: 0.0)
-        layer.colors = [leftColor.cgColor , rightColor.cgColor]
-        self.titleLabel?.layer.insertSublayer(layer, at: 0)
+        _layer.colors = [leftColor.cgColor , rightColor.cgColor]
+        self.titleLabel?.layer.insertSublayer(_layer, at: 0)
+    }
+    
+    @IBInspectable
+    var underline: Bool = false  {
+        didSet {
+            if underline {
+                underline()
+            }
+        }
     }
 }

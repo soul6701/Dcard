@@ -54,7 +54,6 @@ class LoginVC: UIViewController {
         super.viewWillAppear(animated)
         addObserverToKeyboard()
         ToolbarView.shared.show(false)
-        LoadingView.reset()
         IQKeyboardManager.shared.toolbarDoneBarButtonItemText = "完成"
     }
     override func viewWillDisappear(_ animated: Bool) {

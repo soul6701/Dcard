@@ -44,14 +44,13 @@
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                <real key="value" value="22"/>
+                                <real key="value" value="18"/>
                             </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="gradientBGEnable" value="YES"/>
                             <userDefinedRuntimeAttribute type="color" keyPath="leftColor">
-                                <color key="value" red="0.0" green="0.97680455450000003" blue="0.0" alpha="0.22043557363013699" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="value" red="0.0" green="0.97647058823529409" blue="0.0" alpha="0.22043557363013699" colorSpace="custom" customColorSpace="sRGB"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="color" keyPath="rightColor">
-                                <color key="value" red="0.45138680930000002" green="0.99309605359999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="value" red="0.45098039215686275" green="0.99215686274509807" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>

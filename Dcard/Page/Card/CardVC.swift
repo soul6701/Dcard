@@ -204,7 +204,10 @@ extension CardVC {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CardInfoVC") as? CardInfoVC {
             vc.setContent(card: self.card)
             vc.setDelegate(self)
-            self.navigationController?.pushViewController(vc, animated: true)
+            self.navigationController?.pushViewController(vc, animated: true) {
+                vc.navigationItem.setHidesBackButton(false, animated: false)
+                vc.navigationController?.setNavigationBarHidden(false, animated: false)
+            }
         }
     }
 }

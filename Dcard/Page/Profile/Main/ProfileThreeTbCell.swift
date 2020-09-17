@@ -16,8 +16,6 @@ class ProfileThreeTbCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.selectionStyle = .gray
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

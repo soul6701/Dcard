@@ -210,7 +210,7 @@ extension SelectCountryVC: UISearchBarDelegate {
         self.resultList = [Country]()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.searchBar.setShowsCancelButton(false, animated: true)
         self.mode = .common
         self.tableView.reloadData()

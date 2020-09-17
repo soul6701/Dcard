@@ -9,7 +9,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SelectPronView" customModule="Dcard" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SelectPronView" customModule="ChiaCard" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -34,10 +34,11 @@
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WPL-kU-d10">
-                                    <rect key="frame" x="0.0" y="10" width="41.5" height="41.5"/>
+                                    <rect key="frame" x="10" y="10" width="41.5" height="41.5"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="WPL-kU-d10" secondAttribute="height" multiplier="1:1" id="lAJ-mP-omJ"/>
                                     </constraints>
+                                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <state key="normal" image="xmark" catalog="system"/>
                                     <connections>
                                         <action selector="didClickBtnClose:" destination="iN0-l3-epB" eventType="touchUpInside" id="ZDV-Xd-pMh"/>
@@ -52,7 +53,7 @@
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             <constraints>
-                                <constraint firstItem="WPL-kU-d10" firstAttribute="leading" secondItem="ySe-C4-MRQ" secondAttribute="leading" id="6AM-75-LbT"/>
+                                <constraint firstItem="WPL-kU-d10" firstAttribute="leading" secondItem="ySe-C4-MRQ" secondAttribute="leading" constant="10" id="6AM-75-LbT"/>
                                 <constraint firstItem="kHd-wf-xFE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="WPL-kU-d10" secondAttribute="trailing" constant="5" id="I17-td-6Ss"/>
                                 <constraint firstItem="kHd-wf-xFE" firstAttribute="bottom" secondItem="WPL-kU-d10" secondAttribute="bottom" id="JUl-Pe-nbT"/>
                                 <constraint firstAttribute="bottom" secondItem="11J-Mn-J8K" secondAttribute="bottom" id="Lpg-TR-JVP"/>

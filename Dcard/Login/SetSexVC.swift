@@ -72,7 +72,7 @@ class SetSexVC: UIViewController {
     }
     @IBAction func didClickBtnSelect(_ sender: UIButton) {
         if let view = UINib(nibName: "SelectPronView", bundle: nil).instantiate(withOwner: nil, options: nil).first as? SelectPronView {
-            view.setDelegate(delegate: self)
+            view.setDelegate(self)
             self.view.setFixedView(view)
             view.show()
         }

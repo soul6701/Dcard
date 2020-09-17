@@ -14,7 +14,26 @@ struct ProfilePage {
     var favoriteVC: FavoriteVC {
         return self.storyboard.instantiateViewController(withIdentifier: "FavoriteVC") as! FavoriteVC
     }
+    var followIssueVC: FollowIssueVC {
+        return self.storyboard.instantiateViewController(withIdentifier: "FollowIssueVC") as! FollowIssueVC
+    }
+    var followCardVC: FollowCardVC {
+        return self.storyboard.instantiateViewController(withIdentifier: "FollowCardVC") as! FollowCardVC
+    }
+    var articalVC: ArticalVC {
+        return self.storyboard.instantiateViewController(withIdentifier: "ArticalVC") as! ArticalVC
+    }
+    var mailVC: MailVC {
+        return self.storyboard.instantiateViewController(withIdentifier: "MailVC") as! MailVC
+    }
+}
+struct CardPage {
+    let storyboard = UIStoryboard(name: "Card", bundle: nil)
+    var cardInfoVC: CardInfoVC {
+        return self.storyboard.instantiateViewController(withIdentifier: "CardInfoVC") as! CardInfoVC
+    }
 }
 extension UIStoryboard {
     static let profile = ProfilePage()
+    static let card = CardPage()
 }

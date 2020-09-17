@@ -19,4 +19,12 @@ extension UIView {
         view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         view.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
+    //動態更新View內容
+    func fadeTransition(_ duration: CFTimeInterval) {
+        let animation = CATransition()
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        animation.type = .fade
+        animation.duration = duration
+        self.layer.add(animation, forKey: kCATransition)
+    }
 }

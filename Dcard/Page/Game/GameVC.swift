@@ -11,8 +11,8 @@ import UIView_Shake
 
 enum SegmentedControlType: Int {
     case calculator = 0
-    case skitch = 1
-    case calendar = 2
+    case skitch
+    case calendar
 }
 class GameVC: UIViewController {
     @IBOutlet weak var viewSeg: UISegmentedControl!

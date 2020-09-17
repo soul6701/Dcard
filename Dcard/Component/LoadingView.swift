@@ -48,16 +48,13 @@ class LoadingView: UIView {
     func show(_ willShow: Bool) {
         if willShow {
             let window = UIApplication.shared.windows.first!
-            layer.zPosition = 6
+            self.layer.zPosition = 6
             window.addSubview(self)
             
-            translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([leadingAnchor.constraint(equalTo: window.leadingAnchor), bottomAnchor.constraint(equalTo: window.bottomAnchor), heightAnchor.constraint(equalToConstant: Size.screenHeight), widthAnchor.constraint(equalToConstant: Size.screenWidth)])
+            self.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([self.leadingAnchor.constraint(equalTo: window.leadingAnchor), self.trailingAnchor.constraint(equalTo: window.trailingAnchor), self.topAnchor.constraint(equalTo: window.topAnchor), self.bottomAnchor.constraint(equalTo: window.bottomAnchor)])
         } else {
             removeFromSuperview()
         }
-    }
-    static func reset() {
-        self._shared = nil
     }
 }

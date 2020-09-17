@@ -8,8 +8,15 @@
 
 import UIKit
 import Kingfisher
+
+enum PostCellMode {
+    case home
+    case profile
+}
+
 class PostCell: UITableViewCell {
 
+    @IBOutlet weak var btnEdit: UIButton!
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var lbForumAndSchool: UILabel!
     @IBOutlet weak var lbExcerpt: UILabel!
@@ -21,17 +28,15 @@ class PostCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.userImageView.layer.cornerRadius = 5
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+        self.selectionStyle = .none
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         self.backgroundColor = highlighted ? #colorLiteral(red: 0.5818830132, green: 0.2156915367, blue: 1, alpha: 0.4206442637) : .white
     }
-    func setContent(post: Post) {
+    func setContent(post: Post, mode: PostCellMode) {
+        self.btnEdit.isHidden = mode == .home
         if post.mediaMeta.count != 0 {
             self.lbExcerpt.isHidden = false
             self._lbExcerpt.isHidden = true
@@ -49,7 +54,7 @@ class PostCell: UITableViewCell {
         self.lbForumAndSchool.text = post.forumName + " " + post.school + (post.department.rangeOfCharacter(from: letters) != nil && !post.withNickname ? " " + post.department : "")
         
         
-        self.LikeAndcommentCount.text = "❤️\(post.likeCount) 回應: \(post.commentCount)"
+        self.LikeAndcommentCount.text = (post.likeCount != "0" ? "❤️" : "🤍") + "\(post.likeCount) 回應: \(post.commentCount)"
         self.lbTitle.text = post.title
         if post.withNickname {
             let label = UILabel()

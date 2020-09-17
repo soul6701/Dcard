@@ -31,15 +31,16 @@ class CardInfoTitleCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
     }
-    func setContent(photo: String, sex: String, school: String) {
-        self.photo.kf.setImage(with: URL(string: photo))
+    func setContent(card: Card, isUser: Bool) {
+        self.photo.kf.setImage(with: URL(string: card.photo))
         self._photo = self.photo.image
-        self.lbSex.text = sex == "male" ? "男同學" : "女同學"
-        self.lbSchool.text = school
+        self.lbSex.text = isUser ? card.name : card.sex == "男性" ? "男同學" : "女同學"
+        self.lbSchool.text = card.school + " " + card.department
         setGaussianBlur()
     }
+    
+    //製作背景模糊頭貼
     private func setGaussianBlur() {
-        
         let image = self._photo ?? UIImage()
         //獲取原始圖片
         let inputImage =  CIImage(image: image)

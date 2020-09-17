@@ -10,24 +10,30 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+protocol FavoriteVCDelegate {
+    //
+}
 class FavoriteVC: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var itemSpace: CGFloat = 6
+    private var itemSpace: CGFloat = 8
     private var lineSpace: CGFloat = 10
-    private var collectionPadding: CGFloat = 10
+    private var collectionPadding: CGFloat = 15
     private var tfAddList: UITextField?
     private var itemSize: CGSize {
         let width = floor((Double)(self.collectionView.bounds.width - itemSpace - collectionPadding * 2) / 2)
         return CGSize(width: width, height: width)
     }
-    private var favoriteList = [Favorite]()
+    private var favoriteList = [Favorite]() {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
         ToolbarView.shared.show(false)
         initView()
     }
@@ -40,7 +46,6 @@ class FavoriteVC: UIViewController {
 extension FavoriteVC {
     private func initView() {
         confiCollectionView()
-        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addList))
     }
     private func confiCollectionView() {
@@ -48,7 +53,7 @@ extension FavoriteVC {
         self.collectionView.dataSource = self
         self.collectionView.register(UINib(nibName: "FavoriteCell", bundle: nil), forCellWithReuseIdentifier: "FavoriteCell")
         let _view = UIView(frame: self.collectionView.frame)
-        _view.backgroundColor = #colorLiteral(red: 0.9995340705, green: 0.988355577, blue: 0.4726552367, alpha: 0.8784514127)
+        _view.backgroundColor = #colorLiteral(red: 0.7540688515, green: 0.7540867925, blue: 0.7540771365, alpha: 0.1963291952)
         self.collectionView.backgroundView = _view
         setCollectionViewLayout()
     }
@@ -89,12 +94,19 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let row = indexPath.row
+        let favorite = self.favoriteList[indexPath.row]
+        let name = favorite.listName
+        let post = favorite.post
+        let index = (indexPath.row) % 8
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCell", for: indexPath) as! FavoriteCell
-        cell.setContent(name: self.favoriteList[row].listName, imageString: !self.favoriteList[row].post.isEmpty ? self.favoriteList[row].post[0].mediaMeta[0].normalizedUrl : "")
+        cell.setContent(name: name, imageString: !post.isEmpty ? post[index].mediaMeta[0].thumbnail : "")
         return cell
     }
     func  collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return self.itemSize
     }
+}
+// MARK: - FavoriteVCDelegate
+extension FavoriteVC: FavoriteVCDelegate {
+    
 }

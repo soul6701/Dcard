@@ -197,19 +197,18 @@ extension HomeVC {
 // MARK: - UITableViewDelegate
 extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return showList.count
+        return self.showList.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
-        cell.selectionStyle = .none
-        cell.setContent(post: showList[indexPath.row])
+        cell.setContent(post: self.showList[indexPath.row], mode: .home)
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.getComment(list: showList, index: indexPath.row)
+        viewModel.getComment(list: self.showList, index: indexPath.row)
     }
 }
 // MARK: - DrawerDelegate

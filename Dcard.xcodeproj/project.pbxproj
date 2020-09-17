@@ -19,6 +19,17 @@
 		22179C8124F66BE900BAD5C4 /* SelectCountryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22179C7F24F66BE900BAD5C4 /* SelectCountryVC.swift */; };
 		22179C8224F66BE900BAD5C4 /* SelectCountryVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22179C8024F66BE900BAD5C4 /* SelectCountryVC.xib */; };
 		2219E83D24F53C6200155ABB /* SetPhoneAddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2219E83C24F53C6200155ABB /* SetPhoneAddressVC.swift */; };
+		221A47C325105C4300DE1301 /* FollowCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A47C125105C4300DE1301 /* FollowCardCell.swift */; };
+		221A47C425105C4300DE1301 /* FollowCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 221A47C225105C4300DE1301 /* FollowCardCell.xib */; };
+		221A47C625105CF300DE1301 /* FollowCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A47C525105CF300DE1301 /* FollowCardVC.swift */; };
+		221A47C82510CA0800DE1301 /* ArticalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A47C72510CA0800DE1301 /* ArticalVC.swift */; };
+		221A47CE2510D30E00DE1301 /* PrivacyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 221A47CD2510D30E00DE1301 /* PrivacyView.xib */; };
+		221A47D02510D31E00DE1301 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A47CF2510D31E00DE1301 /* PrivacyView.swift */; };
+		221A47D22511AD0200DE1301 /* SelectNotifyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 221A47D12511AD0200DE1301 /* SelectNotifyView.xib */; };
+		221A47D42511AD1600DE1301 /* SelectNotifyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A47D32511AD1600DE1301 /* SelectNotifyView.swift */; };
+		221A47D82512160000DE1301 /* Extension_UIAlertAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A47D72512160000DE1301 /* Extension_UIAlertAction.swift */; };
+		221A47DB2512218A00DE1301 /* CardHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A47D92512218A00DE1301 /* CardHomeVC.swift */; };
+		221A47DC2512218A00DE1301 /* CardHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 221A47DA2512218A00DE1301 /* CardHomeVC.xib */; };
 		221ADAF42499F0A100C25BD1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF32499F0A100C25BD1 /* AppDelegate.swift */; };
 		221ADAF62499F0A100C25BD1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */; };
 		221ADAF82499F0A100C25BD1 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221ADAF72499F0A100C25BD1 /* HomeVC.swift */; };
@@ -67,6 +78,9 @@
 		22664E3024EB7BB70080BAF8 /* MemoPageTwoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22664E2E24EB7BB70080BAF8 /* MemoPageTwoVC.xib */; };
 		22664E3324EB7BDF0080BAF8 /* MemoPageThreeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22664E3124EB7BDF0080BAF8 /* MemoPageThreeVC.swift */; };
 		22664E3424EB7BDF0080BAF8 /* MemoPageThreeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22664E3224EB7BDF0080BAF8 /* MemoPageThreeVC.xib */; };
+		2271888F250F838D00AAA166 /* FollowIssueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2271888E250F838D00AAA166 /* FollowIssueVC.swift */; };
+		22718892250F858400AAA166 /* FollowIssueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22718890250F858400AAA166 /* FollowIssueCell.swift */; };
+		22718893250F858400AAA166 /* FollowIssueCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22718891250F858400AAA166 /* FollowIssueCell.xib */; };
 		2271913D24FE8B1C006C1C5B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2271913C24FE8B1C006C1C5B /* User.swift */; };
 		2276108024F8FF2C003A3F88 /* LoginFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276107F24F8FF2C003A3F88 /* LoginFirebase.swift */; };
 		2276108224F90470003A3F88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2276108124F90470003A3F88 /* GoogleService-Info.plist */; };
@@ -126,6 +140,11 @@
 		22D7C39F24ED1EC8006412BE /* LoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22D7C39E24ED1EC8006412BE /* LoadingView.xib */; };
 		22DCB54824EED99400EE2DDD /* 哭泣.gif in Resources */ = {isa = PBXBuildFile; fileRef = 22DCB54724EED99400EE2DDD /* 哭泣.gif */; };
 		22DCB55024EF9F7200EE2DDD /* Extension_UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DCB54F24EF9F7200EE2DDD /* Extension_UITextField.swift */; };
+		22EDC71E25130C480021B435 /* Extension_UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDC71D25130C480021B435 /* Extension_UIButton.swift */; };
+		22EDC72025134DDC0021B435 /* MailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDC71F25134DDC0021B435 /* MailVC.swift */; };
+		22EDC723251351A70021B435 /* MailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDC721251351A70021B435 /* MailCell.swift */; };
+		22EDC724251351A70021B435 /* MailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22EDC722251351A70021B435 /* MailCell.xib */; };
+		22EDC726251367A20021B435 /* Extension_UINavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDC725251367A20021B435 /* Extension_UINavigation.swift */; };
 		22EE9AA424B9840400823C83 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE9AA324B9840400823C83 /* Constant.swift */; };
 		22EFC6A424F95638003CD570 /* LoginVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC6A324F95638003CD570 /* LoginVM.swift */; };
 		22EFC6A624FB7D21003CD570 /* LoginNAV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EFC6A524FB7D21003CD570 /* LoginNAV.swift */; };
@@ -168,6 +187,17 @@
 		22179C7F24F66BE900BAD5C4 /* SelectCountryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCountryVC.swift; sourceTree = "<group>"; };
 		22179C8024F66BE900BAD5C4 /* SelectCountryVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectCountryVC.xib; sourceTree = "<group>"; };
 		2219E83C24F53C6200155ABB /* SetPhoneAddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPhoneAddressVC.swift; sourceTree = "<group>"; };
+		221A47C125105C4300DE1301 /* FollowCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowCardCell.swift; sourceTree = "<group>"; };
+		221A47C225105C4300DE1301 /* FollowCardCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowCardCell.xib; sourceTree = "<group>"; };
+		221A47C525105CF300DE1301 /* FollowCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowCardVC.swift; sourceTree = "<group>"; };
+		221A47C72510CA0800DE1301 /* ArticalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticalVC.swift; sourceTree = "<group>"; };
+		221A47CD2510D30E00DE1301 /* PrivacyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrivacyView.xib; sourceTree = "<group>"; };
+		221A47CF2510D31E00DE1301 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
+		221A47D12511AD0200DE1301 /* SelectNotifyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectNotifyView.xib; sourceTree = "<group>"; };
+		221A47D32511AD1600DE1301 /* SelectNotifyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectNotifyView.swift; sourceTree = "<group>"; };
+		221A47D72512160000DE1301 /* Extension_UIAlertAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_UIAlertAction.swift; sourceTree = "<group>"; };
+		221A47D92512218A00DE1301 /* CardHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHomeVC.swift; sourceTree = "<group>"; };
+		221A47DA2512218A00DE1301 /* CardHomeVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardHomeVC.xib; sourceTree = "<group>"; };
 		221ADAF02499F0A100C25BD1 /* ChiaCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChiaCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		221ADAF32499F0A100C25BD1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -222,6 +252,9 @@
 		22664E2E24EB7BB70080BAF8 /* MemoPageTwoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemoPageTwoVC.xib; sourceTree = "<group>"; };
 		22664E3124EB7BDF0080BAF8 /* MemoPageThreeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoPageThreeVC.swift; sourceTree = "<group>"; };
 		22664E3224EB7BDF0080BAF8 /* MemoPageThreeVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemoPageThreeVC.xib; sourceTree = "<group>"; };
+		2271888E250F838D00AAA166 /* FollowIssueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowIssueVC.swift; sourceTree = "<group>"; };
+		22718890250F858400AAA166 /* FollowIssueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowIssueCell.swift; sourceTree = "<group>"; };
+		22718891250F858400AAA166 /* FollowIssueCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowIssueCell.xib; sourceTree = "<group>"; };
 		2271913C24FE8B1C006C1C5B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		2276107F24F8FF2C003A3F88 /* LoginFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFirebase.swift; sourceTree = "<group>"; };
 		2276108124F90470003A3F88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -281,6 +314,11 @@
 		22D7C39E24ED1EC8006412BE /* LoadingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingView.xib; sourceTree = "<group>"; };
 		22DCB54724EED99400EE2DDD /* 哭泣.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "哭泣.gif"; sourceTree = "<group>"; };
 		22DCB54F24EF9F7200EE2DDD /* Extension_UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_UITextField.swift; sourceTree = "<group>"; };
+		22EDC71D25130C480021B435 /* Extension_UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_UIButton.swift; sourceTree = "<group>"; };
+		22EDC71F25134DDC0021B435 /* MailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailVC.swift; sourceTree = "<group>"; };
+		22EDC721251351A70021B435 /* MailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailCell.swift; sourceTree = "<group>"; };
+		22EDC722251351A70021B435 /* MailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MailCell.xib; sourceTree = "<group>"; };
+		22EDC725251367A20021B435 /* Extension_UINavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_UINavigation.swift; sourceTree = "<group>"; };
 		22EE9AA324B9840400823C83 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		22EFC6A324F95638003CD570 /* LoginVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVM.swift; sourceTree = "<group>"; };
 		22EFC6A524FB7D21003CD570 /* LoginNAV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginNAV.swift; sourceTree = "<group>"; };
@@ -333,6 +371,9 @@
 		2205D17A24A7725E004A4F41 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				223F8D552507F69E00B11868 /* customView.swift */,
+				2205D17B24A772C8004A4F41 /* PostCell.swift */,
+				2205D17C24A772C8004A4F41 /* PostCell.xib */,
 				228D421C24B3889A0077D29E /* SettingView.xib */,
 				228D421E24B38AFC0077D29E /* SettingView.swift */,
 				224E3CB124B76E85003F8F2B /* ToolbarView.xib */,
@@ -341,7 +382,12 @@
 				22D7C39E24ED1EC8006412BE /* LoadingView.xib */,
 				22179C7F24F66BE900BAD5C4 /* SelectCountryVC.swift */,
 				22179C8024F66BE900BAD5C4 /* SelectCountryVC.xib */,
-				223F8D552507F69E00B11868 /* customView.swift */,
+				221A47CD2510D30E00DE1301 /* PrivacyView.xib */,
+				221A47CF2510D31E00DE1301 /* PrivacyView.swift */,
+				221A47D12511AD0200DE1301 /* SelectNotifyView.xib */,
+				221A47D32511AD1600DE1301 /* SelectNotifyView.swift */,
+				221A47D92512218A00DE1301 /* CardHomeVC.swift */,
+				221A47DA2512218A00DE1301 /* CardHomeVC.xib */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -356,6 +402,9 @@
 				224E002D24E6928400E77048 /* Extension_UINavigationController.swift */,
 				22DCB54F24EF9F7200EE2DDD /* Extension_UITextField.swift */,
 				2246035B2507EFB1008480D8 /* Extension_UIStoryboard.swift */,
+				221A47D72512160000DE1301 /* Extension_UIAlertAction.swift */,
+				22EDC71D25130C480021B435 /* Extension_UIButton.swift */,
+				22EDC725251367A20021B435 /* Extension_UINavigation.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -386,12 +435,12 @@
 			isa = PBXGroup;
 			children = (
 				223B21EE24F2B6A100D60299 /* Login */,
-				22A75F1624E5188E00287460 /* resourse */,
 				221ADB232499F19300C25BD1 /* Storyboard */,
 				224E3CF024B783A3003F8F2B /* Page */,
 				2205D18324A98CEA004A4F41 /* Helper */,
 				2205D17A24A7725E004A4F41 /* Component */,
 				221ADB242499F58A00C25BD1 /* Model */,
+				22A75F1624E5188E00287460 /* resourse */,
 				221ADAF32499F0A100C25BD1 /* AppDelegate.swift */,
 				221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */,
 				221ADAFC2499F0A300C25BD1 /* Assets.xcassets */,
@@ -493,8 +542,6 @@
 				2205D17F24A79C83004A4F41 /* HomeVM.swift */,
 				228D419824AA49080077D29E /* PostVC.swift */,
 				2205D18124A79E04004A4F41 /* PostRepository.swift */,
-				2205D17B24A772C8004A4F41 /* PostCell.swift */,
-				2205D17C24A772C8004A4F41 /* PostCell.xib */,
 				228D41E024AD06290077D29E /* CommentCell.swift */,
 				228D41E124AD06290077D29E /* CommentCell.xib */,
 				228F932C24C1FDFA00A7EBD9 /* Drawer.swift */,
@@ -560,8 +607,14 @@
 		224E3CF524B7840F003F8F2B /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				22CAAAD9250DFB7200CDF95B /* Favorite */,
 				22CAAAD8250DFB4400CDF95B /* Main */,
+				22CAAAD9250DFB7200CDF95B /* Favorite */,
+				22718888250F816F00AAA166 /* FollowIssue */,
+				22718889250F819600AAA166 /* FollowCard */,
+				2271888A250F81A000AAA166 /* Artical */,
+				2271888B250F81F500AAA166 /* Introduce */,
+				2271888C250F820F00AAA166 /* MyCard */,
+				2271888D250F821A00AAA166 /* Mail */,
 				22CAAABC250CF03400CDF95B /* ProfileVC.swift */,
 				22CAAADC250E2F4800CDF95B /* ProfileManager.swift */,
 			);
@@ -583,6 +636,58 @@
 				22664E3224EB7BDF0080BAF8 /* MemoPageThreeVC.xib */,
 			);
 			path = page;
+			sourceTree = "<group>";
+		};
+		22718888250F816F00AAA166 /* FollowIssue */ = {
+			isa = PBXGroup;
+			children = (
+				2271888E250F838D00AAA166 /* FollowIssueVC.swift */,
+				22718890250F858400AAA166 /* FollowIssueCell.swift */,
+				22718891250F858400AAA166 /* FollowIssueCell.xib */,
+			);
+			path = FollowIssue;
+			sourceTree = "<group>";
+		};
+		22718889250F819600AAA166 /* FollowCard */ = {
+			isa = PBXGroup;
+			children = (
+				221A47C125105C4300DE1301 /* FollowCardCell.swift */,
+				221A47C225105C4300DE1301 /* FollowCardCell.xib */,
+				221A47C525105CF300DE1301 /* FollowCardVC.swift */,
+			);
+			path = FollowCard;
+			sourceTree = "<group>";
+		};
+		2271888A250F81A000AAA166 /* Artical */ = {
+			isa = PBXGroup;
+			children = (
+				221A47C72510CA0800DE1301 /* ArticalVC.swift */,
+			);
+			path = Artical;
+			sourceTree = "<group>";
+		};
+		2271888B250F81F500AAA166 /* Introduce */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Introduce;
+			sourceTree = "<group>";
+		};
+		2271888C250F820F00AAA166 /* MyCard */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MyCard;
+			sourceTree = "<group>";
+		};
+		2271888D250F821A00AAA166 /* Mail */ = {
+			isa = PBXGroup;
+			children = (
+				22EDC71F25134DDC0021B435 /* MailVC.swift */,
+				22EDC721251351A70021B435 /* MailCell.swift */,
+				22EDC722251351A70021B435 /* MailCell.xib */,
+			);
+			path = Mail;
 			sourceTree = "<group>";
 		};
 		22A75F1624E5188E00287460 /* resourse */ = {
@@ -746,6 +851,7 @@
 				22A75F2624E54C7800287460 /* WeekHeaderView.xib in Resources */,
 				2241D36C24E3DCC900529BC8 /* SkitchVC.xib in Resources */,
 				22788AFC2503F82A00E87F7F /* CardInfoTitleCell.xib in Resources */,
+				221A47CE2510D30E00DE1301 /* PrivacyView.xib in Resources */,
 				22A75F1C24E51AEB00287460 /* CalendarVC.xib in Resources */,
 				228D41E324AD06290077D29E /* CommentCell.xib in Resources */,
 				22D7C39B24ECBA83006412BE /* 熊貓.gif in Resources */,
@@ -755,7 +861,9 @@
 				220D16E224F4DAC6007B578E /* DescriptionVC.xib in Resources */,
 				22D7C39F24ED1EC8006412BE /* LoadingView.xib in Resources */,
 				22CAAACF250D267600CDF95B /* ProfileTwoCell.xib in Resources */,
+				221A47C425105C4300DE1301 /* FollowCardCell.xib in Resources */,
 				22664E3024EB7BB70080BAF8 /* MemoPageTwoVC.xib in Resources */,
+				221A47DC2512218A00DE1301 /* CardHomeVC.xib in Resources */,
 				224E3CED24B782CE003F8F2B /* Notify.storyboard in Resources */,
 				224E3CEF24B782DD003F8F2B /* Profile.storyboard in Resources */,
 				22349E6F250E924700DBE94E /* FavoriteCell.xib in Resources */,
@@ -768,11 +876,14 @@
 				221ADAFD2499F0A300C25BD1 /* Assets.xcassets in Resources */,
 				228D421D24B3889A0077D29E /* SettingView.xib in Resources */,
 				224E3CE924B78294003F8F2B /* Card.storyboard in Resources */,
+				22EDC724251351A70021B435 /* MailCell.xib in Resources */,
+				221A47D22511AD0200DE1301 /* SelectNotifyView.xib in Resources */,
 				22664E3424EB7BDF0080BAF8 /* MemoPageThreeVC.xib in Resources */,
 				22A75F2024E5380300287460 /* DayCell.xib in Resources */,
 				22F2111924CC5324003B1F1D /* ForumCell.xib in Resources */,
 				22A75F1824E5189C00287460 /* 柴犬.gif in Resources */,
 				224E3CB224B76E85003F8F2B /* ToolbarView.xib in Resources */,
+				22718893250F858400AAA166 /* FollowIssueCell.xib in Resources */,
 				22EFC6AA24FBB16F003CD570 /* country.json in Resources */,
 				22CAAABB250C960400CDF95B /* ChatRoomVC.xib in Resources */,
 				22788B002504147A00E87F7F /* FilterView.xib in Resources */,
@@ -869,6 +980,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				221ADAF82499F0A100C25BD1 /* HomeVC.swift in Sources */,
+				22EDC71E25130C480021B435 /* Extension_UIButton.swift in Sources */,
 				2260BECA24F7A21800AF1C3E /* SelectPronView.swift in Sources */,
 				22CAAADD250E2F4800CDF95B /* ProfileManager.swift in Sources */,
 				22DCB55024EF9F7200EE2DDD /* Extension_UITextField.swift in Sources */,
@@ -876,10 +988,12 @@
 				22D7C39824EC2021006412BE /* MessageCell.swift in Sources */,
 				22F2111824CC5324003B1F1D /* ForumCell.swift in Sources */,
 				2205D17D24A772C8004A4F41 /* PostCell.swift in Sources */,
+				221A47D02510D31E00DE1301 /* PrivacyView.swift in Sources */,
 				22788AEA2503909400E87F7F /* Card.swift in Sources */,
 				22CAAAD7250DE31600CDF95B /* ProfileCellModel.swift in Sources */,
 				221ADAF42499F0A100C25BD1 /* AppDelegate.swift in Sources */,
 				2271913D24FE8B1C006C1C5B /* User.swift in Sources */,
+				2271888F250F838D00AAA166 /* FollowIssueVC.swift in Sources */,
 				22664E2F24EB7BB70080BAF8 /* MemoPageTwoVC.swift in Sources */,
 				2241D36B24E3DCC900529BC8 /* SkitchVC.swift in Sources */,
 				22CAAABD250CF03400CDF95B /* ProfileVC.swift in Sources */,
@@ -887,7 +1001,9 @@
 				22A75F1B24E51AEB00287460 /* CalendarVC.swift in Sources */,
 				220D16E824F4F5B5007B578E /* SetSexVC.swift in Sources */,
 				22788AFB2503F82A00E87F7F /* CardInfoTitleCell.swift in Sources */,
+				221A47D42511AD1600DE1301 /* SelectNotifyView.swift in Sources */,
 				227FD592249F43CC00BC185C /* APIInfo.swift in Sources */,
+				22EDC723251351A70021B435 /* MailCell.swift in Sources */,
 				226583D224F8051B00314134 /* CompleteRegisterVC.swift in Sources */,
 				22433D3C24EA4CEC00E8D79D /* MemoPageOneVC.swift in Sources */,
 				229A6FCD24F7D4F700993038 /* SetPasswordVC.swift in Sources */,
@@ -907,6 +1023,7 @@
 				22EE9AA424B9840400823C83 /* Constant.swift in Sources */,
 				2276108024F8FF2C003A3F88 /* LoginFirebase.swift in Sources */,
 				22788AF22503A87600E87F7F /* UserConfig.swift in Sources */,
+				22EDC72025134DDC0021B435 /* MailVC.swift in Sources */,
 				220D16DC24F4C841007B578E /* UserDefaultsKeys.swift in Sources */,
 				221ADB262499F5C300C25BD1 /* PostAndComment.swift in Sources */,
 				22EFC6AC24FC2980003CD570 /* ForgetPasswordVC.swift in Sources */,
@@ -914,7 +1031,9 @@
 				22179C8124F66BE900BAD5C4 /* SelectCountryVC.swift in Sources */,
 				224E3CF924B784E9003F8F2B /* GameVC.swift in Sources */,
 				2246035C2507EFB1008480D8 /* Extension_UIStoryboard.swift in Sources */,
+				221A47C625105CF300DE1301 /* FollowCardVC.swift in Sources */,
 				224E3CF724B784D9003F8F2B /* CardVC.swift in Sources */,
+				221A47DB2512218A00DE1301 /* CardHomeVC.swift in Sources */,
 				22788AF42503BB5E00E87F7F /* CardInfoVC.swift in Sources */,
 				22433D3324E7E3C500E8D79D /* MemoVC.swift in Sources */,
 				22788B02250416BF00E87F7F /* FilterView.swift in Sources */,
@@ -940,12 +1059,17 @@
 				22CAAAD4250D2EF100CDF95B /* ProfileThreeCell.swift in Sources */,
 				22A75F2524E54C7800287460 /* WeekHeaderView.swift in Sources */,
 				223F8D562507F69E00B11868 /* customView.swift in Sources */,
+				22EDC726251367A20021B435 /* Extension_UINavigation.swift in Sources */,
 				22433D3824EA2AEC00E8D79D /* MemoPageCell.swift in Sources */,
+				22718892250F858400AAA166 /* FollowIssueCell.swift in Sources */,
 				2260DAA424F38F8400FB9E2B /* CreateAccountVC.swift in Sources */,
 				22EFC6A424F95638003CD570 /* LoginVM.swift in Sources */,
+				221A47D82512160000DE1301 /* Extension_UIAlertAction.swift in Sources */,
+				221A47C325105C4300DE1301 /* FollowCardCell.swift in Sources */,
 				228F913124C0B47600A7EBD9 /* Forum.swift in Sources */,
 				22CAAACE250D267600CDF95B /* ProfileTwoCell.swift in Sources */,
 				22349E6E250E924600DBE94E /* FavoriteCell.swift in Sources */,
+				221A47C82510CA0800DE1301 /* ArticalVC.swift in Sources */,
 				2280A6B924D9061100426C2D /* LoadingView.swift in Sources */,
 				22F2111524CC3535003B1F1D /* Extension_UIView.swift in Sources */,
 			);

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Mason_Lin. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 extension UITextField {

@@ -12,6 +12,7 @@ struct ProfileThreeCellInCell {
     var name: String
     var image: UIImage
 }
+
 enum ProfileThreeCellType: Int {
     case favorites = 0
     case followIssue
@@ -89,6 +90,10 @@ class ProfileThreeCell: UITableViewCell {
     func setDelegate(_ delegate: ProfileVCDelegate) {
         self.delegate = delegate
     }
+    func setContent(isNew: Bool) {
+        self.isNew = isNew
+        self.tableView.reloadData()
+    }
 }
 // MARK: - SubscribeViewModel
 extension ProfileThreeCell {
@@ -111,6 +116,7 @@ extension ProfileThreeCell: UITableViewDelegate, UITableViewDataSource {
         return 50
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.delegate?.toNextPage(.favorites)
+        let cellType = ProfileThreeCellType.init(rawValue: indexPath.row)!
+        self.delegate?.toNextPage(cellType)
     }
 }

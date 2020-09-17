@@ -40,6 +40,7 @@ class CardInfoVC: UIViewController {
             self.tableView.reloadData()
         }
     }
+    private var isUser = false
     private var card: Card?
     private var delegate: CardVCDelegate?
     
@@ -48,8 +49,9 @@ class CardInfoVC: UIViewController {
         initView()
         ToolbarView.shared.show(false)
     }
-    func setContent(card: Card) {
+    func setContent(card: Card, isUser: Bool = false) {
         self.card = card
+        self.isUser = isUser
     }
     func setDelegate(_ delegate: CardVCDelegate) {
         self.delegate = delegate
@@ -71,25 +73,24 @@ extension CardInfoVC {
         self.tableView.layer.cornerRadius = 15
     }
     private func confiNav() {
-        self.navigationItem.setHidesBackButton(false, animated: false)
         self.navigationItem.title = "今日 ChiaCard"
         let btnHint = UIButton(type: .infoLight)
         btnHint.addTarget(self, action: #selector(alert), for: .touchUpInside)
         self.navigationItem.setRightBarButton(UIBarButtonItem(customView: btnHint), animated: true)
     }
     @objc private func alert() {
-        
+        //
     }
 }
+// MARK: - UITableViewDelegate
 extension CardInfoVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isFriend ? 7 : 5
+        return self.isUser ? 6 : isFriend ? 7 : 5
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
         if row != 0 {
-            if self.isFriend {
+            if self.isFriend || self.isUser {
                 if let cell = tableView.dequeueReusableCell(withIdentifier: "CardInfoCell") as? CardInfoCell {
                     if row == 1 {
                         cell.setContent(title: CellType(rawValue: row)?.titel ?? "", content: card?.birthday ?? "")
@@ -128,7 +129,7 @@ extension CardInfoVC: UITableViewDelegate, UITableViewDataSource {
             }
         } else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: "CardInfoTitleCell") as? CardInfoTitleCell {
-                cell.setContent(photo: card?.photo ?? "", sex: card?.sex ?? "", school: card?.school ?? "")
+                cell.setContent(card: self.card ?? Card(), isUser: self.isUser)
                 return cell
             }
         }
@@ -144,6 +145,7 @@ extension CardInfoVC: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
 }
+// MARK: - CardSendCellDelegate
 extension CardInfoVC: CardSendCellDelegate {
     func didClickBtnSend() {
         self.isFriend = true

@@ -10,12 +10,15 @@ import Foundation
 
 public struct Card {
     
+    public var id = ""
+    public var post: [Post] = []
     public var name: String = ""
     public var photo: String = ""
     public var sex: String = ""
     public var introduce: String = ""
     public var country: String = ""
     public var school: String = ""
+    public var department: String = ""
     public var article: String = ""
     public var birthday: String = ""
     public var love: String = ""

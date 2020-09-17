@@ -62,13 +62,17 @@ class SelectPronView: UIView {
         hide()
     }
     func show() {
-        self.showAnimaor.startAnimation()
+        DispatchQueue.main.async {
+            self.showAnimaor.startAnimation()
+        }
     }
     func hide() {
-        self.hideAnimaor.startAnimation()
+        DispatchQueue.main.async {
+            self.hideAnimaor.startAnimation()
+        }
     }
     
-    func setDelegate(delegate: SelectPronViewDelegate) {
+    func setDelegate(_ delegate: SelectPronViewDelegate) {
         self.delegate = delegate
     }
 }

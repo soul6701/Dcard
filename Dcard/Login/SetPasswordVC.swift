@@ -39,6 +39,7 @@ class SetPasswordVC: UIViewController {
         toNextPage()
     }
     @objc private func toNextPage() {
+        self.password = self.tfPassword.text ?? ""
         LoginManager.shared.toNextPage(self.navigationController!, next: .CompleteRegisterVC)
     }
 }

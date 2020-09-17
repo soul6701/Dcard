@@ -24,11 +24,13 @@ class ProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.tableViewMain.reloadData()
         ToolbarView.shared.show(true)
     }
 }
 extension ProfileVC {
     private func initView() {
+        self.navigationItem.title = ""
         self.bottomSpace.constant = Size.bottomSpace
         confiTableView()
     }
@@ -60,6 +62,7 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileThreeCell", for: indexPath) as! ProfileThreeCell
             cell.setDelegate(self)
+            cell.setContent(isNew: true)
             return cell
         }
     }
