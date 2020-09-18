@@ -26,6 +26,9 @@ struct ProfilePage {
     var mailVC: MailVC {
         return self.storyboard.instantiateViewController(withIdentifier: "MailVC") as! MailVC
     }
+    var mailAllVC: MailAllVC {
+        return self.storyboard.instantiateViewController(withIdentifier: "MailAllVC") as! MailAllVC
+    }
 }
 struct CardPage {
     let storyboard = UIStoryboard(name: "Card", bundle: nil)

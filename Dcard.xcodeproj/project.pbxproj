@@ -133,6 +133,11 @@
 		22CAAAD7250DE31600CDF95B /* ProfileCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CAAAD6250DE31600CDF95B /* ProfileCellModel.swift */; };
 		22CAAADB250E260700CDF95B /* FavoriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CAAADA250E260700CDF95B /* FavoriteVC.swift */; };
 		22CAAADD250E2F4800CDF95B /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CAAADC250E2F4800CDF95B /* ProfileManager.swift */; };
+		22CD379C25145E1B0066AA7D /* MailAllVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD379B25145E1B0066AA7D /* MailAllVC.swift */; };
+		22CD379F25146C580066AA7D /* MailAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD379D25146C580066AA7D /* MailAllCell.swift */; };
+		22CD37A025146C580066AA7D /* MailAllCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22CD379E25146C580066AA7D /* MailAllCell.xib */; };
+		22CD37A7251486140066AA7D /* MailMainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD37A5251486140066AA7D /* MailMainCell.swift */; };
+		22CD37A8251486140066AA7D /* MailMainCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22CD37A6251486140066AA7D /* MailMainCell.xib */; };
 		22D7C39824EC2021006412BE /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D7C39624EC2021006412BE /* MessageCell.swift */; };
 		22D7C39924EC2021006412BE /* messageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22D7C39724EC2021006412BE /* messageCell.xib */; };
 		22D7C39B24ECBA83006412BE /* 熊貓.gif in Resources */ = {isa = PBXBuildFile; fileRef = 22D7C39A24ECBA83006412BE /* 熊貓.gif */; };
@@ -307,6 +312,11 @@
 		22CAAAD6250DE31600CDF95B /* ProfileCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCellModel.swift; sourceTree = "<group>"; };
 		22CAAADA250E260700CDF95B /* FavoriteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteVC.swift; sourceTree = "<group>"; };
 		22CAAADC250E2F4800CDF95B /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
+		22CD379B25145E1B0066AA7D /* MailAllVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailAllVC.swift; sourceTree = "<group>"; };
+		22CD379D25146C580066AA7D /* MailAllCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailAllCell.swift; sourceTree = "<group>"; };
+		22CD379E25146C580066AA7D /* MailAllCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MailAllCell.xib; sourceTree = "<group>"; };
+		22CD37A5251486140066AA7D /* MailMainCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailMainCell.swift; sourceTree = "<group>"; };
+		22CD37A6251486140066AA7D /* MailMainCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MailMainCell.xib; sourceTree = "<group>"; };
 		22D7C39624EC2021006412BE /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		22D7C39724EC2021006412BE /* messageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = messageCell.xib; sourceTree = "<group>"; };
 		22D7C39A24ECBA83006412BE /* 熊貓.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "熊貓.gif"; sourceTree = "<group>"; };
@@ -686,6 +696,11 @@
 				22EDC71F25134DDC0021B435 /* MailVC.swift */,
 				22EDC721251351A70021B435 /* MailCell.swift */,
 				22EDC722251351A70021B435 /* MailCell.xib */,
+				22CD379B25145E1B0066AA7D /* MailAllVC.swift */,
+				22CD379D25146C580066AA7D /* MailAllCell.swift */,
+				22CD379E25146C580066AA7D /* MailAllCell.xib */,
+				22CD37A5251486140066AA7D /* MailMainCell.swift */,
+				22CD37A6251486140066AA7D /* MailMainCell.xib */,
 			);
 			path = Mail;
 			sourceTree = "<group>";
@@ -874,6 +889,7 @@
 				22179C8224F66BE900BAD5C4 /* SelectCountryVC.xib in Resources */,
 				22D7C39924EC2021006412BE /* messageCell.xib in Resources */,
 				221ADAFD2499F0A300C25BD1 /* Assets.xcassets in Resources */,
+				22CD37A025146C580066AA7D /* MailAllCell.xib in Resources */,
 				228D421D24B3889A0077D29E /* SettingView.xib in Resources */,
 				224E3CE924B78294003F8F2B /* Card.storyboard in Resources */,
 				22EDC724251351A70021B435 /* MailCell.xib in Resources */,
@@ -893,6 +909,7 @@
 				22DCB54824EED99400EE2DDD /* 哭泣.gif in Resources */,
 				2260BEC824F7A20A00AF1C3E /* SelectPronView.xib in Resources */,
 				22CAAAC3250D217F00CDF95B /* ProfileOneCell.xib in Resources */,
+				22CD37A8251486140066AA7D /* MailMainCell.xib in Resources */,
 				2241D36824E3C27500529BC8 /* CalculatorVC.xib in Resources */,
 				221ADAFB2499F0A100C25BD1 /* Home.storyboard in Resources */,
 				22788B062504EDB000E87F7F /* CardSendCell.xib in Resources */,
@@ -982,6 +999,7 @@
 				221ADAF82499F0A100C25BD1 /* HomeVC.swift in Sources */,
 				22EDC71E25130C480021B435 /* Extension_UIButton.swift in Sources */,
 				2260BECA24F7A21800AF1C3E /* SelectPronView.swift in Sources */,
+				22CD379F25146C580066AA7D /* MailAllCell.swift in Sources */,
 				22CAAADD250E2F4800CDF95B /* ProfileManager.swift in Sources */,
 				22DCB55024EF9F7200EE2DDD /* Extension_UITextField.swift in Sources */,
 				223B21F024F2B6B900D60299 /* LoginVC.swift in Sources */,
@@ -1040,12 +1058,14 @@
 				228F932D24C1FDFA00A7EBD9 /* Drawer.swift in Sources */,
 				22EFC6A624FB7D21003CD570 /* LoginNAV.swift in Sources */,
 				22788AEE25039DBE00E87F7F /* CardManager.swift in Sources */,
+				22CD379C25145E1B0066AA7D /* MailAllVC.swift in Sources */,
 				22788B052504EDB000E87F7F /* CardSendCell.swift in Sources */,
 				22788AE82503900200E87F7F /* CardFirebase.swift in Sources */,
 				22D7C39D24ECDFC9006412BE /* ImageInfo.swift in Sources */,
 				22788AF02503A0C100E87F7F /* ModelSingleton.swift in Sources */,
 				22CAAABA250C960400CDF95B /* ChatRoomVC.swift in Sources */,
 				2205D18224A79E04004A4F41 /* PostRepository.swift in Sources */,
+				22CD37A7251486140066AA7D /* MailMainCell.swift in Sources */,
 				2205D18024A79C83004A4F41 /* HomeVM.swift in Sources */,
 				22CAAAC2250D217F00CDF95B /* ProfileOneCell.swift in Sources */,
 				224E3CFB24B784F7003F8F2B /* NotifyVC.swift in Sources */,

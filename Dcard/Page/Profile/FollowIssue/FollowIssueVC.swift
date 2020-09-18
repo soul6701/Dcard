@@ -70,6 +70,9 @@ extension FollowIssueVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.section == 0 ? 60 : 120
     }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+    }
 }
 // MARK: - FollowIssueVCDelegate
 extension FollowIssueVC: FollowIssueVCDelegate {

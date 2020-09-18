@@ -46,7 +46,9 @@ class CalendarVC: UIViewController {
         let width = floor((Double)(collectionViewDay.bounds.width - space * 6 - collectionPadding * 2) / 7)
         return CGSize(width: width, height: width)
     }
-    
+    private var headerSize: CGSize {
+        return CGSize(width: self.collectionViewDay.bounds.width, height: self.itemSize.height / 2)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -191,7 +193,7 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource {
         return self.itemSize
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: itemSize.height / 2)
+        return self.headerSize
     }
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header", for: indexPath) as? WeekHeaderView else {

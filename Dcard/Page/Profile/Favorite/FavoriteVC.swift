@@ -49,8 +49,6 @@ extension FavoriteVC {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addList))
     }
     private func confiCollectionView() {
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
         self.collectionView.register(UINib(nibName: "FavoriteCell", bundle: nil), forCellWithReuseIdentifier: "FavoriteCell")
         let _view = UIView(frame: self.collectionView.frame)
         _view.backgroundColor = #colorLiteral(red: 0.7540688515, green: 0.7540867925, blue: 0.7540771365, alpha: 0.1963291952)
