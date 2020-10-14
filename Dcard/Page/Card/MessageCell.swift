@@ -9,8 +9,8 @@
 import UIKit
 import Kingfisher
 
-enum MessageCellType {
-    case left
+enum MessageCellType: Int {
+    case left = 0
     case right
 }
 

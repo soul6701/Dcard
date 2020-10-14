@@ -20,7 +20,7 @@ class MailVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     private var mailList = [Mail]()
     private var notyetReplyMailList: [Mail] {
-        return self.mailList.filter({ return $0.message.first!.user == true})
+        return self.mailList.filter({ return $0.message.first!.user == 1})
     }
     private lazy var segmentedControl: UISegmentedControl = {
         let items = ["全部", "未回覆"]
@@ -64,12 +64,13 @@ extension MailVC {
         var mailList = [Mail]()
         (0...6).forEach { (i) in
             var messageList = [Message]()
-            let message = ["我先洗澡", "我是胖虎我是孩子王", "胖虎不要🥴🥴🥴", "小咪約我看電影😳😳😳", "大雄👉👈其實我喜歡的是你😘", "欸欸你快看我新發的限動", "最近轉涼，要特別注意身體喔"]
+            
             let messageCount = Int.random(in: 1...100)
-            messageList.append(Message(user: Bool.random(), text: message[i], date: ["2020/09/15", "2021/02/21", "1900/04/21", "2100/05/11", "2020/08/02", "2001/01/30"].randomElement()!))
             (1...messageCount).forEach {(i) in
-                messageList.append(Message(user: Bool.random(), text: ["睡了嗎", "早安", "最近轉涼，要特別注意身體喔", "週末要看電影嗎？", "欸欸你快看我新發的限動", "我先洗澡", "不要太晚睡～", "噁男88", "🙄🙄🙄", "我是胖虎我是孩子王"].randomElement()!, date: ["2020/09/15", "2021/02/21", "1900/04/21", "2100/05/11", "2020/08/02", "2001/01/30"].randomElement()!))
+                messageList.append(Message(user: Int.random(in: (0...1)), text: ["睡了嗎", "早安", "最近轉涼，要特別注意身體喔", "週末要看電影嗎？", "欸欸你快看我新發的限動", "我先洗澡", "不要太晚睡～", "噁男88", "🙄🙄🙄", "我是胖虎我是孩子王"].randomElement()!, date: ["2020/09/15", "2021/02/21", "1900/04/21", "2100/05/11", "2020/08/02", "2001/01/30"].randomElement()!))
             }
+            let message = ["我先洗澡", "我是胖虎我是孩子王", "胖虎不要🥴🥴🥴", "小咪約我看電影😳😳😳", "大雄👉👈其實我喜歡的是你😘", "欸欸你快看我新發的限動", "最近轉涼，要特別注意身體喔"]
+            messageList.append(Message(user: Int.random(in: (0...1)), text: message[i], date: ["2020/09/15", "2021/02/21", "1900/04/21", "2100/05/11", "2020/08/02", "2001/01/30"].randomElement()!))
             mailList.append(Mail(card: myCardList[i], message: messageList, isNew: Bool.random()))
         }
         self.mailList = mailList
@@ -86,8 +87,7 @@ extension MailVC {
     }
     @objc private func showAll() {
         let vc = UIStoryboard.profile.mailAllVC
-        let cardList = mailList.map({ return $0.card })
-        vc.setContent(friendList: cardList)
+        vc.setContent(mailList: self.mailList)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     @objc private func selectAllOrNotyetReply(_ sender: UISegmentedControl) {
@@ -108,6 +108,9 @@ extension MailVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        ProfileManager.shared.toFriendCardPage(mail: self.mode == .all ? self.mailList[indexPath.row] : self.notyetReplyMailList[indexPath.row])
     }
     //因為資料不足會顯示分隔線
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

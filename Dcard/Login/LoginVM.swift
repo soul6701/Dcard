@@ -27,6 +27,9 @@ protocol LoginVMInterface {
     //查詢密碼
     var requirePasswordSubject: PublishSubject<RequirePasswordType> { get }
     func requirePassword(uid: String, phone: String?, address: String?)
+    //修改密碼
+    var resetAddressPasswordSubject: PublishSubject<Bool> { get }
+    func resetAddressPassword(newAddress: String, newPassword: String)
 }
 class LoginVM: LoginVMInterface {
     private (set) var requirePasswordSubject = PublishSubject<RequirePasswordType>()
@@ -34,6 +37,7 @@ class LoginVM: LoginVMInterface {
     private (set) var deleteUserDataSubject = PublishSubject<DeleteCollectionType>()
     private (set) var loginSubject = PublishSubject<LoginType>()
     private (set) var expectAccountSubject = PublishSubject<Bool>()
+    private (set) var resetAddressPasswordSubject = PublishSubject<Bool>()
     
     private var loginFirebase: LoginFirebaseInterface
     private var disposeBag = DisposeBag()
@@ -77,6 +81,13 @@ extension LoginVM {
             self.requirePasswordSubject.onNext(result)
         }, onError: { (error) in
             self.requirePasswordSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func resetAddressPassword(newAddress: String, newPassword: String) {
+        self.loginFirebase.resetAddressPassword(newAddress: newAddress, newPassword: newPassword) .subscribe(onNext: { (result) in
+            self.resetAddressPasswordSubject.onNext(result)
+        }, onError: { (error) in
+            self.resetAddressPasswordSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

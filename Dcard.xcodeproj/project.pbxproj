@@ -159,6 +159,18 @@
 		22F2111524CC3535003B1F1D /* Extension_UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2111424CC3535003B1F1D /* Extension_UIView.swift */; };
 		22F2111824CC5324003B1F1D /* ForumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2111624CC5324003B1F1D /* ForumCell.swift */; };
 		22F2111924CC5324003B1F1D /* ForumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22F2111724CC5324003B1F1D /* ForumCell.xib */; };
+		848A6CA1253404BD00125138 /* SettingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6C9F253404BD00125138 /* SettingDetailVC.swift */; };
+		848A6CA2253404BD00125138 /* SettingDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A6CA0253404BD00125138 /* SettingDetailVC.xib */; };
+		848A6CD62534285A00125138 /* DbManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6CD52534285A00125138 /* DbManager.swift */; };
+		848A6CDB2534298E00125138 /* DbManager+Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6CDA2534298E00125138 /* DbManager+Preference.swift */; };
+		848A6CE025342B9600125138 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6CDF25342B9600125138 /* Preference.swift */; };
+		848A6D1125346D0300125138 /* SettingAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6D0F25346D0300125138 /* SettingAccountVC.swift */; };
+		848A6D1225346D0300125138 /* SettingAccountVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A6D1025346D0300125138 /* SettingAccountVC.xib */; };
+		848E16C5252EC2EE00FA4B4F /* SettingMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848E16C4252EC2EE00FA4B4F /* SettingMainVC.swift */; };
+		848E16D5252ED10C00FA4B4F /* FeedbackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848E16D3252ED10C00FA4B4F /* FeedbackCell.swift */; };
+		848E16D6252ED10C00FA4B4F /* FeedbackCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848E16D4252ED10C00FA4B4F /* FeedbackCell.xib */; };
+		84C818A8252DC39800CFABA6 /* FriendCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C818A6252DC39800CFABA6 /* FriendCardVC.swift */; };
+		84C818A9252DC39800CFABA6 /* FriendCardVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C818A7252DC39800CFABA6 /* FriendCardVC.xib */; };
 		934A0551A1012375356ACBFD /* Pods_Dcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */; };
 /* End PBXBuildFile section */
 
@@ -339,6 +351,18 @@
 		22F2111624CC5324003B1F1D /* ForumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumCell.swift; sourceTree = "<group>"; };
 		22F2111724CC5324003B1F1D /* ForumCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ForumCell.xib; sourceTree = "<group>"; };
 		538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dcard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		848A6C9F253404BD00125138 /* SettingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailVC.swift; sourceTree = "<group>"; };
+		848A6CA0253404BD00125138 /* SettingDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingDetailVC.xib; sourceTree = "<group>"; };
+		848A6CD52534285A00125138 /* DbManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbManager.swift; sourceTree = "<group>"; };
+		848A6CDA2534298E00125138 /* DbManager+Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DbManager+Preference.swift"; sourceTree = "<group>"; };
+		848A6CDF25342B9600125138 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
+		848A6D0F25346D0300125138 /* SettingAccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAccountVC.swift; sourceTree = "<group>"; };
+		848A6D1025346D0300125138 /* SettingAccountVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingAccountVC.xib; sourceTree = "<group>"; };
+		848E16C4252EC2EE00FA4B4F /* SettingMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingMainVC.swift; sourceTree = "<group>"; };
+		848E16D3252ED10C00FA4B4F /* FeedbackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackCell.swift; sourceTree = "<group>"; };
+		848E16D4252ED10C00FA4B4F /* FeedbackCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeedbackCell.xib; sourceTree = "<group>"; };
+		84C818A6252DC39800CFABA6 /* FriendCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCardVC.swift; sourceTree = "<group>"; };
+		84C818A7252DC39800CFABA6 /* FriendCardVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendCardVC.xib; sourceTree = "<group>"; };
 		94CD125306D27448D8A0CBAD /* Pods-Dcard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dcard.debug.xcconfig"; path = "Target Support Files/Pods-Dcard/Pods-Dcard.debug.xcconfig"; sourceTree = "<group>"; };
 		B2E0A8FC2B2910AA863AA7DC /* Pods-Dcard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dcard.release.xcconfig"; path = "Target Support Files/Pods-Dcard/Pods-Dcard.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -497,6 +521,7 @@
 		221ADB242499F58A00C25BD1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				848A6CD12534264600125138 /* localDatabase */,
 				221ADB252499F5C300C25BD1 /* PostAndComment.swift */,
 				228F913024C0B47600A7EBD9 /* Forum.swift */,
 				227FD58F249F409C00BC185C /* APIManager.swift */,
@@ -506,6 +531,7 @@
 				22788AEF2503A0C100E87F7F /* ModelSingleton.swift */,
 				22788AF12503A87600E87F7F /* UserConfig.swift */,
 				22CAAAD6250DE31600CDF95B /* ProfileCellModel.swift */,
+				848A6CDF25342B9600125138 /* Preference.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -625,6 +651,7 @@
 				2271888B250F81F500AAA166 /* Introduce */,
 				2271888C250F820F00AAA166 /* MyCard */,
 				2271888D250F821A00AAA166 /* Mail */,
+				848E16C3252EC24700FA4B4F /* Setting */,
 				22CAAABC250CF03400CDF95B /* ProfileVC.swift */,
 				22CAAADC250E2F4800CDF95B /* ProfileManager.swift */,
 			);
@@ -701,6 +728,8 @@
 				22CD379E25146C580066AA7D /* MailAllCell.xib */,
 				22CD37A5251486140066AA7D /* MailMainCell.swift */,
 				22CD37A6251486140066AA7D /* MailMainCell.xib */,
+				84C818A6252DC39800CFABA6 /* FriendCardVC.swift */,
+				84C818A7252DC39800CFABA6 /* FriendCardVC.xib */,
 			);
 			path = Mail;
 			sourceTree = "<group>";
@@ -752,6 +781,29 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		848A6CD12534264600125138 /* localDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				848A6CD52534285A00125138 /* DbManager.swift */,
+				848A6CDA2534298E00125138 /* DbManager+Preference.swift */,
+			);
+			path = localDatabase;
+			sourceTree = "<group>";
+		};
+		848E16C3252EC24700FA4B4F /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				848E16C4252EC2EE00FA4B4F /* SettingMainVC.swift */,
+				848E16D3252ED10C00FA4B4F /* FeedbackCell.swift */,
+				848E16D4252ED10C00FA4B4F /* FeedbackCell.xib */,
+				848A6C9F253404BD00125138 /* SettingDetailVC.swift */,
+				848A6CA0253404BD00125138 /* SettingDetailVC.xib */,
+				848A6D0F25346D0300125138 /* SettingAccountVC.swift */,
+				848A6D1025346D0300125138 /* SettingAccountVC.xib */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -764,7 +816,6 @@
 				221ADAED2499F0A100C25BD1 /* Frameworks */,
 				221ADAEE2499F0A100C25BD1 /* Resources */,
 				6785E89D8FD7768BE1A40781 /* [CP] Embed Pods Frameworks */,
-				650CEF678A49F7FE9DBDAA43 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -862,6 +913,7 @@
 				22433D3924EA2AEC00E8D79D /* MemoPageCell.xib in Resources */,
 				22433D3524E847C500E8D79D /* 柴犬2.gif in Resources */,
 				22CAAAD5250D2EF100CDF95B /* ProfileThreeCell.xib in Resources */,
+				848E16D6252ED10C00FA4B4F /* FeedbackCell.xib in Resources */,
 				22CAAACB250D21E800CDF95B /* ProfileThreeTbCell.xib in Resources */,
 				22A75F2624E54C7800287460 /* WeekHeaderView.xib in Resources */,
 				2241D36C24E3DCC900529BC8 /* SkitchVC.xib in Resources */,
@@ -886,9 +938,12 @@
 				221ADB002499F0A300C25BD1 /* LaunchScreen.storyboard in Resources */,
 				22CAAAB7250BE25200CDF95B /* 小天使.gif in Resources */,
 				228F932F24C1FE4F00A7EBD9 /* Drawer.xib in Resources */,
+				84C818A9252DC39800CFABA6 /* FriendCardVC.xib in Resources */,
 				22179C8224F66BE900BAD5C4 /* SelectCountryVC.xib in Resources */,
+				848A6CA2253404BD00125138 /* SettingDetailVC.xib in Resources */,
 				22D7C39924EC2021006412BE /* messageCell.xib in Resources */,
 				221ADAFD2499F0A300C25BD1 /* Assets.xcassets in Resources */,
+				848A6D1225346D0300125138 /* SettingAccountVC.xib in Resources */,
 				22CD37A025146C580066AA7D /* MailAllCell.xib in Resources */,
 				228D421D24B3889A0077D29E /* SettingView.xib in Resources */,
 				224E3CE924B78294003F8F2B /* Card.storyboard in Resources */,
@@ -955,23 +1010,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		650CEF678A49F7FE9DBDAA43 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Dcard/Pods-Dcard-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Dcard/Pods-Dcard-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Dcard/Pods-Dcard-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6785E89D8FD7768BE1A40781 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1002,6 +1040,7 @@
 				22CD379F25146C580066AA7D /* MailAllCell.swift in Sources */,
 				22CAAADD250E2F4800CDF95B /* ProfileManager.swift in Sources */,
 				22DCB55024EF9F7200EE2DDD /* Extension_UITextField.swift in Sources */,
+				848E16C5252EC2EE00FA4B4F /* SettingMainVC.swift in Sources */,
 				223B21F024F2B6B900D60299 /* LoginVC.swift in Sources */,
 				22D7C39824EC2021006412BE /* MessageCell.swift in Sources */,
 				22F2111824CC5324003B1F1D /* ForumCell.swift in Sources */,
@@ -1012,9 +1051,11 @@
 				221ADAF42499F0A100C25BD1 /* AppDelegate.swift in Sources */,
 				2271913D24FE8B1C006C1C5B /* User.swift in Sources */,
 				2271888F250F838D00AAA166 /* FollowIssueVC.swift in Sources */,
+				848A6CE025342B9600125138 /* Preference.swift in Sources */,
 				22664E2F24EB7BB70080BAF8 /* MemoPageTwoVC.swift in Sources */,
 				2241D36B24E3DCC900529BC8 /* SkitchVC.swift in Sources */,
 				22CAAABD250CF03400CDF95B /* ProfileVC.swift in Sources */,
+				848A6D1125346D0300125138 /* SettingAccountVC.swift in Sources */,
 				224E002E24E6928400E77048 /* Extension_UINavigationController.swift in Sources */,
 				22A75F1B24E51AEB00287460 /* CalendarVC.swift in Sources */,
 				220D16E824F4F5B5007B578E /* SetSexVC.swift in Sources */,
@@ -1062,16 +1103,20 @@
 				22788B052504EDB000E87F7F /* CardSendCell.swift in Sources */,
 				22788AE82503900200E87F7F /* CardFirebase.swift in Sources */,
 				22D7C39D24ECDFC9006412BE /* ImageInfo.swift in Sources */,
+				848A6CD62534285A00125138 /* DbManager.swift in Sources */,
 				22788AF02503A0C100E87F7F /* ModelSingleton.swift in Sources */,
+				84C818A8252DC39800CFABA6 /* FriendCardVC.swift in Sources */,
 				22CAAABA250C960400CDF95B /* ChatRoomVC.swift in Sources */,
 				2205D18224A79E04004A4F41 /* PostRepository.swift in Sources */,
 				22CD37A7251486140066AA7D /* MailMainCell.swift in Sources */,
 				2205D18024A79C83004A4F41 /* HomeVM.swift in Sources */,
 				22CAAAC2250D217F00CDF95B /* ProfileOneCell.swift in Sources */,
 				224E3CFB24B784F7003F8F2B /* NotifyVC.swift in Sources */,
+				848A6CDB2534298E00125138 /* DbManager+Preference.swift in Sources */,
 				2219E83D24F53C6200155ABB /* SetPhoneAddressVC.swift in Sources */,
 				22EFC6A824FB907A003CD570 /* FirebaseManager.swift in Sources */,
 				224E002A24E59DE600E77048 /* Extension_Uimage.swift in Sources */,
+				848A6CA1253404BD00125138 /* SettingDetailVC.swift in Sources */,
 				228D419924AA49080077D29E /* PostVC.swift in Sources */,
 				22433D4124EA81C900E8D79D /* MemoPageOneHeader.swift in Sources */,
 				228D41E224AD06290077D29E /* CommentCell.swift in Sources */,
@@ -1083,6 +1128,7 @@
 				22433D3824EA2AEC00E8D79D /* MemoPageCell.swift in Sources */,
 				22718892250F858400AAA166 /* FollowIssueCell.swift in Sources */,
 				2260DAA424F38F8400FB9E2B /* CreateAccountVC.swift in Sources */,
+				848E16D5252ED10C00FA4B4F /* FeedbackCell.swift in Sources */,
 				22EFC6A424F95638003CD570 /* LoginVM.swift in Sources */,
 				221A47D82512160000DE1301 /* Extension_UIAlertAction.swift in Sources */,
 				221A47C325105C4300DE1301 /* FollowCardCell.swift in Sources */,

@@ -94,7 +94,7 @@ extension CardVC {
             
             CardManager.shared.showOKView(mode: .becomeFriend) {
                 let vc = ChatRoomVC()
-                vc.setCard(card: self.card)
+                vc.setContent(mail: Mail(card: self.card, message: [Message](), isNew: true))
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }, onError: { (error) in
@@ -202,7 +202,7 @@ extension CardVC {
     }
     @objc private func toNextPage() {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "CardInfoVC") as? CardInfoVC {
-            vc.setContent(card: self.card)
+            vc.setContent(card: self.card, isUser: false, isFriend: false)
             vc.setDelegate(self)
             self.navigationController?.pushViewController(vc, animated: true) {
                 vc.navigationItem.setHidesBackButton(false, animated: false)

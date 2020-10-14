@@ -35,11 +35,7 @@ class CardInfoVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    private var isFriend = false {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
+    private var isFriend = false
     private var isUser = false
     private var card: Card?
     private var delegate: CardVCDelegate?
@@ -49,9 +45,10 @@ class CardInfoVC: UIViewController {
         initView()
         ToolbarView.shared.show(false)
     }
-    func setContent(card: Card, isUser: Bool = false) {
+    func setContent(card: Card, isUser: Bool, isFriend: Bool) {
         self.card = card
         self.isUser = isUser
+        self.isFriend = isFriend
     }
     func setDelegate(_ delegate: CardVCDelegate) {
         self.delegate = delegate
@@ -149,6 +146,7 @@ extension CardInfoVC: UITableViewDelegate, UITableViewDataSource {
 extension CardInfoVC: CardSendCellDelegate {
     func didClickBtnSend() {
         self.isFriend = true
+        self.tableView.reloadData()
         self.delegate?.addFriend(name: self.card?.name ?? "")
     }
 }

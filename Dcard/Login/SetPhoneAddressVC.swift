@@ -167,7 +167,7 @@ extension SetPhoneAddressVC {
     }
     @objc private func open() {
         let vc = SelectCountryVC()
-        vc.setDelegate(delegate: self)
+        vc.setDelegate(self)
         vc.setHideStatusBar(true)
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen

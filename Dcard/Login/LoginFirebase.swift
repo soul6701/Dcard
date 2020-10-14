@@ -34,6 +34,7 @@ protocol LoginFirebaseInterface {
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<RequirePasswordType>
     func getUserData(uid: String) -> Observable<User>
     func addFriend(name: String) -> Observable<Bool>
+    func resetAddressPassword(newAddress: String, newPassword: String) -> Observable<Bool>
 }
 
 public class LoginFirebase: LoginFirebaseInterface {
@@ -176,10 +177,9 @@ public class LoginFirebase: LoginFirebaseInterface {
                 }.isEmpty) {
                     subject.onNext(.success(successString))
                 } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-                    if let dir = queryDocumentSnapshot.data() as? [String:Any] {
-                        if (dir["uid"] as! String) == uid {
-                            return true
-                        }
+                    let dir = queryDocumentSnapshot.data()
+                    if (dir["uid"] as! String) == uid {
+                        return true
                     }
                     return false
                 }.isEmpty) {
@@ -268,9 +268,48 @@ public class LoginFirebase: LoginFirebaseInterface {
                         subject.onNext(true)
                         var (oldUser, oldCardMode) = (ModelSingleton.shared.userConfig.user, ModelSingleton.shared.userConfig.cardmode)
                         oldUser.friend = friendList
-                        print("🐱🐱🐱\(friendList.first ?? "")")
                         ModelSingleton.shared.setUserConfig(config: UserConfig(user: oldUser, cardmode: oldCardMode))
                     }
+                }
+            }
+        }
+        return subject.asObserver()
+    }
+    // MARK: - 修改信箱及密碼
+    func resetAddressPassword(newAddress: String, newPassword: String) -> Observable<Bool> {
+        let subject = PublishSubject<Bool>()
+        var userId = ""
+        
+        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            }
+            if let querySnapshot = querySnapshot {
+                let document = querySnapshot.documents.first { (queryDocumentSnapshot) -> Bool in
+                    let dir = queryDocumentSnapshot.data()
+                    return (dir["uid"] as! String) == ModelSingleton.shared.userConfig.user.uid
+                }
+                userId = document?.documentID ?? ""
+            }
+            guard !userId.isEmpty else {
+                subject.onNext(false)
+                return
+            }
+            let setter = !newAddress.isEmpty ? ["address" : newAddress] : ["password" : newPassword]
+            FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).document(userId).updateData(setter) { (error) in
+                if let error = error {
+                    NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                    subject.onError(error)
+                } else {
+                    subject.onNext(true)
+                    var (oldUser, oldCardMode) = (ModelSingleton.shared.userConfig.user, ModelSingleton.shared.userConfig.cardmode)
+                    if !newAddress.isEmpty {
+                        oldUser.address = newAddress
+                    } else {
+                        oldUser.password = newPassword
+                    }
+                    ModelSingleton.shared.setUserConfig(config: UserConfig(user: oldUser, cardmode: oldCardMode))
                 }
             }
         }

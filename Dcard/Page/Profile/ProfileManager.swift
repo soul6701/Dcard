@@ -13,11 +13,14 @@ import SwiftMessages
 import LocalAuthentication
 
 protocol ProfileManagerInterface {
+    func setBaseNav(_ nav: UINavigationController)
     func showOKView(mode: ProfileOKMode, handler: (() -> Void)?)
     func showAlertView(errorMessage: String, handler: (() -> Void)?)
     func showBellModeView(delegate: SelectNotifyViewDelegate, notifyMode: Int)
     func showCancelFollowCardView(_ viewController: UIViewController,  title: String, OKAction: (() -> Void)?)
     func showAuthenticationView(times: Int, callbackAction: @escaping ((_ state: AuthenticationState) -> Void))
+    func toFriendCardPage(mail: Mail)
+    func toNextPage(next: ProfileThreeCellType)
 }
 enum AuthenticationState {
     case success
@@ -32,10 +35,11 @@ enum ProfileOKMode {
 class ProfileManager: ProfileManagerInterface {
     
     static let shared = ProfileManager()
-    var OKView: MessageView!
-    var OKConfig: SwiftMessages.Config!
-    var alertView: MessageView!
-    var alertconfig: SwiftMessages.Config!
+    private var OKView: MessageView!
+    private var OKConfig: SwiftMessages.Config!
+    private var alertView: MessageView!
+    private var alertconfig: SwiftMessages.Config!
+    private var baseNav: UINavigationController!
     
     init() {
         confiOKView()
@@ -60,6 +64,14 @@ class ProfileManager: ProfileManagerInterface {
         self.alertconfig.presentationContext = .window(windowLevel: .alert)
         self.alertconfig.presentationStyle = .center
         self.alertconfig.duration = .forever
+    }
+    //存入本地資料庫
+    func saveToDataBase(preference: Preference) {
+        DbManager.shared.updatePreference(preference: preference)
+    }
+    //設置NavigationController
+    func setBaseNav(_ nav: UINavigationController) {
+        self.baseNav = nav
     }
     //成功視窗
     func showOKView(mode: ProfileOKMode, handler: (() -> Void)?) {
@@ -130,8 +142,19 @@ class ProfileManager: ProfileManagerInterface {
             }
         }
     }
+    //跳轉卡友頁面
+    func toFriendCardPage(mail: Mail) {
+        if !(self.baseNav.viewControllers.last is MailVC) {
+            for vc in self.baseNav.viewControllers where vc is MailVC {
+                self.baseNav.popToViewController(vc, animated: false)
+            }
+        }
+        let vc = FriendCardVC()
+        vc.setContent(mail: mail)
+        self.baseNav.pushViewController(vc, animated: true)
+    }
     //跳轉指定頁面
-    func toNextPage(_ currentNav: UINavigationController, next: ProfileThreeCellType) {
+    func toNextPage(next: ProfileThreeCellType) {
         //假值
         var postList = [Post]()
         var myPostList = [Post]()
@@ -156,8 +179,8 @@ class ProfileManager: ProfileManagerInterface {
             }
             
             vc.setContent(favoriteList: list, title: next.cell.name)
-            currentNav.pushViewController(vc, animated: true) {
-                currentNav.setNavigationBarHidden(false, animated: false)
+            self.baseNav.pushViewController(vc, animated: true) {
+                self.baseNav.setNavigationBarHidden(false, animated: false)
             }
         case .followIssue:
             let vc = UIStoryboard.profile.followIssueVC
@@ -167,8 +190,8 @@ class ProfileManager: ProfileManagerInterface {
                 list.append(FollowIssue(listName: ["金曲獎", "金鐘獎", "金馬獎"].randomElement()!, postCount: Int.random(in: (1...100)), followCount: Int.random(in: (1...100)), notifyMode: (0...2).randomElement()!, isFollowing: Bool.random()))
             }
             vc.setContent(followIssueList: list, title: next.cell.name)
-            currentNav.pushViewController(vc, animated: true) {
-                currentNav.setNavigationBarHidden(false, animated: false)
+            self.baseNav.pushViewController(vc, animated: true) {
+                self.baseNav.setNavigationBarHidden(false, animated: false)
             }
         case .followCard:
             let vc = UIStoryboard.profile.followCardVC
@@ -179,15 +202,15 @@ class ProfileManager: ProfileManagerInterface {
                 list.append(FollowCard(card: Card(id: ["qaz123", "wsx123", "edc123", "rfv123"].randomElement()!, post: _postList, name: ["NBA 小天使", "🦊🦊🦊🦊🦊", "🐱🐱🐱", "🐶🐶", "🐼"].randomElement()!, photo: "", sex: ["男性", "女性", "其他"].randomElement()!, introduce: "", country: "", school: "", article: "", birthday: "", love: ""), notifyMode: (0...2).randomElement()!, isFollowing: Bool.random(), isNew: Bool.random()))
             }
             vc.setContent(followCardList: list, title: next.cell.name)
-            currentNav.pushViewController(vc, animated: true) {
-                currentNav.setNavigationBarHidden(false, animated: false)
+            self.baseNav.pushViewController(vc, animated: true) {
+                self.baseNav.setNavigationBarHidden(false, animated: false)
             }
         case .artical:
             let vc = UIStoryboard.profile.articalVC
             let _ = vc.view
             vc.setContent(articalList: myPostList, title: next.cell.name)
-            currentNav.pushViewController(vc, animated: true) {
-                currentNav.setNavigationBarHidden(false, animated: false)
+            self.baseNav.pushViewController(vc, animated: true) {
+                self.baseNav.setNavigationBarHidden(false, animated: false)
             }
         case .introduce:
             let vc = UIStoryboard.card.cardInfoVC
@@ -195,19 +218,18 @@ class ProfileManager: ProfileManagerInterface {
             vc.view.backgroundColor = #colorLiteral(red: 0.7540688515, green: 0.7540867925, blue: 0.7540771365, alpha: 0.8770333904)
             vc.setContent(card: Card(id: "a_a", post: [], name: "野比大雄", photo: "https://firebasestorage.googleapis.com/v0/b/dcard-test-478e3.appspot.com/o/user%2Fa_a.png?alt=media&token=61936705-d591-43ac-ae87-96e77328e809", sex: "男性", introduce: """
 於8月7日出生，住所在日本東京都練馬區月見台鈴木原道，但時代雖然改變，卻一直以居於東京小學生的身份出現，永遠都是十歲（在漫畫中，一直都是小學四年級生，在大山版動畫早期是四年級生（而且常因「胖虎、狗跟水溝」而受苦），中後期與水田版動畫變成五年級生），為家中獨生子，與父母及哆啦A夢同住。
-""", country: "日本", school: "私立臺灣肥宅學院", department: "邊緣人養成學系", article: "", birthday: "8月7日 獅子座", love: "只愛靜香"), isUser: true)
-            currentNav.pushViewController(vc, animated: true) {
-                currentNav.setNavigationBarHidden(false, animated: false)
+""", country: "日本", school: "私立臺灣肥宅學院", department: "邊緣人養成學系", article: "", birthday: "8月7日 獅子座", love: "只愛靜香"), isUser: true, isFriend: false)
+            self.baseNav.pushViewController(vc, animated: true) {
+                self.baseNav.setNavigationBarHidden(false, animated: false)
             }
         case .myCard:
             break
         case .mail:
             let vc = UIStoryboard.profile.mailVC
-            currentNav.pushViewController(vc, animated: true)
+            self.baseNav.pushViewController(vc, animated: true)
         case .setting:
-            break
-        default:
-            break
+            let vc = UIStoryboard.profile.settingMainVC
+            self.baseNav.pushViewController(vc, animated: true)
         }
     }
 }

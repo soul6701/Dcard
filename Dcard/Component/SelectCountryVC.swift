@@ -9,12 +9,12 @@
 import UIKit
 import IQKeyboardManagerSwift
 
-struct Country {
+public struct Country {
     var name: String
     var code: String
     var alias: String
     
-    init(name: String, alias: String, code: String) {
+    public init(name: String, alias: String, code: String) {
         self.name = name
         self.alias = alias
         self.code = code
@@ -63,7 +63,7 @@ class SelectCountryVC: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return self.hideStatusBar
     }
-    func setDelegate(delegate: SelectCountryVCDelegate) {
+    func setDelegate(_ delegate: SelectCountryVCDelegate) {
         self.delegate = delegate
     }
     func setHideStatusBar(_ hide: Bool) {
@@ -73,6 +73,7 @@ class SelectCountryVC: UIViewController {
 // MARK: - SetupUI
 extension SelectCountryVC {
     private func initView() {
+        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78)
         self.navigationItem.title = "選擇國家 / 地區"
         let btnBack = UIButton(type: .system)
         btnBack.setTitle("取消", for: .normal)

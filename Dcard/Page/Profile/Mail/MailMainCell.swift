@@ -22,15 +22,15 @@ class MailMainCell: UITableViewCell {
     private var headerSize: CGSize {
         return CGSize(width: self.collectionView.bounds.width, height: 20)
     }
-    private var friendList = [Card]()
+    private var mailList = [Mail]()
     
     override func awakeFromNib() {
         super.awakeFromNib()
         self.selectionStyle = .none
         initView()
     }
-    func setContent(friendList: [Card]) {
-        self.friendList = friendList
+    func setContent(mailList: [Mail]) {
+        self.mailList = mailList
     }
 }
 // MARK: - SetupUI
@@ -40,11 +40,12 @@ extension MailMainCell {
     }
     private func confiCollectionView() {
         self.collectionView.register(UINib(nibName: "MailAllCell", bundle: nil), forCellWithReuseIdentifier: "MailAllCell")
+        self.collectionView.showsVerticalScrollIndicator = false
         setCollectionViewLayout()
     }
     private func setCollectionViewLayout() {
         let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: self.collectionPadding, left: self.collectionPadding, bottom: self.collectionPadding, right: self.collectionPadding)
+        layout.sectionInset = UIEdgeInsets(top: self.collectionPadding, left: self.collectionPadding, bottom: self.collectionPadding + 20, right: self.collectionPadding)
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = self.itemSpace
         layout.minimumLineSpacing = self.lineSpace
@@ -55,20 +56,18 @@ extension MailMainCell {
 // MARK: - UICollectionViewDelegate
 extension MailMainCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.friendList.count
+        return self.mailList.count
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MailAllCell", for: indexPath) as! MailAllCell
-        let friend = self.friendList[indexPath.row]
+        let friend = self.mailList[indexPath.row].card
         cell.setContent(card: friend)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return self.itemSize
     }
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! MailAllCell
-        cell.setHighlightView()
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        ProfileManager.shared.toFriendCardPage(mail: self.mailList[indexPath.row])
     }
 }

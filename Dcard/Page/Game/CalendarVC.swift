@@ -96,7 +96,6 @@ extension CalendarVC {
         self.pickerYearMonth.backgroundColor = #colorLiteral(red: 0.8374180198, green: 0.8374378085, blue: 0.8374271393, alpha: 1)
         self.pickerYearMonth.delegate = self
         self.pickerYearMonth.dataSource = self
-        
         self.confiGesture()
     }
     private func confiGesture() {

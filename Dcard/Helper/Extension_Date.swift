@@ -16,6 +16,12 @@ extension Date {
     static var calendar: Calendar {
         return Calendar(identifier: .gregorian)
     }
+    static func getCurrentDateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        let currentDateString = dateFormatter.string(from: Date())
+        return currentDateString
+    }
     
     var FirstDayInMonth: Date {
         let _firstDay: DateComponents = Date.calendar.dateComponents([.year, .month], from: self)

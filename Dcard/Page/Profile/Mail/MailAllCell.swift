@@ -23,7 +23,4 @@ class MailAllCell: UICollectionViewCell {
         self.lbSchoolDepartment.text = card.school + " " + card.department
         self.imageAvatar.kf.setImage(with: URL(string: card.photo))
     }
-    func setHighlightView() {
-        self.imageAvatar.isHidden = true
-    }
 }

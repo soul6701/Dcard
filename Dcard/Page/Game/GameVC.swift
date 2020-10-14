@@ -9,17 +9,20 @@
 import UIKit
 import UIView_Shake
 
-enum SegmentedControlType: Int {
+private enum SegmentedControlType: Int {
     case calculator = 0
     case skitch
     case calendar
 }
 class GameVC: UIViewController {
-    @IBOutlet weak var viewSeg: UISegmentedControl!
+    @IBOutlet weak var control: UISegmentedControl!
     @IBOutlet weak var viewContainer: UIView!
     @IBOutlet weak var bottomSpace: NSLayoutConstraint!
-    var selectedVC: UIViewController?
-    var selected = 0
+    var calculatorVC: CalculatorVC!
+    var skitchVC: SkitchVC!
+    var calendarVC: CalendarVC!
+    var selectedVC: UIViewController!
+    var selectedIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,24 +44,20 @@ class GameVC: UIViewController {
         }
     }
     @IBAction func onClickSeg(_ sender: UISegmentedControl) {
-        if self.selected != viewSeg.selectedSegmentIndex || selectedVC == nil {
-            self.selected = viewSeg.selectedSegmentIndex
+        if self.selectedIndex != control.selectedSegmentIndex || selectedVC == nil {
+            self.selectedIndex = control.selectedSegmentIndex
             
             self.selectedVC?.removeFromParent()
             self.selectedVC?.view.removeFromSuperview()
             
-            let type: SegmentedControlType = SegmentedControlType.init(rawValue: selected)!
+            let type: SegmentedControlType = SegmentedControlType.init(rawValue: selectedIndex)!
             switch type {
             case .calculator:
-                self.selectedVC = CalculatorVC()
+                self.selectedVC = self.calculatorVC
             case .skitch:
-                self.selectedVC = SkitchVC()
+                self.selectedVC = self.skitchVC
             case .calendar:
-                self.selectedVC = CalendarVC()
-                (self.selectedVC as! CalendarVC).setDelegate(self)
-            }
-            guard let selectedVC = self.selectedVC else {
-                return
+                self.selectedVC = self.calendarVC
             }
             self.addChild(selectedVC)
             self.viewContainer.setFixedView(selectedVC.view)
@@ -69,9 +68,16 @@ class GameVC: UIViewController {
 // MARK: - SetupUI
 extension GameVC {
     func initView() {
-        self.bottomSpace.constant = Size.bottomSpace + (UIApplication.shared.windows.first?.safeAreaInsets ?? UIEdgeInsets.zero).bottom 
-        self.onClickSeg(viewSeg)
-        self.viewSeg.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 25), NSAttributedString.Key.foregroundColor: UIColor.red], for: .selected)
+        self.bottomSpace.constant = Size.bottomSpace + (UIApplication.shared.windows.first?.safeAreaInsets ?? UIEdgeInsets.zero).bottom
+        self.control.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 25), NSAttributedString.Key.foregroundColor: UIColor.red], for: .selected)
+        confiAllVC()
+    }
+    private func confiAllVC() {
+        self.calculatorVC = CalculatorVC()
+        self.skitchVC = SkitchVC()
+        self.calendarVC = CalendarVC()
+        self.calendarVC.setDelegate(self)
+        onClickSeg(self.control)
     }
 }
 // MARK: - CalendarVCDelegate

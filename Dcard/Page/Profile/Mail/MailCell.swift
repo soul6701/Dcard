@@ -20,11 +20,11 @@ class MailCell: UITableViewCell {
         super.awakeFromNib()
     }
     func setContent(mail: Mail) {
-        let firstMessage = mail.message.first!
+        let lastMessage = mail.message.last ?? Message(user: 0, text: "", date: "")
         self.viewCircle.backgroundColor = mail.isNew ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.8982769692) : .lightGray
         self.imageAvatar.kf.setImage(with: URL(string: mail.card.photo))
         self.lbName.text = mail.card.name
-        self.lbMessage.text = firstMessage.text
-        self.lbDate.text = firstMessage.date
+        self.lbMessage.text = lastMessage.text
+        self.lbDate.text = lastMessage.date
     }
 }

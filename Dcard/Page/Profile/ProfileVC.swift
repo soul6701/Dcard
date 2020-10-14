@@ -20,6 +20,7 @@ class ProfileVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        ProfileManager.shared.setBaseNav(self.navigationController!)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -80,6 +81,6 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
 }
 extension ProfileVC: ProfileVCDelegate {
     func toNextPage(_ page: ProfileThreeCellType) {
-        ProfileManager.shared.toNextPage(self.navigationController!, next: page)
+        ProfileManager.shared.toNextPage(next: page)
     }
 }

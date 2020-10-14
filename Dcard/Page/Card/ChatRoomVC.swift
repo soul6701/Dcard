@@ -21,15 +21,6 @@ enum ChatRoomContentMode {
     case search
     case message
 }
-class ContextMode {
-    var mode: MessageCellType
-    var context: String
-    
-    init(context: String, mode: MessageCellType) {
-        self.context = context
-        self.mode = mode
-    }
-}
 class ChatRoomVC: UIViewController {
     
     @IBOutlet weak var imageBG: UIImageView!
@@ -71,7 +62,7 @@ class ChatRoomVC: UIViewController {
         }
     }
     private var searchView: UISearchController!
-    private var searchArray = [ContextMode]() {
+    private var searchArray = [Message]() {
         didSet {
             self.lbNotFound.isHidden = !self.searchArray.isEmpty || self.searchBar.text?.isEmpty ?? true
             self.tableView.isHidden = !self.searchArray.isEmpty || !(self.searchBar.text?.isEmpty ?? true)
@@ -93,8 +84,8 @@ class ChatRoomVC: UIViewController {
     private var card = Card()
     
     private var i = 0
-    private var contextList = [ContextMode]()
-    private var _contextList = ["會啊～", "木星 水星 火星 土星 追尋", "時間滴滴答滴答 答的聲音", "你為我 擦的指甲油 沒想透", "你和我 會不會有以後", """
+    private var messageList = [Message]()
+    private var _messageList = ["會啊～", "木星 水星 火星 土星 追尋", "時間滴滴答滴答 答的聲音", "你為我 擦的指甲油 沒想透", "你和我 會不會有以後", """
 地球不停的轉動
 在你的時空 我從未退縮懦弱
 當我靠在你耳朵 只想輕輕對你說
@@ -151,8 +142,9 @@ class ChatRoomVC: UIViewController {
             self.directionMode = .down
         }
     }
-    func setCard(card: Card) {
-        self.card = card
+    func setContent(mail: Mail) {
+        self.card = mail.card
+        self.messageList = mail.message
     }
 }
 // MARK: - SetupUI
@@ -298,7 +290,7 @@ extension ChatRoomVC {
         guard let txt = tf.text, !txt.isEmpty else {
             return
         }
-        self.contextList.append(ContextMode(context: txt, mode: .left))
+        self.messageList.append(Message(user: 0, text: txt, date: Date.getCurrentDateString()))
         self.tableView.reloadData()
         self.view.layoutIfNeeded()
         updateTableContentInset()
@@ -308,7 +300,7 @@ extension ChatRoomVC {
         speak()
     }
     private func speak() {
-        guard self.i < self._contextList.count else {
+        guard self.i < self._messageList.count else {
             return
         }
         let random = Int.random(in: 0...2)
@@ -322,7 +314,7 @@ extension ChatRoomVC {
                 self.lbHint.text = self.card.name + "輸入中...."
                 let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
                     if start == random {
-                        self.contextList.append(ContextMode(context: self._contextList[self.i], mode: .right))
+                        self.messageList.append(Message(user: 1, text: self._messageList[self.i], date: Date.getCurrentDateString()))
                         self.i += 1
                         self.lbHint.text = ""
                         self.tableView.reloadData()
@@ -340,7 +332,7 @@ extension ChatRoomVC {
         _timer.fire()
     }
     private func scrollToBottom() {
-        if self.contextList.count != 0 {
+        if self.messageList.count != 0 {
             let indexPath = IndexPath(row: tableView.numberOfRows(inSection: tableView.numberOfSections - 1) - 1, section: tableView.numberOfSections - 1)
             tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
@@ -390,21 +382,21 @@ extension ChatRoomVC {
 // MARK: - UITableViewDelegate
 extension ChatRoomVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.searchMode == .message && tableView != self.tableViewSearchResult ? self.contextList.count : self.searchArray.count
+        return self.searchMode == .message && tableView != self.tableViewSearchResult ? self.messageList.count : self.searchArray.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (self.searchMode == .message && tableView != self.tableViewSearchResult) ||
             (self.searchMode == .search && self.searchBar.text?.isEmpty ?? true) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MessageCell
-            cell.setContent(context: contextList[indexPath.row].context, mode: contextList[indexPath.row].mode, friend: self.card)
+            cell.setContent(context: messageList[indexPath.row].text, mode: MessageCellType.init(rawValue: messageList[indexPath.row].user) ?? .left , friend: self.card)
             cell.selectionStyle = .none
             return cell
         } else {
             let cell = UITableViewCell()
             cell.backgroundColor = .black
             cell.textLabel?.textColor = .white
-            cell.imageView?.image = UIImage(named: self.searchArray[indexPath.row].mode == .left ? ImageInfo.pikachu : ImageInfo.carbi)
-            cell.textLabel?.text = self.searchArray[indexPath.row].context
+            cell.imageView?.image = UIImage(named: MessageCellType.init(rawValue: self.searchArray[indexPath.row].user) ?? .left == .left ? ImageInfo.pikachu : ImageInfo.carbi)
+            cell.textLabel?.text = self.searchArray[indexPath.row].text
             return cell
         }
     }
@@ -451,8 +443,9 @@ extension ChatRoomVC: UITextFieldDelegate {
 // MARK: - UISearchBarDelegate
 extension ChatRoomVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let _seachArray = contextList.filter({ (context) -> Bool in
-            if let range = context.context.range(of: searchText, options: .caseInsensitive, range: context.context.startIndex..<context.context.endIndex, locale: nil) {
+        let _seachArray = messageList.filter({ (message) -> Bool in
+            let text = message.text
+            if let range = text.range(of: searchText, options: .caseInsensitive, range: text.startIndex..<text.endIndex, locale: nil) {
                 return !range.isEmpty
             }
             return false
@@ -464,7 +457,7 @@ extension ChatRoomVC: UISearchBarDelegate {
 extension ChatRoomVC: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
        let image = info[.originalImage] as? UIImage
-        self.view.backgroundColor = UIColor(patternImage: image!)
+        self.imageBG.image = image
         picker.dismiss(animated: true, completion: nil)
     }
 }

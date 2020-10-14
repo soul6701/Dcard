@@ -163,17 +163,8 @@ extension PostRepository: PostRepositoryInterface {
                                     self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
                                         self.posts += posts
                                         self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-//                                            self.posts += posts
-//                                            self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-//                                                self.posts += posts
-//                                                self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-//                                                    self.posts += posts
-//                                                    self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
                                                         self.posts += posts
                                                         subject.onNext(self.posts)
-//                                                    }).disposed(by: self.disposeBag)
-//                                                }).disposed(by: self.disposeBag)
-//                                            }).disposed(by: self.disposeBag)
                                         }).disposed(by: self.disposeBag)
                                     }).disposed(by: self.disposeBag)
                                 }).disposed(by: self.disposeBag)

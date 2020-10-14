@@ -46,7 +46,7 @@ class HomeVC: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         ToolbarView.shared.show(true)
         guard let currentForum = currentForum else {
-//            LoadingView.shared.show(true)
+            LoadingView.shared.show(true)
             self.viewModel.getForums()
             return
         }
@@ -102,7 +102,7 @@ extension HomeVC {
         viewModel.postsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { posts in
             self.postList = posts
             if let currentForum = self.currentForum, currentForum.name == "廢文" {
-                self.showList = self.postList.filter({$0.school.contains("弘光")})
+                self.showList = self.postList.filter({$0.school.contains("弘光") || $0.school.contains("輔仁")})
             } else {
                 self.showList = self.postList
             }

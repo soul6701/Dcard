@@ -22,7 +22,7 @@ class APIManager {
 extension APIManager {
     static func loadAPI(httpMethod: HttpMethod = .GET, urlString: String, body: [String:Any]?) -> Observable<APIResult> {
         return Observable.create { (observer) -> Disposable in
-            let _body = (body?.filter { $0.value != nil } ?? [:]) as [String:Any]
+            let _body = body ?? [:]
             var _urlString = urlString
             if httpMethod == .GET {
                 for (index, key) in _body.keys.enumerated() {
@@ -33,7 +33,7 @@ extension APIManager {
                             _urlString.append((index == 0 ? "?" : "&") + "\(key)[]=\(data)")
                         }
                     } else {
-                        _urlString.append((index == 0 ? "?" : "&") + "\(key)=\(value)")
+                        _urlString.append((index == 0 ? "?" : "&") + "\(key)=\(String(describing: value))")
                     }
                 }
             }

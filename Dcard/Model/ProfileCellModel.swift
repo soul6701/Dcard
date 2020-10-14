@@ -45,7 +45,7 @@ public struct Mail {
 //訊息
 public struct Message {
     
-    public var user: Bool = false //0: 我 1: 對方
+    public var user: Int = 0 //0: 我 1: 對方
     public var text: String = ""
     public var date: String = ""
 }
