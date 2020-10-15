@@ -46,7 +46,7 @@ class HomeVC: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         ToolbarView.shared.show(true)
         guard let currentForum = currentForum else {
-            LoadingView.shared.show(true)
+//            LoadingView.shared.show(true)
             self.viewModel.getForums()
             return
         }

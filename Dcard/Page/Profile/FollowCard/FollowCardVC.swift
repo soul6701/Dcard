@@ -86,6 +86,7 @@ extension FollowCardVC: FollowCardVCDelegate {
     }
     func toCardHome(followCard: FollowCard) {
         let vc = CardHomeVC()
+        vc.setContent(followCard: followCard, title: "")
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
