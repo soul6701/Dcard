@@ -41,6 +41,7 @@ class ProfileManager: ProfileManagerInterface {
     private var alertconfig: SwiftMessages.Config!
     private var baseNav: UINavigationController!
     //假值
+    
     let user = ModelSingleton.shared.userConfig.user
     let list = [["我像個殘廢 飛不出你的世界", "借不到一點安慰"], ["雖然暗戀讓人早熟", "也讓人多難過"], ["多麽想告訴你 我好喜歡你", "都怪我控制不了自己"], ["未來的每一步一腳印", "相知相習相依為命"]]
     let _mediaMeta = [[MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=17fh01n/3r580003rr4ps40n960o.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=17fh01n/3r580003rr4ps40n960o.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=1avg1r2/3r580003rqson1npps7s.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=1avg1r2/3r580003rqson1npps7s.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=11sbjcv/ctp-vzntr/15341312472962rqp6q4r2q.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=11sbjcv/ctp-vzntr/15341312472962rqp6q4r2q.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=38pi76/ctp-vzntr/1534131247394rsnss9rr7o.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=38pi76/ctp-vzntr/1534131247394rsnss9rr7o.jpg")]]
@@ -222,14 +223,14 @@ class ProfileManager: ProfileManagerInterface {
             let vc = UIStoryboard.card.cardInfoVC
             _ = vc.view
             vc.view.backgroundColor = #colorLiteral(red: 0.7540688515, green: 0.7540867925, blue: 0.7540771365, alpha: 0.8770333904)
-            vc.setContent(card: Card(id: "a_a", post: [], name: "野比大雄", photo: "https://firebasestorage.googleapis.com/v0/b/dcard-test-478e3.appspot.com/o/user%2Fa_a.png?alt=media&token=61936705-d591-43ac-ae87-96e77328e809", sex: "男性", introduce: """
-於8月7日出生，住所在日本東京都練馬區月見台鈴木原道，但時代雖然改變，卻一直以居於東京小學生的身份出現，永遠都是十歲（在漫畫中，一直都是小學四年級生，在大山版動畫早期是四年級生（而且常因「胖虎、狗跟水溝」而受苦），中後期與水田版動畫變成五年級生），為家中獨生子，與父母及哆啦A夢同住。
-""", country: "日本", school: "私立臺灣肥宅學院", department: "邊緣人養成學系", article: "", birthday: "8月7日 獅子座", love: "只愛靜香"), isUser: true, isFriend: false)
+            vc.setContent(card: user.card, isUser: true, isFriend: false)
             self.baseNav.pushViewController(vc, animated: true) {
                 self.baseNav.setNavigationBarHidden(false, animated: false)
             }
         case .myCard:
-            break
+            let vc = CardHomeVC()
+            vc.setContent(followCard: FollowCard(card: user.card, notifyMode: 0, isFollowing: false, isNew: false), mode: .user)
+            self.baseNav.pushViewController(vc, animated: true)
         case .mail:
             let vc = UIStoryboard.profile.mailVC
             self.baseNav.pushViewController(vc, animated: true)

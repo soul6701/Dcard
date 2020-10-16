@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum SettingDetailType {
+enum SettingDetailMode {
     case hideBoard
     case notifySetting
     case showTheme
@@ -43,13 +43,13 @@ class SettingDetailVC: UIViewController {
 
     @IBOutlet weak var viewNotHideAnyBoard: UIView!
     @IBOutlet weak var tableView: UITableView!
-    private var type: SettingDetailType?
     private var navigationItemTitle = ""
+    private var mode: SettingDetailMode = .autoPlayVedio
     private var sectionList = [String]()
     private var rowList = [String]()
     private var preference = Preference()
     private var state: Int {
-        switch self.type {
+        switch self.mode {
         case .notifySetting:
             return self.preference.newReply
         case .autoPlayVedio:
@@ -65,22 +65,20 @@ class SettingDetailVC: UIViewController {
         super.viewDidLoad()
         initView()
     }
-    func setContent(type: SettingDetailType, title: String) {
-        self.type = type
-        self.navigationItemTitle = title
+    func setContent(mode: SettingDetailMode, title: String) {
+        self.mode = mode
     }
 }
 // MARK: - SetupUI
 extension SettingDetailVC {
     private func initView() {
-        guard let type = type else { return }
         self.preference = ModelSingleton.shared.preference
-        self.sectionList = type.sectionList
-        self.rowList = type.rowList
+        self.sectionList = self.mode.sectionList
+        self.rowList = self.mode.rowList
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        self.tableView.isHidden = type == .hideBoard
+        self.tableView.isHidden = self.mode == .hideBoard
         self.tableView.showsVerticalScrollIndicator = false
-        self.viewNotHideAnyBoard.isHidden = type != .hideBoard
+        self.viewNotHideAnyBoard.isHidden = self.mode != .hideBoard
         self.navigationItem.title = self.navigationItemTitle
     }
 }
@@ -108,7 +106,7 @@ extension SettingDetailVC: UITableViewDelegate, UITableViewDataSource {
         return self.sectionList.count
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch self.type {
+        switch self.mode {
         case .notifySetting:
             return section == 0 ? 3 : (section == 1 ? 3 : 1)
         default:
@@ -118,7 +116,7 @@ extension SettingDetailVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         let row = indexPath.row
-        switch self.type {
+        switch self.mode {
         case .hideBoard:
             return UITableViewCell()
         case .notifySetting:
@@ -160,7 +158,7 @@ extension SettingDetailVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 0 else { return }
-        switch self.type {
+        switch self.mode {
         case .showTheme:
             preference.showTheme = indexPath.row
         case .autoPlayVedio:

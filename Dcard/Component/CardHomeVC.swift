@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum CardHomeVCMode {
+    case user
+    case other
+}
+
 class CardHomeVC: UIViewController {
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -17,19 +22,15 @@ class CardHomeVC: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    lazy private var _tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.dataSource = self
-        tableView.delegate = self
-        return tableView
-    }()
+
+    @IBOutlet weak var tbHeight: NSLayoutConstraint!
+    @IBOutlet weak var viewFollow: UIView!
     @IBOutlet weak var bottomSpace: NSLayoutConstraint!
     @IBOutlet weak var viewIcon: customView!
     @IBOutlet weak var lbID: UILabel!
     @IBOutlet weak var lbName: UILabel!
     @IBOutlet weak var lbIcon: UILabel!
     @IBOutlet weak var lbDescription: UILabel!
-//    @IBOutlet weak var viewHeight: NSLayoutConstraint!
     @IBOutlet weak var stackViewHeight: NSLayoutConstraint!
     @IBOutlet weak var iconHeight: NSLayoutConstraint!
     @IBOutlet weak var viewBell: UIView!
@@ -42,10 +43,10 @@ class CardHomeVC: UIViewController {
     private var oldY: CGFloat = 0
     private var imageBellNameList = ["bell.circle.fill", "bell.fill", "bell.slash.fill"]
     private var followCard: FollowCard!
-    private var navigationItemTitle = ""
     private var myPostList = ProfileManager.shared.myPostList
     private var isFollowing = false
     private var notifyMode = 0
+    private var mode: CardHomeVCMode = .user
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,25 +80,54 @@ class CardHomeVC: UIViewController {
             }
         }
     }
-    func setContent(followCard: FollowCard, title: String) {
+    @IBAction func didClickBack(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    @IBAction func didClickEdit(_ sender: UIButton) {
+        let vc = SettingAccountVC()
+        vc.setContent(mode: .editCard, title: "編輯卡稱")
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true) {
+            nav.navigationBar.tintColor = #colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 1)
+            nav.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        }
+    }
+    @IBAction func didClickShare(_ sender: UIButton) {
+        let alertSheet = UIAlertController(title: nil, message: "分享", preferredStyle: .actionSheet)
+        let actionShare = UIAlertAction(title: "分享我的公開頁面", style: .default) { (action) in
+            //
+        }
+        let aciontCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alertSheet.addAction(actionShare)
+        alertSheet.addAction(aciontCancel)
+        self.present(alertSheet, animated: true, completion: nil)
+    }
+    
+    func setContent(followCard: FollowCard, mode: CardHomeVCMode) {
         self.followCard = followCard
-        self.navigationItemTitle = title
+        self.mode = mode
     }
 }
 // MARK: - SetupUI
 extension CardHomeVC {
     private func initView() {
         confiTableview()
-        self.navigationItem.title = self.navigationItemTitle
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(didClickBell))
-        self.viewBell.addGestureRecognizer(tap)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        ToolbarView.shared.show(false)
         
+        if self.mode == .other {
+            let tap = UITapGestureRecognizer(target: self, action: #selector(didClickBell))
+            self.viewBell.addGestureRecognizer(tap)
+        }
+        self.viewFollow.isHidden = self.mode == .user
+        self.bottomSpace.constant = self.mode == .user ? 0 : 125
+        self.tbHeight.constant = self.mode == .user ? -175 : -125
         resetData(self.followCard)
     }
     private func confiTableview() {
-        self._tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CommonCell")
+        self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
     }
 }
 // MARK: - Private Func
@@ -110,7 +140,7 @@ extension CardHomeVC {
         self.isFollowing = followCard.isFollowing
         self.notifyMode = followCard.notifyMode
         self.lbDescription.text = "\(followCard.card.post.count) 篇文章 | \(followCard.card.fans) 位粉絲"
-        self.lbID.text = followCard.card.id
+        self.lbID.text = "@\(followCard.card.id)"
         self.lbName.text = followCard.card.name
         self.lbIcon.text = String(followCard.card.id.first!).uppercased()
         resetBellState(self.isFollowing, notifyMode: self.notifyMode)
@@ -134,22 +164,14 @@ extension CardHomeVC {
 // MARK: - UITableViewDelegate
 extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        let isTableView = tableView === self.tableView
-        return isTableView ? 1 : 2
+        return 2
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let isTableView = tableView === self.tableView
-        return isTableView ? 1 : (section == 0 ? self.myPostList.count : 1)
+        return section == 0 ? self.myPostList.count : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let isTableView = tableView === self.tableView
         let section = indexPath.section
-        guard !isTableView else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CommonCell", for: indexPath)
-            cell.setFixedView(self._tableView)
-            return cell
-        }
         if section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
             cell.setContent(post: self.myPostList[indexPath.row], mode: .profile)
@@ -159,57 +181,42 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
             cell.textLabel?.textColor = #colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1)
             cell.textLabel?.text = "沒有更多囉！"
             cell.textLabel?.textAlignment = .center
+            cell.selectionStyle = .none
             cell.separatorInset = .init(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude) //隱藏分隔線
             return cell
         }
     }
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let isTableView = tableView === self.tableView
-        return isTableView ? "所有文章" : nil
-    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let isTableView = tableView === self.tableView
-        return isTableView ? self.tableView.frame.height - 20 : (indexPath.section == 0 ? 120 : 180)
-    }
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let isTableView = tableView === self.tableView
-        return isTableView ? 20 : CGFloat.leastNonzeroMagnitude
+        return indexPath.section == 0 ? 120 : 180
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let isTableView = scrollView === self.tableView
-        let canBeScrolled = self.bottomSpace.constant == 0
-        self._tableView.isScrollEnabled = canBeScrolled
-        self.tableView.isScrollEnabled = self._tableView.contentOffset.y <= 0 && canBeScrolled || !canBeScrolled
+        guard self.mode == .other else { return }
+        let yOffset = scrollView.contentOffset.y
+        let scale = min(max(1.0 - yOffset / 125.0, 0.0), 1.0)
+        self.lbDescription.alpha = scale
+        self.bottomSpace.constant = 125 * scale
+        self.imageBell.alpha = scale
+        self.btnFollow.alpha = scale
+        self.lbIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
+        self.iconHeight.constant = 50 * scale
+        self.stackViewHeight.constant = 50 + 50 * scale
         
-        if isTableView {
-            let yOffset = scrollView.contentOffset.y
-            let scale = min(max(1.0 - yOffset / 100.0, 0.0), 1.0)
-            self.lbDescription.alpha = scale
-            self.bottomSpace.constant = 100 * scale
-            self.imageBell.alpha = scale
-            self.btnFollow.alpha = scale
-            self.lbIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
-            self.iconHeight.constant = 50 * scale
-            self.stackViewHeight.constant = 50 + 50 * scale
-            
-            self.viewIcon.cornerRadius = (self.iconHeight.constant                                                                                                               - 5) / 2
-            self.view.layoutIfNeeded()
-        }
+        self.viewIcon.cornerRadius = (self.iconHeight.constant - 5) / 2
+        self.view.layoutIfNeeded()
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        let isTableView = scrollView === self.tableView
-        let auto = self.bottomSpace.constant <= 50
-        if isTableView {
-            self.lbDescription.alpha = auto ? 0 : 1
-            self.bottomSpace.constant = auto ? 0 : 100
-            self.imageBell.alpha = auto ? 0 : 1
-            self.btnFollow.alpha = auto ? 0 : 1
-            self.lbIcon.transform = CGAffineTransform(scaleX: auto ? 0 : 1, y: auto ? 0 : 1)
-            self.iconHeight.constant = auto ? 0 : 50
-            self.stackViewHeight.constant = auto ? 150 : 100
-            self.viewIcon.cornerRadius = auto ? 0 : 45 / 2
-            self.view.layoutIfNeeded()
-        }
+        guard self.mode == .other else { return }
+        let auto = self.bottomSpace.constant <= 50 && self.bottomSpace.constant != 0
+        
+        self.lbDescription.alpha = auto ? 0 : 1
+        self.bottomSpace.constant = auto ? 0 : 125
+        self.imageBell.alpha = auto ? 0 : 1
+        self.btnFollow.alpha = auto ? 0 : 1
+        self.lbIcon.transform = CGAffineTransform(scaleX: auto ? 0 : 1, y: auto ? 0 : 1)
+        self.iconHeight.constant = auto ? 0 : 50
+        self.stackViewHeight.constant = auto ? 150 : 100
+        self.viewIcon.cornerRadius = auto ? 0 : 45 / 2
+        self.view.layoutIfNeeded()
     }
 }
 // MARK: - SelectNotifyViewDelegate

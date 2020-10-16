@@ -231,11 +231,11 @@ extension SettingMainVC: UITableViewDelegate, UITableViewDataSource {
                 switch row {
                 case 0:
                     let vc = SettingAccountVC()
-                    vc.setContent(type: .setAddress, title: title)
+                    vc.setContent(mode: .setAddress, title: title)
                     self.navigationController?.pushViewController(vc, animated: true)
                 case 5:
                     let vc = SettingAccountVC()
-                    vc.setContent(type: .resetPassword, title: title)
+                    vc.setContent(mode: .resetPassword, title: title)
                     self.navigationController?.pushViewController(vc, animated: true)
                 case 6:
                     openCountrySetting()
@@ -245,7 +245,7 @@ extension SettingMainVC: UITableViewDelegate, UITableViewDataSource {
             case 1:
                 switch row {
                 case 0, 1, 3, 4:
-                    var type: SettingDetailType! {
+                    var mode: SettingDetailMode! {
                         switch row {
                         case 0:
                             return .hideBoard
@@ -258,7 +258,7 @@ extension SettingMainVC: UITableViewDelegate, UITableViewDataSource {
                         }
                     }
                     let vc = SettingDetailVC()
-                    vc.setContent(type: type, title: title)
+                    vc.setContent(mode: mode, title: title)
                     self.navigationController?.pushViewController(vc, animated: true)
                 default:
                     break
