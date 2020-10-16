@@ -11,11 +11,14 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CardHomeVC" customModule="ChiaCard" customModuleProvider="target">
             <connections>
+                <outlet property="bottomSpace" destination="6Qg-BL-0LY" id="PGg-sI-tGK"/>
                 <outlet property="btnFollow" destination="KYf-FU-cVw" id="QuU-dz-YHs"/>
                 <outlet property="iconHeight" destination="0Pf-59-aae" id="BDL-X4-YPm"/>
                 <outlet property="imageBell" destination="fv5-hd-2QV" id="9sL-3X-fEA"/>
                 <outlet property="lbDescription" destination="7OO-Rw-ywO" id="XUJ-h3-nLW"/>
+                <outlet property="lbID" destination="TlZ-Ls-CzS" id="Ppw-gB-9De"/>
                 <outlet property="lbIcon" destination="1Bc-7h-Cnd" id="lcg-f3-evo"/>
+                <outlet property="lbName" destination="ErY-gH-Qbr" id="nbT-nT-Yp5"/>
                 <outlet property="stackViewHeight" destination="2Vd-i7-eoH" id="Ibp-s5-XbA"/>
                 <outlet property="tableView" destination="Vf1-TQ-Es3" id="bUR-ak-2b9"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -29,14 +32,6 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Vf1-TQ-Es3">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="hxq-wk-25D"/>
-                        <outlet property="delegate" destination="-1" id="lr0-qb-BKL"/>
-                    </connections>
-                </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nBH-mE-kwd">
                     <rect key="frame" x="0.0" y="44" width="414" height="150"/>
                     <subviews>
@@ -47,10 +42,10 @@
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="50"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h3y-yt-Tyi" customClass="customView" customModule="ChiaCard" customModuleProvider="target">
-                                            <rect key="frame" x="137" y="10" width="40" height="40"/>
+                                            <rect key="frame" x="134.5" y="5" width="45" height="45"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="P" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Bc-7h-Cnd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -66,7 +61,7 @@
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                    <real key="value" value="20"/>
+                                                    <real key="value" value="22.5"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </view>
@@ -75,7 +70,7 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="50" id="0Pf-59-aae"/>
                                         <constraint firstItem="h3y-yt-Tyi" firstAttribute="centerX" secondItem="rh2-ou-1W1" secondAttribute="centerX" id="CSA-RX-Ew7"/>
-                                        <constraint firstItem="h3y-yt-Tyi" firstAttribute="top" secondItem="rh2-ou-1W1" secondAttribute="top" constant="10" id="r3Y-9I-K4t"/>
+                                        <constraint firstItem="h3y-yt-Tyi" firstAttribute="top" secondItem="rh2-ou-1W1" secondAttribute="top" constant="5" id="r3Y-9I-K4t"/>
                                         <constraint firstAttribute="bottom" secondItem="h3y-yt-Tyi" secondAttribute="bottom" id="rXx-15-dPM"/>
                                     </constraints>
                                 </view>
@@ -200,19 +195,27 @@
                         <constraint firstItem="Fp9-X8-Hbm" firstAttribute="top" secondItem="nBH-mE-kwd" secondAttribute="top" id="yZ6-ra-Krt"/>
                     </constraints>
                 </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Vf1-TQ-Es3">
+                    <rect key="frame" x="0.0" y="191" width="414" height="771"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="hxq-wk-25D"/>
+                        <outlet property="delegate" destination="-1" id="lr0-qb-BKL"/>
+                    </connections>
+                </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="Vf1-TQ-Es3" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="2qA-ga-bPT"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="nBH-mE-kwd" secondAttribute="trailing" id="4e9-Z0-o24"/>
-                <constraint firstItem="Vf1-TQ-Es3" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="BZV-dJ-d98"/>
-                <constraint firstItem="Vf1-TQ-Es3" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="HDD-1x-9Jh"/>
-                <constraint firstItem="Vf1-TQ-Es3" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="HLg-kS-gjQ"/>
+                <constraint firstItem="Vf1-TQ-Es3" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" constant="100" id="6Qg-BL-0LY"/>
                 <constraint firstItem="nBH-mE-kwd" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="MaO-aO-34k"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Vf1-TQ-Es3" secondAttribute="bottom" id="PSr-Rk-bS9"/>
+                <constraint firstItem="Vf1-TQ-Es3" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="jOn-Do-jxC"/>
                 <constraint firstItem="nBH-mE-kwd" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="jcn-Jk-LXa"/>
+                <constraint firstItem="Vf1-TQ-Es3" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="1:1" constant="-125" id="p0B-VI-U4a"/>
             </constraints>
-            <point key="canvasLocation" x="430" y="163"/>
+            <point key="canvasLocation" x="570" y="67"/>
         </view>
     </objects>
     <designables>

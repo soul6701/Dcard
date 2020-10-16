@@ -22,4 +22,5 @@ public struct Card {
     public var article: String = ""
     public var birthday: String = ""
     public var love: String = ""
+    public var fans: Int = 0
 }

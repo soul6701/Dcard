@@ -8,16 +8,16 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 extension UIView {
     //設定subview的autolayout全部同parentView
     func setFixedView(_ view: UIView) {
         self.addSubview(view)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        view.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        view.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        view.snp.makeConstraints { (maker) in
+            maker.bottom.top.leading.trailing.equalToSuperview()
+        }
     }
     //動態更新View內容
     func fadeTransition(_ duration: CFTimeInterval) {

@@ -205,7 +205,7 @@ class ProfileManager: ProfileManagerInterface {
             var list = [FollowCard]()
             (1...15).forEach { (i) in
                 let _postList = postList.filter({ _ in return Bool.random()})
-                list.append(FollowCard(card: Card(id: ["qaz123", "wsx123", "edc123", "rfv123"].randomElement()!, post: _postList, name: ["NBA 小天使", "🦊🦊🦊🦊🦊", "🐱🐱🐱", "🐶🐶", "🐼"].randomElement()!, photo: "", sex: ["男性", "女性", "其他"].randomElement()!, introduce: "", country: "", school: "", article: "", birthday: "", love: ""), notifyMode: (0...2).randomElement()!, isFollowing: Bool.random(), isNew: Bool.random()))
+                list.append(FollowCard(card: Card(id: ["qaz123", "wsx123", "edc123", "rfv123"].randomElement()!, post: _postList, name: ["NBA 小天使", "🦊🦊🦊🦊🦊", "🐱🐱🐱", "🐶🐶", "🐼"].randomElement()!, photo: "", sex: ["男性", "女性", "其他"].randomElement()!, introduce: "", country: "", school: "", article: "", birthday: "", love: "", fans: (0...100).randomElement()!), notifyMode: (0...2).randomElement()!, isFollowing: Bool.random(), isNew: Bool.random()))
             }
             vc.setContent(followCardList: list, title: next.cell.name)
             self.baseNav.pushViewController(vc, animated: true) {

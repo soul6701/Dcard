@@ -74,7 +74,7 @@ class SettingDetailVC: UIViewController {
 extension SettingDetailVC {
     private func initView() {
         guard let type = type else { return }
-        self.preference = DbManager.shared.getPreference()
+        self.preference = ModelSingleton.shared.preference
         self.sectionList = type.sectionList
         self.rowList = type.rowList
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")

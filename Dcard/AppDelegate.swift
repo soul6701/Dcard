@@ -42,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.disabledTouchResignedClasses = [ChatRoomVC.self, SelectCountryVC.self]
         FirebaseApp.configure()
         
+        let _ = DbManager.shared
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         

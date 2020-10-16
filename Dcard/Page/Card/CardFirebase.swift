@@ -53,7 +53,7 @@ class CardFirebase: CardFirebaseInterface {
                         }
                         newQuerySnapshot = newQuerySnapshot.filter({ return $0 != selectedItem})
                     }
-                    ModelSingleton.shared.setCard(cards: cards)
+                    ModelSingleton.shared.setCard(cards)
                     subject.onNext(cards)
                 }
             }
@@ -77,7 +77,7 @@ class CardFirebase: CardFirebaseInterface {
                     }
                     newQuerySnapshot = newQuerySnapshot.filter({ return $0 != selectedItem})
                 }
-                ModelSingleton.shared.setCard(cards: cards)
+                ModelSingleton.shared.setCard(cards)
                 subject.onNext(cards)
             }
         }

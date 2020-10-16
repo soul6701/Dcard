@@ -33,7 +33,11 @@ class SettingMainVC: UIViewController {
     private var sectionTitleList = ["帳號", "偏好設定", "關於ChaiCard", "意見回饋", ""]
     private var rowTitleList = [["常用信箱", "個人身份驗證", "Facebook 帳號連結", "google帳號連結", "Apple帳號連結", "修改密碼", "所在國家/地區"], ["全部熱門隱藏看板設定", "推播通知設定", "使用 Touch ID解鎖我的文章", "顯示主題" , "自動播放影片", "清除圖片快取"], ["Facebook 粉絲專頁", "instagram 官方帳號", "聯絡客服", "常見問題" , "服務條款", "版本"]]
     private var logoutTitleList = ["登出其他裝置", "登出"]
-    private var preference = Preference()
+    private var preference = Preference() {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     private var heart = 0
     private var country = Country(name: "", alias: "", code: "")
     private var address = ""
@@ -48,9 +52,7 @@ class SettingMainVC: UIViewController {
         initView()
     }
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.preference = DbManager.shared.getPreference()
-        self.tableView.reloadData()
+        self.preference = ModelSingleton.shared.preference
     }
 }
 // MARK: - SetupUI
@@ -58,7 +60,6 @@ extension SettingMainVC {
     private func initView() {
         confiTableView()
         confiNav()
-        self.preference = DbManager.shared.getPreference()
         
         let user = ModelSingleton.shared.userConfig.user
         self.country = user.country
@@ -110,6 +111,10 @@ extension SettingMainVC {
         nav.modalTransitionStyle = .crossDissolve
         self.present(nav, animated: true)
     }
+    @objc private func toggle(_ sender: UISwitch) {
+        self.preference.touchIDOn = sender.isOn
+        ProfileManager.shared.saveToDataBase(preference: preference)
+    }
 }
 // MARK: - UITableViewDelegate
 extension SettingMainVC: UITableViewDelegate, UITableViewDataSource {
@@ -159,7 +164,8 @@ extension SettingMainVC: UITableViewDelegate, UITableViewDataSource {
                 case 2:
                     let switchButton = UISwitch()
                     switchButton.onTintColor = #colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78)
-                    switchButton.isOn = false
+                    switchButton.isOn = self.preference.touchIDOn
+                    switchButton.addTarget(self, action: #selector(toggle(_:)), for: .valueChanged)
                     let cell = tableView.dequeueReusableCell(withIdentifier: "CommonCell", for: indexPath)
                     cell.textLabel?.text = title
                     cell.accessoryView = switchButton

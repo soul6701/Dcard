@@ -123,7 +123,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                 if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
                     let dir = queryDocumentSnapshot.data()
                     if dir["uid"] as! String == "\(lastName)_\(firstName)" && dir["password"] as! String == password {
-                        ModelSingleton.shared.setUserConfig(config: UserConfig(user: User(uid: dir["uid"] as! String, lastName: dir["lastname"] as! String, firstName: dir["firstname"] as! String, birthday: dir["birthday"] as! String, sex: dir["sex"] as! String, phone: dir["phone"] as! String, address: dir["address"] as! String, password: dir["password"] as! String, avatar: dir["avatar"] as! String, friend: dir["friend"] as! [String]), cardmode: 0))
+                        ModelSingleton.shared.setUserConfig(UserConfig(user: User(uid: dir["uid"] as! String, lastName: dir["lastname"] as! String, firstName: dir["firstname"] as! String, birthday: dir["birthday"] as! String, sex: dir["sex"] as! String, phone: dir["phone"] as! String, address: dir["address"] as! String, password: dir["password"] as! String, avatar: dir["avatar"] as! String, friend: dir["friend"] as! [String]), cardmode: 0))
                         return true
                     }
                     return false
@@ -268,7 +268,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                         subject.onNext(true)
                         var (oldUser, oldCardMode) = (ModelSingleton.shared.userConfig.user, ModelSingleton.shared.userConfig.cardmode)
                         oldUser.friend = friendList
-                        ModelSingleton.shared.setUserConfig(config: UserConfig(user: oldUser, cardmode: oldCardMode))
+                        ModelSingleton.shared.setUserConfig(UserConfig(user: oldUser, cardmode: oldCardMode))
                     }
                 }
             }
@@ -309,7 +309,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                     } else {
                         oldUser.password = newPassword
                     }
-                    ModelSingleton.shared.setUserConfig(config: UserConfig(user: oldUser, cardmode: oldCardMode))
+                    ModelSingleton.shared.setUserConfig(UserConfig(user: oldUser, cardmode: oldCardMode))
                 }
             }
         }
