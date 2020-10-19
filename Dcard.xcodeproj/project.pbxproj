@@ -159,6 +159,8 @@
 		22F2111524CC3535003B1F1D /* Extension_UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2111424CC3535003B1F1D /* Extension_UIView.swift */; };
 		22F2111824CC5324003B1F1D /* ForumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2111624CC5324003B1F1D /* ForumCell.swift */; };
 		22F2111924CC5324003B1F1D /* ForumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22F2111724CC5324003B1F1D /* ForumCell.xib */; };
+		8470A43E253D845300B5E766 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8470A43D253D845300B5E766 /* WaitingView.swift */; };
+		8470A443253D847400B5E766 /* WaitingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8470A442253D847400B5E766 /* WaitingView.xib */; };
 		848A6CA1253404BD00125138 /* SettingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6C9F253404BD00125138 /* SettingDetailVC.swift */; };
 		848A6CA2253404BD00125138 /* SettingDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A6CA0253404BD00125138 /* SettingDetailVC.xib */; };
 		848A6CD62534285A00125138 /* DbManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6CD52534285A00125138 /* DbManager.swift */; };
@@ -351,6 +353,8 @@
 		22F2111624CC5324003B1F1D /* ForumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumCell.swift; sourceTree = "<group>"; };
 		22F2111724CC5324003B1F1D /* ForumCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ForumCell.xib; sourceTree = "<group>"; };
 		538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dcard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8470A43D253D845300B5E766 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
+		8470A442253D847400B5E766 /* WaitingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WaitingView.xib; sourceTree = "<group>"; };
 		848A6C9F253404BD00125138 /* SettingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailVC.swift; sourceTree = "<group>"; };
 		848A6CA0253404BD00125138 /* SettingDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingDetailVC.xib; sourceTree = "<group>"; };
 		848A6CD52534285A00125138 /* DbManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbManager.swift; sourceTree = "<group>"; };
@@ -422,6 +426,8 @@
 				221A47D32511AD1600DE1301 /* SelectNotifyView.swift */,
 				221A47D92512218A00DE1301 /* CardHomeVC.swift */,
 				221A47DA2512218A00DE1301 /* CardHomeVC.xib */,
+				8470A43D253D845300B5E766 /* WaitingView.swift */,
+				8470A442253D847400B5E766 /* WaitingView.xib */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -939,6 +945,7 @@
 				22CAAAB7250BE25200CDF95B /* 小天使.gif in Resources */,
 				228F932F24C1FE4F00A7EBD9 /* Drawer.xib in Resources */,
 				84C818A9252DC39800CFABA6 /* FriendCardVC.xib in Resources */,
+				8470A443253D847400B5E766 /* WaitingView.xib in Resources */,
 				22179C8224F66BE900BAD5C4 /* SelectCountryVC.xib in Resources */,
 				848A6CA2253404BD00125138 /* SettingDetailVC.xib in Resources */,
 				22D7C39924EC2021006412BE /* messageCell.xib in Resources */,
@@ -1120,6 +1127,7 @@
 				228D419924AA49080077D29E /* PostVC.swift in Sources */,
 				22433D4124EA81C900E8D79D /* MemoPageOneHeader.swift in Sources */,
 				228D41E224AD06290077D29E /* CommentCell.swift in Sources */,
+				8470A43E253D845300B5E766 /* WaitingView.swift in Sources */,
 				22CAAACA250D21E800CDF95B /* ProfileThreeTbCell.swift in Sources */,
 				22CAAAD4250D2EF100CDF95B /* ProfileThreeCell.swift in Sources */,
 				22A75F2524E54C7800287460 /* WeekHeaderView.swift in Sources */,

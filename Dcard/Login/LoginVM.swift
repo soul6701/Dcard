@@ -27,9 +27,9 @@ protocol LoginVMInterface {
     //查詢密碼
     var requirePasswordSubject: PublishSubject<RequirePasswordType> { get }
     func requirePassword(uid: String, phone: String?, address: String?)
-    //修改密碼
-    var resetAddressPasswordSubject: PublishSubject<Bool> { get }
-    func resetAddressPassword(newAddress: String, newPassword: String)
+    //修改使用者資訊
+    var updateUserInfoSubject: PublishSubject<Bool> { get }
+    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType : String])
 }
 class LoginVM: LoginVMInterface {
     private (set) var requirePasswordSubject = PublishSubject<RequirePasswordType>()
@@ -37,7 +37,7 @@ class LoginVM: LoginVMInterface {
     private (set) var deleteUserDataSubject = PublishSubject<DeleteCollectionType>()
     private (set) var loginSubject = PublishSubject<LoginType>()
     private (set) var expectAccountSubject = PublishSubject<Bool>()
-    private (set) var resetAddressPasswordSubject = PublishSubject<Bool>()
+    private (set) var updateUserInfoSubject = PublishSubject<Bool>()
     
     private var loginFirebase: LoginFirebaseInterface
     private var disposeBag = DisposeBag()
@@ -83,11 +83,11 @@ extension LoginVM {
             self.requirePasswordSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
-    func resetAddressPassword(newAddress: String, newPassword: String) {
-        self.loginFirebase.resetAddressPassword(newAddress: newAddress, newPassword: newPassword) .subscribe(onNext: { (result) in
-            self.resetAddressPasswordSubject.onNext(result)
+    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType : String]) {
+        self.loginFirebase.updateUserInfo(newAddress: newAddress, newPassword: newPassword, newCard: newCard) .subscribe(onNext: { (result) in
+            self.updateUserInfoSubject.onNext(result)
         }, onError: { (error) in
-            self.resetAddressPasswordSubject.onError(error)
+            self.updateUserInfoSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

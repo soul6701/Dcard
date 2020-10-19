@@ -52,6 +52,13 @@ class CardHomeVC: UIViewController {
         super.viewDidLoad()
         initView()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.mode == .user {
+            self.followCard = FollowCard(card: ModelSingleton.shared.userConfig.user.card)
+            resetData(self.followCard)
+        }
+    }
     @IBAction func didClickBtnCancelFollow(_ sender: UIButton) {
         if self.isFollowing {
             ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followCard.card.name + "」？") {
@@ -104,7 +111,7 @@ class CardHomeVC: UIViewController {
         self.present(alertSheet, animated: true, completion: nil)
     }
     
-    func setContent(followCard: FollowCard, mode: CardHomeVCMode) {
+    func setContent(followCard: FollowCard = FollowCard(card: ModelSingleton.shared.userConfig.user.card), mode: CardHomeVCMode) {
         self.followCard = followCard
         self.mode = mode
     }

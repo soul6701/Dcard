@@ -57,9 +57,9 @@ extension PostVC {
         self.tableView.dataSource = self
     }
     @IBAction func show(_ sender: UIButton) {
+        self.show = !self.show
+        self.bottomSpace.constant += self.show ? (self.commentList!.count <= 1 ? 200 : 400) : (self.commentList!.count <= 1 ? -200 : -400)
         UIView.animate(withDuration: 0.3) {
-            self.show = !self.show
-            self.bottomSpace.constant += self.show ? (self.commentList!.count <= 1 ? 200 : 400) : (self.commentList!.count <= 1 ? -200 : -400)
             self.view.layoutIfNeeded()
         }
     }

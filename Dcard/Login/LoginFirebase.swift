@@ -26,6 +26,10 @@ enum RequirePasswordType {
     case success(String)
     case error(LoginErroType)
 }
+enum CardFieldType: String {
+    case name
+    case id
+}
 protocol LoginFirebaseInterface {
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) -> Observable<Bool>
     func login(lastName: String, firstName: String, password: String) -> Observable<LoginType>
@@ -34,7 +38,7 @@ protocol LoginFirebaseInterface {
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<RequirePasswordType>
     func getUserData(uid: String) -> Observable<User>
     func addFriend(name: String) -> Observable<Bool>
-    func resetAddressPassword(newAddress: String, newPassword: String) -> Observable<Bool>
+    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType: String]) -> Observable<Bool>
 }
 
 public class LoginFirebase: LoginFirebaseInterface {
@@ -275,8 +279,8 @@ public class LoginFirebase: LoginFirebaseInterface {
         }
         return subject.asObserver()
     }
-    // MARK: - 修改信箱及密碼
-    func resetAddressPassword(newAddress: String, newPassword: String) -> Observable<Bool> {
+    // MARK: - 修改使用者資訊
+    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType: String]) -> Observable<Bool> {
         let subject = PublishSubject<Bool>()
         var userId = ""
         
@@ -296,7 +300,23 @@ public class LoginFirebase: LoginFirebaseInterface {
                 subject.onNext(false)
                 return
             }
-            let setter = !newAddress.isEmpty ? ["address" : newAddress] : ["password" : newPassword]
+            var setter: [String:Any] = [:]
+            if !newAddress.isEmpty {
+                setter["address"] = newAddress
+            } else if !newPassword.isEmpty {
+                setter["password"] = newPassword
+            } else if !newCard.isEmpty {
+                var list: [String: String] = [:]
+                newCard.forEach { (key, value) in
+                    list[key.rawValue] = value
+                }
+                setter["card"] = list
+            }
+                
+            guard !setter.isEmpty else {
+                subject.onNext(false)
+                return
+            }
             FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).document(userId).updateData(setter) { (error) in
                 if let error = error {
                     NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
@@ -304,10 +324,21 @@ public class LoginFirebase: LoginFirebaseInterface {
                 } else {
                     subject.onNext(true)
                     var (oldUser, oldCardMode) = (ModelSingleton.shared.userConfig.user, ModelSingleton.shared.userConfig.cardmode)
+                    var oldCard = oldUser.card
                     if !newAddress.isEmpty {
                         oldUser.address = newAddress
-                    } else {
+                    } else if !newPassword.isEmpty {
                         oldUser.password = newPassword
+                    } else if !newCard.isEmpty {
+                        newCard.forEach { (key, value) in
+                            switch key {
+                            case .id:
+                                oldCard.id = value
+                            case .name:
+                                oldCard.name = value
+                            }
+                        }
+                        oldUser.card = oldCard
                     }
                     ModelSingleton.shared.setUserConfig(UserConfig(user: oldUser, cardmode: oldCardMode))
                 }

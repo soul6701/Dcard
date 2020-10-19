@@ -41,8 +41,9 @@ class ProfileManager: ProfileManagerInterface {
     private var alertconfig: SwiftMessages.Config!
     private var baseNav: UINavigationController!
     //假值
-    
-    let user = ModelSingleton.shared.userConfig.user
+    var user: User {
+        return ModelSingleton.shared.userConfig.user
+    }
     let list = [["我像個殘廢 飛不出你的世界", "借不到一點安慰"], ["雖然暗戀讓人早熟", "也讓人多難過"], ["多麽想告訴你 我好喜歡你", "都怪我控制不了自己"], ["未來的每一步一腳印", "相知相習相依為命"]]
     let _mediaMeta = [[MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=17fh01n/3r580003rr4ps40n960o.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=17fh01n/3r580003rr4ps40n960o.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=1avg1r2/3r580003rqson1npps7s.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=1avg1r2/3r580003rqson1npps7s.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=11sbjcv/ctp-vzntr/15341312472962rqp6q4r2q.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=11sbjcv/ctp-vzntr/15341312472962rqp6q4r2q.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=38pi76/ctp-vzntr/1534131247394rsnss9rr7o.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=38pi76/ctp-vzntr/1534131247394rsnss9rr7o.jpg")]]
     var postList: [Post] {
@@ -229,7 +230,7 @@ class ProfileManager: ProfileManagerInterface {
             }
         case .myCard:
             let vc = CardHomeVC()
-            vc.setContent(followCard: FollowCard(card: user.card, notifyMode: 0, isFollowing: false, isNew: false), mode: .user)
+            vc.setContent(mode: .user)
             self.baseNav.pushViewController(vc, animated: true)
         case .mail:
             let vc = UIStoryboard.profile.mailVC
