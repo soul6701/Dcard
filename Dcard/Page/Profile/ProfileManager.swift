@@ -31,6 +31,7 @@ enum ProfileOKMode {
     case sendVefifymail
     case cancelFollowCard
     case cancelFollowIssue
+    case shareCardInfo
 }
 class ProfileManager: ProfileManagerInterface {
     
@@ -49,7 +50,7 @@ class ProfileManager: ProfileManagerInterface {
     var postList: [Post] {
         var _postList = [Post]()
         (0...7).forEach { (i) in
-            _postList.append(Post(id: ["qwert12345", "asdfg12345", "zxcvb12345"].randomElement()!, title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: ["F", "M"].randomElement()!, school: "", mediaMeta: _mediaMeta[i % 4], department: ["神奇寶貝研究系", "愛哩愛尬沒系", "機械工程系", "資訊工程系", "肥宅養成系", "愛丟卡慘系"].randomElement()!, anonymousSchool: Bool.random(), anonymousDepartment:  Bool.random(), withNickname:  Bool.random()))
+            _postList.append(Post(id: ["qwert12345", "asdfg12345", "zxcvb12345"].randomElement()!, title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: ["F", "M"].randomElement()!, department: ["神奇寶貝研究系", "愛哩愛尬沒系", "機械工程系", "資訊工程系", "肥宅養成系", "愛丟卡慘系"].randomElement()!, anonymousSchool: Bool.random(), anonymousDepartment: Bool.random(), school: "", withNickname: Bool.random(), mediaMeta: _mediaMeta[i % 4]))
         }
         return _postList
     }
@@ -57,7 +58,7 @@ class ProfileManager: ProfileManagerInterface {
         var _myPostList = [Post]()
         (0...7).forEach { (i) in
             let withNickname = Bool.random()
-            _myPostList.append(Post(id: user.lastName + "_" + user.firstName , title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15", "2018-02-21"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: "M", school: withNickname ? "野比大雄" : "私立台灣肥宅學院", mediaMeta: _mediaMeta[i % 4], department: withNickname ? "K" : "邊緣人養成系", anonymousSchool: false, anonymousDepartment: false, withNickname: withNickname))
+            _myPostList.append(Post(id: user.lastName + "_" + user.firstName , title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15", "2018-02-21"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: "M", department: withNickname ? "K" : "邊緣人養成系", anonymousSchool: false, anonymousDepartment: false, school: withNickname ? "野比大雄" : "私立台灣肥宅學院", withNickname: withNickname, mediaMeta: _mediaMeta[i % 4]))
         }
         return _myPostList
     }
@@ -103,6 +104,8 @@ class ProfileManager: ProfileManagerInterface {
             body = "已成功發送"
         case .cancelFollowCard, .cancelFollowIssue:
             body = "成功取消追蹤"
+        case .shareCardInfo:
+            body = "分享成功"
         }
         self.OKView.configureContent(title: "", body: body)
         self.OKConfig.eventListeners = .init(arrayLiteral: { (event) in

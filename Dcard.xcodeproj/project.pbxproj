@@ -217,7 +217,7 @@
 		221A47D72512160000DE1301 /* Extension_UIAlertAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_UIAlertAction.swift; sourceTree = "<group>"; };
 		221A47D92512218A00DE1301 /* CardHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHomeVC.swift; sourceTree = "<group>"; };
 		221A47DA2512218A00DE1301 /* CardHomeVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardHomeVC.xib; sourceTree = "<group>"; };
-		221ADAF02499F0A100C25BD1 /* ChiaCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChiaCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		221ADAF02499F0A100C25BD1 /* ChaiCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChaiCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		221ADAF32499F0A100C25BD1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		221ADAF72499F0A100C25BD1 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -464,7 +464,7 @@
 		221ADAF12499F0A100C25BD1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				221ADAF02499F0A100C25BD1 /* ChiaCard.app */,
+				221ADAF02499F0A100C25BD1 /* ChaiCard.app */,
 				221ADB062499F0A300C25BD1 /* DcardTests.xctest */,
 				221ADB112499F0A300C25BD1 /* DcardUITests.xctest */,
 			);
@@ -829,7 +829,7 @@
 			);
 			name = Dcard;
 			productName = Dcard;
-			productReference = 221ADAF02499F0A100C25BD1 /* ChiaCard.app */;
+			productReference = 221ADAF02499F0A100C25BD1 /* ChaiCard.app */;
 			productType = "com.apple.product-type.application";
 		};
 		221ADB052499F0A300C25BD1 /* DcardTests */ = {
@@ -1328,7 +1328,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.soul6701.dcard-test";
-				PRODUCT_NAME = ChiaCard;
+				PRODUCT_NAME = ChaiCard;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1348,7 +1348,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.soul6701.dcard-test";
-				PRODUCT_NAME = ChiaCard;
+				PRODUCT_NAME = ChaiCard;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

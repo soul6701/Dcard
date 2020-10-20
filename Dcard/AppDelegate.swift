@@ -16,8 +16,8 @@ import FirebaseDatabase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     ///當前界面支持的方向（默認情況下只能豎屏，不能橫屏顯示）
-    var interfaceOrientations:UIInterfaceOrientationMask = .portrait {
-        didSet{
+    var interfaceOrientations: UIInterfaceOrientationMask = .portrait {
+        didSet {
             //強制設置成直屏
             if interfaceOrientations == .portrait {
                 UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue,
@@ -43,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         let _ = DbManager.shared
+        
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         

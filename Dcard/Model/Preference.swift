@@ -27,9 +27,9 @@ public struct Preference {
         case 0:
             return "根據系統設定"
         case 1:
-            return "深色模式"
-        default:
             return "淺色模式"
+        default:
+            return "深色模式"
         }
     }
     var autoPlayVedioToString: String {

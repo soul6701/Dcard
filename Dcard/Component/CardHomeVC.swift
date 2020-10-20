@@ -103,7 +103,16 @@ class CardHomeVC: UIViewController {
     @IBAction func didClickShare(_ sender: UIButton) {
         let alertSheet = UIAlertController(title: nil, message: "分享", preferredStyle: .actionSheet)
         let actionShare = UIAlertAction(title: "分享我的公開頁面", style: .default) { (action) in
-            //
+            let vc = UIActivityViewController(activityItems: [self.followCard.card.name], applicationActivities: nil)
+            vc.completionWithItemsHandler = { (_, completed, _, error) in
+                if let error = error {
+                    ProfileManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+                }
+                if completed {
+                    ProfileManager.shared.showOKView(mode: .shareCardInfo, handler: nil)
+                }
+            }
+            self.present(vc, animated: true, completion: nil)
         }
         let aciontCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         alertSheet.addAction(actionShare)

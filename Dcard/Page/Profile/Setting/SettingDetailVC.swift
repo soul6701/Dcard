@@ -19,7 +19,7 @@ enum SettingDetailMode {
         case .notifySetting:
             return ["關閉", "標註我的回應", "所有回應", "我的文章獲得心情", "我的回應獲得喜歡", "我的卡稱受到多人追蹤", "卡友來信"]
         case .showTheme:
-            return ["根據系統設定", "深色模式", "淺色模式"]
+            return ["根據系統設定", "淺色模式", "深色模式"]
         case .autoPlayVedio:
             return ["開啟", "關閉", "僅 Wi-Fi"]
         default:
@@ -158,13 +158,16 @@ extension SettingDetailVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 0 else { return }
+        let row = indexPath.row
         switch self.mode {
         case .showTheme:
-            preference.showTheme = indexPath.row
+            preference.showTheme = row
+            let scene = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+            scene?.window?.overrideUserInterfaceStyle = UIUserInterfaceStyle(rawValue: row) ?? .unspecified
         case .autoPlayVedio:
-            preference.autoPlayVedio = indexPath.row
+            preference.autoPlayVedio = row
         case .notifySetting:
-            preference.newReply = indexPath.row
+            preference.newReply = row
         default:
             break
         }

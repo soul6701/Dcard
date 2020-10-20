@@ -48,17 +48,17 @@ enum SettingAccountMode {
     }
 }
 class SettingAccountVC: UIViewController {
-    lazy private var btnSave: UIBarButtonItem = {
+    private var btnSave: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(title: "儲存", style: .plain, target: self, action: #selector(save))
         barButtonItem.isEnabled = false
         return barButtonItem
     }()
-    lazy private var btnHint: UIButton = {
+    private var btnHint: UIButton = {
         let button = UIButton(type: .infoLight)
         button.addTarget(self, action: #selector(alert), for: .touchUpInside)
         return button
     }()
-    lazy private var btnClose: UIButton = {
+    private var btnClose: UIButton = {
         let button = UIButton(type: .close)
         button.addTarget(self, action: #selector(close), for: .touchUpInside)
         return button
@@ -113,7 +113,7 @@ class SettingAccountVC: UIViewController {
         }
         return list
     }()
-    lazy private var viewOK: UIView = {
+    private var viewOK: UIView = {
         let view = customView()
         view.viewBorderWidth = 1
         view.viewBorderColor = #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)
@@ -121,6 +121,62 @@ class SettingAccountVC: UIViewController {
         view.addGestureRecognizer(tap)
         return view
     }()
+    lazy private var vcHint: UIViewController = {
+        let vc = UIViewController()
+        guard let view = vc.view else { return vc }
+        view.layer.cornerRadius = 15
+        view.backgroundColor = .white
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.attributedText = NSAttributedString(string: "規則", attributes: [.font: UIFont.boldSystemFont(ofSize: 16)])
+        view.addSubview(label)
+        label.snp.makeConstraints { (maker) in
+            maker.centerX.equalToSuperview()
+            maker.top.equalToSuperview().offset(5)
+            maker.height.equalTo(40)
+            maker.width.equalToSuperview()
+        }
+        let button = UIButton(type: .custom)
+        button.backgroundColor = .link
+        button.layer.cornerRadius = 15
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("好", for: .normal)
+        button.addTarget(self, action: #selector(self.close), for: .touchUpInside)
+        view.addSubview(button)
+        button.snp.makeConstraints { (maker) in
+            maker.width.equalToSuperview().dividedBy(2)
+            maker.centerX.equalToSuperview()
+            maker.height.equalTo(30)
+            maker.bottom.equalToSuperview().offset(-5)
+        }
+        let textView = UITextView()
+        textView.contentInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 10)
+        textView.backgroundColor = .clear
+        textView.attributedText = NSAttributedString(string: """
+ID 規則
+1. 不可與他人重複
+2. 首字為英文字母
+3. 只可以用小寫字母、數字、半形底線、點
+4. 不可含dcard字串
+5.長度不可超過15個字元
+
+卡稱規則
+1. 卡稱不可超過12個字元
+2. 不可包含 dcard、Dcard、狄卡字串
+""", attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .light)])
+        textView.isEditable = false
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(textView)
+        textView.snp.makeConstraints { (maker) in
+            maker.centerX.equalToSuperview()
+            maker.top.equalTo(label.snp.bottom)
+            maker.width.equalTo(label.snp.width)
+            maker.bottom.equalTo(button.snp.top).offset(-5)
+        }
+        return vc
+    }()
+    
     private var mode: SettingAccountMode = .setAddress
     private var oldAddress = ""
     private var newAddress = ""
@@ -273,69 +329,11 @@ extension SettingAccountVC {
     }
     //跳出ID規則視窗
     @objc private func alert() {
-        if !self.hintOpend {
-            let vc = UIViewController()
-            vc.modalPresentationStyle = .popover
-            vc.preferredContentSize = CGSize(width: self.view.bounds.width - 40, height: self.view.bounds.height / 2)
-            vc.popoverPresentationController?.delegate = self
-            vc.popoverPresentationController?.sourceView = self.btnHint
-            present(vc, animated: true) {
-                guard let view = vc.view else { return }
-                view.layer.cornerRadius = 15
-                view.backgroundColor = .white
-                let label = UILabel()
-                label.translatesAutoresizingMaskIntoConstraints = false
-                label.textAlignment = .center
-                label.attributedText = NSAttributedString(string: "規則", attributes: [.font: UIFont.boldSystemFont(ofSize: 16)])
-                view.addSubview(label)
-                label.snp.makeConstraints { (maker) in
-                    maker.centerX.equalToSuperview()
-                    maker.top.equalToSuperview().offset(5)
-                    maker.height.equalTo(40)
-                    maker.width.equalToSuperview()
-                }
-                let button = UIButton(type: .custom)
-                button.backgroundColor = .link
-                button.layer.cornerRadius = 15
-                button.translatesAutoresizingMaskIntoConstraints = false
-                button.setTitle("好", for: .normal)
-                button.addTarget(self, action: #selector(self.close), for: .touchUpInside)
-                view.addSubview(button)
-                button.snp.makeConstraints { (maker) in
-                    maker.width.equalToSuperview().dividedBy(2)
-                    maker.centerX.equalToSuperview()
-                    maker.height.equalTo(30)
-                    maker.bottom.equalToSuperview().offset(-5)
-                }
-                let textView = UITextView()
-                textView.contentInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 10)
-                textView.backgroundColor = .clear
-                textView.attributedText = NSAttributedString(string: """
-ID 規則
-1. 不可與他人重複
-2. 首字為英文字母
-3. 只可以用小寫字母、數字、半形底線、點
-4. 不可含dcard字串
-5.長度不可超過15個字元
-
-卡稱規則
-1. 卡稱不可超過12個字元
-2. 不可包含 dcard、Dcard、狄卡字串
-""", attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .light)])
-                textView.isEditable = false
-                textView.translatesAutoresizingMaskIntoConstraints = false
-                view.addSubview(textView)
-                textView.snp.makeConstraints { (maker) in
-                    maker.centerX.equalToSuperview()
-                    maker.top.equalTo(label.snp.bottom)
-                    maker.width.equalTo(label.snp.width)
-                    maker.bottom.equalTo(button.snp.top).offset(-5)
-                }
-            }
-        } else {
-            
-        }
-        self.hintOpend = !self.hintOpend
+        self.vcHint.modalPresentationStyle = .popover
+        self.vcHint.preferredContentSize = CGSize(width: self.view.bounds.width - 40, height: self.view.bounds.height / 2)
+        self.vcHint.popoverPresentationController?.delegate = self
+        self.vcHint.popoverPresentationController?.sourceView = self.btnHint
+        present(self.vcHint, animated: true, completion: nil)
     }
     @objc private func close() {
         dismiss(animated: true, completion: nil)
@@ -364,7 +362,9 @@ ID 規則
     //是否前往編輯卡稱ID頁面
     @objc private func showCardIDPage() {
         let alert = UIAlertController(title: "注意", message: "你只有一次修改ID的機會，且這個ID是會對其他使用者顯示的，請謹慎選擇。", preferredStyle: .alert)
-        let laterAction = UIAlertAction(title: "之後再說", style: .cancel, handler: nil)
+        let laterAction = UIAlertAction(title: "之後再說", style: .default) { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }
         let okAction = UIAlertAction(title: "前往修改", style: .default) { (action) in
             let vc = SettingAccountVC()
             vc.setContent(mode: .enterNewID, title: "輸入新的 ID")

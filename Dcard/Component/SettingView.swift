@@ -17,9 +17,13 @@ class SettingView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        confiTableView()
     }
     func setContent(floor: Int) {
         self.floor = floor
+    }
+    private func confiTableView() {
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CommonCell")
     }
 }
 extension SettingView: UITableViewDelegate, UITableViewDataSource {
@@ -28,9 +32,9 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
         return items.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.attributedText = NSAttributedString(string: indexPath.row == 0 ? items[indexPath.row] + "B\(floor)": items[indexPath.row], attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 12)])
-        cell.contentView.backgroundColor = .white
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CommonCell", for: indexPath)
+        cell.textLabel?.attributedText = NSAttributedString(string: indexPath.row == 0 ? items[indexPath.row] + "B\(floor)": items[indexPath.row], attributes: [.font : UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black])
+        cell.backgroundColor = .white
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
