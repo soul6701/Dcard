@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -110,7 +110,7 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="LyF-zf-p3m">
-                            <rect key="frame" x="50" y="100" width="314" height="50"/>
+                            <rect key="frame" x="50" y="95" width="314" height="50"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10556 篇文章 | 65 位粉絲" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7OO-Rw-ywO">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="25"/>
@@ -231,7 +231,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="150" id="AwM-Es-Bk1"/>
                         <constraint firstItem="LyF-zf-p3m" firstAttribute="leading" secondItem="nBH-mE-kwd" secondAttribute="leading" constant="50" id="Hs4-TT-P96"/>
-                        <constraint firstItem="LyF-zf-p3m" firstAttribute="top" secondItem="Fp9-X8-Hbm" secondAttribute="bottom" id="K7N-9Q-mO0"/>
+                        <constraint firstItem="LyF-zf-p3m" firstAttribute="top" secondItem="Fp9-X8-Hbm" secondAttribute="bottom" constant="-5" id="K7N-9Q-mO0"/>
                         <constraint firstItem="eZ0-dG-DxK" firstAttribute="leading" secondItem="nBH-mE-kwd" secondAttribute="leading" constant="5" id="Okr-sw-Sb1"/>
                         <constraint firstItem="7hA-f4-hkZ" firstAttribute="top" secondItem="nBH-mE-kwd" secondAttribute="top" constant="5" id="XpQ-Qw-PTs"/>
                         <constraint firstItem="LyF-zf-p3m" firstAttribute="centerX" secondItem="nBH-mE-kwd" secondAttribute="centerX" id="ZPd-2Y-6vj"/>

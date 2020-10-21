@@ -39,10 +39,13 @@ class CardHomeVC: UIViewController {
     private var isFollowing = false
     private var notifyMode = 0
     private var mode: CardHomeVCMode = .user
+    private var canBeDragged = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        ToolbarView.shared.show(false)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -122,16 +125,20 @@ extension CardHomeVC {
     private func initView() {
         confiTableview()
         
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        ToolbarView.shared.show(false)
-        
         if self.mode == .other {
             let tap = UITapGestureRecognizer(target: self, action: #selector(didClickBell))
             self.viewBell.addGestureRecognizer(tap)
         }
         self.viewFollow.isHidden = self.mode == .user
-        self.bottomSpace.constant = self.mode == .user ? 0 : 125
-        self.tbHeight.constant = self.mode == .user ? -175 : -125
+        self.bottomSpace.constant = self.mode == .user ? 0 : 100
+        self.tbHeight.constant = self.mode == .user ? -175 : -75
+        
+        if self.mode == .other {
+            let pan = UIPanGestureRecognizer(target: self, action: #selector(move))
+            pan.delegate = self
+            self.tableView.addGestureRecognizer(pan)
+            self.tableView.isScrollEnabled = false
+        }
         resetData(self.followCard)
     }
     private func confiTableview() {
@@ -142,6 +149,56 @@ extension CardHomeVC {
 extension CardHomeVC {
     @objc private func didClickBell() {
         ProfileManager.shared.showBellModeView(delegate: self, notifyMode: self.followCard.notifyMode)
+    }
+    @objc private func move(_ ges: UIPanGestureRecognizer) {
+        if ges.state == .began || ges.state == .changed {
+            let translation = ges.translation(in: ges.view)
+            if self.bottomSpace.constant > 0 || self.canBeDragged {
+                self.bottomSpace.constant += translation.y
+            } else if self.bottomSpace.constant > 100 {
+                self.bottomSpace.constant = 100
+            } else {
+                self.bottomSpace.constant = 0
+            }
+            self.bottomSpace.constant = max(self.bottomSpace.constant, 0)
+            let scale = self.bottomSpace.constant / 100
+            if scale <= 1 {
+                self.lbDescription.alpha = scale
+                self.imageBell.alpha = scale
+                self.btnFollow.alpha = scale
+                self.lbIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
+                self.iconHeight.constant = 50 * scale
+                self.stackViewHeight.constant = 50 + 50 * scale
+                self.viewIcon.cornerRadius = (self.iconHeight.constant - 5) / 2
+            }
+            self.view.layoutIfNeeded()
+            ges.setTranslation(CGPoint.zero, in: ges.view)
+        }
+        if ges.state == .ended {
+            if self.bottomSpace.constant >= 50 {
+                self.bottomSpace.constant = 100
+                self.tableView.isScrollEnabled = false
+                self.lbDescription.alpha = 1
+                self.imageBell.alpha = 1
+                self.btnFollow.alpha = 1
+                self.lbIcon.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.iconHeight.constant = 50
+                self.stackViewHeight.constant = 100
+                self.viewIcon.cornerRadius = (self.iconHeight.constant - 5) / 2
+            } else {
+                self.tableView.scrollsToTop = true
+                self.bottomSpace.constant = 0
+                self.tableView.isScrollEnabled = true
+                self.lbDescription.alpha = 0
+                self.imageBell.alpha = 0
+                self.btnFollow.alpha = 0
+                self.lbIcon.transform = CGAffineTransform(scaleX: 0, y: 0)
+                self.iconHeight.constant = 0
+                self.stackViewHeight.constant = 50
+                self.viewIcon.cornerRadius = (self.iconHeight.constant - 5) / 2
+            }
+            self.view.layoutIfNeeded()
+        }
     }
     //重置卡稱資訊
     private func resetData(_ followCard: FollowCard) {
@@ -167,6 +224,14 @@ extension CardHomeVC {
             self.btnFollow.backgroundColor = #colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78)
         }
         self.imageBell.image = UIImage(systemName: self.imageBellNameList[notifyMode])
+    }
+    private func scrollHandler(_ yOffset: CGFloat) {
+        if yOffset <= 0 {
+            self.canBeDragged = true
+            self.tableView.isScrollEnabled = false
+        } else {
+            self.canBeDragged = false
+        }
     }
 }
 // MARK: - UITableViewDelegate
@@ -199,32 +264,12 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard self.mode == .other else { return }
-        let yOffset = scrollView.contentOffset.y
-        let scale = min(max(1.0 - yOffset / 125.0, 0.0), 1.0)
-        self.lbDescription.alpha = scale
-        self.bottomSpace.constant = 125 * scale
-        self.imageBell.alpha = scale
-        self.btnFollow.alpha = scale
-        self.lbIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
-        self.iconHeight.constant = 50 * scale
-        self.stackViewHeight.constant = 50 + 50 * scale
-        
-        self.viewIcon.cornerRadius = (self.iconHeight.constant - 5) / 2
-        self.view.layoutIfNeeded()
+        scrollHandler(scrollView.contentOffset.y)
     }
+    
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard self.mode == .other else { return }
-        let auto = self.bottomSpace.constant <= 50 && self.bottomSpace.constant != 0
-        
-        self.lbDescription.alpha = auto ? 0 : 1
-        self.bottomSpace.constant = auto ? 0 : 125
-        self.imageBell.alpha = auto ? 0 : 1
-        self.btnFollow.alpha = auto ? 0 : 1
-        self.lbIcon.transform = CGAffineTransform(scaleX: auto ? 0 : 1, y: auto ? 0 : 1)
-        self.iconHeight.constant = auto ? 0 : 50
-        self.stackViewHeight.constant = auto ? 150 : 100
-        self.viewIcon.cornerRadius = auto ? 0 : 45 / 2
-        self.view.layoutIfNeeded()
+        guard self.mode == .other && decelerate else { return }
+        scrollHandler(scrollView.contentOffset.y)
     }
 }
 // MARK: - SelectNotifyViewDelegate
@@ -232,5 +277,10 @@ extension CardHomeVC: SelectNotifyViewDelegate {
     func setNewValue(_ newNotifymode: Int) {
         self.notifyMode = newNotifymode
         self.imageBell.image = UIImage(systemName: self.imageBellNameList[newNotifymode])
+    }
+}
+extension CardHomeVC: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

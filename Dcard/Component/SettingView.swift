@@ -50,6 +50,7 @@ class SettingView: UIView {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CommonCell")
     }
 }
+// MARK: - UITableViewDelegate
 extension SettingView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.dataList.count
@@ -60,6 +61,7 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
         let data = self.dataList[row]
         cell.backgroundColor = .white
         cell.textLabel?.attributedText = NSAttributedString(string: (self.mode == .posterSetting ? data : (indexPath.row == 0 ? data + "B\(floor)": data)), attributes: [.font : UIFont.systemFont(ofSize: 12), .foregroundColor: UIColor.black])
+        cell.selectionStyle = .none
         if self.mode == .commentSetting {
             cell.imageView?.image = nil
         } else {
