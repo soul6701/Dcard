@@ -161,6 +161,7 @@
 		22F2111924CC5324003B1F1D /* ForumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22F2111724CC5324003B1F1D /* ForumCell.xib */; };
 		8470A43E253D845300B5E766 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8470A43D253D845300B5E766 /* WaitingView.swift */; };
 		8470A443253D847400B5E766 /* WaitingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8470A442253D847400B5E766 /* WaitingView.xib */; };
+		8479ADA62540293A007CE86D /* PostSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479ADA52540293A007CE86D /* PostSettingVC.swift */; };
 		848A6CA1253404BD00125138 /* SettingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6C9F253404BD00125138 /* SettingDetailVC.swift */; };
 		848A6CA2253404BD00125138 /* SettingDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A6CA0253404BD00125138 /* SettingDetailVC.xib */; };
 		848A6CD62534285A00125138 /* DbManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6CD52534285A00125138 /* DbManager.swift */; };
@@ -355,6 +356,7 @@
 		538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dcard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8470A43D253D845300B5E766 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
 		8470A442253D847400B5E766 /* WaitingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WaitingView.xib; sourceTree = "<group>"; };
+		8479ADA52540293A007CE86D /* PostSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSettingVC.swift; sourceTree = "<group>"; };
 		848A6C9F253404BD00125138 /* SettingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailVC.swift; sourceTree = "<group>"; };
 		848A6CA0253404BD00125138 /* SettingDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingDetailVC.xib; sourceTree = "<group>"; };
 		848A6CD52534285A00125138 /* DbManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbManager.swift; sourceTree = "<group>"; };
@@ -590,6 +592,7 @@
 				228F932E24C1FE4F00A7EBD9 /* Drawer.xib */,
 				22F2111624CC5324003B1F1D /* ForumCell.swift */,
 				22F2111724CC5324003B1F1D /* ForumCell.xib */,
+				8479ADA52540293A007CE86D /* PostSettingVC.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1048,6 +1051,7 @@
 				22CAAADD250E2F4800CDF95B /* ProfileManager.swift in Sources */,
 				22DCB55024EF9F7200EE2DDD /* Extension_UITextField.swift in Sources */,
 				848E16C5252EC2EE00FA4B4F /* SettingMainVC.swift in Sources */,
+				8479ADA62540293A007CE86D /* PostSettingVC.swift in Sources */,
 				223B21F024F2B6B900D60299 /* LoginVC.swift in Sources */,
 				22D7C39824EC2021006412BE /* MessageCell.swift in Sources */,
 				22F2111824CC5324003B1F1D /* ForumCell.swift in Sources */,

@@ -14,14 +14,6 @@ enum CardHomeVCMode {
 }
 
 class CardHomeVC: UIViewController {
-    
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: "CardHomeVC", bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     @IBOutlet weak var tbHeight: NSLayoutConstraint!
     @IBOutlet weak var viewFollow: UIView!

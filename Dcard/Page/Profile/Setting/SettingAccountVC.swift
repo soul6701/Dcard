@@ -121,7 +121,7 @@ class SettingAccountVC: UIViewController {
         view.addGestureRecognizer(tap)
         return view
     }()
-    lazy private var vcHint: UIViewController = {
+    lazy private var hintVC: UIViewController = {
         let vc = UIViewController()
         guard let view = vc.view else { return vc }
         view.layer.cornerRadius = 15
@@ -329,11 +329,11 @@ extension SettingAccountVC {
     }
     //跳出ID規則視窗
     @objc private func alert() {
-        self.vcHint.modalPresentationStyle = .popover
-        self.vcHint.preferredContentSize = CGSize(width: self.view.bounds.width - 40, height: self.view.bounds.height / 2)
-        self.vcHint.popoverPresentationController?.delegate = self
-        self.vcHint.popoverPresentationController?.sourceView = self.btnHint
-        present(self.vcHint, animated: true, completion: nil)
+        self.hintVC.modalPresentationStyle = .popover
+        self.hintVC.preferredContentSize = CGSize(width: self.view.bounds.width - 40, height: self.view.bounds.height / 2)
+        self.hintVC.popoverPresentationController?.delegate = self
+        self.hintVC.popoverPresentationController?.sourceView = self.btnHint
+        present(self.hintVC, animated: true, completion: nil)
     }
     @objc private func close() {
         dismiss(animated: true, completion: nil)

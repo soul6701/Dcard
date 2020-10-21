@@ -74,7 +74,7 @@ class CommentCell: UITableViewCell {
         heart = !heart
     }
     @IBAction func onClickSetting(_ sender: UIButton) {
-        let point = btnSetting.convert(CGPoint.zero, to: view)
-        delegate?.showView(location: point,floor: comment.floor)
+        let point = self.btnSetting.convert(CGPoint.zero, to: self.view)
+        delegate?.showView(location: point,floor: self.comment.floor)
     }
 }
