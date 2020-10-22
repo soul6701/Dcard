@@ -23,4 +23,11 @@ public struct Card {
     public var birthday: String = ""
     public var love: String = ""
     public var fans: Int = 0
+    public var favariteCatolog: [FavariteCatolog] = {
+        var list = [FavariteCatolog]()
+        (0...20).forEach { (_) in
+            list.append(FavariteCatolog())
+        }
+        return list
+    }()
 }

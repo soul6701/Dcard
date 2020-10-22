@@ -39,7 +39,14 @@ struct CardPage {
         return self.storyboard.instantiateViewController(withIdentifier: "CardInfoVC") as! CardInfoVC
     }
 }
+struct HomePage {
+    let storyboard = UIStoryboard(name: "Home", bundle: nil)
+    var postVC: PostVC {
+        return self.storyboard.instantiateViewController(withIdentifier: "PostVC") as! PostVC
+    }
+}
 extension UIStoryboard {
     static let profile = ProfilePage()
     static let card = CardPage()
+    static let home = HomePage()
 }

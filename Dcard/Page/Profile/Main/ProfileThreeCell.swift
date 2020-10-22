@@ -76,34 +76,27 @@ class ProfileThreeCell: UITableViewCell {
     private var followIssueList = [FollowIssue]()
     private var followCardList = [FollowCard]()
     private var mail = [Mail]()
-    private var delegate: ProfileVCDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        self.selectionStyle = .none
         self.tableView.register(UINib(nibName: "ProfileThreeTbCell", bundle: nil), forCellReuseIdentifier: "ProfileThreeTbCell")
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
         self.tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
     }
-    func setDelegate(_ delegate: ProfileVCDelegate) {
-        self.delegate = delegate
-    }
     func setContent(isNew: Bool) {
         self.isNew = isNew
         self.tableView.reloadData()
     }
 }
-// MARK: - SubscribeViewModel
-extension ProfileThreeCell {
-    
-}
+// MARK: - UITableViewDelegate
 extension ProfileThreeCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        8
+        return 8
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileThreeTbCell", for: indexPath) as! ProfileThreeTbCell
         if let type = ProfileThreeCellType(rawValue: indexPath.row) {
@@ -117,6 +110,6 @@ extension ProfileThreeCell: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cellType = ProfileThreeCellType.init(rawValue: indexPath.row)!
-        self.delegate?.toNextPage(cellType)
+        ProfileManager.shared.toNextPage(next: cellType)
     }
 }

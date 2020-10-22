@@ -161,6 +161,8 @@
 		22F2111924CC5324003B1F1D /* ForumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22F2111724CC5324003B1F1D /* ForumCell.xib */; };
 		8470A43E253D845300B5E766 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8470A43D253D845300B5E766 /* WaitingView.swift */; };
 		8470A443253D847400B5E766 /* WaitingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8470A442253D847400B5E766 /* WaitingView.xib */; };
+		8472EADD254153DA00D448EA /* ProfilePostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472EADC254153DA00D448EA /* ProfilePostVC.swift */; };
+		8472EAE2254185DF00D448EA /* FavariteCatolog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472EAE1254185DE00D448EA /* FavariteCatolog.swift */; };
 		8479ADA62540293A007CE86D /* PostSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479ADA52540293A007CE86D /* PostSettingVC.swift */; };
 		848A6CA1253404BD00125138 /* SettingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6C9F253404BD00125138 /* SettingDetailVC.swift */; };
 		848A6CA2253404BD00125138 /* SettingDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A6CA0253404BD00125138 /* SettingDetailVC.xib */; };
@@ -356,6 +358,8 @@
 		538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dcard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8470A43D253D845300B5E766 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
 		8470A442253D847400B5E766 /* WaitingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WaitingView.xib; sourceTree = "<group>"; };
+		8472EADC254153DA00D448EA /* ProfilePostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePostVC.swift; sourceTree = "<group>"; };
+		8472EAE1254185DE00D448EA /* FavariteCatolog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavariteCatolog.swift; sourceTree = "<group>"; };
 		8479ADA52540293A007CE86D /* PostSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSettingVC.swift; sourceTree = "<group>"; };
 		848A6C9F253404BD00125138 /* SettingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailVC.swift; sourceTree = "<group>"; };
 		848A6CA0253404BD00125138 /* SettingDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingDetailVC.xib; sourceTree = "<group>"; };
@@ -540,6 +544,7 @@
 				22788AF12503A87600E87F7F /* UserConfig.swift */,
 				22CAAAD6250DE31600CDF95B /* ProfileCellModel.swift */,
 				848A6CDF25342B9600125138 /* Preference.swift */,
+				8472EAE1254185DE00D448EA /* FavariteCatolog.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -768,6 +773,7 @@
 				22CAAACD250D267600CDF95B /* ProfileTwoCell.xib */,
 				22CAAAD2250D2EF100CDF95B /* ProfileThreeCell.swift */,
 				22CAAAD3250D2EF100CDF95B /* ProfileThreeCell.xib */,
+				8472EADC254153DA00D448EA /* ProfilePostVC.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -1072,6 +1078,7 @@
 				220D16E824F4F5B5007B578E /* SetSexVC.swift in Sources */,
 				22788AFB2503F82A00E87F7F /* CardInfoTitleCell.swift in Sources */,
 				221A47D42511AD1600DE1301 /* SelectNotifyView.swift in Sources */,
+				8472EADD254153DA00D448EA /* ProfilePostVC.swift in Sources */,
 				227FD592249F43CC00BC185C /* APIInfo.swift in Sources */,
 				22EDC723251351A70021B435 /* MailCell.swift in Sources */,
 				226583D224F8051B00314134 /* CompleteRegisterVC.swift in Sources */,
@@ -1140,6 +1147,7 @@
 				22433D3824EA2AEC00E8D79D /* MemoPageCell.swift in Sources */,
 				22718892250F858400AAA166 /* FollowIssueCell.swift in Sources */,
 				2260DAA424F38F8400FB9E2B /* CreateAccountVC.swift in Sources */,
+				8472EAE2254185DF00D448EA /* FavariteCatolog.swift in Sources */,
 				848E16D5252ED10C00FA4B4F /* FeedbackCell.swift in Sources */,
 				22EFC6A424F95638003CD570 /* LoginVM.swift in Sources */,
 				221A47D82512160000DE1301 /* Extension_UIAlertAction.swift in Sources */,

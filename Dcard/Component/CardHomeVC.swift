@@ -18,21 +18,22 @@ class CardHomeVC: UIViewController {
     @IBOutlet weak var tbHeight: NSLayoutConstraint!
     @IBOutlet weak var viewFollow: UIView!
     @IBOutlet weak var bottomSpace: NSLayoutConstraint!
-    @IBOutlet weak var viewIcon: customView!
+    @IBOutlet weak var stackViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var iconHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var viewProfileInfo: UIView!
     @IBOutlet weak var lbID: UILabel!
     @IBOutlet weak var lbName: UILabel!
     @IBOutlet weak var lbIcon: UILabel!
     @IBOutlet weak var lbDescription: UILabel!
-    @IBOutlet weak var stackViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var iconHeight: NSLayoutConstraint!
     @IBOutlet weak var viewBell: UIView!
-    @IBOutlet weak var viewProfileInfo: UIView!
-    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var imageBell: UIImageView!
     @IBOutlet weak var btnFollow: customButton!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var btnEdit: UIButton!
+    @IBOutlet weak var btnShare: UIButton!
+    @IBOutlet weak var lbFollowing: UILabel!
     
-    private var dragging = false
-    private var oldY: CGFloat = 0
     private var imageBellNameList = ["bell.circle.fill", "bell.fill", "bell.slash.fill"]
     private var followCard: FollowCard!
     private var myPostList = ProfileManager.shared.myPostList
@@ -40,19 +41,20 @@ class CardHomeVC: UIViewController {
     private var notifyMode = 0
     private var mode: CardHomeVCMode = .user
     private var canBeDragged = false
+    private var selectedPost = Post()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
         ToolbarView.shared.show(false)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         if self.mode == .user {
             self.followCard = FollowCard(card: ModelSingleton.shared.userConfig.user.card)
-            resetData(self.followCard)
         }
+        resetData(self.followCard)
     }
     @IBAction func didClickBtnCancelFollow(_ sender: UIButton) {
         if self.isFollowing {
@@ -96,61 +98,64 @@ class CardHomeVC: UIViewController {
         }
     }
     @IBAction func didClickShare(_ sender: UIButton) {
-        let alertSheet = UIAlertController(title: nil, message: "分享", preferredStyle: .actionSheet)
-        let actionShare = UIAlertAction(title: "分享我的公開頁面", style: .default) { (action) in
-            let vc = UIActivityViewController(activityItems: [self.followCard.card.name], applicationActivities: nil)
-            vc.completionWithItemsHandler = { (_, completed, _, error) in
-                if let error = error {
-                    ProfileManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-                }
-                if completed {
-                    ProfileManager.shared.showOKView(mode: .shareCardInfo, handler: nil)
-                }
+        let vc = UIActivityViewController(activityItems: [self.followCard.card.name], applicationActivities: nil)
+        vc.completionWithItemsHandler = { (_, completed, _, error) in
+            if let error = error {
+                ProfileManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
             }
+            if completed {
+                ProfileManager.shared.showOKView(mode: .shareCardInfo, handler: nil)
+            }
+        }
+        if mode == .user {
+            let alertSheet = UIAlertController(title: nil, message: "分享", preferredStyle: .actionSheet)
+            let actionShare = UIAlertAction(title: "分享我的公開頁面", style: .default) { (action) in
+                self.present(vc, animated: true, completion: nil)
+            }
+            let aciontCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+            alertSheet.addAction(actionShare)
+            alertSheet.addAction(aciontCancel)
+            self.present(alertSheet, animated: true, completion: nil)
+        } else {
             self.present(vc, animated: true, completion: nil)
         }
-        let aciontCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-        alertSheet.addAction(actionShare)
-        alertSheet.addAction(aciontCancel)
-        self.present(alertSheet, animated: true, completion: nil)
     }
     
-    func setContent(followCard: FollowCard = FollowCard(card: ModelSingleton.shared.userConfig.user.card), mode: CardHomeVCMode) {
-        self.followCard = followCard
+    func setContent(followCard: FollowCard? = nil, mode: CardHomeVCMode) {
+        self.followCard = followCard == nil ? FollowCard(card: ModelSingleton.shared.userConfig.user.card) : followCard
         self.mode = mode
     }
 }
 // MARK: - SetupUI
 extension CardHomeVC {
     private func initView() {
-        confiTableview()
-        
-        if self.mode == .other {
-            let tap = UITapGestureRecognizer(target: self, action: #selector(didClickBell))
-            self.viewBell.addGestureRecognizer(tap)
-        }
+        self.lbIcon.layer.cornerRadius = 45 / 2
         self.viewFollow.isHidden = self.mode == .user
         self.bottomSpace.constant = self.mode == .user ? 0 : 100
         self.tbHeight.constant = self.mode == .user ? -175 : -75
         
         if self.mode == .other {
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(move))
+            let tap = UITapGestureRecognizer(target: self, action: #selector(didClickBell))
+            self.viewBell.addGestureRecognizer(tap)
+            let pan = UIPanGestureRecognizer(target: self, action: #selector(didPanArticle))
             pan.delegate = self
+            pan.cancelsTouchesInView = false
+            pan.delaysTouchesBegan = true
             self.tableView.addGestureRecognizer(pan)
             self.tableView.isScrollEnabled = false
+            self.btnEdit.isHidden = true
         }
-        resetData(self.followCard)
-    }
-    private func confiTableview() {
         self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
     }
 }
 // MARK: - Private Func
 extension CardHomeVC {
+    //彈出通知選項視窗
     @objc private func didClickBell() {
         ProfileManager.shared.showBellModeView(delegate: self, notifyMode: self.followCard.notifyMode)
     }
-    @objc private func move(_ ges: UIPanGestureRecognizer) {
+    //移動文章表格
+    @objc private func didPanArticle(_ ges: UIPanGestureRecognizer) {
         if ges.state == .began || ges.state == .changed {
             let translation = ges.translation(in: ges.view)
             if self.bottomSpace.constant > 0 || self.canBeDragged {
@@ -161,16 +166,17 @@ extension CardHomeVC {
                 self.bottomSpace.constant = 0
             }
             self.bottomSpace.constant = max(self.bottomSpace.constant, 0)
-            let scale = self.bottomSpace.constant / 100
-            if scale <= 1 {
-                self.lbDescription.alpha = scale
-                self.imageBell.alpha = scale
-                self.btnFollow.alpha = scale
-                self.lbIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
-                self.iconHeight.constant = 50 * scale
-                self.stackViewHeight.constant = 50 + 50 * scale
-                self.viewIcon.cornerRadius = (self.iconHeight.constant - 5) / 2
-            }
+            let scale = max(min(self.bottomSpace.constant, 100) / 100, 0)
+            let _scale = max(min(self.bottomSpace.constant, 50) / 50, 0)
+            self.lbDescription.alpha = scale
+            self.imageBell.alpha = scale
+            self.btnFollow.alpha = scale
+            self.lbIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
+            self.iconHeight.constant = 50 * scale
+            self.stackViewHeight.constant = 50 + 50 * scale
+            self.lbIcon.layer.cornerRadius = (self.iconHeight.constant - 5) / 2
+            self.btnShare.isHidden = scale < 1
+            self.lbFollowing.alpha = (1 - _scale)
             self.view.layoutIfNeeded()
             ges.setTranslation(CGPoint.zero, in: ges.view)
         }
@@ -181,10 +187,12 @@ extension CardHomeVC {
                 self.lbDescription.alpha = 1
                 self.imageBell.alpha = 1
                 self.btnFollow.alpha = 1
+                self.btnShare.isHidden = false
+                self.lbFollowing.alpha = 0
                 self.lbIcon.transform = CGAffineTransform(scaleX: 1, y: 1)
                 self.iconHeight.constant = 50
                 self.stackViewHeight.constant = 100
-                self.viewIcon.cornerRadius = (self.iconHeight.constant - 5) / 2
+                self.lbIcon.layer.cornerRadius = (self.iconHeight.constant - 5) / 2
             } else {
                 self.tableView.scrollsToTop = true
                 self.bottomSpace.constant = 0
@@ -192,10 +200,12 @@ extension CardHomeVC {
                 self.lbDescription.alpha = 0
                 self.imageBell.alpha = 0
                 self.btnFollow.alpha = 0
+                self.btnShare.isHidden = true
+                self.lbFollowing.alpha = 1
                 self.lbIcon.transform = CGAffineTransform(scaleX: 0, y: 0)
                 self.iconHeight.constant = 0
                 self.stackViewHeight.constant = 50
-                self.viewIcon.cornerRadius = (self.iconHeight.constant - 5) / 2
+                self.lbIcon.layer.cornerRadius = (self.iconHeight.constant - 5) / 2
             }
             self.view.layoutIfNeeded()
         }
@@ -207,6 +217,7 @@ extension CardHomeVC {
         self.lbDescription.text = "\(followCard.card.post.count) 篇文章 | \(followCard.card.fans) 位粉絲"
         self.lbID.text = "@\(followCard.card.id)"
         self.lbName.text = followCard.card.name
+        self.lbIcon.backgroundColor = followCard.card.sex == "M" ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1) : #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
         self.lbIcon.text = String(followCard.card.id.first!).uppercased()
         resetBellState(self.isFollowing, notifyMode: self.notifyMode)
     }
@@ -214,9 +225,9 @@ extension CardHomeVC {
     private func resetBellState(_ isFollowing: Bool, notifyMode: Int) {
         if isFollowing {
             self.viewBell.isHidden = false
-            self.btnFollow.setTitleColor(.darkText, for: .normal)
+            self.btnFollow.setTitleColor(.darkGray, for: .normal)
             self.btnFollow.setTitle("追蹤中", for: .normal)
-            self.btnFollow.backgroundColor = .lightGray
+            self.btnFollow.backgroundColor = .systemGray5
         } else {
             self.viewBell.isHidden = true
             self.btnFollow.setTitleColor(.white, for: .normal)
@@ -225,6 +236,7 @@ extension CardHomeVC {
         }
         self.imageBell.image = UIImage(systemName: self.imageBellNameList[notifyMode])
     }
+    //TableView滾輪動作
     private func scrollHandler(_ yOffset: CGFloat) {
         if yOffset <= 0 {
             self.canBeDragged = true
@@ -261,6 +273,17 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.section == 0 ? 120 : 180
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = indexPath.row
+        let vc = UIStoryboard.home.postVC
+        self.selectedPost = myPostList[row]
+        vc.setContent(post: self.selectedPost, commentList: [Comment()])
+        vc.navigationItem.title = self.selectedPost.title
+        vc.modalPresentationStyle = .formSheet
+        self.navigationController?.pushViewController(vc, animated: true) {
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+        }
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard self.mode == .other else { return }

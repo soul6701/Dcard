@@ -85,8 +85,8 @@ class SelectNotifyView: UIView {
     func setContent(notifymode: Int) {
         self.currentNotifymode = notifymode
         for i in 0..<3 {
-            self.views[i].tintColor = i == notifymode ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.8982769692) : .darkGray
-            self.lbs[i].textColor = i == notifymode ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.8982769692) : .darkGray
+            self.views[i].tintColor = i == notifymode ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.8982769692) : .systemGray
+            self.lbs[i].textColor = i == notifymode ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.8982769692) : .systemGray
             self.imageCheckMark[i].isHidden = i != notifymode
         }
     }
@@ -96,8 +96,8 @@ extension SelectNotifyView {
     private func subsribe() {
         self.tapGesList.forEach { (ges) in
             ges.rx.event.bind { (ges) in
-                self.lbs.forEach({ $0.textColor = .darkGray })
-                self.views.forEach({ $0.tintColor = .darkGray })
+                self.lbs.forEach({ $0.textColor = .systemGray })
+                self.views.forEach({ $0.tintColor = .systemGray })
                 self.imageCheckMark.forEach({ $0.isHidden = true })
                 if let index = self.tapGesList.firstIndex(of: ges) {
                     self.lbs[index].textColor = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.8982769692)

@@ -64,25 +64,12 @@ extension FavoriteVC {
         self.collectionView.collectionViewLayout = layout
     }
     @objc private func addList() {
-        let alertController = UIAlertController(title: "建立收藏分類", message: "為你的收藏分類命名", preferredStyle: .alert)
-        alertController.addTextField { (tf) in
-            self.tfAddList = tf
-            tf.becomeFirstResponder()
-        }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel) { (action) in
+        UIAlertController.showNewFavoriteCatolog(self, cancelHandler: {
             self.dismiss(animated: true, completion: nil)
-        }
-        let OKAction = UIAlertAction(title: "建立", style: .default) { (action) in
-            self.favoriteList.append(Favorite(listName: self.tfAddList?.text ?? "", post: []))
+        }, OKHandler: { (text) in
+            self.favoriteList.append(Favorite(listName: text, post: []))
             self.collectionView.reloadData()
-        }
-        
-        alertController.addAction(cancelAction)
-        alertController.addAction(OKAction)
-        self.present(alertController, animated: true)
-        
-        let OKActionValid = self.tfAddList?.rx.text.orEmpty.map({ return !$0.isEmpty })
-        OKActionValid?.bind(to: OKAction.rx.isEnabled).disposed(by: self.disposeBag)
+        }, disposeBag: self.disposeBag)
     }
 }
 // MARK: - UICollectionViewDelegate

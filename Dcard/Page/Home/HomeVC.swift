@@ -34,6 +34,7 @@ class HomeVC: UIViewController {
     private var logoView = [UIImageView]()
     private var user: User?
     private var exitTime: Date?
+    private var selectedPost = Post()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,10 +76,10 @@ extension HomeVC {
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: disposeBag)
         
-        viewModel.commentSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (comments, index) in
-            let vc = self.storyboard?.instantiateViewController(identifier: "PostVC") as! PostVC
-            vc.setContent(post: self.showList[index], commentList: comments)
-            vc.navigationItem.title = self.showList[index].title
+        viewModel.commentSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (comments) in
+            let vc = UIStoryboard.home.postVC
+            vc.setContent(post: self.selectedPost, commentList: comments)
+            vc.navigationItem.title = self.selectedPost.title
             vc.modalPresentationStyle = .formSheet
             self.navigationController?.pushViewController(vc, animated: true)
         }, onError: { error in
@@ -208,7 +209,9 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
         return 100
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.getComment(list: self.showList, index: indexPath.row)
+        let row = indexPath.row
+        self.selectedPost = self.showList[row]
+        viewModel.getComment(post: self.selectedPost)
     }
 }
 // MARK: - DrawerDelegate

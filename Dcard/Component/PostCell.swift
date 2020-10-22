@@ -30,10 +30,9 @@ class PostCell: UITableViewCell {
         self.userImageView.layer.cornerRadius = 5
         self.selectionStyle = .none
     }
-    
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        self.backgroundColor = highlighted ? #colorLiteral(red: 0.5818830132, green: 0.2156915367, blue: 1, alpha: 0.4206442637) : .white
+        self.backgroundColor = highlighted ? #colorLiteral(red: 0.9995340705, green: 0.988355577, blue: 0.4726552367, alpha: 0.8842572774) : nil
     }
     func setContent(post: Post, mode: PostCellMode) {
         self.btnEdit.isHidden = mode == .home
@@ -52,7 +51,6 @@ class PostCell: UITableViewCell {
         let letters = NSCharacterSet.letters
         
         self.lbForumAndSchool.text = post.forumName + " " + post.school + (post.department.rangeOfCharacter(from: letters) != nil && !post.withNickname ? " " + post.department : "")
-        
         
         self.LikeAndcommentCount.text = (post.likeCount != "0" ? "❤️" : "🤍") + "\(post.likeCount) 回應: \(post.commentCount)"
         self.lbTitle.text = post.title

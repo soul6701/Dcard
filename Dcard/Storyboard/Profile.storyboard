@@ -13,22 +13,26 @@
         <!--ProfileVC-->
         <scene sceneID="Lx3-63-5xx">
             <objects>
-                <viewController id="PPm-vt-N4L" customClass="ProfileVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="PPm-vt-N4L" customClass="ProfileVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J4s-nm-LoJ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pty-eG-brE">
-                                <rect key="frame" x="10" y="44" width="394" height="808"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="803"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="PPm-vt-N4L" id="ZBD-zj-dKD"/>
+                                    <outlet property="delegate" destination="PPm-vt-N4L" id="217-aS-Hso"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="t2z-0a-IWk"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="t2z-0a-IWk" firstAttribute="bottom" secondItem="pty-eG-brE" secondAttribute="bottom" constant="10" id="Y8g-Zo-TBX"/>
+                            <constraint firstItem="t2z-0a-IWk" firstAttribute="bottom" secondItem="pty-eG-brE" secondAttribute="bottom" constant="15" id="Y8g-Zo-TBX"/>
                             <constraint firstItem="pty-eG-brE" firstAttribute="top" secondItem="t2z-0a-IWk" secondAttribute="top" id="enG-7g-1l4"/>
-                            <constraint firstItem="pty-eG-brE" firstAttribute="leading" secondItem="t2z-0a-IWk" secondAttribute="leading" constant="10" id="tnq-RI-42d"/>
-                            <constraint firstItem="t2z-0a-IWk" firstAttribute="trailing" secondItem="pty-eG-brE" secondAttribute="trailing" constant="10" id="udz-sn-168"/>
+                            <constraint firstItem="pty-eG-brE" firstAttribute="leading" secondItem="t2z-0a-IWk" secondAttribute="leading" id="tnq-RI-42d"/>
+                            <constraint firstItem="t2z-0a-IWk" firstAttribute="trailing" secondItem="pty-eG-brE" secondAttribute="trailing" id="udz-sn-168"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="scR-bz-T4Z"/>
@@ -44,7 +48,7 @@
         <!--FavoriteVC-->
         <scene sceneID="kXy-ms-Bnn">
             <objects>
-                <viewController storyboardIdentifier="FavoriteVC" id="ifw-3M-H10" customClass="FavoriteVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FavoriteVC" id="ifw-3M-H10" customClass="FavoriteVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WFZ-hu-Nit">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -94,7 +98,7 @@
         <!--Follow IssueVC-->
         <scene sceneID="DYX-qt-Cq9">
             <objects>
-                <viewController storyboardIdentifier="FollowIssueVC" id="Pac-Q3-bhu" customClass="FollowIssueVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FollowIssueVC" id="Pac-Q3-bhu" customClass="FollowIssueVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3U8-QG-ShR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -128,7 +132,7 @@
         <!--Follow CardVC-->
         <scene sceneID="MHe-ox-cA6">
             <objects>
-                <viewController storyboardIdentifier="FollowCardVC" id="BDG-7k-2K6" customClass="FollowCardVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FollowCardVC" id="BDG-7k-2K6" customClass="FollowCardVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qSh-1a-kRK">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -162,7 +166,7 @@
         <!--ArticalVC-->
         <scene sceneID="H6M-n8-lLk">
             <objects>
-                <viewController storyboardIdentifier="ArticalVC" id="myz-Zx-TYJ" customClass="ArticalVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ArticalVC" id="myz-Zx-TYJ" customClass="ArticalVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n5F-2c-g2V">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -196,7 +200,7 @@
         <!--MailVC-->
         <scene sceneID="uNR-Vn-qek">
             <objects>
-                <viewController storyboardIdentifier="MailVC" id="wgX-qg-zyi" customClass="MailVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MailVC" id="wgX-qg-zyi" customClass="MailVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3tR-4M-Eqb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -230,7 +234,7 @@
         <!--Setting MainVC-->
         <scene sceneID="Slk-Q0-SgX">
             <objects>
-                <viewController storyboardIdentifier="SettingMainVC" id="rcd-TQ-mC3" customClass="SettingMainVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingMainVC" id="rcd-TQ-mC3" customClass="SettingMainVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Zbs-Ue-BbG">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -262,10 +266,25 @@
             </objects>
             <point key="canvasLocation" x="3775" y="45"/>
         </scene>
+        <!--Profile PostVC-->
+        <scene sceneID="Zeu-J7-BIV">
+            <objects>
+                <viewController id="Uoo-TJ-x80" customClass="ProfilePostVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="t19-81-PlF">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="o2N-Ll-f8k"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UaQ-Uo-ayW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4439" y="48"/>
+        </scene>
         <!--Mail AllVC-->
         <scene sceneID="cdN-vF-XHj">
             <objects>
-                <viewController storyboardIdentifier="MailAllVC" id="aNw-Wa-Oub" customClass="MailAllVC" customModule="ChiaCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MailAllVC" id="aNw-Wa-Oub" customClass="MailAllVC" customModule="ChaiCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bwR-Ax-wF2">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -114,7 +114,6 @@ class PostVC: UIViewController {
             self.btnSetting.imageView?.tintColor = setting ? .systemBlue : .systemGray2
         }
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -140,9 +139,13 @@ class PostVC: UIViewController {
     }
     @IBAction func didClickBtnKeep(_ sender: UIButton) {
         self.keep = !self.keep
+        let vc = PostSettingVC()
+        vc.setContent(mode: .keep)
+        present(vc, animated: true, completion: nil)
     }
     @IBAction func didClickBtnSetting(_ sender: UIButton) {
-        let vc = PostSettingVC(host: self.setting)
+        let vc = PostSettingVC()
+        vc.setContent(host: self.setting, mode: .setting)
         present(vc, animated: true, completion: nil)
     }
     func setContent(post: Post, commentList: [Comment]) {

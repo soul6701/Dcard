@@ -18,8 +18,8 @@ protocol HomeVMInterface {
     var postsSubject: PublishSubject<[Post]> { get }
     func getPosts(alias: String)
     //取得留言
-    var commentSubject: PublishSubject<([Comment], Int)> { get }
-    func getComment(list: [Post], index: Int)
+    var commentSubject: PublishSubject<([Comment])> { get }
+    func getComment(post: Post)
     //取得話題
     var forumsSubject: PublishSubject<[Forum]> { get }
     func getForums()
@@ -29,7 +29,7 @@ protocol HomeVMInterface {
 }
 class HomeVM {
     private(set) var recentPostSubject = PublishSubject<[Post]>()
-    private(set) var commentSubject = PublishSubject<([Comment], Int)>()
+    private(set) var commentSubject = PublishSubject<([Comment])>()
     private(set) var forumsSubject = PublishSubject<[Forum]>()
     private(set) var postsSubject = PublishSubject<[Post]>()
     private(set) var userDataSubject = PublishSubject<User>()
@@ -52,9 +52,9 @@ extension HomeVM: HomeVMInterface {
             self.recentPostSubject.onError(error)
             }).disposed(by: disposeBag)
     }
-    func getComment(list: [Post], index: Int) {
-        self.postRepository.getComment(id: list[index].id).subscribe(onNext: { comments in
-            self.commentSubject.onNext((comments, index))
+    func getComment(post: Post) {
+        self.postRepository.getComment(id: post.id).subscribe(onNext: { comments in
+            self.commentSubject.onNext((comments))
         }, onError: { error in
         self.commentSubject.onError(error)
             }).disposed(by: disposeBag)

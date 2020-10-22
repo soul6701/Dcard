@@ -72,7 +72,6 @@
                         <state key="normal" image="ellipsis" catalog="system"/>
                     </button>
                 </subviews>
-                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 <constraints>
                     <constraint firstItem="aAX-Yn-HHW" firstAttribute="leading" secondItem="vgf-vp-4mF" secondAttribute="leading" id="3Zv-qk-EVd"/>
                     <constraint firstItem="glY-5V-Px0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eeu-vG-nQc" secondAttribute="trailing" constant="10" id="4ku-zF-pht"/>
@@ -116,9 +115,6 @@
     </objects>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
