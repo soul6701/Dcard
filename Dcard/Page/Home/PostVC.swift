@@ -74,7 +74,7 @@ class PostVC: UIViewController {
             self.viewOption.isHidden = self.willbeOpened
             self.viewSeparator.isHidden = self.willbeOpened
             self.lbSchool.attributedText = self.willbeOpened ? afterString : beforeString
-            _ = willbeOpened ? self.tvComment.becomeFirstResponder() : self.view.endEditing(true)
+            _ = self.willbeOpened ? self.tvComment.becomeFirstResponder() : self.view.endEditing(true)
         }
     }
     private var posterMode: PosterMode = .school {
@@ -96,22 +96,16 @@ class PostVC: UIViewController {
     private var schoolList: [String] {
         return [self.user.card.school, self.user.card.department, self.user.card.name]
     }
-    private var schoolIndex = 0
     private var heart = false {
         didSet {
-            self.btnHeart.setImage(UIImage(systemName: heart ? "heart.fill" : "heart"), for: .normal)
-            self.btnHeart.imageView?.tintColor = heart ? .systemRed : .systemGray2
+            self.btnHeart.setImage(UIImage(systemName: self.heart ? "heart.fill" : "heart"), for: .normal)
+            self.btnHeart.imageView?.tintColor = self.heart ? .systemRed : .systemGray2
         }
     }
     private var keep = false {
         didSet {
-            self.btnKeep.setImage(UIImage(systemName: keep ? "folder.fill" : "folder"), for: .normal)
-            self.btnKeep.imageView?.tintColor = keep ? .systemBlue : .systemGray2
-        }
-    }
-    private var setting = false {
-        didSet {
-            self.btnSetting.imageView?.tintColor = setting ? .systemBlue : .systemGray2
+            self.btnKeep.setImage(UIImage(systemName: self.keep ? "folder.fill" : "folder"), for: .normal)
+            self.btnKeep.imageView?.tintColor = self.keep ? .systemBlue : .systemGray2
         }
     }
     override func viewDidLoad() {
@@ -145,7 +139,7 @@ class PostVC: UIViewController {
     }
     @IBAction func didClickBtnSetting(_ sender: UIButton) {
         let vc = PostSettingVC()
-        vc.setContent(host: self.setting, mode: .setting)
+        vc.setContent(host: self.post.host, mode: .setting)
         present(vc, animated: true, completion: nil)
     }
     func setContent(post: Post, commentList: [Comment]) {
@@ -160,7 +154,7 @@ extension PostVC {
         self.btnShowComment.isHidden = self.commentList.isEmpty
         self.heart = false
         self.keep = false
-        self.setting = Bool.random()
+        self.btnSetting.imageView?.tintColor = self.post.host ? .systemBlue : .systemGray2
         self.posterMode = .school
         confiTextFieldView()
         confiTableView()
@@ -196,6 +190,7 @@ extension PostVC {
         self.willbeOpened = false
     }
     @objc private func send() {
+        //沒任何留言隱藏開啟留言圖示，發出新留言則顯示
         if self.btnShowComment.isHidden {
             self.btnShowComment.isHidden = false
         }
@@ -210,7 +205,7 @@ extension PostVC {
             self.willbeOpened = true
         } else {
             IQKeyboardManager.shared.shouldResignOnTouchOutside = false
-            self.viewPosterSetting.setContent(mode: .posterSetting, floor: 0)
+            self.viewPosterSetting.setContent(mode: .posterSetting)
             self.viewPosterSetting.setDelegate(self)
             let location = self.imageViewAvator.convert(CGPoint(x: self.imageViewAvator.frame.maxX, y: self.imageViewAvator.frame.minY), to: self.view)
             self.viewPosterSetting.frame = CGRect(x: location.x + 10, y: location.y - 40, width: 200, height: 90)
@@ -222,7 +217,7 @@ extension PostVC {
 // MARK: - SubscribeRX
 extension PostVC {
     private func subscribe() {
-        let isValid = self.tvComment.rx.text.orEmpty.map { return $0.count > 0}
+        let isValid = self.tvComment.rx.text.orEmpty.map { return $0.count > 0 }
         isValid.subscribe { (result) in
             if result.element == true {
                 self.tvComment.addRightButtonOnKeyboardWithText("完成", target: self, action: #selector(self.send), titleText: nil)

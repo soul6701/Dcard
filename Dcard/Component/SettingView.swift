@@ -39,7 +39,7 @@ class SettingView: UIView {
         confiTableView()
         self.tableView.layer.cornerRadius = 20
     }
-    func setContent(mode: SettingViewMode, floor: Int) {
+    func setContent(mode: SettingViewMode, floor: Int = 0) {
         self.mode = mode
         self.floor = floor
     }
