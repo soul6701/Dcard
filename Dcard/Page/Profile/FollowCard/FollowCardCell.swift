@@ -55,7 +55,7 @@ class FollowCardCell: UITableViewCell
         self.lbName.text = name
         self.lbDescription.attributedText = combination
         self.viewNew.gradientBGEnable = isNew
-        self.viewID.backgroundColor = sex == "男性" ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1) : #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
+        self.viewID.backgroundColor = sex == "M" ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1) : #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
         self.imageBell.image = UIImage(systemName: self.imageBellNameList[notify])
     }
     func setDelegate(_ delegate: FollowCardVCDelegate) {

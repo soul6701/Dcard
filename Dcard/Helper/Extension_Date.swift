@@ -16,9 +16,10 @@ extension Date {
     static var calendar: Calendar {
         return Calendar(identifier: .gregorian)
     }
-    static func getCurrentDateString() -> String {
+    static func getCurrentDateString(_ containTime: Bool) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy/MM/dd"
+        dateFormatter.locale = Locale(identifier: "zh_Hant_TW")
+        dateFormatter.dateFormat = containTime ? "yyyy/MM/dd HH:mm" : "yyyy/MM/dd"
         let currentDateString = dateFormatter.string(from: Date())
         return currentDateString
     }

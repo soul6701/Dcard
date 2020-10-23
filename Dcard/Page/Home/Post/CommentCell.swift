@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol showSettingView {
+protocol showSettingViewDelegate {
     func showView(location: CGPoint, floor: Int)
 }
 class CommentCell: UITableViewCell {
@@ -23,7 +23,7 @@ class CommentCell: UITableViewCell {
     
     private var view: UIView!
     private var comment: Comment!
-    private var delegate: showSettingView?
+    private var delegate: showSettingViewDelegate?
     private var heart = false {
         didSet {
             if comment.likeCount <= 0 {
@@ -67,14 +67,14 @@ class CommentCell: UITableViewCell {
             photoView.image = comment.gender == "F" ? UIImage(named: ImageInfo.pikachu) : UIImage(named: ImageInfo.carbi)
         }
     }
-    func setDelegate(delegate: showSettingView?) {
+    func setDelegate(_ delegate: showSettingViewDelegate) {
         self.delegate = delegate
     }
     @IBAction func onClickHeart(_ sender: UIButton) {
         heart = !heart
     }
     @IBAction func onClickSetting(_ sender: UIButton) {
-        let point = btnSetting.convert(CGPoint.zero, to: view)
-        delegate?.showView(location: point,floor: comment.floor)
+        let point = self.btnSetting.convert(CGPoint.zero, to: self.view)
+        delegate?.showView(location: point,floor: self.comment.floor)
     }
 }

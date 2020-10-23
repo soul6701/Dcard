@@ -13,51 +13,33 @@ public struct MediaMeta {
     let normalizedUrl: String
 }
 public struct Post {
-    let id: String
-    let title: String
-    let excerpt: String
-    let createdAt: String
-    let commentCount: String
-    let likeCount: String
-    let forumName: String
-    let gender: String
-    let department: String
-    let anonymousSchool: Bool
-    let anonymousDepartment: Bool
-    let school: String
-    let withNickname: Bool
-    let mediaMeta: [MediaMeta]
-    
-    init(id: String, title: String, excerpt: String, createdAt: String, commentCount: String, likeCount: String, forumName: String, gender: String, school: String, mediaMeta: [MediaMeta], department: String, anonymousSchool: Bool, anonymousDepartment: Bool, withNickname: Bool) {
-        self.id = id
-        self.title = title
-        self.excerpt = excerpt
-        self.createdAt = createdAt
-        self.commentCount = commentCount
-        self.likeCount = likeCount
-        self.forumName = forumName
-        self.gender = gender
-        self.school = school
-        self.mediaMeta = mediaMeta
-        self.department = department
-        self.anonymousSchool = anonymousSchool
-        self.anonymousDepartment = anonymousDepartment
-        self.withNickname = withNickname
-    }
+    var id: String = ""
+    var title: String = ""
+    var excerpt: String = ""
+    var createdAt: String = ""
+    var commentCount: String = ""
+    var likeCount: String = ""
+    var forumName: String = ""
+    var gender: String = ""
+    var department: String = ""
+    var anonymousSchool: Bool = false
+    var anonymousDepartment: Bool = false
+    var school: String = ""
+    var withNickname: Bool = false
+    var mediaMeta: [MediaMeta] = []
+    var host: Bool = false
 }
 public struct Comment {
-    let id: String
-    let anonymous: Bool
-    let content: String
-    let createdAt: String
-    let floor: Int
-    let likeCount: Int
-    let gender: String
-    let department: String
-    let school: String
-    let withNickname: Bool
-    let host: Bool
-    let mediaMeta: [MediaMeta]
-    
-    
+    var id: String = ""
+    var anonymous: Bool = false
+    var content: String = ""
+    var createdAt: String = ""
+    var floor: Int = 0
+    var likeCount: Int = 0
+    var gender: String = ""
+    var department: String = ""
+    var school: String = ""
+    var withNickname: Bool = false
+    var host: Bool = false
+    var mediaMeta: [MediaMeta] = []
 }

@@ -169,11 +169,11 @@ extension SelectCountryVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 20).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -20).isActive = true
-        stackView.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
-        
+        stackView.snp.makeConstraints { (maker) in
+            maker.leading.equalToSuperview().offset(20)
+            maker.trailing.equalToSuperview().offset(-20)
+            maker.bottom.top.equalToSuperview()
+        }
         return cell
     }
     //自定義header

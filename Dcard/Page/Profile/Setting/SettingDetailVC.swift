@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum SettingDetailType {
+enum SettingDetailMode {
     case hideBoard
     case notifySetting
     case showTheme
@@ -19,7 +19,7 @@ enum SettingDetailType {
         case .notifySetting:
             return ["關閉", "標註我的回應", "所有回應", "我的文章獲得心情", "我的回應獲得喜歡", "我的卡稱受到多人追蹤", "卡友來信"]
         case .showTheme:
-            return ["根據系統設定", "深色模式", "淺色模式"]
+            return ["根據系統設定", "淺色模式", "深色模式"]
         case .autoPlayVedio:
             return ["開啟", "關閉", "僅 Wi-Fi"]
         default:
@@ -43,13 +43,13 @@ class SettingDetailVC: UIViewController {
 
     @IBOutlet weak var viewNotHideAnyBoard: UIView!
     @IBOutlet weak var tableView: UITableView!
-    private var type: SettingDetailType?
     private var navigationItemTitle = ""
+    private var mode: SettingDetailMode = .autoPlayVedio
     private var sectionList = [String]()
     private var rowList = [String]()
     private var preference = Preference()
     private var state: Int {
-        switch self.type {
+        switch self.mode {
         case .notifySetting:
             return self.preference.newReply
         case .autoPlayVedio:
@@ -65,22 +65,20 @@ class SettingDetailVC: UIViewController {
         super.viewDidLoad()
         initView()
     }
-    func setContent(type: SettingDetailType, title: String) {
-        self.type = type
-        self.navigationItemTitle = title
+    func setContent(mode: SettingDetailMode, title: String) {
+        self.mode = mode
     }
 }
 // MARK: - SetupUI
 extension SettingDetailVC {
     private func initView() {
-        guard let type = type else { return }
-        self.preference = DbManager.shared.getPreference()
-        self.sectionList = type.sectionList
-        self.rowList = type.rowList
+        self.preference = ModelSingleton.shared.preference
+        self.sectionList = self.mode.sectionList
+        self.rowList = self.mode.rowList
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        self.tableView.isHidden = type == .hideBoard
+        self.tableView.isHidden = self.mode == .hideBoard
         self.tableView.showsVerticalScrollIndicator = false
-        self.viewNotHideAnyBoard.isHidden = type != .hideBoard
+        self.viewNotHideAnyBoard.isHidden = self.mode != .hideBoard
         self.navigationItem.title = self.navigationItemTitle
     }
 }
@@ -108,7 +106,7 @@ extension SettingDetailVC: UITableViewDelegate, UITableViewDataSource {
         return self.sectionList.count
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch self.type {
+        switch self.mode {
         case .notifySetting:
             return section == 0 ? 3 : (section == 1 ? 3 : 1)
         default:
@@ -118,7 +116,7 @@ extension SettingDetailVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         let row = indexPath.row
-        switch self.type {
+        switch self.mode {
         case .hideBoard:
             return UITableViewCell()
         case .notifySetting:
@@ -160,13 +158,16 @@ extension SettingDetailVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 0 else { return }
-        switch self.type {
+        let row = indexPath.row
+        switch self.mode {
         case .showTheme:
-            preference.showTheme = indexPath.row
+            preference.showTheme = row
+            let scene = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+            scene?.window?.overrideUserInterfaceStyle = UIUserInterfaceStyle(rawValue: row) ?? .unspecified
         case .autoPlayVedio:
-            preference.autoPlayVedio = indexPath.row
+            preference.autoPlayVedio = row
         case .notifySetting:
-            preference.newReply = indexPath.row
+            preference.newReply = row
         default:
             break
         }

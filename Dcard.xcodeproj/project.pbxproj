@@ -159,6 +159,11 @@
 		22F2111524CC3535003B1F1D /* Extension_UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2111424CC3535003B1F1D /* Extension_UIView.swift */; };
 		22F2111824CC5324003B1F1D /* ForumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2111624CC5324003B1F1D /* ForumCell.swift */; };
 		22F2111924CC5324003B1F1D /* ForumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22F2111724CC5324003B1F1D /* ForumCell.xib */; };
+		8470A43E253D845300B5E766 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8470A43D253D845300B5E766 /* WaitingView.swift */; };
+		8470A443253D847400B5E766 /* WaitingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8470A442253D847400B5E766 /* WaitingView.xib */; };
+		8472EADD254153DA00D448EA /* ProfilePostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472EADC254153DA00D448EA /* ProfilePostVC.swift */; };
+		8472EAE2254185DF00D448EA /* FavariteCatolog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472EAE1254185DE00D448EA /* FavariteCatolog.swift */; };
+		8479ADA62540293A007CE86D /* PostSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479ADA52540293A007CE86D /* PostSettingVC.swift */; };
 		848A6CA1253404BD00125138 /* SettingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6C9F253404BD00125138 /* SettingDetailVC.swift */; };
 		848A6CA2253404BD00125138 /* SettingDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A6CA0253404BD00125138 /* SettingDetailVC.xib */; };
 		848A6CD62534285A00125138 /* DbManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A6CD52534285A00125138 /* DbManager.swift */; };
@@ -215,7 +220,7 @@
 		221A47D72512160000DE1301 /* Extension_UIAlertAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_UIAlertAction.swift; sourceTree = "<group>"; };
 		221A47D92512218A00DE1301 /* CardHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHomeVC.swift; sourceTree = "<group>"; };
 		221A47DA2512218A00DE1301 /* CardHomeVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardHomeVC.xib; sourceTree = "<group>"; };
-		221ADAF02499F0A100C25BD1 /* ChiaCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChiaCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		221ADAF02499F0A100C25BD1 /* ChaiCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChaiCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		221ADAF32499F0A100C25BD1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		221ADAF52499F0A100C25BD1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		221ADAF72499F0A100C25BD1 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -351,6 +356,11 @@
 		22F2111624CC5324003B1F1D /* ForumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumCell.swift; sourceTree = "<group>"; };
 		22F2111724CC5324003B1F1D /* ForumCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ForumCell.xib; sourceTree = "<group>"; };
 		538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Dcard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8470A43D253D845300B5E766 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
+		8470A442253D847400B5E766 /* WaitingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WaitingView.xib; sourceTree = "<group>"; };
+		8472EADC254153DA00D448EA /* ProfilePostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePostVC.swift; sourceTree = "<group>"; };
+		8472EAE1254185DE00D448EA /* FavariteCatolog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavariteCatolog.swift; sourceTree = "<group>"; };
+		8479ADA52540293A007CE86D /* PostSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSettingVC.swift; sourceTree = "<group>"; };
 		848A6C9F253404BD00125138 /* SettingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDetailVC.swift; sourceTree = "<group>"; };
 		848A6CA0253404BD00125138 /* SettingDetailVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingDetailVC.xib; sourceTree = "<group>"; };
 		848A6CD52534285A00125138 /* DbManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbManager.swift; sourceTree = "<group>"; };
@@ -406,10 +416,6 @@
 			isa = PBXGroup;
 			children = (
 				223F8D552507F69E00B11868 /* customView.swift */,
-				2205D17B24A772C8004A4F41 /* PostCell.swift */,
-				2205D17C24A772C8004A4F41 /* PostCell.xib */,
-				228D421C24B3889A0077D29E /* SettingView.xib */,
-				228D421E24B38AFC0077D29E /* SettingView.swift */,
 				224E3CB124B76E85003F8F2B /* ToolbarView.xib */,
 				224E3CB324B76EA7003F8F2B /* ToolbarView.swift */,
 				2280A6B824D9061100426C2D /* LoadingView.swift */,
@@ -422,6 +428,8 @@
 				221A47D32511AD1600DE1301 /* SelectNotifyView.swift */,
 				221A47D92512218A00DE1301 /* CardHomeVC.swift */,
 				221A47DA2512218A00DE1301 /* CardHomeVC.xib */,
+				8470A43D253D845300B5E766 /* WaitingView.swift */,
+				8470A442253D847400B5E766 /* WaitingView.xib */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -458,7 +466,7 @@
 		221ADAF12499F0A100C25BD1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				221ADAF02499F0A100C25BD1 /* ChiaCard.app */,
+				221ADAF02499F0A100C25BD1 /* ChaiCard.app */,
 				221ADB062499F0A300C25BD1 /* DcardTests.xctest */,
 				221ADB112499F0A300C25BD1 /* DcardUITests.xctest */,
 			);
@@ -532,6 +540,7 @@
 				22788AF12503A87600E87F7F /* UserConfig.swift */,
 				22CAAAD6250DE31600CDF95B /* ProfileCellModel.swift */,
 				848A6CDF25342B9600125138 /* Preference.swift */,
+				8472EAE1254185DE00D448EA /* FavariteCatolog.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -576,10 +585,7 @@
 			children = (
 				221ADAF72499F0A100C25BD1 /* HomeVC.swift */,
 				2205D17F24A79C83004A4F41 /* HomeVM.swift */,
-				228D419824AA49080077D29E /* PostVC.swift */,
-				2205D18124A79E04004A4F41 /* PostRepository.swift */,
-				228D41E024AD06290077D29E /* CommentCell.swift */,
-				228D41E124AD06290077D29E /* CommentCell.xib */,
+				93207E98254284FB00432A23 /* Post */,
 				228F932C24C1FDFA00A7EBD9 /* Drawer.swift */,
 				228F932E24C1FE4F00A7EBD9 /* Drawer.xib */,
 				22F2111624CC5324003B1F1D /* ForumCell.swift */,
@@ -759,6 +765,7 @@
 				22CAAACD250D267600CDF95B /* ProfileTwoCell.xib */,
 				22CAAAD2250D2EF100CDF95B /* ProfileThreeCell.swift */,
 				22CAAAD3250D2EF100CDF95B /* ProfileThreeCell.xib */,
+				8472EADC254153DA00D448EA /* ProfilePostVC.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -804,6 +811,22 @@
 			path = Setting;
 			sourceTree = "<group>";
 		};
+		93207E98254284FB00432A23 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				2205D17B24A772C8004A4F41 /* PostCell.swift */,
+				2205D17C24A772C8004A4F41 /* PostCell.xib */,
+				228D421C24B3889A0077D29E /* SettingView.xib */,
+				228D421E24B38AFC0077D29E /* SettingView.swift */,
+				228D419824AA49080077D29E /* PostVC.swift */,
+				228D41E024AD06290077D29E /* CommentCell.swift */,
+				228D41E124AD06290077D29E /* CommentCell.xib */,
+				8479ADA52540293A007CE86D /* PostSettingVC.swift */,
+				2205D18124A79E04004A4F41 /* PostRepository.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -823,7 +846,7 @@
 			);
 			name = Dcard;
 			productName = Dcard;
-			productReference = 221ADAF02499F0A100C25BD1 /* ChiaCard.app */;
+			productReference = 221ADAF02499F0A100C25BD1 /* ChaiCard.app */;
 			productType = "com.apple.product-type.application";
 		};
 		221ADB052499F0A300C25BD1 /* DcardTests */ = {
@@ -939,6 +962,7 @@
 				22CAAAB7250BE25200CDF95B /* 小天使.gif in Resources */,
 				228F932F24C1FE4F00A7EBD9 /* Drawer.xib in Resources */,
 				84C818A9252DC39800CFABA6 /* FriendCardVC.xib in Resources */,
+				8470A443253D847400B5E766 /* WaitingView.xib in Resources */,
 				22179C8224F66BE900BAD5C4 /* SelectCountryVC.xib in Resources */,
 				848A6CA2253404BD00125138 /* SettingDetailVC.xib in Resources */,
 				22D7C39924EC2021006412BE /* messageCell.xib in Resources */,
@@ -1041,6 +1065,7 @@
 				22CAAADD250E2F4800CDF95B /* ProfileManager.swift in Sources */,
 				22DCB55024EF9F7200EE2DDD /* Extension_UITextField.swift in Sources */,
 				848E16C5252EC2EE00FA4B4F /* SettingMainVC.swift in Sources */,
+				8479ADA62540293A007CE86D /* PostSettingVC.swift in Sources */,
 				223B21F024F2B6B900D60299 /* LoginVC.swift in Sources */,
 				22D7C39824EC2021006412BE /* MessageCell.swift in Sources */,
 				22F2111824CC5324003B1F1D /* ForumCell.swift in Sources */,
@@ -1061,6 +1086,7 @@
 				220D16E824F4F5B5007B578E /* SetSexVC.swift in Sources */,
 				22788AFB2503F82A00E87F7F /* CardInfoTitleCell.swift in Sources */,
 				221A47D42511AD1600DE1301 /* SelectNotifyView.swift in Sources */,
+				8472EADD254153DA00D448EA /* ProfilePostVC.swift in Sources */,
 				227FD592249F43CC00BC185C /* APIInfo.swift in Sources */,
 				22EDC723251351A70021B435 /* MailCell.swift in Sources */,
 				226583D224F8051B00314134 /* CompleteRegisterVC.swift in Sources */,
@@ -1120,6 +1146,7 @@
 				228D419924AA49080077D29E /* PostVC.swift in Sources */,
 				22433D4124EA81C900E8D79D /* MemoPageOneHeader.swift in Sources */,
 				228D41E224AD06290077D29E /* CommentCell.swift in Sources */,
+				8470A43E253D845300B5E766 /* WaitingView.swift in Sources */,
 				22CAAACA250D21E800CDF95B /* ProfileThreeTbCell.swift in Sources */,
 				22CAAAD4250D2EF100CDF95B /* ProfileThreeCell.swift in Sources */,
 				22A75F2524E54C7800287460 /* WeekHeaderView.swift in Sources */,
@@ -1128,6 +1155,7 @@
 				22433D3824EA2AEC00E8D79D /* MemoPageCell.swift in Sources */,
 				22718892250F858400AAA166 /* FollowIssueCell.swift in Sources */,
 				2260DAA424F38F8400FB9E2B /* CreateAccountVC.swift in Sources */,
+				8472EAE2254185DF00D448EA /* FavariteCatolog.swift in Sources */,
 				848E16D5252ED10C00FA4B4F /* FeedbackCell.swift in Sources */,
 				22EFC6A424F95638003CD570 /* LoginVM.swift in Sources */,
 				221A47D82512160000DE1301 /* Extension_UIAlertAction.swift in Sources */,
@@ -1320,7 +1348,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.soul6701.dcard-test";
-				PRODUCT_NAME = ChiaCard;
+				PRODUCT_NAME = ChaiCard;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1340,7 +1368,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.soul6701.dcard-test";
-				PRODUCT_NAME = ChiaCard;
+				PRODUCT_NAME = ChaiCard;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

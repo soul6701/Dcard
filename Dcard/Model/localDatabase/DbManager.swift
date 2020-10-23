@@ -11,7 +11,7 @@ import SQLite
 
 var db: Connection!
 
-class DbManager {
+public class DbManager {
     public static var shared = DbManager()
     //與資料庫建立連線
     private init() {

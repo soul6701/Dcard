@@ -30,9 +30,8 @@ class PrivacyView: UIView {
         self.delegate = delegate
     }
     func show(vc: UIViewController) {
-        vc.view.addSubview(self)
         self.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([self.leadingAnchor.constraint(equalTo: vc.view.leadingAnchor), self.trailingAnchor.constraint(equalTo: vc.view.trailingAnchor), self.topAnchor.constraint(equalTo: vc.view.topAnchor), self.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor)])
+        vc.view.setFixedView(self)
     }
     func close() {
         let animation = UIViewPropertyAnimator(duration: 1, curve: .easeInOut) {

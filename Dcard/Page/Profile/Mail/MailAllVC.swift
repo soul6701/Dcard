@@ -47,16 +47,21 @@ extension MailAllVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         let label = UILabel()
-        view.addSubview(label)
-        view.backgroundColor = #colorLiteral(red: 0.8374180198, green: 0.8374378085, blue: 0.8374271393, alpha: 1)
+        view.backgroundColor = .systemGray5
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
-        label.topAnchor.constraint(equalTo: view.topAnchor, constant: 5).isActive = true
-        label.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5).isActive = true
-        label.attributedText = NSAttributedString(string: "所有好友", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1)])
+        view.addSubview(label)
+        label.snp.makeConstraints { (maker) in
+            maker.left.equalToSuperview().offset(30)
+            maker.height.equalTo(10)
+            maker.centerY.equalToSuperview()
+        }
+        label.attributedText = NSAttributedString(string: "所有好友", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
         return view
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return tableView.bounds.height
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
     }
 }

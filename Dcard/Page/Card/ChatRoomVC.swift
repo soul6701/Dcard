@@ -290,7 +290,7 @@ extension ChatRoomVC {
         guard let txt = tf.text, !txt.isEmpty else {
             return
         }
-        self.messageList.append(Message(user: 0, text: txt, date: Date.getCurrentDateString()))
+        self.messageList.append(Message(user: 0, text: txt, date: Date.getCurrentDateString(false)))
         self.tableView.reloadData()
         self.view.layoutIfNeeded()
         updateTableContentInset()
@@ -314,7 +314,7 @@ extension ChatRoomVC {
                 self.lbHint.text = self.card.name + "輸入中...."
                 let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
                     if start == random {
-                        self.messageList.append(Message(user: 1, text: self._messageList[self.i], date: Date.getCurrentDateString()))
+                        self.messageList.append(Message(user: 1, text: self._messageList[self.i], date: Date.getCurrentDateString(false)))
                         self.i += 1
                         self.lbHint.text = ""
                         self.tableView.reloadData()

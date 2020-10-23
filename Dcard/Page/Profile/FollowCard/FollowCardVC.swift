@@ -27,8 +27,12 @@ class FollowCardVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ToolbarView.shared.show(false)
         initView()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ToolbarView.shared.show(false)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     func setContent(followCardList: [FollowCard], title: String) {
         self.followCardList = followCardList
@@ -86,7 +90,7 @@ extension FollowCardVC: FollowCardVCDelegate {
     }
     func toCardHome(followCard: FollowCard) {
         let vc = CardHomeVC()
-        vc.setContent(followCard: followCard, title: "")
+        vc.setContent(followCard: followCard, mode: .other)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

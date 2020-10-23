@@ -56,7 +56,7 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, school: school, mediaMeta: mediaMeta, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, withNickname: withNickname))
+                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
             }
             subject.onNext(self.posts)
         }, onError: { error in
@@ -146,7 +146,7 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, school: school, mediaMeta: mediaMeta, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, withNickname: withNickname))
+                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
             }
             self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
                 self.posts += posts
@@ -206,7 +206,7 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, school: school, mediaMeta: mediaMeta, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, withNickname: withNickname))
+                posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
             }
             subject.onNext(posts)
         }, onError: { error in

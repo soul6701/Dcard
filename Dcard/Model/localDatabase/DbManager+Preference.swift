@@ -18,6 +18,7 @@ let _getFollowed = Expression<Bool>("getFollowed")
 let _newMail = Expression<Bool>("newMail")
 let _showTheme = Expression<Int>("showTheme") //0: 根據系統設定 1: 深色模式 2: 淺色模式
 let _autoPlayVedio = Expression<Int>("autoPlayVedio") //0: 開啟 1: 關閉 2: 僅 Wi-Fi
+let _touchIDOn = Expression<Bool>("touchIDOn")
 
 extension DbManager {
 
@@ -31,6 +32,7 @@ extension DbManager {
                 tb.column(_newMail)
                 tb.column(_showTheme)
                 tb.column(_autoPlayVedio)
+                tb.column(_touchIDOn)
                 print("創建偏好設定資料表 成功")
             })
         } catch {
@@ -39,28 +41,18 @@ extension DbManager {
     }
     func initPreference() {
         do {
-            try db?.run(_preference.insert(_newReply <- 0, _getMood <- false, _getLiked <- false, _getFollowed <- false, _newMail <- false, _showTheme <- 0, _autoPlayVedio <- 0))
+            try db?.run(_preference.insert(_newReply <- 0, _getMood <- false, _getLiked <- false, _getFollowed <- false, _newMail <- false, _showTheme <- 0, _autoPlayVedio <- 0, _touchIDOn <- false))
             print("新增偏好設定資料表 成功")
+            ModelSingleton.shared.setPreference(Preference())
         } catch {
             print("新增偏好設定資料表 失敗")
         }
     }
-    func getPreference() -> Preference {
-        var list = [Preference]()
-        do {
-            for _list in try db.prepare(_preference) {
-                list.append(Preference(newReply: _list[_newReply], getMood: _list[_getMood], getLiked: _list[_getLiked], getFollowed: _list[_getFollowed], newMail: _list[_newMail], showTheme: _list[_showTheme], autoPlayVedio: _list[_autoPlayVedio]))
-            }
-            print("取得偏好設定資料表 成功")
-        } catch {
-            print("取得偏好設定資料表 失敗")
-        }
-        return list.first ?? Preference()
-    }
     func updatePreference(preference: Preference) {
         do {
-            try db.run(_preference.update([_newReply <- preference.newReply, _getMood <- preference.getMood, _getLiked <- preference.getLiked, _getFollowed <- preference.getFollowed, _newMail <- preference.newMail, _showTheme <- preference.showTheme, _autoPlayVedio <- preference.autoPlayVedio]))
+            try db.run(_preference.update([_newReply <- preference.newReply, _getMood <- preference.getMood, _getLiked <- preference.getLiked, _getFollowed <- preference.getFollowed, _newMail <- preference.newMail, _showTheme <- preference.showTheme, _autoPlayVedio <- preference.autoPlayVedio, _touchIDOn <- preference.touchIDOn]))
             print("更新偏好設定資料表 成功")
+            ModelSingleton.shared.setPreference(preference)
         } catch {
             print("更新偏好設定資料表 失敗")
         }

@@ -134,12 +134,11 @@ extension SetPhoneAddressVC {
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         _view.addSubview(imageView)
-        imageView.widthAnchor.constraint(equalTo: _view.widthAnchor, multiplier: 0.3).isActive = true
-        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: _view.centerYAnchor).isActive = true
-        imageView.centerXAnchor.constraint(equalTo: _view.centerXAnchor).isActive = true
-        
-        
+        imageView.snp.makeConstraints { (maker) in
+            maker.width.equalToSuperview().multipliedBy(0.3)
+            maker.height.equalTo(imageView.snp.width)
+            maker.centerY.centerX.equalToSuperview()
+        }
         self.lbCountryCode.textAlignment = .center
         self.lbCountryCode.text = self.code
 

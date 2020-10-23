@@ -19,7 +19,7 @@ class ArticalVC: UIViewController {
     private var tfAddress: UITextField?
     private var articalList = [Post]()
     private var times = 1
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         ToolbarView.shared.show(false)
@@ -127,19 +127,23 @@ extension ArticalVC: ArticalVCDelegate {
 // MARK: - PrivacyViewDelegate
 extension ArticalVC: PrivacyViewDelegate {
     func didClickPassword() {
-        ProfileManager.shared.showAuthenticationView(times: self.times) { (state) in
-            switch state {
-            case .success:
-                DispatchQueue.main.async {
-                    PrivacyView.shared.close()
+        if ModelSingleton.shared.preference.touchIDOn {
+            ProfileManager.shared.showAuthenticationView(times: self.times) { (state) in
+                switch state {
+                case .success:
+                    DispatchQueue.main.async {
+                        PrivacyView.shared.close()
+                    }
+                case .fallback:
+                    DispatchQueue.main.async {
+                        self.showPasswordView()
+                    }
+                case .error:
+                    break
                 }
-            case .fallback:
-                DispatchQueue.main.async {
-                    self.showPasswordView()
-                }
-            case .error:
-                break
             }
+        } else {
+            showPasswordView()
         }
     }
 }
