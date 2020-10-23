@@ -32,6 +32,9 @@ struct ProfilePage {
     var settingMainVC: SettingMainVC {
         return self.storyboard.instantiateViewController(withIdentifier: "SettingMainVC") as! SettingMainVC
     }
+    var profilePostVC: ProfilePostVC {
+        return self.storyboard.instantiateViewController(withIdentifier: "ProfilePostVC") as! ProfilePostVC
+    }
 }
 struct CardPage {
     let storyboard = UIStoryboard(name: "Card", bundle: nil)

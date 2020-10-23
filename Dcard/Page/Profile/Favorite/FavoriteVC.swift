@@ -34,7 +34,6 @@ class FavoriteVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ToolbarView.shared.show(false)
         initView()
     }
     func setContent(favoriteList: [Favorite], title: String) {
@@ -45,8 +44,9 @@ class FavoriteVC: UIViewController {
 // MARK: - SetupUI
 extension FavoriteVC {
     private func initView() {
-        confiCollectionView()
+        ToolbarView.shared.show(false)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addList))
+        confiCollectionView()
     }
     private func confiCollectionView() {
         self.collectionView.register(UINib(nibName: "FavoriteCell", bundle: nil), forCellWithReuseIdentifier: "FavoriteCell")

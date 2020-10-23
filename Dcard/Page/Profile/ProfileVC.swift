@@ -71,4 +71,13 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
             return self.tableViewMain.bounds.height - 120 - 60
         }
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = indexPath.row
+        if row == 1 {
+            let vc = UIStoryboard.profile.profilePostVC
+            self.navigationController?.pushViewController(vc, animated: true) {
+                self.navigationController?.setNavigationBarHidden(false, animated: false)
+            }
+        }
+    }
 }
