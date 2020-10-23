@@ -416,10 +416,6 @@
 			isa = PBXGroup;
 			children = (
 				223F8D552507F69E00B11868 /* customView.swift */,
-				2205D17B24A772C8004A4F41 /* PostCell.swift */,
-				2205D17C24A772C8004A4F41 /* PostCell.xib */,
-				228D421C24B3889A0077D29E /* SettingView.xib */,
-				228D421E24B38AFC0077D29E /* SettingView.swift */,
 				224E3CB124B76E85003F8F2B /* ToolbarView.xib */,
 				224E3CB324B76EA7003F8F2B /* ToolbarView.swift */,
 				2280A6B824D9061100426C2D /* LoadingView.swift */,
@@ -589,15 +585,11 @@
 			children = (
 				221ADAF72499F0A100C25BD1 /* HomeVC.swift */,
 				2205D17F24A79C83004A4F41 /* HomeVM.swift */,
-				228D419824AA49080077D29E /* PostVC.swift */,
-				2205D18124A79E04004A4F41 /* PostRepository.swift */,
-				228D41E024AD06290077D29E /* CommentCell.swift */,
-				228D41E124AD06290077D29E /* CommentCell.xib */,
+				93207E98254284FB00432A23 /* Post */,
 				228F932C24C1FDFA00A7EBD9 /* Drawer.swift */,
 				228F932E24C1FE4F00A7EBD9 /* Drawer.xib */,
 				22F2111624CC5324003B1F1D /* ForumCell.swift */,
 				22F2111724CC5324003B1F1D /* ForumCell.xib */,
-				8479ADA52540293A007CE86D /* PostSettingVC.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -817,6 +809,22 @@
 				848A6D1025346D0300125138 /* SettingAccountVC.xib */,
 			);
 			path = Setting;
+			sourceTree = "<group>";
+		};
+		93207E98254284FB00432A23 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				2205D17B24A772C8004A4F41 /* PostCell.swift */,
+				2205D17C24A772C8004A4F41 /* PostCell.xib */,
+				228D421C24B3889A0077D29E /* SettingView.xib */,
+				228D421E24B38AFC0077D29E /* SettingView.swift */,
+				228D419824AA49080077D29E /* PostVC.swift */,
+				228D41E024AD06290077D29E /* CommentCell.swift */,
+				228D41E124AD06290077D29E /* CommentCell.xib */,
+				8479ADA52540293A007CE86D /* PostSettingVC.swift */,
+				2205D18124A79E04004A4F41 /* PostRepository.swift */,
+			);
+			path = Post;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -27,13 +27,13 @@ private class PostSettingCell: UITableViewCell {
         return imageView
     }()
     override func layoutSubviews() {
+        self.backgroundColor = .clear
         self.addSubview(self.imageViewCatalog)
         self.imageViewCatalog.snp.makeConstraints { (maker) in
             maker.leading.equalToSuperview().offset(40)
             maker.width.height.equalTo(40)
             maker.centerY.equalToSuperview()
         }
-        
         self.addSubview(self.lbTitle)
         self.lbTitle.snp.makeConstraints { (maker) in
             maker.leading.equalTo(self.imageViewCatalog.snp.trailing).offset(30)
@@ -61,6 +61,7 @@ class PostSettingVC: UIViewController {
         tableView.register(PostSettingCell.self, forCellReuseIdentifier: "PostSettingCell")
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         tableView.isScrollEnabled = self.mode == .keep
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -68,8 +69,9 @@ class PostSettingVC: UIViewController {
     }()
     lazy private var lbTitle: UILabel = {
         let label = UILabel()
+        label.backgroundColor = .clear
         label.textAlignment = .center
-        label.attributedText = NSAttributedString(string: "已收藏，試試將文章加入...", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: UIColor.black])
+        label.attributedText = NSAttributedString(string: "已收藏，試試將文章加入...", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)])
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -96,17 +98,25 @@ class PostSettingVC: UIViewController {
 // MARK: - SetupUI
 extension PostSettingVC {
     private func initView() {
-        self.view.backgroundColor = .systemBackground
-        self.view.addSubview(self.lbTitle)
-        self.lbTitle.snp.makeConstraints { (maker) in
-            maker.top.leading.trailing.equalToSuperview()
-            maker.height.equalTo(70)
-        }
-        self.view.addSubview(self.tableView)
-        self.tableView.snp.makeConstraints { (maker) in
-            maker.top.equalTo(self.lbTitle.snp.bottom).offset(5)
-            maker.leading.trailing.equalToSuperview()
-            maker.bottom.equalToSuperview()
+        self.view.backgroundColor = #colorLiteral(red: 0.8321695924, green: 0.985483706, blue: 0.4733308554, alpha: 0.8150684932)
+        if self.mode == .keep {
+            self.view.addSubview(self.lbTitle)
+            self.lbTitle.snp.makeConstraints { (maker) in
+                maker.top.leading.trailing.equalToSuperview()
+                maker.height.equalTo(70)
+            }
+            self.view.addSubview(self.tableView)
+            self.tableView.snp.makeConstraints { (maker) in
+                maker.top.equalTo(self.lbTitle.snp.bottom).offset(5)
+                maker.leading.trailing.equalToSuperview()
+                maker.bottom.equalToSuperview()
+            }
+        } else {
+            self.view.addSubview(self.tableView)
+            self.tableView.snp.makeConstraints { (maker) in
+                maker.bottom.leading.trailing.equalToSuperview()
+                maker.top.equalToSuperview().offset(20)
+            }
         }
     }
 }

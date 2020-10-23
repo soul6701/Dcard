@@ -12,6 +12,41 @@ import RxCocoa
 import RxSwift
 import IQKeyboardManagerSwift
 
+private class PresentationController : UIPresentationController {
+    
+    lazy private var bgButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .black
+        button.alpha = 0.8
+        button.addTarget(self, action: #selector(self.willDismiss), for: .touchUpInside)
+        return button
+    }()
+    
+    private var height: CGFloat
+    
+    init(height: CGFloat, presentedViewController: UIViewController, presenting: UIViewController?) {
+        self.height = height
+        super.init(presentedViewController: presentedViewController, presenting: presenting)
+    }
+    override var frameOfPresentedViewInContainerView: CGRect {
+        guard let containerView = containerView else {
+            return CGRect.zero
+        }
+        return CGRect(x: 0, y: containerView.bounds.height - self.height, width: containerView.bounds.width, height: self.height)
+    }
+    override func presentationTransitionWillBegin() {
+        guard let containerView = containerView, let presentedView = self.presentedView else { return }
+        self.bgButton.frame = containerView.frame
+        containerView.setFixedView(self.bgButton)
+        presentedView.layer.masksToBounds = true
+        presentedView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        presentedView.layer.cornerRadius = 40
+    }
+    @objc private func willDismiss() {
+        self.presentedViewController.dismiss(animated: true, completion: nil)
+    }
+}
+
 class PostVC: UIViewController {
 
     @IBOutlet weak var tvExcerpt: UITextView!
@@ -132,13 +167,19 @@ class PostVC: UIViewController {
         self.heart = !self.heart
     }
     @IBAction func didClickBtnKeep(_ sender: UIButton) {
+        if !keep {
+            let vc = PostSettingVC()
+            vc.modalPresentationStyle = .custom
+            vc.transitioningDelegate = self
+            vc.setContent(mode: .keep)
+            present(vc, animated: true, completion: nil)
+        }
         self.keep = !self.keep
-        let vc = PostSettingVC()
-        vc.setContent(mode: .keep)
-        present(vc, animated: true, completion: nil)
     }
     @IBAction func didClickBtnSetting(_ sender: UIButton) {
         let vc = PostSettingVC()
+        vc.modalPresentationStyle = .custom
+        vc.transitioningDelegate = self
         vc.setContent(host: self.post.host, mode: .setting)
         present(vc, animated: true, completion: nil)
     }
@@ -317,5 +358,10 @@ extension PostVC: SettingViewDelegate {
             self.imageViewAvator.kf.setImage(with: URL(string: self.user.avatar))
         }
         close()
+    }
+}
+extension PostVC: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return PresentationController(height: 450, presentedViewController: presented, presenting: presenting )
     }
 }
