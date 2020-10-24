@@ -12,36 +12,49 @@ class ProfilePostVC: UIViewController {
 
     lazy private var tableView: UITableView = {
        var tableView = UITableView()
+        tableView.register(UINib(nibName: "ProfilePostMoodCell", bundle: nil), forCellReuseIdentifier: "ProfilePostMoodCell")
+        tableView.separatorStyle = .none
+        tableView.allowsSelection = false
         tableView.delegate = self
         tableView.dataSource = self
         tableView.layer.cornerRadius = 20
-        tableView.backgroundColor = .secondarySystemBackground
+        tableView.backgroundColor = .tertiarySystemGroupedBackground
+        let tap = UITapGestureRecognizer(target: self, action: #selector(showMaintainView))
+        tableView.addGestureRecognizer(tap)
         return tableView
     }()
     lazy private var collectionView: UICollectionView = {
         var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.register(UINib(nibName: "ProfilePostCell", bundle: nil), forCellWithReuseIdentifier: "ProfilePostCell")
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
         return collectionView
     }()
-    lazy private var viewTitle: UIView = {
-        var view = UIView()
-        let imageView = UIImageView()
+    lazy private var viewTitle: ProfilePostView = {
+        let view = UINib(nibName: "ProfilePostView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! ProfilePostView
+        let tap = UITapGestureRecognizer(target: self, action: #selector(showMaintainView))
+        tableView.addGestureRecognizer(tap)
+        view.addGestureRecognizer(tap)
         return view
     }()
     @IBOutlet weak var tableViewMain: UITableView!
     private let itemSpace: CGFloat = 20
     private var itemSize: CGSize {
         let width = floor((Double)(self.collectionView.bounds.width - self.itemSpace) / 2)
-        let height = floor((Double)(400 - 10 - 2 * self.itemSpace) / 3)
+        let height = floor((Double)(400 - 20 - 2 * self.itemSpace) / 3)
         return CGSize(width: width, height: height)
+    }
+    private var mood: Mood {
+        return ModelSingleton.shared.userConfig.user.card.mood
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        ProfileManager.shared.setupMaintainBaseVC(target: self)
     }
 }
+// MARK: - SetupUI
 extension ProfilePostVC {
     private func initView() {
         ToolbarView.shared.show(false)
@@ -49,7 +62,6 @@ extension ProfilePostVC {
         confiCollectionView()
     }
     private func confiCollectionView() {
-        self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "CommonCell")
         setCollectionViewLayout()
     }
     private func setCollectionViewLayout() {
@@ -64,13 +76,20 @@ extension ProfilePostVC {
         view.translatesAutoresizingMaskIntoConstraints = false
         cell.addSubview(view)
         view.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview().offset(10)
+            maker.top.equalToSuperview().offset(20)
             maker.leading.equalToSuperview().offset(20)
             maker.trailing.equalToSuperview().offset(-20)
             maker.bottom.equalToSuperview().offset(last ? -50 : 0)
         }
     }
 }
+// MARK: - Private Handler
+extension ProfilePostVC {
+    @objc private func showMaintainView() {
+        ProfileManager.shared.showMaintainView()
+    }
+}
+// MARK: - UITableViewDelegate
 extension ProfilePostVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableView === self.tableViewMain ? 3 : 7
@@ -78,9 +97,9 @@ extension ProfilePostVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
-        let cell = UITableViewCell()
-        cell.backgroundColor = .clear
         if tableView === self.tableViewMain {
+            let cell = UITableViewCell()
+            cell.backgroundColor = .clear
             let last = row == 2
             switch row {
             case 0:
@@ -90,10 +109,12 @@ extension ProfilePostVC: UITableViewDelegate, UITableViewDataSource {
             default:
                setAutoLayout(self.tableView, in: cell, last: last)
             }
+            return cell
         } else {
-            //
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ProfilePostMoodCell", for: indexPath) as! ProfilePostMoodCell
+            cell.setContent(rank: row)
+            return cell
         }
-        return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let row = indexPath.row
@@ -101,7 +122,7 @@ extension ProfilePostVC: UITableViewDelegate, UITableViewDataSource {
         if tableView === self.tableViewMain {
             switch row {
             case 0:
-                height = 150
+                height = 110
             case 1:
                 height = 400
             default:
@@ -113,16 +134,26 @@ extension ProfilePostVC: UITableViewDelegate, UITableViewDataSource {
         return height
     }
 }
+// MARK: - UICollectionViewDelegate
 extension ProfilePostVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 6
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CommonCell", for: indexPath)
-        cell.backgroundColor = .yellow
+        let row = indexPath.row
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfilePostCell", for: indexPath) as! ProfilePostCell
+        cell.setContent(mode: ProfilePostCellMode(rawValue: row)!)
         return cell
     }
     func  collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return self.itemSize
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let row = indexPath.row
+        if row != 0 && row != 2 {
+            ProfileManager.shared.showMaintainView()
+        } else {
+            ProfileManager.shared.toNextPage(next: .artical)
+        }
     }
 }

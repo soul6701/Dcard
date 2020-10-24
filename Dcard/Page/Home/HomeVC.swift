@@ -32,7 +32,9 @@ class HomeVC: UIViewController {
     }()
     private var viewMenu: Drawer?
     private var logoView = [UIImageView]()
-    private var user: User?
+    private var user: User {
+        return ModelSingleton.shared.userConfig.user
+    }
     private var exitTime: Date?
     private var selectedPost = Post()
     
@@ -116,14 +118,7 @@ extension HomeVC {
         }, onError: { error in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: disposeBag)
-        
-        viewModel.userDataSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (user) in
-            self.user = user
-            ToolbarView.shared.setAvatar(url: user.avatar)
-        }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-        }).disposed(by: self.disposeBag)
-        
+
     }
 }
 
@@ -131,8 +126,8 @@ extension HomeVC {
 extension HomeVC {
     private func initView() {
         ToolbarView.shared.setDelegate(self)
+        ToolbarView.shared.resetAvatar()
         self.bottomSpace.constant = Size.bottomSpace
-        
         confiTableView()
         confiNavBarItem()
     }

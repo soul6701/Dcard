@@ -81,7 +81,7 @@ extension SettingMainVC {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 }
-// MARK: - Private Func
+// MARK: - Private Handler
 extension SettingMainVC {
     private func confiRightDetailTableViewCell(_ isOK: Bool, title: String, textState: (String, String), cell: RightDetailTableViewCell) {
         cell.textLabel?.text = title

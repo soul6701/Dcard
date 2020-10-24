@@ -19,7 +19,9 @@ class ArticalVC: UIViewController {
     private var tfAddress: UITextField?
     private var articalList = [Post]()
     private var times = 1
-
+    private var user: User {
+        return ModelSingleton.shared.userConfig.user
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         ToolbarView.shared.show(false)
@@ -114,7 +116,15 @@ extension ArticalVC: UITableViewDelegate, UITableViewDataSource {
         return indexPath.section == 0 ? 120 : 180
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        viewModel.getComment(list: self.showList, index: indexPath.row)
+        let row = indexPath.row
+        let vc = UIStoryboard.home.postVC
+        let post = self.user.card.post[row]
+        vc.setContent(post: post, commentList: [Comment()])
+        vc.navigationItem.title = post.title
+        vc.modalPresentationStyle = .formSheet
+        self.navigationController?.pushViewController(vc, animated: true) {
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+        }
     }
 }
 // MARK: - ArticalVCDelegate

@@ -12,16 +12,6 @@ import RxSwift
 import SwiftMessages
 import LocalAuthentication
 
-protocol ProfileManagerInterface {
-    func setBaseNav(_ nav: UINavigationController)
-    func showOKView(mode: ProfileOKMode, handler: (() -> Void)?)
-    func showAlertView(errorMessage: String, handler: (() -> Void)?)
-    func showBellModeView(delegate: SelectNotifyViewDelegate, notifyMode: Int)
-    func showCancelFollowCardView(_ viewController: UIViewController,  title: String, OKAction: (() -> Void)?)
-    func showAuthenticationView(times: Int, callbackAction: @escaping ((_ state: AuthenticationState) -> Void))
-    func toFriendCardPage(mail: Mail)
-    func toNextPage(next: ProfileThreeCellType)
-}
 enum AuthenticationState {
     case success
     case error
@@ -33,7 +23,7 @@ enum ProfileOKMode {
     case cancelFollowIssue
     case shareCardInfo
 }
-class ProfileManager: ProfileManagerInterface {
+class ProfileManager {
     
     static let shared = ProfileManager()
     private var OKView: MessageView!
@@ -41,6 +31,7 @@ class ProfileManager: ProfileManagerInterface {
     private var alertView: MessageView!
     private var alertconfig: SwiftMessages.Config!
     private var baseNav: UINavigationController!
+    private var maintainBaseVC: UIViewController?
     //假值
     var user: User {
         return ModelSingleton.shared.userConfig.user
@@ -165,6 +156,16 @@ class ProfileManager: ProfileManagerInterface {
                 }
             }
         }
+    }
+    //維護視窗
+    func setupMaintainBaseVC(target viewController: UIViewController) {
+        self.maintainBaseVC = viewController
+    }
+    func showMaintainView() {
+        let alert = UIAlertController(title: "這邊還有沒東西！", message: "進階功能還在努力開發中，以後再回來看看😎", preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "好", style: .cancel, handler: nil)
+        alert.addAction(OKAction)
+        self.maintainBaseVC?.present(alert, animated: true, completion: nil)
     }
     //跳轉卡友頁面
     func toFriendCardPage(mail: Mail) {

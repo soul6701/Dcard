@@ -219,7 +219,7 @@ extension PostVC {
         self.willbeOpened = false
     }
 }
-// MARK: - Private func
+// MARK: - Private Handler
 extension PostVC {
     @objc private func close() {
         self.viewBg.removeFromSuperview()

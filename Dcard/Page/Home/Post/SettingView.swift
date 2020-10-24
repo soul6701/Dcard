@@ -25,9 +25,9 @@ class SettingView: UIView {
     @IBOutlet weak var tableView: UITableView!
     
     private var mode: SettingViewMode = .commentSetting
-    private let user = ModelSingleton.shared.userConfig.user
-    
-    
+    private var user: User {
+        return ModelSingleton.shared.userConfig.user
+    }
     private var dataList: [String] {
         return mode == .commentSetting ? ["回應並標註 ", "複製", "檢舉", "我不喜歡這則回應"] : [self.user.card.school, self.user.card.school + " " + self.user.card.department, self.user.card.name]
     }

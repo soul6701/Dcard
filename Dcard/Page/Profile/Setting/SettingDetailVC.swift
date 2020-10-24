@@ -82,7 +82,7 @@ extension SettingDetailVC {
         self.navigationItem.title = self.navigationItemTitle
     }
 }
-// MARK: - Private Func
+// MARK: - Private Handler
 extension SettingDetailVC {
     @objc private func toggle(_ sender: UISwitch) {
         let tag = sender.tag

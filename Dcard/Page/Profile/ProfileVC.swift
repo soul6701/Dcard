@@ -12,8 +12,9 @@ class ProfileVC: UIViewController {
 
     @IBOutlet var bottomSpace: NSLayoutConstraint!
     @IBOutlet weak var tableViewMain: UITableView!
-    private var user = ModelSingleton.shared.userConfig.user
-    
+    private var user: User {
+        return ModelSingleton.shared.userConfig.user
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()

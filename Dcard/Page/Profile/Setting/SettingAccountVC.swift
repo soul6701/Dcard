@@ -48,19 +48,19 @@ enum SettingAccountMode {
     }
 }
 class SettingAccountVC: UIViewController {
-    private var btnSave: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(title: "儲存", style: .plain, target: self, action: #selector(save))
+    lazy private var btnSave: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "儲存", style: .plain, target: self, action: #selector(self.save))
         barButtonItem.isEnabled = false
         return barButtonItem
     }()
-    private var btnHint: UIButton = {
+    lazy private var btnHint: UIButton = {
         let button = UIButton(type: .infoLight)
-        button.addTarget(self, action: #selector(alert), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.alert), for: .touchUpInside)
         return button
     }()
-    private var btnClose: UIButton = {
+    lazy private var btnClose: UIButton = {
         let button = UIButton(type: .close)
-        button.addTarget(self, action: #selector(close), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.close), for: .touchUpInside)
         return button
     }()
     lazy private var tfEmailList: [UITextField] = {
@@ -113,7 +113,7 @@ class SettingAccountVC: UIViewController {
         }
         return list
     }()
-    private var viewOK: UIView = {
+    lazy private var viewOK: UIView = {
         let view = customView()
         view.viewBorderWidth = 1
         view.viewBorderColor = #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)
@@ -177,6 +177,9 @@ ID 規則
         return vc
     }()
     
+    private var user: User {
+        return ModelSingleton.shared.userConfig.user
+    }
     private var mode: SettingAccountMode = .setAddress
     private var oldAddress = ""
     private var newAddress = ""
@@ -213,13 +216,7 @@ ID 規則
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let user = ModelSingleton.shared.userConfig.user
-        self.oldAddress = user.address
-        self.oldPassword = user.password
-        self.cardName = user.card.name
-        self.cardID = user.card.id
         self.tableView.reloadData()
-        
         if self.mode == .editCard || self.mode == .enterNewID {
             IQKeyboardManager.shared.enableAutoToolbar = false
             IQKeyboardManager.shared.shouldResignOnTouchOutside = false
@@ -244,6 +241,11 @@ extension SettingAccountVC {
     private func initView() {
         self.sectionList = mode.sectionList
         self.rowList = mode.rowList
+        
+        self.oldAddress = self.user.address
+        self.oldPassword = self.user.password
+        self.cardName = self.user.card.name
+        self.cardID = self.user.card.id
         
         confiTableView()
         confiNav()
@@ -285,7 +287,7 @@ extension SettingAccountVC {
         }
     }
 }
-// MARK: - Private Func
+// MARK: - Private Handler
 extension SettingAccountVC {
     //重設帳號資訊
     @objc private func save() {
@@ -395,12 +397,16 @@ extension SettingAccountVC {
     }
     private func subsribeViewModel() {
         self.viewModel.updateUserInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            WaitingView.shared.show(false)
             if result {
-                if self.mode == .editCard || self.mode == .enterNewID {
-                    WaitingView.shared.show(false)
-                    let alert = UIAlertController(title: "修改完成", message: "編輯" + (self.mode == .editCard ? "卡稱" : "ID") + "成功！\n稍等一下才會同步完畢唷！", preferredStyle: .alert)
+                if self.mode == .editCard || self.mode == .enterNewID || self.mode == .resetPassword {
+                    let alert = UIAlertController(title: "修改完成", message: "編輯" + (self.mode == .editCard ? "卡稱" : self.mode == .resetPassword ? "密碼" : "ID") + "成功！\n稍等一下才會同步完畢唷！", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "好", style: .default) { (action) in
-                        self.dismiss(animated: true, completion: nil)
+                        if self.mode == .resetPassword {
+                            self.navigationController?.popViewController(animated: true)
+                        } else {
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     }
                     alert.addAction(cancelAction)
                     self.present(alert, animated: true, completion: nil)
@@ -451,6 +457,7 @@ extension SettingAccountVC: UITableViewDelegate, UITableViewDataSource {
                 cell.textLabel?.text = "修改"
                 cell.textLabel?.textColor = #colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78)
                 cell.textLabel?.textAlignment = .center
+                cell.selectionStyle = .none
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "RightDetailCell", for: indexPath) as! RightDetailTableViewCell

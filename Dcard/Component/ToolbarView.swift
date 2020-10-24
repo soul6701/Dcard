@@ -84,9 +84,10 @@ class ToolbarView: UIView {
     func setDelegate(_ delegate: ToolbarViewDelegate?) {
         self.delegate = delegate
     }
-    func setAvatar(url: String) {
-        if url != "" {
-            self.imageAvatar.kf.setImage(with: URL(string: url))
+    func resetAvatar() {
+        let imageString = ModelSingleton.shared.userConfig.user.avatar
+        if imageString != "" {
+            self.imageAvatar.kf.setImage(with: URL(string: imageString))
         } else {
             self.imageAvatar.image = UIImage(named: ImageInfo.profile)
         }

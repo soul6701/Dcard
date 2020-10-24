@@ -44,7 +44,7 @@ protocol LoginFirebaseInterface {
 public class LoginFirebase: LoginFirebaseInterface {
     
     public static var shared = LoginFirebase()
-    
+
     // MARK: - 創建帳戶
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) -> Observable<Bool> {
         let subject = PublishSubject<Bool>()
@@ -283,7 +283,7 @@ public class LoginFirebase: LoginFirebaseInterface {
     func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType: String]) -> Observable<Bool> {
         let subject = PublishSubject<Bool>()
         var userId = ""
-        
+
         FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
@@ -306,13 +306,14 @@ public class LoginFirebase: LoginFirebaseInterface {
             } else if !newPassword.isEmpty {
                 setter["password"] = newPassword
             } else if !newCard.isEmpty {
-                var list: [String: String] = [:]
+                let card = ModelSingleton.shared.userConfig.user.card
+//                var list: [String: Any] = ["id": card.id, "post": card.post, "name": card.name, "photo": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "": card.fans, "favariteCatolog": card.favariteCatolog, "comment": card.comment, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart, "getMood": card.getMood, "mood": card.mood]
+                var list: [String: Any] = ["id": card.id, "name": card.name, "photo": card.photo, "sex": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "fans": card.fans, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart]
                 newCard.forEach { (key, value) in
                     list[key.rawValue] = value
                 }
                 setter["card"] = list
             }
-                
             guard !setter.isEmpty else {
                 subject.onNext(false)
                 return

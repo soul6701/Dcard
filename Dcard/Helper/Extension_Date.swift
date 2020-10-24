@@ -11,19 +11,29 @@ import UIKit
 
 extension Date {
     
+    static var containTimeString = "yyyy/MM/dd HH:mm"
+    static var notContainTimeString = "yyyy/MM/dd"
     static let monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     
     static var calendar: Calendar {
         return Calendar(identifier: .gregorian)
     }
-    static func getCurrentDateString(_ containTime: Bool) -> String {
+    static var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "zh_Hant_TW")
-        dateFormatter.dateFormat = containTime ? "yyyy/MM/dd HH:mm" : "yyyy/MM/dd"
+        return dateFormatter
+    }()
+    static func getCurrentDateString(_ containTime: Bool) -> String {
+        self.dateFormatter.dateFormat = containTime ? containTimeString : notContainTimeString
         let currentDateString = dateFormatter.string(from: Date())
         return currentDateString
     }
-    
+    static func getTimeIntervalSince(_ dateString: String) -> String {
+        self.dateFormatter.dateFormat = notContainTimeString
+        let date = dateFormatter.date(from: dateString) ?? Date()
+        let components = self.calendar.dateComponents([.year, .month], from: date, to: Date())
+        return "已註冊 \((String)(components.year!))年 \((String)(components.month!))個月"
+    }
     var FirstDayInMonth: Date {
         let _firstDay: DateComponents = Date.calendar.dateComponents([.year, .month], from: self)
         return Date.calendar.date(from: _firstDay)!

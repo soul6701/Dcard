@@ -41,7 +41,6 @@ class CardHomeVC: UIViewController {
     private var notifyMode = 0
     private var mode: CardHomeVCMode = .user
     private var canBeDragged = false
-    private var selectedPost = Post()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -148,7 +147,7 @@ extension CardHomeVC {
         self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
     }
 }
-// MARK: - Private Func
+// MARK: - Private Handler
 extension CardHomeVC {
     //彈出通知選項視窗
     @objc private func didClickBell() {
@@ -277,9 +276,8 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         let vc = UIStoryboard.home.postVC
-        self.selectedPost = myPostList[row]
-        vc.setContent(post: self.selectedPost, commentList: [Comment()])
-        vc.navigationItem.title = self.selectedPost.title
+        vc.setContent(post: myPostList[row], commentList: [Comment()])
+        vc.navigationItem.title = myPostList[row].title
         vc.modalPresentationStyle = .formSheet
         self.navigationController?.pushViewController(vc, animated: true) {
             self.navigationController?.setNavigationBarHidden(false, animated: false)
