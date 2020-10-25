@@ -29,6 +29,10 @@ class FollowIssueVC: UIViewController {
         ToolbarView.shared.show(false)
         initView()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
     func setContent(followIssueList: [FollowIssue], title: String) {
         self.followIssueList = followIssueList
         self.navigationItem.title = title
@@ -63,15 +67,18 @@ extension FollowIssueVC: UITableViewDelegate, UITableViewDataSource {
         
         let row = indexPath.row
         let cell = tableView.dequeueReusableCell(withIdentifier: "FollowIssueCell", for: indexPath) as! FollowIssueCell
-        cell.setContent(index: row, followIssue: self.followIssueList[indexPath.row])
+        cell.setContent(index: row, followIssue: self.followIssueList[row])
         cell.setDelegate(self)
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.section == 0 ? 60 : 120
     }
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = indexPath.row
+        let vc = FollowIssueInfoVC()
+        vc.setContent(followIssue: self.followIssueList[row])
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 // MARK: - FollowIssueVCDelegate

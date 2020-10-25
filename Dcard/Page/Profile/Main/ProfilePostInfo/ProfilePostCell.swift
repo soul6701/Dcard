@@ -2,7 +2,7 @@
 //  ProfilePostCell.swift
 //  Dcard
 //
-//  Created by 林英全 on 2020/10/24.
+//  Created by Mason_Lin on 2020/10/24.
 //  Copyright © 2020 Mason_Lin. All rights reserved.
 //
 

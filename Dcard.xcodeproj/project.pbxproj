@@ -172,6 +172,8 @@
 		848E16D6252ED10C00FA4B4F /* FeedbackCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848E16D4252ED10C00FA4B4F /* FeedbackCell.xib */; };
 		84C818A8252DC39800CFABA6 /* FriendCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C818A6252DC39800CFABA6 /* FriendCardVC.swift */; };
 		84C818A9252DC39800CFABA6 /* FriendCardVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C818A7252DC39800CFABA6 /* FriendCardVC.xib */; };
+		89D80C542545291700EB4F18 /* FollowIssueInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D80C522545291700EB4F18 /* FollowIssueInfoVC.swift */; };
+		89D80C552545291700EB4F18 /* FollowIssueInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */; };
 		934A0551A1012375356ACBFD /* Pods_Dcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */; };
 		936E380B2543B57D00EFFBFC /* Extension_Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936E380A2543B57D00EFFBFC /* Extension_Date.swift */; };
 		936E380D2543B59200EFFBFC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 936E380C2543B59100EFFBFC /* Profile.storyboard */; };
@@ -185,8 +187,6 @@
 		936E38222543B94900EFFBFC /* ProfilePostMoodCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 936E38202543B94900EFFBFC /* ProfilePostMoodCell.xib */; };
 		93A1F7E02543C37300CFC907 /* Extension_String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A1F7DF2543C37300CFC907 /* Extension_String.swift */; };
 		93A1F7E22543F6E400CFC907 /* Extension_Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A1F7E12543F6E400CFC907 /* Extension_Int.swift */; };
-		93A1F7E525443A2600CFC907 /* FollowIssueInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A1F7E325443A2600CFC907 /* FollowIssueInfoVC.swift */; };
-		93A1F7E625443A2600CFC907 /* FollowIssueInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93A1F7E425443A2600CFC907 /* FollowIssueInfoVC.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -379,6 +379,8 @@
 		848E16D4252ED10C00FA4B4F /* FeedbackCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeedbackCell.xib; sourceTree = "<group>"; };
 		84C818A6252DC39800CFABA6 /* FriendCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCardVC.swift; sourceTree = "<group>"; };
 		84C818A7252DC39800CFABA6 /* FriendCardVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendCardVC.xib; sourceTree = "<group>"; };
+		89D80C522545291700EB4F18 /* FollowIssueInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowIssueInfoVC.swift; sourceTree = "<group>"; };
+		89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowIssueInfoVC.xib; sourceTree = "<group>"; };
 		936E380A2543B57D00EFFBFC /* Extension_Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension_Date.swift; sourceTree = "<group>"; };
 		936E380C2543B59100EFFBFC /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		936E380F2543B5B200EFFBFC /* ProfilePostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePostView.swift; sourceTree = "<group>"; };
@@ -391,8 +393,6 @@
 		936E38202543B94900EFFBFC /* ProfilePostMoodCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfilePostMoodCell.xib; sourceTree = "<group>"; };
 		93A1F7DF2543C37300CFC907 /* Extension_String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_String.swift; sourceTree = "<group>"; };
 		93A1F7E12543F6E400CFC907 /* Extension_Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_Int.swift; sourceTree = "<group>"; };
-		93A1F7E325443A2600CFC907 /* FollowIssueInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowIssueInfoVC.swift; sourceTree = "<group>"; };
-		93A1F7E425443A2600CFC907 /* FollowIssueInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowIssueInfoVC.xib; sourceTree = "<group>"; };
 		94CD125306D27448D8A0CBAD /* Pods-Dcard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dcard.debug.xcconfig"; path = "Target Support Files/Pods-Dcard/Pods-Dcard.debug.xcconfig"; sourceTree = "<group>"; };
 		B2E0A8FC2B2910AA863AA7DC /* Pods-Dcard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dcard.release.xcconfig"; path = "Target Support Files/Pods-Dcard/Pods-Dcard.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -709,8 +709,8 @@
 				2271888E250F838D00AAA166 /* FollowIssueVC.swift */,
 				22718890250F858400AAA166 /* FollowIssueCell.swift */,
 				22718891250F858400AAA166 /* FollowIssueCell.xib */,
-				93A1F7E325443A2600CFC907 /* FollowIssueInfoVC.swift */,
-				93A1F7E425443A2600CFC907 /* FollowIssueInfoVC.xib */,
+				89D80C522545291700EB4F18 /* FollowIssueInfoVC.swift */,
+				89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */,
 			);
 			path = FollowIssue;
 			sourceTree = "<group>";
@@ -1015,7 +1015,7 @@
 				221A47D22511AD0200DE1301 /* SelectNotifyView.xib in Resources */,
 				22664E3424EB7BDF0080BAF8 /* MemoPageThreeVC.xib in Resources */,
 				22A75F2024E5380300287460 /* DayCell.xib in Resources */,
-				93A1F7E625443A2600CFC907 /* FollowIssueInfoVC.xib in Resources */,
+				89D80C552545291700EB4F18 /* FollowIssueInfoVC.xib in Resources */,
 				22F2111924CC5324003B1F1D /* ForumCell.xib in Resources */,
 				22A75F1824E5189C00287460 /* 柴犬.gif in Resources */,
 				224E3CB224B76E85003F8F2B /* ToolbarView.xib in Resources */,
@@ -1161,7 +1161,6 @@
 				221A47C625105CF300DE1301 /* FollowCardVC.swift in Sources */,
 				224E3CF724B784D9003F8F2B /* CardVC.swift in Sources */,
 				221A47DB2512218A00DE1301 /* CardHomeVC.swift in Sources */,
-				93A1F7E525443A2600CFC907 /* FollowIssueInfoVC.swift in Sources */,
 				22788AF42503BB5E00E87F7F /* CardInfoVC.swift in Sources */,
 				22433D3324E7E3C500E8D79D /* MemoVC.swift in Sources */,
 				22788B02250416BF00E87F7F /* FilterView.swift in Sources */,
@@ -1169,6 +1168,7 @@
 				22EFC6A624FB7D21003CD570 /* LoginNAV.swift in Sources */,
 				22788AEE25039DBE00E87F7F /* CardManager.swift in Sources */,
 				22CD379C25145E1B0066AA7D /* MailAllVC.swift in Sources */,
+				89D80C542545291700EB4F18 /* FollowIssueInfoVC.swift in Sources */,
 				22788B052504EDB000E87F7F /* CardSendCell.swift in Sources */,
 				22788AE82503900200E87F7F /* CardFirebase.swift in Sources */,
 				936E38142543B5B300EFFBFC /* ProfilePostCell.swift in Sources */,
@@ -1318,7 +1318,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1372,7 +1372,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

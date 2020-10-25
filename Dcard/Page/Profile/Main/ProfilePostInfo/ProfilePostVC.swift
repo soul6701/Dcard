@@ -19,7 +19,7 @@ class ProfilePostVC: UIViewController {
         tableView.dataSource = self
         tableView.layer.cornerRadius = 20
         tableView.backgroundColor = .tertiarySystemGroupedBackground
-        let tap = UITapGestureRecognizer(target: self, action: #selector(showMaintainView))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.showMaintainView))
         tableView.addGestureRecognizer(tap)
         return tableView
     }()
@@ -33,16 +33,17 @@ class ProfilePostVC: UIViewController {
     }()
     lazy private var viewTitle: ProfilePostView = {
         let view = UINib(nibName: "ProfilePostView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! ProfilePostView
-        let tap = UITapGestureRecognizer(target: self, action: #selector(showMaintainView))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.showMaintainView))
         tableView.addGestureRecognizer(tap)
         view.addGestureRecognizer(tap)
         return view
     }()
     @IBOutlet weak var tableViewMain: UITableView!
-    private let itemSpace: CGFloat = 20
+    
+    private let itemSpace: CGFloat = 15
     private var itemSize: CGSize {
         let width = floor((Double)(self.collectionView.bounds.width - self.itemSpace) / 2)
-        let height = floor((Double)(400 - 20 - 2 * self.itemSpace) / 3)
+        let height = floor((Double)(400 - 15 - 2 * self.itemSpace) / 3)
         return CGSize(width: width, height: height)
     }
     private var mood: Mood {
@@ -76,9 +77,9 @@ extension ProfilePostVC {
         view.translatesAutoresizingMaskIntoConstraints = false
         cell.addSubview(view)
         view.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview().offset(20)
-            maker.leading.equalToSuperview().offset(20)
-            maker.trailing.equalToSuperview().offset(-20)
+            maker.top.equalToSuperview().offset(15)
+            maker.leading.equalToSuperview().offset(15)
+            maker.trailing.equalToSuperview().offset(-15)
             maker.bottom.equalToSuperview().offset(last ? -50 : 0)
         }
     }
@@ -122,14 +123,14 @@ extension ProfilePostVC: UITableViewDelegate, UITableViewDataSource {
         if tableView === self.tableViewMain {
             switch row {
             case 0:
-                height = 110
+                height = 90
             case 1:
                 height = 400
             default:
                 height = 400
             }
         } else {
-            height = (400 - 20 - 50) / 7
+            height = (400 - 15 - 50) / 7
         }
         return height
     }

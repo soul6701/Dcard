@@ -23,17 +23,17 @@
                     </constraints>
                 </imageView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="WP1-na-wlg">
-                    <rect key="frame" x="80" y="45" width="52.5" height="50"/>
+                    <rect key="frame" x="80" y="45" width="46" height="50"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hox-gC-L7Y">
-                            <rect key="frame" x="0.0" y="0.0" width="52.5" height="25"/>
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="21"/>
+                            <rect key="frame" x="0.0" y="0.0" width="46" height="25"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G01-XQ-42d">
-                            <rect key="frame" x="0.0" y="25" width="52.5" height="25"/>
-                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
+                            <rect key="frame" x="0.0" y="25" width="46" height="25"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>

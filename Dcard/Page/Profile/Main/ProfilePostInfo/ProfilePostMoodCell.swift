@@ -53,61 +53,63 @@ class ProfilePostMoodCell: UITableViewCell {
     @IBOutlet weak var imageViewTitleIcon: UIImageView!
     
     //心情
+    @IBOutlet weak var lbEmoji: UILabel!
     @IBOutlet weak var lbCount: UILabel!
-    @IBOutlet weak var imageViewEmoji: UIImageView!
     @IBOutlet weak var viewLine: customView!
     
-    private var width: CGFloat {
-        return self.bounds.width * 2 / 3
+    static private var width: CGFloat = 0 //由最大心情數量決定線條寬度
+    private var mode: ProfilePostMoodCellMode = .title
+    private var mood: Mood {
+        return ModelSingleton.shared.userConfig.user.card.mood
     }
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     func setContent(rank: Int) {
-        let mood = ModelSingleton.shared.userConfig.user.card.mood
         let mode = rank == 0 ? .title : mood.sortedMoods.reversed()[rank - 1].0
         let data = mode.data
         
         if mode != .title {
-            self.imageView?.image = data.icon.image()!
+            self.lbEmoji.text = data.icon
             self.lbCount.text = String(data.count)
             self.lbTitle.isHidden = true
             self.imageViewTitleIcon.isHidden = true
             self.lbCount.isHidden = false
-            self.imageViewEmoji.isHidden = false
+            self.lbEmoji.isHidden = false
             self.viewLine.isHidden = false
-            if mood.contrast {
-                if mode == mood.largest {
+            if self.mood.contrast {
+                if mode == self.mood.largest {
+                    print("aaaaaa\(self.viewLine.frame.width)")
+                    self.viewLine.layoutIfNeeded() //因為lable加入文字自適應寬度，為了新增分隔線，須立即更新layout
                     makeSeperatorView(in: self.viewLine)
-                    self.viewLine.snp.remakeConstraints { (maker) in
-                        maker.width.equalTo(self.width)
-                    }
+                    ProfilePostMoodCell.width = self.lbCount.frame.minX - self.lbEmoji.frame.maxX
                 } else {
                     self.viewLine.snp.remakeConstraints { (maker) in
-                        maker.width.equalTo((self.width) * (mood.scale[mode]!))
+                        maker.width.equalTo((ProfilePostMoodCell.width) * (self.mood.scale[mode]!))
                     }
                 }
             } else {
                 self.viewLine.snp.remakeConstraints { (maker) in
-                    maker.width.equalTo((self.width) * (mood.scale[mode]!))
+                    maker.width.equalTo((ProfilePostMoodCell.width) * (self.mood.scale[mode]!))
                 }
             }
         } else {
             self.lbTitle.isHidden = false
             self.imageViewTitleIcon.isHidden = false
             self.lbCount.isHidden = true
-            self.imageViewEmoji.isHidden = true
+            self.lbEmoji.isHidden = true
             self.viewLine.isHidden = true
         }
     }
+    //加入分割線
     private func makeSeperatorView(in view: customView) {
         let path = UIBezierPath()
-        let Width: CGFloat = view.bounds.width
-        let height: CGFloat = view.bounds.height
-        path.move(to: CGPoint(x: Width - 22.5, y: 0))
-        path.addLine(to: CGPoint(x: Width - 30, y: height))
-        path.addLine(to: CGPoint(x: Width - 40, y: height))
-        path.addLine(to: CGPoint(x: Width - 32.5, y: 0))
+        let width: CGFloat = view.frame.width
+        let height: CGFloat = view.frame.height
+        path.move(to: CGPoint(x: width - 22.5, y: 0))
+        path.addLine(to: CGPoint(x: width - 30, y: height))
+        path.addLine(to: CGPoint(x: width - 40, y: height))
+        path.addLine(to: CGPoint(x: width - 32.5, y: 0))
         path.close()
         let seperatorLayer = CAShapeLayer()
         seperatorLayer.path = path.cgPath

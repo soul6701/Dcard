@@ -39,7 +39,7 @@ class FriendCardVC: UIViewController {
         control.backgroundColor = .clear
         control.fixedSegmentWidth = true
         control.selectedSegmentIndex = 0
-        control.addTarget(self, action: #selector(onClickSeg(_:)), for: .valueChanged)
+        control.addTarget(self, action: #selector(didClickControl(_:)), for: .valueChanged)
         return control
     }()
     lazy private var titleView: UIView = {
@@ -64,7 +64,7 @@ extension FriendCardVC {
         confiAllVC()
     }
     private func confiNav() {
-        self.navigationItem.titleView = titleView
+        self.navigationItem.titleView = self.titleView
     }
     private func confiAllVC() {
         guard let mail = self.mail else { return }
@@ -72,12 +72,12 @@ extension FriendCardVC {
         chatRoomVC.setContent(mail: mail)
         cardInfoVC = UIStoryboard.card.cardInfoVC
         cardInfoVC.setContent(card: mail.card, isUser: false, isFriend: true)
-        onClickSeg(self.control)
+        didClickControl(self.control)
     }
 }
 // MARK: - private Fun
 extension FriendCardVC {
-    @objc func onClickSeg(_ sender: ScrollableSegmentedControl) {
+    @objc func didClickControl(_ sender: ScrollableSegmentedControl) {
         if self.selectedIndex != sender.selectedSegmentIndex || selectedVC == nil {
             self.selectedIndex = sender.selectedSegmentIndex
             

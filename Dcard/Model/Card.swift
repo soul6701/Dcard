@@ -51,7 +51,7 @@ public struct Card {
 public struct Mood {
     public var heart: Int = Int.random(in: 0...10000)
     public var haha: Int = Int.random(in: 0...10000)
-    public var angry: Int = Int.random(in: 0...100000)
+    public var angry: Int = 999999
     public var cry: Int = Int.random(in: 0...10000)
     public var surprise: Int = Int.random(in: 0...10000)
     public var respect: Int = Int.random(in: 0...100000)
@@ -78,7 +78,8 @@ public struct Mood {
     public var contrast: Bool {
         let largest = self.sortedMoods.first { return $0.0 == self.largest }!
         let secondLargest = self.sortedMoods.first { return $0.0 == self.secondLargest }!
-        return largest.1.findMultipleBaseTen() - secondLargest.1.findMultipleBaseTen() >= 1
+        let difference = largest.1.findMultipleBaseTen() - secondLargest.1.findMultipleBaseTen()
+        return difference >= 1 || difference == 0 && (largest.1 / secondLargest.1 > 2)
     }
     public var scale: [ProfilePostMoodCellMode: CGFloat] {
         return calculateScale(self.contrast ? self.sortedMoods.dropLast() : self.sortedMoods)

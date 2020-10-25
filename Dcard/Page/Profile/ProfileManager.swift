@@ -162,7 +162,7 @@ class ProfileManager {
         self.maintainBaseVC = viewController
     }
     func showMaintainView() {
-        let alert = UIAlertController(title: "這邊還有沒東西！", message: "進階功能還在努力開發中，以後再回來看看😎", preferredStyle: .alert)
+        let alert = UIAlertController(title: "這邊還沒有東西！", message: "進階功能還在努力開發中，以後再回來看看😎", preferredStyle: .alert)
         let OKAction = UIAlertAction(title: "好", style: .cancel, handler: nil)
         alert.addAction(OKAction)
         self.maintainBaseVC?.present(alert, animated: true, completion: nil)
@@ -199,12 +199,10 @@ class ProfileManager {
             _ = vc.view
             var list = [FollowIssue]()
             (1...20).forEach { (i) in
-                list.append(FollowIssue(listName: ["金曲獎", "金鐘獎", "金馬獎"].randomElement()!, postCount: Int.random(in: (1...100)), followCount: Int.random(in: (1...100)), notifyMode: (0...2).randomElement()!, isFollowing: Bool.random()))
+                list.append(FollowIssue(listName: ["春夏韓風穿搭", "第10002屆葛萊美獎", "第11123132屆金馬獎"].randomElement()!, postCount: Int.random(in: (1...1000)), followCount: Int.random(in: (1...1000)), notifyMode: (0...2).randomElement()!, isFollowing: true))
             }
             vc.setContent(followIssueList: list, title: next.cell.name)
-            self.baseNav.pushViewController(vc, animated: true) {
-                self.baseNav.setNavigationBarHidden(false, animated: false)
-            }
+            self.baseNav.pushViewController(vc, animated: true)
         case .followCard:
             let vc = UIStoryboard.profile.followCardVC
             _ = vc.view
@@ -214,9 +212,7 @@ class ProfileManager {
                 list.append(FollowCard(card: Card(id: ["qaz123", "wsx123", "edc123", "rfv123"].randomElement()!, post: _postList, name: ["NBA 小天使", "🦊🦊🦊🦊🦊", "🐱🐱🐱", "🐶🐶", "🐼"].randomElement()!, photo: "", sex: ["F", "M", "其他"].randomElement()!, introduce: "", country: "", school: "", article: "", birthday: "", love: "", fans: (0...100).randomElement()!), notifyMode: (0...2).randomElement()!, isFollowing: Bool.random(), isNew: Bool.random()))
             }
             vc.setContent(followCardList: list, title: next.cell.name)
-            self.baseNav.pushViewController(vc, animated: true) {
-                self.baseNav.setNavigationBarHidden(false, animated: false)
-            }
+            self.baseNav.pushViewController(vc, animated: true)
         case .artical:
             let vc = UIStoryboard.profile.articalVC
             let _ = vc.view

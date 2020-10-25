@@ -11,12 +11,12 @@ import UIKit
 
 extension String {
     func image() -> UIImage? {
-        let size = CGSize(width: 35, height: 35)
+        let size = CGSize(width: 30, height: 30)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         UIColor.clear.set()
         let rect = CGRect(origin: .zero, size: size)
         UIRectFill(rect)
-        (self as AnyObject).draw(in: rect, withAttributes: [.font: UIFont.systemFont(ofSize: 30)])
+        (self as AnyObject).draw(in: rect, withAttributes: [.font: UIFont.systemFont(ofSize: 28)])
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image

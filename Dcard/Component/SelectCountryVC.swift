@@ -206,13 +206,13 @@ extension SelectCountryVC: UITableViewDelegate, UITableViewDataSource {
 // MARK: - UISearchBarDelegate
 extension SelectCountryVC: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        self.searchBar.setShowsCancelButton(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.searchBar.setShowsCancelButton(true, animated: false)
         self.resultList = [Country]()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.searchBar.setShowsCancelButton(false, animated: true)
+        self.searchBar.setShowsCancelButton(false, animated: false)
         self.mode = .common
         self.tableView.reloadData()
         closeKeyboard()
