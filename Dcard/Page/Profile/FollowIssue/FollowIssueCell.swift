@@ -33,7 +33,7 @@ class FollowIssueCell: UITableViewCell {
         self.index = index
         self.followIssue = followIssue
         let name = followIssue.listName
-        let description = "\(followIssue.postCount)篇文章" + " | " + "\(followIssue.followCount)個追蹤"
+        let description = "\(followIssue.post.count)篇文章" + " | " + "\(followIssue.post.count)個追蹤"
         self.lbName.text = name
         self.lbDescription.text = description
         self.imageBell.image = UIImage(systemName: self.imageBellNameList[followIssue.notifyMode])

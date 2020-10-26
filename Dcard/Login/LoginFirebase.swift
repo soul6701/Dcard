@@ -38,7 +38,7 @@ protocol LoginFirebaseInterface {
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<RequirePasswordType>
     func getUserData(uid: String) -> Observable<User>
     func addFriend(name: String) -> Observable<Bool>
-    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType: String]) -> Observable<Bool>
+    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType: Any]) -> Observable<Bool>
 }
 
 public class LoginFirebase: LoginFirebaseInterface {
@@ -280,7 +280,7 @@ public class LoginFirebase: LoginFirebaseInterface {
         return subject.asObserver()
     }
     // MARK: - 修改使用者資訊
-    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType: String]) -> Observable<Bool> {
+    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType: Any]) -> Observable<Bool> {
         let subject = PublishSubject<Bool>()
         var userId = ""
 
@@ -308,9 +308,17 @@ public class LoginFirebase: LoginFirebaseInterface {
             } else if !newCard.isEmpty {
                 let card = ModelSingleton.shared.userConfig.user.card
 //                var list: [String: Any] = ["id": card.id, "post": card.post, "name": card.name, "photo": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "": card.fans, "favariteCatolog": card.favariteCatolog, "comment": card.comment, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart, "getMood": card.getMood, "mood": card.mood]
-                var list: [String: Any] = ["id": card.id, "name": card.name, "photo": card.photo, "sex": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "fans": card.fans, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart]
+                
+                var postList: [[String: Any]] = []
+                var favariteCatologList: [[String: Any]] = []
+                card.favariteCatolog.forEach { (favariteCatolog) in
+                    favariteCatologList.append(["photo": favariteCatolog.photo, "title": favariteCatolog.title, "posts": postList])
+                }
+                var list: [String: Any] = ["id": card.id, "name": card.name, "photo": card.photo, "sex": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "fans": card.fans, "favariteCatolog": favariteCatologList, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart]
                 newCard.forEach { (key, value) in
-                    list[key.rawValue] = value
+                    if key == .id || key == .name {
+                        list[key.rawValue] = value as! String
+                    }
                 }
                 setter["card"] = list
             }
@@ -334,9 +342,9 @@ public class LoginFirebase: LoginFirebaseInterface {
                         newCard.forEach { (key, value) in
                             switch key {
                             case .id:
-                                oldCard.id = value
+                                oldCard.id = value as! String
                             case .name:
-                                oldCard.name = value
+                                oldCard.name = value as! String
                             }
                         }
                         oldUser.card = oldCard

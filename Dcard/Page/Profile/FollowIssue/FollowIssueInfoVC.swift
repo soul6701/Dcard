@@ -25,8 +25,34 @@ class FollowIssueInfoVC: UIViewController {
         control.addTarget(self, action: #selector(self.didClickControl(_:)), for: .valueChanged)
         return control
     }()
+    lazy private var btnBG: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.alpha = 0.8
+        button.backgroundColor = .black
+        button.addTarget(self, action: #selector(self.closeHintView), for: .touchUpInside)
+        return button
+    }()
+    lazy private var tableViewHint: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CommonCell")
+        tableView.layer.cornerRadius = 10
+        tableView.showsVerticalScrollIndicator = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        return tableView
+    }()
+    lazy private var pan: UIPanGestureRecognizer = {
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(self.didPanArticle))
+        pan.delegate = self
+        pan.cancelsTouchesInView = false
+        pan.delaysTouchesBegan = true
+        return pan
+    }()
+    @IBOutlet weak var viewContainer: UIView!
+    @IBOutlet weak var viewTitle: UIStackView!
     @IBOutlet weak var topSpace: NSLayoutConstraint!
-    @IBOutlet weak var tbHeight: NSLayoutConstraint!
     @IBOutlet weak var ViewSegmented: UIView!
     @IBOutlet weak var viewProfileInfo: UIView!
     @IBOutlet var lbIssueTitle: [UILabel]!
@@ -34,16 +60,21 @@ class FollowIssueInfoVC: UIViewController {
     @IBOutlet weak var viewBell: UIView!
     @IBOutlet weak var imageBell: UIImageView!
     @IBOutlet weak var btnFollow: customButton!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableViewAll: UITableView!
+    @IBOutlet weak var tableViewHot: UITableView!
     @IBOutlet weak var btnEdit: UIButton!
     @IBOutlet weak var lbFollowing: UILabel!
     
     private var imageBellNameList = ["bell.circle.fill", "bell.fill", "bell.slash.fill"]
     private var followIssue: FollowIssue!
-    private var myPostList = ProfileManager.shared.myPostList
+    private var allPostList = ProfileManager.shared.myPostList
+    private var hotPostList: [Post] {
+        return self.allPostList.filter{ return $0.hot }
+    }
     private var isFollowing = false
     private var notifyMode = 0
     private var canBeDragged = false
+    private var viewProfileInfoHeight: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,8 +115,13 @@ class FollowIssueInfoVC: UIViewController {
     @IBAction func didClickBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
-    @IBAction func didClickShare(_ sender: UIButton) {
-        //
+    @IBAction func didClickBtnEdit(_ sender: UIButton) {
+        self.btnBG.isHidden = false
+        self.tableViewHint.isHidden = false
+        UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.8) {
+            self.setupHintViewEndSize()
+            self.tableViewHint.layoutIfNeeded()
+        }.startAnimation()
     }
     
     func setContent(followIssue: FollowIssue) {
@@ -96,7 +132,6 @@ class FollowIssueInfoVC: UIViewController {
 extension FollowIssueInfoVC {
     private func initView() {
         ToolbarView.shared.show(false)
-        self.tbHeight.constant = self.mode == .user ? -175 : -75
         addControlAndSetAutoLayout()
         let tap = UITapGestureRecognizer(target: self, action: #selector(didClickBell))
         self.viewBell.addGestureRecognizer(tap)
@@ -105,10 +140,15 @@ extension FollowIssueInfoVC {
         self.lbIssueTitle.forEach { (lb) in
             lb.text = self.followIssue.listName
         }
-        self.lbDescription.text = "\(followIssue.postCount) 篇文章 | \(followIssue.followCount) 位粉絲"
+        self.lbDescription.text = "\(followIssue.post.count) 篇文章 | \(followIssue.followCount) 位粉絲"
         resetBellState(self.isFollowing, notifyMode: self.notifyMode)
-        
         confiTableView()
+        setupHintView()
+        self.view.layoutIfNeeded()
+        self.viewProfileInfoHeight = self.viewProfileInfo.frame.height
+        self.viewTitle.alpha = 0
+        self.lbFollowing.alpha = 0
+        self.tableViewHot.isHidden = true
     }
     private func addControlAndSetAutoLayout() {
         self.ViewSegmented.addSubview(self.control)
@@ -118,19 +158,43 @@ extension FollowIssueInfoVC {
         }
     }
     private func confiTableView() {
-        self.tableView.isScrollEnabled = false
-        self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(didPanArticle))
-        pan.delegate = self
-        pan.cancelsTouchesInView = false
-        pan.delaysTouchesBegan = true
-        self.tableView.addGestureRecognizer(pan)
+        self.tableViewAll.isScrollEnabled = false
+        self.tableViewHot.isScrollEnabled = false
+        self.tableViewAll.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
+        self.tableViewHot.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
+        
+        self.viewContainer.addGestureRecognizer(self.pan)
+    }
+    private func setupHintView() {
+        self.view.setFixedView(self.btnBG)
+        self.view.addSubview(self.tableViewHint)
+        setupHintViewInitialSize()
+    }
+    private func setupHintViewInitialSize() {
+        self.tableViewHint.snp.remakeConstraints { (maker) in
+            maker.top.equalTo(self.btnEdit.snp.bottom).offset(5)
+            maker.trailing.equalTo(self.btnEdit.snp.leading).offset(5)
+            maker.width.height.equalTo(1)
+        }
+        self.btnBG.isHidden = true
+        self.tableViewHint.isHidden = true
+    }
+    private func setupHintViewEndSize() {
+        self.tableViewHint.snp.remakeConstraints { (maker) in
+            maker.top.equalTo(self.btnEdit.snp.bottom).offset(5)
+            maker.trailing.equalTo(self.btnEdit.snp.leading).offset(5)
+            maker.width.equalTo(200)
+            maker.height.equalTo(100)
+        }
     }
 }
 // MARK: - Private Handler
 extension FollowIssueInfoVC {
     @objc private func didClickControl(_ sender: ScrollableSegmentedControl) {
-        
+        let isAll = sender.selectedSegmentIndex == 0
+        self.tableViewAll.isHidden = !isAll
+        self.tableViewHot.isHidden = isAll
+        self.canBeDragged = false
     }
     //彈出通知選項視窗
     @objc private func didClickBell() {
@@ -138,56 +202,44 @@ extension FollowIssueInfoVC {
     }
     //移動文章表格
     @objc private func didPanArticle(_ ges: UIPanGestureRecognizer) {
+        let upperBoundary = 40 - self.viewProfileInfoHeight
+        let tableView = (self.control.selectedSegmentIndex == 0 ? self.tableViewAll : self.tableViewHot)!
         if ges.state == .began || ges.state == .changed {
-            
             let translation = ges.translation(in: ges.view)
-            if self.bottomSpace.constant > 0 || self.canBeDragged {
-                self.bottomSpace.constant += translation.y
-            } else if self.bottomSpace.constant > 100 {
-                self.bottomSpace.constant = 100
+            if self.topSpace.constant > upperBoundary || self.canBeDragged {
+                self.topSpace.constant += translation.y
+                self.btnEdit.isHidden = true
+            } else if self.topSpace.constant <= upperBoundary {
+                self.topSpace.constant = upperBoundary
+                self.btnEdit.isHidden = true
             } else {
-                self.bottomSpace.constant = 0
+                self.topSpace.constant = 40
+                self.btnEdit.isHidden = false
             }
-            let scale = max(min(self.bottomSpace.constant, 100) / 100, 0)
-            let _scale = max(min(self.bottomSpace.constant, 50) / 50, 0)
-            self.lbDescription.alpha = scale
-            self.imageBell.alpha = scale
-            self.btnFollow.alpha = scale
-            self.lbIcon.transform = CGAffineTransform(scaleX: scale, y: scale)
-            self.iconHeight.constant = 50 * scale
-            self.stackViewHeight.constant = 50 + 50 * scale
-            self.lbIcon.layer.cornerRadius = (self.iconHeight.constant - 5) / 2
-            self.btnShare.isHidden = scale < 1
-            self.lbFollowing.alpha = (1 - _scale)
+            let scale = min(self.topSpace.constant / 40, 1)
+            self.viewProfileInfo.alpha = scale
+            self.viewTitle.alpha = 1 - scale
+            self.lbFollowing.alpha = 1 - scale
             self.view.layoutIfNeeded()
             ges.setTranslation(CGPoint.zero, in: ges.view)
         }
         if ges.state == .ended {
-            if self.bottomSpace.constant >= 50 {
-                self.bottomSpace.constant = 100
-                self.tableView.isScrollEnabled = false
-                self.lbDescription.alpha = 1
-                self.imageBell.alpha = 1
-                self.btnFollow.alpha = 1
-                self.btnShare.isHidden = false
+            let linePosition = 40 - self.viewProfileInfoHeight / 2
+            if self.topSpace.constant >= linePosition {
+                self.topSpace.constant = 40
+                tableView.isScrollEnabled = false
+                self.viewProfileInfo.alpha = 1
+                self.viewTitle.alpha = 0
                 self.lbFollowing.alpha = 0
-                self.lbIcon.transform = CGAffineTransform(scaleX: 1, y: 1)
-                self.iconHeight.constant = 50
-                self.stackViewHeight.constant = 100
-                self.lbIcon.layer.cornerRadius = (self.iconHeight.constant - 5) / 2
+                self.btnEdit.isHidden = false
             } else {
-                self.tableView.scrollsToTop = true
-                self.bottomSpace.constant = 0
-                self.tableView.isScrollEnabled = true
-                self.lbDescription.alpha = 0
-                self.imageBell.alpha = 0
-                self.btnFollow.alpha = 0
-                self.btnShare.isHidden = true
+                tableView.scrollsToTop = true
+                self.topSpace.constant = upperBoundary
+                tableView.isScrollEnabled = true
+                self.viewProfileInfo.alpha = 0
+                self.viewTitle.alpha = 1
                 self.lbFollowing.alpha = 1
-                self.lbIcon.transform = CGAffineTransform(scaleX: 0, y: 0)
-                self.iconHeight.constant = 0
-                self.stackViewHeight.constant = 50
-                self.lbIcon.layer.cornerRadius = (self.iconHeight.constant - 5) / 2
+                self.btnEdit.isHidden = true
             }
             self.view.layoutIfNeeded()
         }
@@ -208,62 +260,112 @@ extension FollowIssueInfoVC {
         self.imageBell.image = UIImage(systemName: self.imageBellNameList[notifyMode])
     }
     //TableView滾輪動作
-//    private func scrollHandler(_ yOffset: CGFloat) {
-//        if yOffset <= 0 {
-//            self.canBeDragged = true
-//            self.tableView.isScrollEnabled = false
-//        } else {
-//            self.canBeDragged = false
-//        }
-//    }
+    private func scrollHandler(in tableView: UITableView, yOffset: CGFloat) {
+        if yOffset <= 0 {
+            self.canBeDragged = true
+            tableView.isScrollEnabled = false
+        } else {
+            self.canBeDragged = false
+        }
+    }
+    @objc private func closeHintView() {
+        setupHintViewInitialSize()
+    }
 }
 // MARK: - UITableViewDelegate
 extension FollowIssueInfoVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        let notTableViewHint = tableView !== self.tableViewHint
+        return notTableViewHint ? 2 : 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? self.myPostList.count : 1
+        let notTableViewHint = tableView !== self.tableViewHint
+        let isTableViewAll = tableView == self.tableViewAll
+        return notTableViewHint ? (section == 0 ? (isTableViewAll ? self.allPostList.count : self.hotPostList.count ) : 1) : 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
-        if section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
-            cell.setContent(post: self.myPostList[indexPath.row], mode: .profile)
-            return cell
+        let row = indexPath.row
+        let notTableViewHint = tableView !== self.tableViewHint
+        let isTableViewAll = tableView == self.tableViewAll
+        
+        if notTableViewHint {
+            if section == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
+                cell.setContent(post: isTableViewAll ? self.allPostList[row] : self.hotPostList[row], mode: .profile)
+                return cell
+            } else {
+                let cell = UITableViewCell()
+                cell.textLabel?.textColor = #colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1)
+                cell.textLabel?.text = "沒有更多囉！"
+                cell.textLabel?.textAlignment = .center
+                cell.selectionStyle = .none
+                cell.separatorInset = .init(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude) //隱藏分隔線
+                return cell
+            }
         } else {
-            let cell = UITableViewCell()
-            cell.textLabel?.textColor = #colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1)
-            cell.textLabel?.text = "沒有更多囉！"
-            cell.textLabel?.textAlignment = .center
-            cell.selectionStyle = .none
-            cell.separatorInset = .init(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude) //隱藏分隔線
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CommonCell", for: indexPath)
+            cell.imageView?.image = UIImage(systemName: row == 0 ? "square.and.arrow.up.fill" : "exclamationmark.circle.fill")
+            cell.imageView?.tintColor = .systemGray5
+            cell.textLabel?.text = row == 0 ? "分享" : "檢舉話題"
             return cell
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? 120 : 180
+        let notTableViewHint = tableView !== self.tableViewHint
+        return notTableViewHint ? (indexPath.section == 0 ? 120 : 180) : 50
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
-        let vc = UIStoryboard.home.postVC
-        vc.setContent(post: myPostList[row], commentList: [Comment()])
-        vc.navigationItem.title = myPostList[row].title
-        vc.modalPresentationStyle = .formSheet
-        self.navigationController?.pushViewController(vc, animated: true) {
-            self.navigationController?.setNavigationBarHidden(false, animated: false)
+        let notTableViewHint = tableView !== self.tableViewHint
+        let isTableViewAll = tableView == self.tableViewAll
+        let post = isTableViewAll ? allPostList[row] : hotPostList[row]
+        
+        if notTableViewHint {
+            let vc = UIStoryboard.home.postVC
+            vc.setContent(post: post, commentList: [Comment()])
+            vc.navigationItem.title = post.title
+            vc.modalPresentationStyle = .formSheet
+            self.navigationController?.pushViewController(vc, animated: true) {
+                self.navigationController?.setNavigationBarHidden(false, animated: false)
+            }
+        } else {
+            setupHintViewInitialSize()
+            if row == 0 {
+                let vc = UIActivityViewController(activityItems: [self.followIssue.listName], applicationActivities: nil)
+                vc.completionWithItemsHandler = { (_, completed, _, error) in
+                    if let error = error {
+                        ProfileManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+                    }
+                    if completed {
+                        ProfileManager.shared.showOKView(mode: .shareCardInfoAndIssueInfo, handler: nil)
+                    }
+                }
+                present(vc, animated: true, completion: nil)
+            } else {
+                let vc = ReportVC()
+                let nav = UINavigationController(rootViewController: vc)
+                nav.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+                nav.modalPresentationStyle = .fullScreen
+                present(nav, animated: true, completion: nil)
+            }
         }
     }
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        guard self.mode == .other else { return }
-//        scrollHandler(scrollView.contentOffset.y)
-//    }
-//
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        guard self.mode == .other && decelerate else { return }
-//        scrollHandler(scrollView.contentOffset.y)
-//    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let notTableViewHint = scrollView !== self.tableViewHint
+        if notTableViewHint {
+            scrollHandler(in: scrollView as! UITableView, yOffset: scrollView.contentOffset.y)
+        }
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard decelerate else { return }
+        let notTableViewHint = scrollView !== self.tableViewHint
+        if notTableViewHint {
+            scrollHandler(in: scrollView as! UITableView, yOffset: scrollView.contentOffset.y)
+        }
+    }
 }
 // MARK: - SelectNotifyViewDelegate
 extension FollowIssueInfoVC: SelectNotifyViewDelegate {

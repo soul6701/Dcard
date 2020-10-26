@@ -48,7 +48,7 @@ class LoginVC: UIViewController {
         initView()
         confiViewModel()
         subsribeViewModel()
-        self.viewModel.login(lastName: "a", firstName: "a", password: "123456")
+        self.viewModel.login(lastName: "a", firstName: "a", password: "a12345")
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

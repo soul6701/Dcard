@@ -58,11 +58,6 @@ class SettingAccountVC: UIViewController {
         button.addTarget(self, action: #selector(self.alert), for: .touchUpInside)
         return button
     }()
-    lazy private var btnClose: UIButton = {
-        let button = UIButton(type: .close)
-        button.addTarget(self, action: #selector(self.close), for: .touchUpInside)
-        return button
-    }()
     lazy private var tfEmailList: [UITextField] = {
         let placeholderRowOne = self.mode == .resetAddress ? "請輸入欲修改的信箱" : "請輸入新密碼"
         let placeholderRowTwo = self.mode == .resetAddress ? "再次輸入新信箱" : "再次輸入新密碼"
@@ -264,7 +259,7 @@ extension SettingAccountVC {
         if self.mode == .editCard || self.mode == .enterNewID {
             self.navigationItem.setRightBarButton(UIBarButtonItem(customView: self.btnHint), animated: true)
             guard self.mode == .editCard else { return }
-            self.navigationItem.setLeftBarButton(UIBarButtonItem(customView: self.btnClose), animated: true)
+            self.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(self.close)), animated: true)
         }
     }
     private func confiDoneButton() {

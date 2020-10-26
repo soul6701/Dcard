@@ -20,7 +20,7 @@ public struct Favorite {
 public struct FollowIssue {
     
     public var listName: String = ""
-    public var postCount: Int = 0
+    public var post: [Post] = []
     public var followCount: Int = 0
     public var notifyMode: Int = 0 //0: 開啟新文章通知 1: 開啟個人化文章通知 2: 關閉全部文章通知
     public var isFollowing: Bool = true

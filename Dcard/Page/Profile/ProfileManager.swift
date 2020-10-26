@@ -21,7 +21,7 @@ enum ProfileOKMode {
     case sendVefifymail
     case cancelFollowCard
     case cancelFollowIssue
-    case shareCardInfo
+    case shareCardInfoAndIssueInfo
 }
 class ProfileManager {
     
@@ -49,7 +49,7 @@ class ProfileManager {
         var _myPostList = [Post]()
         (0...7).forEach { (i) in
             let withNickname = Bool.random()
-            _myPostList.append(Post(id: user.lastName + "_" + user.firstName , title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15", "2018-02-21"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: "M", department: withNickname ? "K" : "邊緣人養成系", anonymousSchool: false, anonymousDepartment: false, school: withNickname ? "野比大雄" : "私立台灣肥宅學院", withNickname: withNickname, mediaMeta: _mediaMeta[i % 4]))
+            _myPostList.append(Post(id: user.lastName + "_" + user.firstName , title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15", "2018-02-21"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: "M", department: withNickname ? "K" : "邊緣人養成系", anonymousSchool: false, anonymousDepartment: false, school: withNickname ? "野比大雄" : "私立台灣肥宅學院", withNickname: withNickname, mediaMeta: _mediaMeta[i % 4], host: true, hot: Bool.random()))
         }
         return _myPostList
     }
@@ -77,6 +77,7 @@ class ProfileManager {
         self.alertconfig.presentationContext = .window(windowLevel: .alert)
         self.alertconfig.presentationStyle = .center
         self.alertconfig.duration = .forever
+        
     }
     //存入本地資料庫
     func saveToDataBase(preference: Preference) {
@@ -95,7 +96,7 @@ class ProfileManager {
             body = "已成功發送"
         case .cancelFollowCard, .cancelFollowIssue:
             body = "成功取消追蹤"
-        case .shareCardInfo:
+        case .shareCardInfoAndIssueInfo:
             body = "分享成功"
         }
         self.OKView.configureContent(title: "", body: body)
@@ -199,7 +200,7 @@ class ProfileManager {
             _ = vc.view
             var list = [FollowIssue]()
             (1...20).forEach { (i) in
-                list.append(FollowIssue(listName: ["春夏韓風穿搭", "第10002屆葛萊美獎", "第11123132屆金馬獎"].randomElement()!, postCount: Int.random(in: (1...1000)), followCount: Int.random(in: (1...1000)), notifyMode: (0...2).randomElement()!, isFollowing: true))
+                list.append(FollowIssue(listName: ["春夏韓風穿搭", "第10002屆葛萊美獎", "第11123132屆金馬獎"].randomElement()!, post: self.myPostList, followCount: Int.random(in: (1...1000)), notifyMode: (0...2).randomElement()!, isFollowing: true))
             }
             vc.setContent(followIssueList: list, title: next.cell.name)
             self.baseNav.pushViewController(vc, animated: true)

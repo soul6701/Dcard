@@ -90,11 +90,10 @@ class CardHomeVC: UIViewController {
         let vc = SettingAccountVC()
         vc.setContent(mode: .editCard, title: "編輯卡稱")
         let nav = UINavigationController(rootViewController: vc)
+        nav.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        nav.navigationBar.tintColor = #colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 1)
         nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true) {
-            nav.navigationBar.tintColor = #colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 1)
-            nav.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-        }
+        present(nav, animated: true, completion: nil)
     }
     @IBAction func didClickShare(_ sender: UIButton) {
         let vc = UIActivityViewController(activityItems: [self.followCard.card.name], applicationActivities: nil)
@@ -103,7 +102,7 @@ class CardHomeVC: UIViewController {
                 ProfileManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
             }
             if completed {
-                ProfileManager.shared.showOKView(mode: .shareCardInfo, handler: nil)
+                ProfileManager.shared.showOKView(mode: .shareCardInfoAndIssueInfo, handler: nil)
             }
         }
         if mode == .user {

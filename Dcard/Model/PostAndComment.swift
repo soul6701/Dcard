@@ -28,6 +28,7 @@ public struct Post {
     var withNickname: Bool = false
     var mediaMeta: [MediaMeta] = []
     var host: Bool = false
+    var hot: Bool = false
 }
 public struct Comment {
     var id: String = ""
