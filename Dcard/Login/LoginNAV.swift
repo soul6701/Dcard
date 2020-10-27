@@ -45,6 +45,7 @@ class LoginNAV: UINavigationController, LoginInfo {
         super.viewDidLoad()
         self.modalPresentationStyle = .fullScreen
         self.setNavigationBarHidden(true, animated: false)
+        LoginManager.shared.setBaseNav(self)
     }
     func setLoginInfo(lastname: String) {
         self.lastName = lastname

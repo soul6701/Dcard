@@ -36,11 +36,15 @@ class SetPasswordVC: UIViewController {
         return true
     }
     @IBAction func didClickBtnNext(_ sender: UIButton) {
+        guard let password = self.tfPassword.text, expectPasswordFormat(password) else {
+            LoginManager.shared.showAlertView(errorMessage: "含有數字、英文字母和標點符號（如！和＆）的密碼組合，且至少由六個字組成", handler: nil)
+            return
+        }
         toNextPage()
     }
     @objc private func toNextPage() {
         self.password = self.tfPassword.text ?? ""
-        LoginManager.shared.toNextPage(self.navigationController!, next: .CompleteRegisterVC)
+        LoginManager.shared.toNextPage(.CompleteRegisterVC)
     }
 }
 // MARK: - SetupUI
@@ -79,5 +83,13 @@ extension SetPasswordVC {
             }
             self.password = text
         }).disposed(by: self.disposeBag)
+    }
+}
+// MARK: - Private Handler
+extension SetPasswordVC {
+    private func expectPasswordFormat(_ password: String) -> Bool {
+        let containNumber = !password.match("\\d+", options: .caseInsensitive).isEmpty
+        let containAlp = !password.match("[a-zA-Z]+", options: .caseInsensitive).isEmpty
+        return containNumber && containAlp
     }
 }

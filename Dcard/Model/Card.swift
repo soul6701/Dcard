@@ -24,16 +24,25 @@ public struct Card {
     public var birthday: String = ""
     public var love: String = ""
     public var fans: Int = 0
-    public var favariteCatolog: [FavariteCatolog] = {
-        var list = [FavariteCatolog]()
-        var random = Int.random(in: 1...10000)
-        (0...random).forEach { (_) in
-            list.append(FavariteCatolog())
+    public var favorite: [Favorite] = {
+        var _list = [Favorite]()
+        let list = [["我像個殘廢 飛不出你的世界", "借不到一點安慰"], ["雖然暗戀讓人早熟", "也讓人多難過"], ["多麽想告訴你 我好喜歡你", "都怪我控制不了自己"], ["未來的每一步一腳印", "相知相習相依為命"]]
+        let _mediaMeta = [[MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=17fh01n/3r580003rr4ps40n960o.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=17fh01n/3r580003rr4ps40n960o.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=1avg1r2/3r580003rqson1npps7s.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=1avg1r2/3r580003rqson1npps7s.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=11sbjcv/ctp-vzntr/15341312472962rqp6q4r2q.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=11sbjcv/ctp-vzntr/15341312472962rqp6q4r2q.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=38pi76/ctp-vzntr/1534131247394rsnss9rr7o.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=38pi76/ctp-vzntr/1534131247394rsnss9rr7o.jpg")]]
+        var postList: [Post] {
+            var _postList = [Post]()
+            (0...7).forEach { (i) in
+                _postList.append(Post(id: ["qwert12345", "asdfg12345", "zxcvb12345"].randomElement()!, title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: ["F", "M"].randomElement()!, department: ["神奇寶貝研究系", "愛哩愛尬沒系", "機械工程系", "資訊工程系", "肥宅養成系", "愛丟卡慘系"].randomElement()!, anonymousSchool: Bool.random(), anonymousDepartment: Bool.random(), school: "", withNickname: Bool.random(), mediaMeta: _mediaMeta[i % 4]))
+            }
+            return _postList
         }
-        return list
+        var random = Int.random(in: 1...10)
+        (0...random).forEach { (_) in
+            _list.append(Favorite(photo: "", title: ["居家", "笑話", "美食", "工作", "狗狗"].randomElement()!, posts: postList))
+        }
+        return _list
     }()
     public var comment: [Comment] = {
-        var random = Int.random(in: 1...10000)
+        var random = Int.random(in: 1...10)
         var list = [Comment]()
         (0...random).forEach { (_) in
             list.append(Comment())
@@ -46,7 +55,7 @@ public struct Card {
     public var getMood: Int {
         return mood.angry + mood.cry + mood.haha + mood.heart + mood.respect + mood.surprise
     }
-    public var mood = Mood()
+    public var mood: Mood = Mood()
 }
 public struct Mood {
     public var heart: Int = Int.random(in: 0...10000)

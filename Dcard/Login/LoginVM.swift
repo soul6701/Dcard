@@ -20,10 +20,10 @@ protocol LoginVMInterface {
     func deleteUserData()
     //登入
     var loginSubject: PublishSubject<LoginType> { get }
-    func login(lastName: String, firstName: String, password: String)
-    //檢查帳號重複
+    func login(address: String, password: String)
+    //檢查信箱重複
     var expectAccountSubject: PublishSubject<Bool> { get }
-    func expectAccount(lastName: String, firstName: String)
+    func expectAccount(address: String)
     //查詢密碼
     var requirePasswordSubject: PublishSubject<RequirePasswordType> { get }
     func requirePassword(uid: String, phone: String?, address: String?)
@@ -55,8 +55,8 @@ extension LoginVM {
             self.creartUserDataSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
-    func login(lastName: String, firstName: String, password: String) {
-        self.loginFirebase.login(lastName: lastName, firstName: firstName, password: password).subscribe(onNext: { (loginType) in
+    func login(address: String, password: String) {
+        self.loginFirebase.login(address: address, password: password).subscribe(onNext: { (loginType) in
             self.loginSubject.onNext(loginType)
         }, onError: { (error) in
             self.loginSubject.onError(error)
@@ -69,8 +69,8 @@ extension LoginVM {
             self.deleteUserDataSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
-    func expectAccount(lastName: String, firstName: String) {
-        self.loginFirebase.expectAccount(lastName: lastName, firstName: firstName).subscribe(onNext: { (result) in
+    func expectAccount(address: String) {
+        self.loginFirebase.expectAccount(address: address).subscribe(onNext: { (result) in
             self.expectAccountSubject.onNext(result)
         }, onError: { (error) in
             self.expectAccountSubject.onError(error)

@@ -176,6 +176,10 @@
 		89D80C552545291700EB4F18 /* FollowIssueInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */; };
 		933F610A2546AC3800609E70 /* ReportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933F61082546AC3800609E70 /* ReportVC.swift */; };
 		933F610B2546AC3800609E70 /* ReportVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 933F61092546AC3800609E70 /* ReportVC.xib */; };
+		933F610E2547FCD500609E70 /* FavoriteInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */; };
+		933F610F2547FCD500609E70 /* FavoriteInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */; };
+		933F61112548088100609E70 /* FavoriteInfoTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 933F61102548088100609E70 /* FavoriteInfoTitleView.xib */; };
+		933F611325480B9100609E70 /* FavoriteInfoTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933F611225480B9100609E70 /* FavoriteInfoTitleView.swift */; };
 		934A0551A1012375356ACBFD /* Pods_Dcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */; };
 		936E380B2543B57D00EFFBFC /* Extension_Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936E380A2543B57D00EFFBFC /* Extension_Date.swift */; };
 		936E380D2543B59200EFFBFC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 936E380C2543B59100EFFBFC /* Profile.storyboard */; };
@@ -385,6 +389,10 @@
 		89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowIssueInfoVC.xib; sourceTree = "<group>"; };
 		933F61082546AC3800609E70 /* ReportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportVC.swift; sourceTree = "<group>"; };
 		933F61092546AC3800609E70 /* ReportVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReportVC.xib; sourceTree = "<group>"; };
+		933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteInfoVC.swift; sourceTree = "<group>"; };
+		933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteInfoVC.xib; sourceTree = "<group>"; };
+		933F61102548088100609E70 /* FavoriteInfoTitleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteInfoTitleView.xib; sourceTree = "<group>"; };
+		933F611225480B9100609E70 /* FavoriteInfoTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteInfoTitleView.swift; sourceTree = "<group>"; };
 		936E380A2543B57D00EFFBFC /* Extension_Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension_Date.swift; sourceTree = "<group>"; };
 		936E380C2543B59100EFFBFC /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		936E380F2543B5B200EFFBFC /* ProfilePostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePostView.swift; sourceTree = "<group>"; };
@@ -806,6 +814,10 @@
 				22CAAADA250E260700CDF95B /* FavoriteVC.swift */,
 				22349E6C250E924600DBE94E /* FavoriteCell.swift */,
 				22349E6D250E924600DBE94E /* FavoriteCell.xib */,
+				933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */,
+				933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */,
+				933F61102548088100609E70 /* FavoriteInfoTitleView.xib */,
+				933F611225480B9100609E70 /* FavoriteInfoTitleView.swift */,
 			);
 			path = Favorite;
 			sourceTree = "<group>";
@@ -984,6 +996,7 @@
 				848E16D6252ED10C00FA4B4F /* FeedbackCell.xib in Resources */,
 				22CAAACB250D21E800CDF95B /* ProfileThreeTbCell.xib in Resources */,
 				22A75F2624E54C7800287460 /* WeekHeaderView.xib in Resources */,
+				933F61112548088100609E70 /* FavoriteInfoTitleView.xib in Resources */,
 				2241D36C24E3DCC900529BC8 /* SkitchVC.xib in Resources */,
 				22788AFC2503F82A00E87F7F /* CardInfoTitleCell.xib in Resources */,
 				221A47CE2510D30E00DE1301 /* PrivacyView.xib in Resources */,
@@ -1030,6 +1043,7 @@
 				936E38222543B94900EFFBFC /* ProfilePostMoodCell.xib in Resources */,
 				22EFC6AA24FBB16F003CD570 /* country.json in Resources */,
 				22CAAABB250C960400CDF95B /* ChatRoomVC.xib in Resources */,
+				933F610F2547FCD500609E70 /* FavoriteInfoVC.xib in Resources */,
 				22788B002504147A00E87F7F /* FilterView.xib in Resources */,
 				224E3CEB24B782C0003F8F2B /* Game.storyboard in Resources */,
 				2205D17E24A772C8004A4F41 /* PostCell.xib in Resources */,
@@ -1171,6 +1185,7 @@
 				221A47DB2512218A00DE1301 /* CardHomeVC.swift in Sources */,
 				22788AF42503BB5E00E87F7F /* CardInfoVC.swift in Sources */,
 				22433D3324E7E3C500E8D79D /* MemoVC.swift in Sources */,
+				933F610E2547FCD500609E70 /* FavoriteInfoVC.swift in Sources */,
 				22788B02250416BF00E87F7F /* FilterView.swift in Sources */,
 				228F932D24C1FDFA00A7EBD9 /* Drawer.swift in Sources */,
 				22EFC6A624FB7D21003CD570 /* LoginNAV.swift in Sources */,
@@ -1182,6 +1197,7 @@
 				936E38142543B5B300EFFBFC /* ProfilePostCell.swift in Sources */,
 				22D7C39D24ECDFC9006412BE /* ImageInfo.swift in Sources */,
 				848A6CD62534285A00125138 /* DbManager.swift in Sources */,
+				933F611325480B9100609E70 /* FavoriteInfoTitleView.swift in Sources */,
 				22788AF02503A0C100E87F7F /* ModelSingleton.swift in Sources */,
 				84C818A8252DC39800CFABA6 /* FriendCardVC.swift in Sources */,
 				22CAAABA250C960400CDF95B /* ChatRoomVC.swift in Sources */,

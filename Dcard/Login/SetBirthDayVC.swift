@@ -139,7 +139,12 @@ extension SetBirthDayVC {
         self.tfBirthday.addRightButtonOnKeyboardWithText("繼續", target: self, action: #selector(toNextPage))
     }
     @objc private func toNextPage() {
-        LoginManager.shared.toNextPage(self.navigationController!, next: .SetSexVC)
+        guard !self.birthday.isEmpty else {
+            self.view.endEditing(true)
+            LoginManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
+            return
+        }
+        LoginManager.shared.toNextPage(.SetSexVC)
     }
 }
 // MARK: - SubscribeRX

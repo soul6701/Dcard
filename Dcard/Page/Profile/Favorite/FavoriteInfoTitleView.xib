@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="FavoriteInfoTitleView" customModule="ChaiCard" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="422" height="120"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="全部收藏" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hBJ-nQ-Jcd">
+                    <rect key="frame" x="15" y="15" width="117.5" height="35"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="29"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EPA-O9-n6e">
+                    <rect key="frame" x="15" y="79" width="90" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <inset key="titleEdgeInsets" minX="-15" minY="0.0" maxX="4" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="79" minY="6" maxX="0.0" maxY="4"/>
+                    <state key="normal" title="看板篩選" image="arrowtriangle.down.fill" catalog="system">
+                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                    </state>
+                    <connections>
+                        <action selector="didClickBtnForumFilter:" destination="iN0-l3-epB" eventType="touchUpInside" id="q6P-bL-ask"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N6w-9f-LSd">
+                    <rect key="frame" x="319" y="78" width="76" height="22"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <inset key="imageEdgeInsets" minX="-8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="未分類" image="square" catalog="system">
+                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                    </state>
+                    <connections>
+                        <action selector="didClickBtnCatalog:" destination="iN0-l3-epB" eventType="touchUpInside" id="KFi-Xa-GeQ"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lqc-p8-NXa">
+                    <rect key="frame" x="360" y="15" width="35" height="33"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                    <state key="normal" title="選取"/>
+                    <connections>
+                        <action selector="didClickBtnSelect:" destination="iN0-l3-epB" eventType="touchUpInside" id="Z4O-1E-1OD"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="hBJ-nQ-Jcd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="Kty-Da-DhC"/>
+                <constraint firstItem="N6w-9f-LSd" firstAttribute="bottom" secondItem="EPA-O9-n6e" secondAttribute="bottom" id="Pf4-1f-Yd1"/>
+                <constraint firstItem="EPA-O9-n6e" firstAttribute="leading" secondItem="hBJ-nQ-Jcd" secondAttribute="leading" id="Son-iq-UB0"/>
+                <constraint firstItem="N6w-9f-LSd" firstAttribute="trailing" secondItem="Lqc-p8-NXa" secondAttribute="trailing" id="XxR-ej-Htz"/>
+                <constraint firstItem="Lqc-p8-NXa" firstAttribute="top" secondItem="hBJ-nQ-Jcd" secondAttribute="top" id="ZxR-83-lfS"/>
+                <constraint firstItem="hBJ-nQ-Jcd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="cLg-e4-njd"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Lqc-p8-NXa" secondAttribute="trailing" constant="27" id="qtQ-u2-i3O"/>
+                <constraint firstAttribute="bottom" secondItem="EPA-O9-n6e" secondAttribute="bottom" constant="20" id="rby-PF-r5a"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="btnCatalog" destination="N6w-9f-LSd" id="Uoe-Au-GEz"/>
+                <outlet property="btnForumFilter" destination="EPA-O9-n6e" id="aQI-qe-0KS"/>
+                <outlet property="btnSelect" destination="Lqc-p8-NXa" id="wrl-Lv-aEn"/>
+                <outlet property="lbTitle" destination="hBJ-nQ-Jcd" id="dnH-nT-9W1"/>
+            </connections>
+            <point key="canvasLocation" x="529" y="96"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrowtriangle.down.fill" catalog="system" width="128" height="124"/>
+        <image name="square" catalog="system" width="128" height="114"/>
+    </resources>
+</document>

@@ -373,15 +373,12 @@ extension SettingAccountVC {
     }
     //檢查信箱格式
     private func expectEmailFormat(_ email: String) -> Bool {
-        let regex = try! NSRegularExpression(pattern: "^\\w+@\\w+$", options: .caseInsensitive)
-        return !regex.matches(in: email, options: [], range: NSRange(location: 0, length: email.count)).isEmpty
+        return !email.match("^\\w+@\\w+$", options: .caseInsensitive).isEmpty
     }
     //檢查密碼格式
     private func expectPasswordFormat(_ password: String) -> Bool {
-        let numberRegex = try! NSRegularExpression(pattern: "\\d+", options: .caseInsensitive)
-        let alpRegex = try! NSRegularExpression(pattern: "[a-zA-Z]+", options: .caseInsensitive)
-        let containNumber = !numberRegex.matches(in: password, options: [], range: NSRange(location: 0, length: password.count)).isEmpty
-        let containAlp = !alpRegex.matches(in: password, options: [], range: NSRange(location: 0, length: password.count)).isEmpty
+        let containNumber = !password.match("\\d+", options: .caseInsensitive).isEmpty
+        let containAlp = !password.match("[a-zA-Z]+", options: .caseInsensitive).isEmpty
         return containNumber && containAlp
     }
 }

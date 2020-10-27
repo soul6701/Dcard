@@ -60,12 +60,9 @@ extension ProfilePostVC {
     private func initView() {
         ToolbarView.shared.show(false)
         self.navigationItem.title = "我的成就"
-        confiCollectionView()
+        setupCollectionViewLayout()
     }
-    private func confiCollectionView() {
-        setCollectionViewLayout()
-    }
-    private func setCollectionViewLayout() {
+    private func setupCollectionViewLayout() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.itemSize = self.itemSize

@@ -20,7 +20,7 @@ class SetPhoneAddressVC: UIViewController {
     @IBOutlet weak var viewHaveAccount: UIView!
     @IBOutlet weak var btnChange: UIButton!
     @IBOutlet weak var btnNext: UIButton!
-    @IBOutlet weak var tfPhone: UITextField!
+    @IBOutlet weak var tfPhoneAddress: UITextField!
     @IBOutlet weak var lbHint: UILabel!
     @IBOutlet weak var lbTitle: UILabel!
     
@@ -36,29 +36,20 @@ class SetPhoneAddressVC: UIViewController {
         didSet {
             UIView.animate(withDuration: 0.3, animations: {
                 self.stackView.alpha = 0
-                if let text = self.tfPhone.text {
-                    if self.mode == .phone {
-                        self.address = text
-                    } else {
-                        self.phone = text
-                    }
-                }
             }) { (_) in
                 UIView.animate(withDuration: 0.3) {
                     self.stackView.alpha = 1
                     self.lbTitle.text = self.mode == .phone ? "你的手機號碼為何" : "你的電子郵件地址為何"
                     self.lbHint.text = self.mode == .phone ? "當你登入或需要重設密碼時，將需使用這個電話號碼。" : "當你登入或需要重設密碼時，將需使用這個電子郵件。"
                     self.btnChange.setTitle(self.mode == .phone ? "使用電子郵件地址" : "使用手機號碼", for: .normal)
-                    self.tfPhone.leftView = self.mode == .phone ? self.leftview : nil
-                    self.tfPhone.placeholder = self.mode == .phone ? "輸入手機號碼" : "輸入電子郵件"
-                    self.tfPhone.keyboardType = self.mode == .phone ? .numberPad : .default
+                    self.tfPhoneAddress.leftView = self.mode == .phone ? self.leftview : nil
+                    self.tfPhoneAddress.placeholder = self.mode == .phone ? "輸入手機號碼" : "輸入電子郵件"
+                    self.tfPhoneAddress.keyboardType = self.mode == .phone ? .numberPad : .default
                     
-                    if self.phone == "" && self.mode == .phone {
-                        self.tfPhone.text = self.phone
-                    } else if self.address == "" && self.mode == .address {
-                        self.tfPhone.text = self.address
+                    if self.mode == .phone {
+                        self.tfPhoneAddress.text = self.phone
                     } else {
-                        self.tfPhone.text = self.mode == .phone ? self.phone : self.address
+                        self.tfPhoneAddress.text = self.address
                     }
                 }
             }
@@ -93,7 +84,16 @@ class SetPhoneAddressVC: UIViewController {
         self.mode = self.mode == .phone ? .address : .phone
     }
     @IBAction func didClickBtnNext(_ sender: UIButton) {
-        toNextPage()
+        expect()
+    }
+    func toNextPage() {
+        LoginManager.shared.toNextPage(.SetPasswordVC)
+    }
+    func clear() {
+        if mode == .address {
+            self.tfPhoneAddress.text = ""
+            self.address = ""
+        }
     }
 }
 // MARK: - SetupUI
@@ -120,20 +120,16 @@ extension SetPhoneAddressVC {
     }
     private func confiLeftViewForTfAddress() {
         self.leftview = UIView()
-        leftview.widthAnchor.constraint(equalToConstant: self.tfPhone.bounds.width / 3).isActive = true
+        leftview.widthAnchor.constraint(equalToConstant: self.tfPhoneAddress.bounds.width / 3).isActive = true
         
         self.lbCountryAlias.textAlignment = .center
         self.lbCountryAlias.text = self.alias
         
-        leftview.addSubview(self.lbCountryAlias)
-        self.lbCountryAlias.setContentCompressionResistancePriority(.required, for: .horizontal)
-        self.lbCountryAlias.adjustsFontSizeToFitWidth = true
-        
-        let _view = UIView()
+        let openIconView = UIView()
         let imageView = UIImageView(image: UIImage(named: ImageInfo.arrow_open))
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        _view.addSubview(imageView)
+        openIconView.addSubview(imageView)
         imageView.snp.makeConstraints { (maker) in
             maker.width.equalToSuperview().multipliedBy(0.3)
             maker.height.equalTo(imageView.snp.width)
@@ -142,27 +138,29 @@ extension SetPhoneAddressVC {
         self.lbCountryCode.textAlignment = .center
         self.lbCountryCode.text = self.code
 
-        let stackView = UIStackView(arrangedSubviews: [self.lbCountryAlias, _view, self.lbCountryCode])
+        let stackView = UIStackView(arrangedSubviews: [self.lbCountryAlias, openIconView, self.lbCountryCode])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .fill
         self.leftview.addSubview(stackView)
-        
-        stackView.leadingAnchor.constraint(equalTo: self.leftview.leadingAnchor, constant: 20).isActive = true
-        stackView.heightAnchor.constraint(equalTo: self.leftview.heightAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: self.leftview.trailingAnchor, constant: -5).isActive = true
-        stackView.centerYAnchor.constraint(equalTo: self.leftview.centerYAnchor).isActive = true
+        stackView.snp.makeConstraints { (maker) in
+            maker.leading.equalToSuperview().offset(20)
+            maker.height.equalToSuperview()
+            maker.trailing.equalToSuperview().offset(-5)
+            maker.centerX.equalToSuperview()
+        }
         let ges = UITapGestureRecognizer(target: self, action: #selector(open))
         self.leftview.addGestureRecognizer(ges)
     }
     private func confiTextfield() {
-        self.tfPhone.placeholder = "輸入手機號碼"
-        self.tfPhone.text = self.phone
-        self.tfPhone.keyboardType = .numberPad
-        self.tfPhone.leftView = self.leftview
-        self.tfPhone.leftViewMode = .always
-        self.tfPhone.addRightButtonOnKeyboardWithText("繼續", target: self, action: #selector(toNextPage))
+        self.tfPhoneAddress.delegate = self
+        self.tfPhoneAddress.placeholder = "輸入手機號碼"
+        self.tfPhoneAddress.text = self.phone
+        self.tfPhoneAddress.keyboardType = .numberPad
+        self.tfPhoneAddress.leftView = self.leftview
+        self.tfPhoneAddress.leftViewMode = .always
+        self.tfPhoneAddress.addRightButtonOnKeyboardWithText("繼續", target: self, action: #selector(expect))
     }
     @objc private func open() {
         let vc = SelectCountryVC()
@@ -173,19 +171,50 @@ extension SetPhoneAddressVC {
         nav.modalTransitionStyle = .crossDissolve
         self.present(nav, animated: true)
     }
-    @objc private func toNextPage() {
+    @objc private func expect() {
+        let text = self.tfPhoneAddress.text ?? ""
         if mode == .phone {
-            self.phone = self.tfPhone.text ?? ""
+            self.phone = text
         } else {
-            self.address = self.tfPhone.text ?? ""
+            self.address = text
         }
-        LoginManager.shared.toNextPage(self.navigationController!, next: .SetPasswordVC)
+        guard !self.phone.isEmpty && !self.address.isEmpty else {
+            LoginManager.shared.showAlertView(errorMessage: (self.phone.isEmpty ? "手機" : "信箱") + "不得為空", handler: nil)
+            return
+        }
+        let addressPattern = "^[A-z0-9]+@[A-z0-9]+.com$"
+        let phonePattern = "[0-9]"
+        let phoneIsValid = self.mode == .phone ? text.match(phonePattern, options: .caseInsensitive).count == 10 : self.phone.match(phonePattern, options: .caseInsensitive).count == 10
+        let addressIsValid = self.mode == .phone ? !self.address.match(addressPattern, options: .caseInsensitive).isEmpty : !text.match(addressPattern, options: .caseInsensitive).isEmpty
+        guard phoneIsValid && addressIsValid else {
+            if !addressIsValid {
+                self.address = ""
+            }
+            if !phoneIsValid {
+                self.phone = ""
+            }
+            self.tfPhoneAddress.text = ""
+            hide()
+            LoginManager.shared.showAlertView(errorMessage: "請填寫完整/格式錯誤", handler: nil)
+            return
+        }
+        self.nav._delegate?.expectAccount(address: self.mode == .phone ? self.address : text)
+    }
+    private func hide() {
+        let hideBtnNext = self.address.isEmpty || self.phone.isEmpty
+        self.btnChange.isHidden = false
+        self.lbHint.isHidden = !hideBtnNext
+        self.btnNext.isHidden = hideBtnNext
+        UIView.animate(withDuration: 0.3) {
+            self.btnNext.alpha = hideBtnNext ? 0 : 1
+            self.btnNext.center.y -= 30
+        }
     }
 }
 // MARK: - SubscribeRX
 extension SetPhoneAddressVC {
     private func subscribe() {
-        self.tfPhone.rx.controlEvent(.editingDidBegin).asObservable().subscribe(onNext: { (_) in
+        self.tfPhoneAddress.rx.controlEvent(.editingDidBegin).asObservable().observeOn(MainScheduler.instance).subscribe(onNext: { (_) in
             self.btnChange.isHidden = true
             self.btnNext.isHidden = true
             self.lbHint.isHidden = false
@@ -193,20 +222,14 @@ extension SetPhoneAddressVC {
                 self.btnNext.alpha = 0
             })
         }).disposed(by: self.disposeBag)
-        self.tfPhone.rx.controlEvent(.editingDidEnd).asObservable().subscribe(onNext: { (_) in
-            let text = self.tfPhone.text ?? ""
-            self.btnChange.isHidden = false
-            self.lbHint.isHidden = !text.isEmpty
-            self.btnNext.isHidden = text.isEmpty
-            UIView.animate(withDuration: 0.3) {
-                self.btnNext.alpha = text.isEmpty ? 0 : 1
-                self.btnNext.center.y -= 30
-            }
+        self.tfPhoneAddress.rx.controlEvent(.editingDidEnd).asObservable().observeOn(MainScheduler.instance).subscribe(onNext: { (_) in
+            let text = self.tfPhoneAddress.text ?? ""
             if self.mode == .phone {
                 self.phone = text
             } else {
                 self.address = text
             }
+            self.hide()
         }).disposed(by: self.disposeBag)
     }
 }
@@ -217,5 +240,20 @@ extension SetPhoneAddressVC: SelectCountryVCDelegate {
         self.lbCountryCode.text = country.code
         self.code = country.code
         self.alias = country.alias
+    }
+}
+extension SetPhoneAddressVC: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if mode == .phone {
+            guard let textFieldText = textField.text,
+                let rangeOfTextToReplace = Range(range, in: textFieldText) else {
+                    return false
+            }
+            let substringToReplace = textFieldText[rangeOfTextToReplace]
+            let count = textFieldText.count - substringToReplace.count + string.count
+            return count <= 10
+        } else {
+            return true
+        }
     }
 }

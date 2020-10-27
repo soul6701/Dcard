@@ -30,7 +30,7 @@ class ProfileManager {
     private var OKConfig: SwiftMessages.Config!
     private var alertView: MessageView!
     private var alertconfig: SwiftMessages.Config!
-    private var baseNav: UINavigationController!
+    private var baseNav: UINavigationController?
     private var maintainBaseVC: UIViewController?
     //假值
     var user: User {
@@ -170,14 +170,15 @@ class ProfileManager {
     }
     //跳轉卡友頁面
     func toFriendCardPage(mail: Mail) {
-        if !(self.baseNav.viewControllers.last is MailVC) {
-            for vc in self.baseNav.viewControllers where vc is MailVC {
-                self.baseNav.popToViewController(vc, animated: false)
+        guard let nav = self.baseNav else { return }
+        if !(nav.viewControllers.last is MailVC) {
+            for vc in nav.viewControllers where vc is MailVC {
+                self.baseNav?.popToViewController(vc, animated: false)
             }
         }
         let vc = FriendCardVC()
         vc.setContent(mail: mail)
-        self.baseNav.pushViewController(vc, animated: true)
+        self.baseNav?.pushViewController(vc, animated: true)
     }
     //跳轉指定頁面
     func toNextPage(next: ProfileThreeCellType) {
@@ -188,12 +189,12 @@ class ProfileManager {
             _ = vc.view
             var list = [Favorite]()
             (1...15).forEach { (i) in
-                list.append(Favorite(listName: ["居家", "笑話", "美食", "工作", "狗狗"].randomElement()!, post: postList))
+                list.append(Favorite(photo: "", title: ["居家", "笑話", "美食", "工作", "狗狗"].randomElement()!, posts: self.myPostList))
             }
             
             vc.setContent(favoriteList: list, title: next.cell.name)
-            self.baseNav.pushViewController(vc, animated: true) {
-                self.baseNav.setNavigationBarHidden(false, animated: false)
+            self.baseNav?.pushViewController(vc, animated: true) {
+                self.baseNav?.setNavigationBarHidden(false, animated: false)
             }
         case .followIssue:
             let vc = UIStoryboard.profile.followIssueVC
@@ -203,7 +204,7 @@ class ProfileManager {
                 list.append(FollowIssue(listName: ["春夏韓風穿搭", "第10002屆葛萊美獎", "第11123132屆金馬獎"].randomElement()!, post: self.myPostList, followCount: Int.random(in: (1...1000)), notifyMode: (0...2).randomElement()!, isFollowing: true))
             }
             vc.setContent(followIssueList: list, title: next.cell.name)
-            self.baseNav.pushViewController(vc, animated: true)
+            self.baseNav?.pushViewController(vc, animated: true)
         case .followCard:
             let vc = UIStoryboard.profile.followCardVC
             _ = vc.view
@@ -213,32 +214,32 @@ class ProfileManager {
                 list.append(FollowCard(card: Card(id: ["qaz123", "wsx123", "edc123", "rfv123"].randomElement()!, post: _postList, name: ["NBA 小天使", "🦊🦊🦊🦊🦊", "🐱🐱🐱", "🐶🐶", "🐼"].randomElement()!, photo: "", sex: ["F", "M", "其他"].randomElement()!, introduce: "", country: "", school: "", article: "", birthday: "", love: "", fans: (0...100).randomElement()!), notifyMode: (0...2).randomElement()!, isFollowing: Bool.random(), isNew: Bool.random()))
             }
             vc.setContent(followCardList: list, title: next.cell.name)
-            self.baseNav.pushViewController(vc, animated: true)
+            self.baseNav?.pushViewController(vc, animated: true)
         case .artical:
             let vc = UIStoryboard.profile.articalVC
             let _ = vc.view
             vc.setContent(articalList: myPostList, title: next.cell.name)
-            self.baseNav.pushViewController(vc, animated: true) {
-                self.baseNav.setNavigationBarHidden(false, animated: false)
+            self.baseNav?.pushViewController(vc, animated: true) {
+                self.baseNav?.setNavigationBarHidden(false, animated: false)
             }
         case .introduce:
             let vc = UIStoryboard.card.cardInfoVC
             _ = vc.view
             vc.view.backgroundColor = #colorLiteral(red: 0.7540688515, green: 0.7540867925, blue: 0.7540771365, alpha: 0.8770333904)
             vc.setContent(card: user.card, isUser: true, isFriend: false)
-            self.baseNav.pushViewController(vc, animated: true) {
-                self.baseNav.setNavigationBarHidden(false, animated: false)
+            self.baseNav?.pushViewController(vc, animated: true) {
+                self.baseNav?.setNavigationBarHidden(false, animated: false)
             }
         case .myCard:
             let vc = CardHomeVC()
             vc.setContent(mode: .user)
-            self.baseNav.pushViewController(vc, animated: true)
+            self.baseNav?.pushViewController(vc, animated: true)
         case .mail:
             let vc = UIStoryboard.profile.mailVC
-            self.baseNav.pushViewController(vc, animated: true)
+            self.baseNav?.pushViewController(vc, animated: true)
         case .setting:
             let vc = UIStoryboard.profile.settingMainVC
-            self.baseNav.pushViewController(vc, animated: true)
+            self.baseNav?.pushViewController(vc, animated: true)
         }
     }
 }

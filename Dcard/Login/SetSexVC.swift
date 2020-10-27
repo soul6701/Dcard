@@ -68,7 +68,7 @@ class SetSexVC: UIViewController {
         return true
     }
     @IBAction func didClickBtnNext(_ sender: UIButton) {
-        LoginManager.shared.toNextPage(self.navigationController!, next: .SetPhoneAddressVC)
+        LoginManager.shared.toNextPage(.SetPhoneAddressVC)
     }
     @IBAction func didClickBtnSelect(_ sender: UIButton) {
         if let view = UINib(nibName: "SelectPronView", bundle: nil).instantiate(withOwner: nil, options: nil).first as? SelectPronView {

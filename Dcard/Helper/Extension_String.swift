@@ -21,4 +21,9 @@ extension String {
         UIGraphicsEndImageContext()
         return image
     }
+    func match(_ pattern: String, options: NSRegularExpression.Options) -> [String] {
+        let regex = try! NSRegularExpression(pattern: pattern, options: options)
+        let result = regex.matches(in: self, options: [], range: NSRange(location: 0, length: self.count))
+        return result.map { return String(self[Range($0.range, in: self)!])}
+    }
 }

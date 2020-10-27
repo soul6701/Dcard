@@ -32,9 +32,9 @@ enum CardFieldType: String {
 }
 protocol LoginFirebaseInterface {
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) -> Observable<Bool>
-    func login(lastName: String, firstName: String, password: String) -> Observable<LoginType>
+    func login(address: String, password: String) -> Observable<LoginType>
     func deleteUserData() -> Observable<DeleteCollectionType>
-    func expectAccount(lastName: String, firstName: String) -> Observable<Bool>
+    func expectAccount(address: String) -> Observable<Bool>
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<RequirePasswordType>
     func getUserData(uid: String) -> Observable<User>
     func addFriend(name: String) -> Observable<Bool>
@@ -77,7 +77,31 @@ public class LoginFirebase: LoginFirebaseInterface {
         return subject.asObserver()
     }
     private func addDocument(subject: PublishSubject<Bool>, uid: String, firstName: String, lastName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatarUrl: String) {
-        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).addDocument(data: ["uid": uid, "firstname": firstName, "lastname": lastName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password, "avatar": avatarUrl, "friend": [String]()]) { (error) in
+        let userCard = ModelSingleton.shared.userConfig.user.card
+        var commentList: [[String: Any]] = []
+        userCard.comment.forEach { (comment) in
+            var mediaMetaList: [[String: Any]] = []
+            comment.mediaMeta.forEach { (mediaMeta) in
+                mediaMetaList.append(["ormalizedUrl,": mediaMeta.normalizedUrl, "thumbnail": mediaMeta.thumbnail])
+            }
+            commentList.append(["id": comment.id, "anonymous": comment.anonymous, "content": comment.content, "createdAt": comment.createdAt, "floor": comment.floor, "likeCount": comment.likeCount, "gender": comment.gender, "department": comment.department, "school": comment.school, "withNickname": comment.withNickname, "host": comment.host, "mediaMeta": mediaMetaList])
+        }
+        let mood: [String: Any] = ["heart": userCard.mood.heart, "haha": userCard.mood.haha, "angry": userCard.mood.angry, "cry": userCard.mood.cry, "surprise": userCard.mood.surprise, "respect": userCard.mood.respect]
+        var favariteList: [[String: Any]] = []
+        userCard.favorite.forEach { (favorite) in
+            var postList: [[String: Any]] = []
+            favorite.posts.forEach { (post) in
+                var mediaMetaList: [[String: Any]] = []
+                post.mediaMeta.forEach { (mediaMeta) in
+                    mediaMetaList.append(["ormalizedUrl,": mediaMeta.normalizedUrl, "thumbnail": mediaMeta.thumbnail])
+                }
+                postList.append(["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot])
+            }
+            favariteList.append(["photo": favorite.photo, "title": favorite.title, "posts": postList])
+        }
+        let card: [String: Any] = ["id": userCard.id, "name": userCard.name, "photo": userCard.photo, "sex": userCard.sex, "introduce": userCard.introduce, "country": userCard.country, "school": userCard.school, "department": userCard.department, "article": userCard.article, "birthday": userCard.birthday, "love": userCard.love, "fans": userCard.fans, "favorite": favariteList, "comment": commentList, "beKeeped": userCard.beKeeped, "beReplyed": userCard.beReplyed, "getHeart": userCard.getHeart, "getMood": userCard.getMood, "mood": mood]
+        let setter: [String: Any] = ["uid": uid, "firstname": firstName, "lastname": lastName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password, "avatar": avatarUrl, "friend": [String](), "card": card, "createAt": FieldValue.serverTimestamp()]
+        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).addDocument(data: setter) { (error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
@@ -87,22 +111,22 @@ public class LoginFirebase: LoginFirebaseInterface {
         }
     }
     // MARK: - 檢查帳號是否重複
-    func expectAccount(lastName: String, firstName: String) -> Observable<Bool> {
+    func expectAccount(address: String) -> Observable<Bool> {
         let subject = PublishSubject<Bool>()
-        let uid = lastName + "_" + firstName
         FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
-            }
-            if let querySnapshot = querySnapshot {
-                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-                    let dir = queryDocumentSnapshot.data()
-                    return (dir["uid"] as! String) == uid ? true : false
-                }.isEmpty) {
-                    subject.onNext(false)
-                } else {
-                    subject.onNext(true)
+            } else {
+                if let querySnapshot = querySnapshot {
+                    if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+                        let dir = queryDocumentSnapshot.data()
+                        return (dir["address"] as! String) == address ? true : false
+                    }.isEmpty) {
+                        subject.onNext(false)
+                    } else {
+                        subject.onNext(true)
+                    }
                 }
             }
         }
@@ -115,7 +139,7 @@ public class LoginFirebase: LoginFirebaseInterface {
     }
     
     // MARK: - 登入
-    func login(lastName: String, firstName: String, password: String) -> Observable<LoginType> {
+    func login(address: String, password: String) -> Observable<LoginType> {
         let subject = PublishSubject<LoginType>()
         
         FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
@@ -126,7 +150,7 @@ public class LoginFirebase: LoginFirebaseInterface {
             if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
                 if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
                     let dir = queryDocumentSnapshot.data()
-                    if dir["uid"] as! String == "\(lastName)_\(firstName)" && dir["password"] as! String == password {
+                    if dir["address"] as! String == address && dir["password"] as! String == password {
                         ModelSingleton.shared.setUserConfig(UserConfig(user: User(uid: dir["uid"] as! String, lastName: dir["lastname"] as! String, firstName: dir["firstname"] as! String, birthday: dir["birthday"] as! String, sex: dir["sex"] as! String, phone: dir["phone"] as! String, address: dir["address"] as! String, password: dir["password"] as! String, avatar: dir["avatar"] as! String, friend: dir["friend"] as! [String]), cardmode: 0))
                         return true
                     }
@@ -135,7 +159,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                     subject.onNext(.success)
                 } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
                     let dir = queryDocumentSnapshot.data()
-                    if (dir["uid"] as! String) == "\(lastName)_\(firstName)" {
+                    if (dir["address"] as! String) == address {
                         return true
                     }
                     return false
@@ -301,26 +325,17 @@ public class LoginFirebase: LoginFirebaseInterface {
                 return
             }
             var setter: [String:Any] = [:]
+            
             if !newAddress.isEmpty {
                 setter["address"] = newAddress
             } else if !newPassword.isEmpty {
                 setter["password"] = newPassword
             } else if !newCard.isEmpty {
-                let card = ModelSingleton.shared.userConfig.user.card
-//                var list: [String: Any] = ["id": card.id, "post": card.post, "name": card.name, "photo": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "": card.fans, "favariteCatolog": card.favariteCatolog, "comment": card.comment, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart, "getMood": card.getMood, "mood": card.mood]
-                
-                var postList: [[String: Any]] = []
-                var favariteCatologList: [[String: Any]] = []
-                card.favariteCatolog.forEach { (favariteCatolog) in
-                    favariteCatologList.append(["photo": favariteCatolog.photo, "title": favariteCatolog.title, "posts": postList])
-                }
-                var list: [String: Any] = ["id": card.id, "name": card.name, "photo": card.photo, "sex": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "fans": card.fans, "favariteCatolog": favariteCatologList, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart]
                 newCard.forEach { (key, value) in
                     if key == .id || key == .name {
-                        list[key.rawValue] = value as! String
+                        setter["card.\(key.rawValue)"] = value
                     }
                 }
-                setter["card"] = list
             }
             guard !setter.isEmpty else {
                 subject.onNext(false)

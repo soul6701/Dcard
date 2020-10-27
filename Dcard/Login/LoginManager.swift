@@ -37,10 +37,11 @@ enum LoginOKMode {
 }
 class LoginManager: LoginManagerInterface {
     static let shared = LoginManager()
-    var OKView: MessageView!
-    var OKconfig: SwiftMessages.Config!
-    var alertView: MessageView!
-    var alertconfig: SwiftMessages.Config!
+    private var OKView: MessageView!
+    private var OKconfig: SwiftMessages.Config!
+    private var alertView: MessageView!
+    private var alertconfig: SwiftMessages.Config!
+    private var baseNav: UINavigationController?
     
     init() {
         confiOKView()
@@ -149,10 +150,13 @@ class LoginManager: LoginManagerInterface {
         handler(userinfo_country_code, id_to_countrycode)
     }
     //跳轉指定頁面
-    func toNextPage(_ currentVC: UINavigationController, next: LoginPageType) {
+    func toNextPage(_ next: LoginPageType) {
         let stroyboard = UIStoryboard(name: "Login", bundle: nil)
-        var nextVC: UIViewController
-        nextVC = stroyboard.instantiateViewController(withIdentifier: next.rawValue)
-        currentVC.pushViewController(nextVC, animated: true)
+        let nextVC = stroyboard.instantiateViewController(withIdentifier: next.rawValue)
+        self.baseNav?.pushViewController(nextVC, animated: true)
+    }
+    //設置NavigationController
+    func setBaseNav(_ nav: UINavigationController) {
+        self.baseNav = nav
     }
 }

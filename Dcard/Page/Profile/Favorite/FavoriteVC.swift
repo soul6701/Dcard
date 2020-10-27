@@ -36,6 +36,11 @@ class FavoriteVC: UIViewController {
         super.viewDidLoad()
         initView()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
+    }
     func setContent(favoriteList: [Favorite], title: String) {
         self.favoriteList = favoriteList
         self.navigationItem.title = title
@@ -63,11 +68,12 @@ extension FavoriteVC {
         layout.minimumLineSpacing = self.lineSpace
         self.collectionView.collectionViewLayout = layout
     }
+    //添加播放清單
     @objc private func addList() {
         UIAlertController.showNewFavoriteCatolog(self, cancelHandler: {
             self.dismiss(animated: true, completion: nil)
         }, OKHandler: { (text) in
-            self.favoriteList.append(Favorite(listName: text, post: []))
+            self.favoriteList.append(Favorite(photo: "", title: text, posts: []))
             self.collectionView.reloadData()
         }, disposeBag: self.disposeBag)
     }
@@ -80,8 +86,8 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let favorite = self.favoriteList[indexPath.row]
-        let name = favorite.listName
-        let post = favorite.post
+        let name = favorite.title
+        let post = favorite.posts
         let index = (indexPath.row) % 8
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCell", for: indexPath) as! FavoriteCell
         cell.setContent(name: name, imageString: !post.isEmpty ? post[index].mediaMeta[0].thumbnail : "")
@@ -89,6 +95,16 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     func  collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return self.itemSize
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let row = indexPath.row
+         let vc = FavoriteInfoVC()
+        if row == 0 {
+            vc.setContent(mode: .all)
+        } else {
+            vc.setContent(favorite: self.favoriteList[row], mode: .other)
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 // MARK: - FavoriteVCDelegate

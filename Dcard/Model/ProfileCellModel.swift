@@ -12,8 +12,9 @@ import Foundation
 //我的收藏
 public struct Favorite {
     
-    public var listName: String = ""
-    public var post: [Post] = []
+    public var photo: String = "https://i.imgur.com/w3YDouN.jpg"
+    public var title: String = "柴柴"
+    public var posts: [Post] = [Post()]
     
 }
 //我追蹤的話題

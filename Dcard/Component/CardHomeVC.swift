@@ -254,10 +254,11 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let row = indexPath.row
         let section = indexPath.section
         if section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
-            cell.setContent(post: self.myPostList[indexPath.row], mode: .profile)
+            cell.setContent(post: self.myPostList[row], mode: .profile)
             return cell
         } else {
             let cell = UITableViewCell()

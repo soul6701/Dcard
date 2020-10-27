@@ -14,7 +14,7 @@ import Firebase
 import SwiftMessages
 
 protocol LoginVCDelegate {
-    func expectAccount(lastName: String, firstName: String)
+    func expectAccount(address: String)
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?)
     func requirePassword(uid: String, phone: String?, address: String?)
 }
@@ -48,7 +48,7 @@ class LoginVC: UIViewController {
         initView()
         confiViewModel()
         subsribeViewModel()
-        self.viewModel.login(lastName: "a", firstName: "a", password: "a12345")
+        self.viewModel.login(address: "a@a.com", password: "a12345")
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -68,10 +68,7 @@ class LoginVC: UIViewController {
         }
     }
     @IBAction func didClickBtnSignIn(_ sender: UIButton) {
-        let (_result, lastName, firstName, password) = self.expect()
-        if _result {
-            self.viewModel.login(lastName: lastName, firstName: firstName, password: password)
-        }
+        expect()
     }
     @IBAction func didClcickBtnCreateNewAccount(_ sender: UIButton) {
         if let vc = self.storyboard?.instantiateViewController(identifier: "CreateAccountVC") as? CreateAccountVC {
@@ -106,27 +103,19 @@ extension LoginVC {
 }
 // MARK: - Private Fun
 extension LoginVC {
-    private func reset(tf: [UITextField]) {
-        tf.forEach { (tf) in
-            tf.text = ""
+    private func expect() {
+        if let password = self.tfPassword.text, let account = self.tfAccount.text, !password.isEmpty && !account.isEmpty {
+            guard !(account.match("^[A-z0-9]+@[A-z0-9]+.com$", options: .caseInsensitive).isEmpty) else {
+                LoginManager.shared.showAlertView(errorMessage: "格式錯誤", handler: nil)
+                [self.tfAccount, self.tfPassword].forEach { (tf) in
+                    tf.text = ""
+                }
+                return
+            }
+            self.viewModel.login(address: account, password: password)
+        } else {
+            LoginManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
         }
-    }
-    private func expect() -> (Bool, String, String, String) {
-        var lastName: String
-        var firstName: String
-        guard let account = self.tfAccount.text else {
-            return (false, "", "", "")
-        }
-        let regex = try! NSRegularExpression(pattern: "^[A-z0-9]+_[A-z0-9]+$", options: .caseInsensitive)
-        guard !(regex.matches(in: account, options: [], range: NSRange(location: 0, length: account.count)).isEmpty), let password = self.tfPassword.text, !account.isEmpty && !password.isEmpty else {
-            LoginManager.shared.showAlertView(errorMessage: "請填寫完整/格式錯誤", handler: nil)
-            reset(tf: [self.tfAccount, self.tfPassword])
-            return (false, "", "", "")
-        }
-        lastName = String(account.split(separator: "_")[0])
-        firstName = String(account.split(separator: "_")[1])
-        
-        return (true, lastName, firstName, password)
     }
 }
 // MARK: - ConfigureViewModel
@@ -185,15 +174,11 @@ extension LoginVC {
         }).disposed(by: self.disposeBag)
         
         self.viewModel.expectAccountSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
-            guard let vc = self.nav.viewControllers.first(where: { (vc) -> Bool in
-                return vc.isKind(of: CreateAccountVC.self)
-            }) as? CreateAccountVC else {
-                return
-            }
+            let vc = self.nav.viewControllers.first(where: { return $0 is SetPhoneAddressVC }) as! SetPhoneAddressVC
             if result {
                 vc.toNextPage()
             } else {
-                LoginManager.shared.showAlertView(errorMessage: "姓氏/名字已被使用，請重新輸入", handler: nil)
+                LoginManager.shared.showAlertView(errorMessage: "信箱已被使用，請重新輸入", handler: nil)
                 vc.clear()
             }
         }, onError: { (error) in
@@ -241,18 +226,13 @@ extension LoginVC {
 // MARK: - UITextFieldDelegate
 extension LoginVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let password = self.tfPassword.text, let account = self.tfAccount.text, !password.isEmpty && !account.isEmpty {
-            let (_result, lastName, firstName, password) = self.expect()
-            if _result {
-                self.viewModel.login(lastName: lastName, firstName: firstName, password: password)
-            }
-        }
+        expect()
         return true
     }
 }
 extension LoginVC: LoginVCDelegate {
-    func expectAccount(lastName: String, firstName: String) {
-        self.viewModel.expectAccount(lastName: lastName, firstName: firstName)
+    func expectAccount(address: String) {
+        self.viewModel.expectAccount(address: address)
     }
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) {
         self.viewModel.creartUserData(lastName: lastName, firstName: firstName, birthday: birthday, sex: sex, phone: phone, address: address, password: password, avatar: avatar)

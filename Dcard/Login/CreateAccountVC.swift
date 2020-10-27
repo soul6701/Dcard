@@ -47,14 +47,7 @@ class CreateAccountVC: UIViewController {
     @IBAction func didClcikBtnNext(_ sender: UIButton) {
         self.lastName = self.tfLastName.text ?? ""
         self.firstName = self.tfFirstName.text ?? ""
-        self.nav._delegate?.expectAccount(lastName: self.lastName, firstName: self.firstName)
-    }
-    func toNextPage() {
-        LoginManager.shared.toNextPage(self.navigationController!, next: .SetBirthDayVC)
-    }
-    func clear() {
-        self.tfLastName.text = ""
-        self.tfFirstName.text = ""
+        LoginManager.shared.toNextPage(.SetBirthDayVC)
     }
 }
 // MARK: - SetupUI
@@ -65,7 +58,6 @@ extension CreateAccountVC {
         confiTextfield()
     }
     private func cinfiButton() {
-        
         self.btnNext.isHidden = true
     }
     private func confiTextfield() {
