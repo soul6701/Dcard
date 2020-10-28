@@ -259,7 +259,7 @@ extension SettingAccountVC {
         if self.mode == .editCard || self.mode == .enterNewID {
             self.navigationItem.setRightBarButton(UIBarButtonItem(customView: self.btnHint), animated: true)
             guard self.mode == .editCard else { return }
-            self.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(self.close)), animated: true)
+            self.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(self.close)), animated: false)
         }
     }
     private func confiDoneButton() {

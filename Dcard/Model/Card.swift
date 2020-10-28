@@ -30,14 +30,14 @@ public struct Card {
         let _mediaMeta = [[MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=17fh01n/3r580003rr4ps40n960o.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=17fh01n/3r580003rr4ps40n960o.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=1avg1r2/3r580003rqson1npps7s.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=1avg1r2/3r580003rqson1npps7s.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=11sbjcv/ctp-vzntr/15341312472962rqp6q4r2q.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=11sbjcv/ctp-vzntr/15341312472962rqp6q4r2q.jpg")], [MediaMeta(thumbnail: "https://i1.kknews.cc/SIG=38pi76/ctp-vzntr/1534131247394rsnss9rr7o.jpg", normalizedUrl: "https://i1.kknews.cc/SIG=38pi76/ctp-vzntr/1534131247394rsnss9rr7o.jpg")]]
         var postList: [Post] {
             var _postList = [Post]()
-            (0...7).forEach { (i) in
+            (0...300).forEach { (i) in
                 _postList.append(Post(id: ["qwert12345", "asdfg12345", "zxcvb12345"].randomElement()!, title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: ["F", "M"].randomElement()!, department: ["神奇寶貝研究系", "愛哩愛尬沒系", "機械工程系", "資訊工程系", "肥宅養成系", "愛丟卡慘系"].randomElement()!, anonymousSchool: Bool.random(), anonymousDepartment: Bool.random(), school: "", withNickname: Bool.random(), mediaMeta: _mediaMeta[i % 4]))
             }
             return _postList
         }
         var random = Int.random(in: 1...10)
         (0...random).forEach { (_) in
-            _list.append(Favorite(photo: "", title: ["居家", "笑話", "美食", "工作", "狗狗"].randomElement()!, posts: postList))
+            _list.append(Favorite(title: ["居家", "笑話", "美食", "工作", "狗狗"].randomElement()!, posts: postList))
         }
         return _list
     }()

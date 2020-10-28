@@ -97,7 +97,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                 }
                 postList.append(["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot])
             }
-            favariteList.append(["photo": favorite.photo, "title": favorite.title, "posts": postList])
+            favariteList.append(["title": favorite.title, "posts": postList])
         }
         let card: [String: Any] = ["id": userCard.id, "name": userCard.name, "photo": userCard.photo, "sex": userCard.sex, "introduce": userCard.introduce, "country": userCard.country, "school": userCard.school, "department": userCard.department, "article": userCard.article, "birthday": userCard.birthday, "love": userCard.love, "fans": userCard.fans, "favorite": favariteList, "comment": commentList, "beKeeped": userCard.beKeeped, "beReplyed": userCard.beReplyed, "getHeart": userCard.getHeart, "getMood": userCard.getMood, "mood": mood]
         let setter: [String: Any] = ["uid": uid, "firstname": firstName, "lastname": lastName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password, "avatar": avatarUrl, "friend": [String](), "card": card, "createAt": FieldValue.serverTimestamp()]

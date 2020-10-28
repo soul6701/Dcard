@@ -19,12 +19,16 @@ protocol ModelSingletonInterface {
     //偏好設定
     var preference: Preference { get }
     func setPreference(_ preference: Preference)
+    //看板
+    var forum: [Forum] { get }
+    func setForum(_ forum: [Forum])
 }
 public class ModelSingleton: ModelSingletonInterface {
     public static let shared = ModelSingleton()
     private(set) var card = [Card]()
     private(set) var userConfig = UserConfig(user: User(), cardmode: 0)
     private(set) var preference = Preference()
+    private(set) var forum = [Forum]()
     
     public func setCard(_ cards: [Card]) {
         self.card = cards
@@ -34,5 +38,8 @@ public class ModelSingleton: ModelSingletonInterface {
     }
     func setPreference(_ preference: Preference) {
         self.preference = preference
+    }
+    func setForum(_ forum: [Forum]) {
+        self.forum = forum
     }
 }

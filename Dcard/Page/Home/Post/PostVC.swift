@@ -11,6 +11,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 import IQKeyboardManagerSwift
+import SwiftMessages
 
 private class PresentationController : UIPresentationController {
     
@@ -67,6 +68,10 @@ class PostVC: UIViewController {
     @IBOutlet weak var bottomSpace: NSLayoutConstraint!
     @IBOutlet weak var _bottomSpace: NSLayoutConstraint!
     @IBOutlet weak var viewHeight: NSLayoutConstraint!
+    
+    //收藏文章提示視窗
+    private var OKView: MessageView!
+    private var OKConfig: SwiftMessages.Config!
     
     lazy private var viewCommentSetting: SettingView = {
         return UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
@@ -150,6 +155,7 @@ class PostVC: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         addObserverToKeyboard()
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -171,7 +177,8 @@ class PostVC: UIViewController {
             let vc = PostSettingVC()
             vc.modalPresentationStyle = .custom
             vc.transitioningDelegate = self
-            vc.setContent(mode: .keep)
+            vc.setDelegate(self)
+            vc.setContent(post: self.post, mode: .keep)
             present(vc, animated: true, completion: nil)
         }
         self.keep = !self.keep
@@ -180,7 +187,7 @@ class PostVC: UIViewController {
         let vc = PostSettingVC()
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = self
-        vc.setContent(host: self.post.host, mode: .setting)
+        vc.setContent(post: self.post, mode: .setting, host: self.post.host)
         present(vc, animated: true, completion: nil)
     }
     func setContent(post: Post, commentList: [Comment]) {
@@ -193,13 +200,15 @@ extension PostVC {
     private func initView() {
         ToolbarView.shared.show(false)
         self.btnShowComment.isHidden = self.commentList.isEmpty
+        self.btnSetting.imageView?.tintColor = self.post.host ? .systemBlue : .systemGray2
+        self.navigationItem.title = self.post.title
         self.heart = false
         self.keep = false
-        self.btnSetting.imageView?.tintColor = self.post.host ? .systemBlue : .systemGray2
         self.posterMode = .school
         confiTextFieldView()
         confiTableView()
         confiView()
+        confiOKView()
     }
     private func confiTextFieldView() {
         self.tvExcerpt.isEditable = false
@@ -217,6 +226,18 @@ extension PostVC {
         let tap = UITapGestureRecognizer(target: self, action: #selector(addNewComment))
         self.viewAddNewComment.addGestureRecognizer(tap)
         self.willbeOpened = false
+    }
+    private func confiOKView() {
+        self.OKView = MessageView.viewFromNib(layout: .cardView)
+        self.OKView.id = "success"
+        self.OKView.configureTheme(backgroundColor: .darkGray, foregroundColor: .white)
+        self.OKView.button?.setTitle("查看收藏", for: .normal)
+        self.OKView.button?.setTitleColor(.link, for: .normal)
+        self.OKView.button?.backgroundColor = .clear
+        
+        self.OKConfig = SwiftMessages.Config()
+        self.OKConfig.presentationContext = .window(windowLevel: .normal)
+        self.OKConfig.presentationStyle = .bottom
     }
 }
 // MARK: - Private Handler
@@ -253,6 +274,11 @@ extension PostVC {
             self.view.addSubview(self.viewBg)
             self.view.addSubview(self.viewPosterSetting)
         }
+    }
+    private func showOKView(title: String) {
+        self.OKConfig.duration = .seconds(seconds: 1.5)
+        self.OKView.configureContent(title: "", body: "已分類至" + "『\(title)』")
+        SwiftMessages.show(config: self.OKConfig, view: self.OKView)
     }
 }
 // MARK: - SubscribeRX
@@ -360,8 +386,15 @@ extension PostVC: SettingViewDelegate {
         close()
     }
 }
+// MARK: - UIViewControllerTransitioningDelegate
 extension PostVC: UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return PresentationController(height: 450, presentedViewController: presented, presenting: presenting )
+    }
+}
+// MARK: - PostSettingCellDelegate
+extension PostVC: PostSettingCellDelegate {
+    func showAddFavoriteListOKView(title: String) {
+        showOKView(title: title)
     }
 }

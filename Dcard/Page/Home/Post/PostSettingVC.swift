@@ -14,6 +14,9 @@ enum PostSettingMode {
     case keep
     case setting
 }
+protocol PostSettingCellDelegate {
+    func showAddFavoriteListOKView(title: String)
+}
 private class PostSettingCell: UITableViewCell {
     
     lazy private var lbTitle: UILabel = {
@@ -78,6 +81,8 @@ class PostSettingVC: UIViewController {
     private var host = false
     private var mode: PostSettingMode = .setting
     private var disposeBag = DisposeBag()
+    private var delegate: PostSettingCellDelegate?
+    private var post: Post = Post()
     
     private var settingDataList: [String] {
         return host ? ["分享", "轉貼到其他看板", "引用原文發文", "關閉文章通知", "刪除文章", "編輯文章", "編輯話題", "複製全文", "重新整理", "我不喜歡這篇文章"] :
@@ -90,9 +95,13 @@ class PostSettingVC: UIViewController {
         super.viewDidLoad()
         initView()
     }
-    func setContent(host: Bool = false, mode: PostSettingMode) {
-        self.host = host
+    func setContent(post: Post, mode: PostSettingMode, host: Bool = false) {
+        self.post = post
         self.mode = mode
+        self.host = host
+    }
+    func setDelegate(_ delegate: PostSettingCellDelegate) {
+        self.delegate = delegate
     }
 }
 // MARK: - SetupUI
@@ -133,7 +142,9 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PostSettingCell", for: indexPath) as! PostSettingCell
         let isSystemImage = self.mode == .keep && row == 0 || self.mode == .setting
         let title = self.mode == .keep ? (row == 0 ? "建立收藏分類" : self.keepDataList[row - 1].title) : self.settingDataList[indexPath.row]
-        let image = isSystemImage ? self.mode == .keep ? "plus" : "book.fill" : self.keepDataList[row - 1].photo
+        let favorite: Favorite? = row == 0 ? nil : self.keepDataList[row - 1]
+        let mediaMeta = favorite?.posts.first { $0.mediaMeta.count > 0 }?.mediaMeta[0].normalizedUrl ?? ""
+        let image = isSystemImage ? self.mode == .keep ? "plus" : "book.fill" : mediaMeta
         cell.setContent(isSystemImage: isSystemImage, image: image, title: title)
         return cell
     }
@@ -145,12 +156,21 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
-        if self.mode == .keep && row == 0 {
-            UIAlertController.showNewFavoriteCatolog(self, cancelHandler: {
-                self.dismiss(animated: true, completion: nil)
-            }, OKHandler: { (text) in
-                //
-            }, disposeBag: self.disposeBag)
+        if self.mode == .keep {
+            if row == 0 {
+                UIAlertController.showNewFavoriteCatolog(self, cancelHandler: {
+                    self.dismiss(animated: true, completion: nil)
+                }, OKHandler: { (text) in
+                    //創建收藏清單
+                }, disposeBag: self.disposeBag)
+            } else {
+                let favorite = self.keepDataList[row - 1]
+                self.dismiss(animated: true) {
+                    self.delegate?.showAddFavoriteListOKView(title: favorite.title)
+                }
+            }
+        } else {
+            
         }
     }
 }

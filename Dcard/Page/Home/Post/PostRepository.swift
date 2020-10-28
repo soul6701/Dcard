@@ -113,6 +113,7 @@ extension PostRepository: PostRepositoryInterface {
                 let postCount = result.json![index]["postCount"]["last30Days"].intValue
                 forums.append(Forum(alias: alias, name: name, logo: logo, postCount: postCount))
             }
+            ModelSingleton.shared.setForum(forums)
             subject.onNext(forums)
         }, onError: { error in
             subject.onError(error)

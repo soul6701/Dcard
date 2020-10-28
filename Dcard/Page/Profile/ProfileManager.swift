@@ -58,6 +58,7 @@ class ProfileManager {
         confiOKView()
         confiAlertView()
     }
+
     func confiOKView() {
         self.OKView = MessageView.viewFromNib(layout: .centeredView)
         self.OKView.id = "success"
@@ -87,7 +88,6 @@ class ProfileManager {
     func setBaseNav(_ nav: UINavigationController) {
         self.baseNav = nav
     }
-    //成功視窗
     func showOKView(mode: ProfileOKMode, handler: (() -> Void)?) {
         self.OKConfig.duration = .seconds(seconds: 1)
         var body = ""
@@ -187,12 +187,7 @@ class ProfileManager {
         case .favorites:
             let vc = UIStoryboard.profile.favoriteVC
             _ = vc.view
-            var list = [Favorite]()
-            (1...15).forEach { (i) in
-                list.append(Favorite(photo: "", title: ["居家", "笑話", "美食", "工作", "狗狗"].randomElement()!, posts: self.myPostList))
-            }
-            
-            vc.setContent(favoriteList: list, title: next.cell.name)
+            vc.setContent(title: next.cell.name)
             self.baseNav?.pushViewController(vc, animated: true) {
                 self.baseNav?.setNavigationBarHidden(false, animated: false)
             }

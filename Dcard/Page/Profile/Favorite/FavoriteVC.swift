@@ -10,9 +10,6 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-protocol FavoriteVCDelegate {
-    //
-}
 class FavoriteVC: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
@@ -25,10 +22,17 @@ class FavoriteVC: UIViewController {
         let width = floor((Double)(self.collectionView.bounds.width - itemSpace - collectionPadding * 2) / 2)
         return CGSize(width: width, height: width)
     }
-    private var favoriteList = [Favorite]() {
+    private var favoriteList = ModelSingleton.shared.userConfig.user.card.favorite {
         didSet {
             self.collectionView.reloadData()
         }
+    }
+    private var allFavorite: Favorite {
+        var postList = [Post]()
+        self.favoriteList.map { return $0.posts }.forEach { (posts) in
+            postList += posts
+        }
+        return Favorite(title: "全部收藏", posts: postList)
     }
     private let disposeBag = DisposeBag()
     
@@ -41,8 +45,7 @@ class FavoriteVC: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         
     }
-    func setContent(favoriteList: [Favorite], title: String) {
-        self.favoriteList = favoriteList
+    func setContent(title: String) {
         self.navigationItem.title = title
     }
 }
@@ -73,7 +76,7 @@ extension FavoriteVC {
         UIAlertController.showNewFavoriteCatolog(self, cancelHandler: {
             self.dismiss(animated: true, completion: nil)
         }, OKHandler: { (text) in
-            self.favoriteList.append(Favorite(photo: "", title: text, posts: []))
+            self.favoriteList.append(Favorite(title: text, posts: []))
             self.collectionView.reloadData()
         }, disposeBag: self.disposeBag)
     }
@@ -81,16 +84,20 @@ extension FavoriteVC {
 // MARK: - UICollectionViewDelegate
 extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.favoriteList.count
+        return self.favoriteList.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let favorite = self.favoriteList[indexPath.row]
-        let name = favorite.title
-        let post = favorite.posts
-        let index = (indexPath.row) % 8
+        let row = indexPath.row
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCell", for: indexPath) as! FavoriteCell
-        cell.setContent(name: name, imageString: !post.isEmpty ? post[index].mediaMeta[0].thumbnail : "")
+        guard row != 0 else {
+            cell.setContent(name: self.allFavorite.title, imageString: "")
+            return cell
+        }
+        let favorite = self.favoriteList[row - 1]
+        let title = favorite.title
+        let mediaMeta = favorite.posts.first { $0.mediaMeta.count > 0 }?.mediaMeta[0].normalizedUrl ?? ""
+        cell.setContent(name: title, imageString: mediaMeta)
         return cell
     }
     func  collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -102,12 +109,8 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         if row == 0 {
             vc.setContent(mode: .all)
         } else {
-            vc.setContent(favorite: self.favoriteList[row], mode: .other)
+            vc.setContent(favorite: self.favoriteList[row - 1], mode: .other)
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
-}
-// MARK: - FavoriteVCDelegate
-extension FavoriteVC: FavoriteVCDelegate {
-    
 }

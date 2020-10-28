@@ -81,7 +81,6 @@ extension HomeVC {
         viewModel.commentSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (comments) in
             let vc = UIStoryboard.home.postVC
             vc.setContent(post: self.selectedPost, commentList: comments)
-            vc.navigationItem.title = self.selectedPost.title
             vc.modalPresentationStyle = .formSheet
             self.navigationController?.pushViewController(vc, animated: true)
         }, onError: { error in
