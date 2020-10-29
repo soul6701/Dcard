@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -70,6 +70,9 @@
                         <rect key="frame" x="292" y="6" width="23" height="18"/>
                         <color key="tintColor" systemColor="systemGrayColor"/>
                         <state key="normal" image="ellipsis" catalog="system"/>
+                        <connections>
+                            <action selector="didClickBtnSetting:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="MNL-9e-rJM"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>
@@ -103,12 +106,11 @@
             <connections>
                 <outlet property="LikeAndcommentCount" destination="BeC-FN-Bkw" id="jND-XV-cJe"/>
                 <outlet property="_lbExcerpt" destination="KaW-6w-dcV" id="eCm-qU-SLk"/>
-                <outlet property="btnEdit" destination="glY-5V-Px0" id="JH6-Pj-cMt"/>
+                <outlet property="imageViewThumbnail" destination="i7u-ay-ycH" id="MIc-rr-s4g"/>
+                <outlet property="imageViewUser" destination="vgf-vp-4mF" id="GnV-qi-RAk"/>
                 <outlet property="lbExcerpt" destination="aAX-Yn-HHW" id="47x-v6-QzL"/>
                 <outlet property="lbForumAndSchool" destination="eeu-vG-nQc" id="4Jk-pX-eTR"/>
                 <outlet property="lbTitle" destination="oDN-Sa-Tl3" id="qOE-Za-LH8"/>
-                <outlet property="thumbnailImageView" destination="i7u-ay-ycH" id="MIc-rr-s4g"/>
-                <outlet property="userImageView" destination="vgf-vp-4mF" id="GnV-qi-RAk"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="152.67857142857142"/>
         </tableViewCell>

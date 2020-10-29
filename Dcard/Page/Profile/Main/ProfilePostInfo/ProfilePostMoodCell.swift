@@ -22,7 +22,7 @@ public enum ProfilePostMoodCellMode: Int {
     case respect
     
     var card: Card {
-        return ModelSingleton.shared.userConfig.user.card
+        return ModelSingleton.shared.userCard
     }
     fileprivate var data: ProfilePostMoodCellModel {
         var data = ProfilePostMoodCellModel()
@@ -60,7 +60,7 @@ class ProfilePostMoodCell: UITableViewCell {
     static private var width: CGFloat = 0 //由最大心情數量決定線條寬度
     private var mode: ProfilePostMoodCellMode = .title
     private var mood: Mood {
-        return ModelSingleton.shared.userConfig.user.card.mood
+        return ModelSingleton.shared.userCard.mood
     }
     override func awakeFromNib() {
         super.awakeFromNib()

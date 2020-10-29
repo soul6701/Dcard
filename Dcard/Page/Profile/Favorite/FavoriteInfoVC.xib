@@ -18,6 +18,7 @@
                 <outlet property="topSpace" destination="gRV-yb-AIm" id="IkQ-Ca-WcS"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="viewContainer" destination="l98-Z3-S1L" id="6k8-nY-Tql"/>
+                <outlet property="viewContainertwo" destination="YSt-ld-Dlx" id="eOa-yU-ZK8"/>
                 <outletCollection property="imageViewList" destination="50y-LP-eOC" collectionClass="NSMutableArray" id="ihH-Rb-HJl"/>
                 <outletCollection property="imageViewList" destination="kzT-yc-bal" collectionClass="NSMutableArray" id="2l1-2K-3dp"/>
                 <outletCollection property="imageViewList" destination="8he-sW-0uk" collectionClass="NSMutableArray" id="gIr-F7-67Z"/>
@@ -49,10 +50,10 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Go3-l4-j5L">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="97.5"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="50y-LP-eOC">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="50y-LP-eOC">
                                             <rect key="frame" x="0.0" y="0.0" width="204.5" height="97.5"/>
                                         </imageView>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kzT-yc-bal">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kzT-yc-bal">
                                             <rect key="frame" x="209.5" y="0.0" width="204.5" height="97.5"/>
                                         </imageView>
                                     </subviews>
@@ -60,10 +61,10 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="jQL-O3-dhb">
                                     <rect key="frame" x="0.0" y="102.5" width="414" height="97.5"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8he-sW-0uk">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8he-sW-0uk">
                                             <rect key="frame" x="0.0" y="0.0" width="204.5" height="97.5"/>
                                         </imageView>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qGe-fO-T9L">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qGe-fO-T9L">
                                             <rect key="frame" x="209.5" y="0.0" width="204.5" height="97.5"/>
                                         </imageView>
                                     </subviews>
@@ -83,60 +84,75 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MCk-dm-o9X">
                     <rect key="frame" x="0.0" y="244" width="414" height="100"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyN-Wn-z06">
-                            <rect key="frame" x="332" y="58" width="67" height="22"/>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <inset key="imageEdgeInsets" minX="-8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="未分類" image="square" catalog="system">
-                                <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                            </state>
-                            <connections>
-                                <action selector="didClickBtnCatalog:" destination="-1" eventType="touchUpInside" id="2XB-OC-J1Y"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fEa-fb-KO1">
-                            <rect key="frame" x="369" y="15" width="30" height="29"/>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                            <state key="normal" title="選取"/>
-                            <connections>
-                                <action selector="didClickBtnSelect:" destination="-1" eventType="touchUpInside" id="Npe-9g-qkP"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwv-3q-Nva">
-                            <rect key="frame" x="15" y="63" width="78.5" height="17"/>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <inset key="contentEdgeInsets" minX="7" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <inset key="titleEdgeInsets" minX="-35" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <inset key="imageEdgeInsets" minX="60" minY="6" maxX="0.0" maxY="4"/>
-                            <state key="normal" title="看板篩選" image="arrowtriangle.down.fill" catalog="system">
-                                <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small"/>
-                            </state>
-                            <connections>
-                                <action selector="didClickBtnForumFilter:" destination="-1" eventType="touchUpInside" id="d3e-x4-00N"/>
-                            </connections>
-                        </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="全部收藏" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WQp-ms-oUd">
-                            <rect key="frame" x="15" y="15" width="117.5" height="35"/>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="29"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TTB-T7-Lhj">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fEa-fb-KO1">
+                                    <rect key="frame" x="369" y="15" width="30" height="29"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                    <state key="normal" title="選取"/>
+                                    <connections>
+                                        <action selector="didClickBtnSelect:" destination="-1" eventType="touchUpInside" id="Npe-9g-qkP"/>
+                                    </connections>
+                                </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="全部收藏" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WQp-ms-oUd">
+                                    <rect key="frame" x="15" y="15" width="117.5" height="35"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="29"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <constraints>
+                                <constraint firstItem="fEa-fb-KO1" firstAttribute="top" secondItem="WQp-ms-oUd" secondAttribute="top" id="7EN-KV-dZt"/>
+                                <constraint firstItem="WQp-ms-oUd" firstAttribute="leading" secondItem="TTB-T7-Lhj" secondAttribute="leading" constant="15" id="AmQ-Je-Vxy"/>
+                                <constraint firstAttribute="trailing" secondItem="fEa-fb-KO1" secondAttribute="trailing" constant="15" id="PyJ-cz-JdD"/>
+                                <constraint firstItem="WQp-ms-oUd" firstAttribute="top" secondItem="TTB-T7-Lhj" secondAttribute="top" constant="15" id="cx6-q7-Yja"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YSt-ld-Dlx">
+                            <rect key="frame" x="0.0" y="60" width="414" height="40"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyN-Wn-z06">
+                                    <rect key="frame" x="329" y="9" width="70" height="22"/>
+                                    <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <inset key="imageEdgeInsets" minX="-7" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <state key="normal" title="未分類" image="square" catalog="system">
+                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="didClickBtnCatalog:" destination="-1" eventType="touchUpInside" id="2XB-OC-J1Y"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwv-3q-Nva">
+                                    <rect key="frame" x="15" y="5" width="77" height="30"/>
+                                    <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <state key="normal" title="看板篩選 ▼"/>
+                                    <connections>
+                                        <action selector="didClickBtnForumFilter:" destination="-1" eventType="touchUpInside" id="d3e-x4-00N"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <constraints>
+                                <constraint firstItem="gwv-3q-Nva" firstAttribute="leading" secondItem="YSt-ld-Dlx" secondAttribute="leading" constant="15" id="5UK-dJ-GNW"/>
+                                <constraint firstAttribute="trailing" secondItem="pyN-Wn-z06" secondAttribute="trailing" constant="15" id="5j2-Jv-QxT"/>
+                                <constraint firstAttribute="bottom" secondItem="gwv-3q-Nva" secondAttribute="bottom" constant="5" id="IhR-N4-JPV"/>
+                                <constraint firstItem="pyN-Wn-z06" firstAttribute="centerY" secondItem="gwv-3q-Nva" secondAttribute="centerY" id="SqE-Hi-szo"/>
+                                <constraint firstAttribute="height" constant="40" id="WS5-8s-fXs"/>
+                            </constraints>
+                        </view>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="pyN-Wn-z06" firstAttribute="bottom" secondItem="gwv-3q-Nva" secondAttribute="bottom" id="3Mf-kx-028"/>
-                        <constraint firstItem="gwv-3q-Nva" firstAttribute="leading" secondItem="WQp-ms-oUd" secondAttribute="leading" id="DSr-hc-sgu"/>
-                        <constraint firstItem="WQp-ms-oUd" firstAttribute="leading" secondItem="MCk-dm-o9X" secondAttribute="leading" constant="15" id="H18-Yp-K4O"/>
-                        <constraint firstItem="WQp-ms-oUd" firstAttribute="top" secondItem="MCk-dm-o9X" secondAttribute="top" constant="15" id="Lw1-ZS-nyf"/>
+                        <constraint firstItem="TTB-T7-Lhj" firstAttribute="leading" secondItem="MCk-dm-o9X" secondAttribute="leading" id="2fe-u4-lrX"/>
+                        <constraint firstAttribute="trailing" secondItem="YSt-ld-Dlx" secondAttribute="trailing" id="52G-bk-lzG"/>
+                        <constraint firstItem="YSt-ld-Dlx" firstAttribute="leading" secondItem="MCk-dm-o9X" secondAttribute="leading" id="Q8Y-Fj-puy"/>
                         <constraint firstAttribute="height" constant="100" id="QRu-d0-tAr"/>
-                        <constraint firstAttribute="trailing" secondItem="fEa-fb-KO1" secondAttribute="trailing" constant="15" id="XNZ-ei-jCF"/>
-                        <constraint firstItem="pyN-Wn-z06" firstAttribute="trailing" secondItem="fEa-fb-KO1" secondAttribute="trailing" id="fhU-HN-e3E"/>
-                        <constraint firstAttribute="bottom" secondItem="gwv-3q-Nva" secondAttribute="bottom" constant="20" id="kUk-lm-k50"/>
-                        <constraint firstItem="fEa-fb-KO1" firstAttribute="top" secondItem="WQp-ms-oUd" secondAttribute="top" id="twg-l7-2em"/>
+                        <constraint firstAttribute="trailing" secondItem="TTB-T7-Lhj" secondAttribute="trailing" id="R8K-2j-Hti"/>
+                        <constraint firstItem="YSt-ld-Dlx" firstAttribute="top" secondItem="TTB-T7-Lhj" secondAttribute="bottom" id="Tg4-G6-Lzw"/>
+                        <constraint firstAttribute="bottom" secondItem="YSt-ld-Dlx" secondAttribute="bottom" id="YTr-n8-smV"/>
+                        <constraint firstItem="TTB-T7-Lhj" firstAttribute="top" secondItem="MCk-dm-o9X" secondAttribute="top" id="kie-6J-rAJ"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WzF-68-w8e">
@@ -172,12 +188,11 @@
                 <constraint firstItem="MCk-dm-o9X" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="xLt-xN-TP5"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <point key="canvasLocation" x="-74" y="152"/>
+            <point key="canvasLocation" x="-220" y="97"/>
         </view>
     </objects>
     <resources>
         <image name="arrow.left" catalog="system" width="128" height="98"/>
-        <image name="arrowtriangle.down.fill" catalog="system" width="128" height="124"/>
         <image name="square" catalog="system" width="128" height="114"/>
     </resources>
 </document>

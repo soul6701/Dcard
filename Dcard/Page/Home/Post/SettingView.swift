@@ -28,8 +28,11 @@ class SettingView: UIView {
     private var user: User {
         return ModelSingleton.shared.userConfig.user
     }
+    private var card: Card {
+        return ModelSingleton.shared.userCard
+    }
     private var dataList: [String] {
-        return mode == .commentSetting ? ["回應並標註 ", "複製", "檢舉", "我不喜歡這則回應"] : [self.user.card.school, self.user.card.school + " " + self.user.card.department, self.user.card.name]
+        return mode == .commentSetting ? ["回應並標註 ", "複製", "檢舉", "我不喜歡這則回應"] : [self.card.school, self.card.school + " " + self.card.department, self.card.name]
     }
     private var floor = 0
     private var delegate: SettingViewDelegate?

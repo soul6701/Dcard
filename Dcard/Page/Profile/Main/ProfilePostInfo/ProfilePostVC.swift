@@ -47,7 +47,7 @@ class ProfilePostVC: UIViewController {
         return CGSize(width: width, height: height)
     }
     private var mood: Mood {
-        return ModelSingleton.shared.userConfig.user.card.mood
+        return ModelSingleton.shared.userCard.mood
     }
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -23,11 +23,11 @@ enum ProfilePostCellMode: Int {
     case getMood
     
     fileprivate var data: ProfilePostCellModel {
-        let card = ModelSingleton.shared.userConfig.user.card
+        let card = ModelSingleton.shared.userCard
         var data = ProfilePostCellModel()
         switch self {
         case .post:
-            data = ProfilePostCellModel(title: "文章被收藏數", icon: "doc.on.clipboard.fill", description: String(card.post.count) + " " + "篇", iconColor: .blue)
+            data = ProfilePostCellModel(title: "發過的文章", icon: "doc.on.clipboard.fill", description: String(card.post.count) + " " + "篇", iconColor: .blue)
         case .comment:
             data = ProfilePostCellModel(title: "發過的回應", icon: "bubble.left.fill", description: String(card.comment.count) + " " + "則", iconColor: .darkGray)
         case .beKeeped:

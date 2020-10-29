@@ -33,6 +33,9 @@ class ProfileManager {
     private var baseNav: UINavigationController?
     private var maintainBaseVC: UIViewController?
     //假值
+    var card: Card {
+        return ModelSingleton.shared.userCard
+    }
     var user: User {
         return ModelSingleton.shared.userConfig.user
     }
@@ -221,7 +224,7 @@ class ProfileManager {
             let vc = UIStoryboard.card.cardInfoVC
             _ = vc.view
             vc.view.backgroundColor = #colorLiteral(red: 0.7540688515, green: 0.7540867925, blue: 0.7540771365, alpha: 0.8770333904)
-            vc.setContent(card: user.card, isUser: true, isFriend: false)
+            vc.setContent(card: self.card, isUser: true, isFriend: false)
             self.baseNav?.pushViewController(vc, animated: true) {
                 self.baseNav?.setNavigationBarHidden(false, animated: false)
             }

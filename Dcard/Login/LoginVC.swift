@@ -38,7 +38,7 @@ class LoginVC: UIViewController {
     private var oldHeight: CGFloat!
     private var newHeight: CGFloat!
     private var disposeBag = DisposeBag()
-    var viewModel: LoginVMInterface!
+    private var viewModel: LoginVMInterface!
     
     private var window: UIWindow {
         return UIApplication.shared.windows.first!

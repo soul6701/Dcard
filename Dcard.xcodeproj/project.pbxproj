@@ -178,6 +178,8 @@
 		933F610E2547FCD500609E70 /* FavoriteInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */; };
 		933F610F2547FCD500609E70 /* FavoriteInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */; };
 		934A0551A1012375356ACBFD /* Pods_Dcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */; };
+		9366156B254AECDA0030CD0A /* PostVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9366156A254AECDA0030CD0A /* PostVM.swift */; };
+		9366EC2F254ABBC20030CD0A /* PostFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9366EC2E254ABBC20030CD0A /* PostFirebase.swift */; };
 		936E380B2543B57D00EFFBFC /* Extension_Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936E380A2543B57D00EFFBFC /* Extension_Date.swift */; };
 		936E380D2543B59200EFFBFC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 936E380C2543B59100EFFBFC /* Profile.storyboard */; };
 		936E38132543B5B300EFFBFC /* ProfilePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936E380F2543B5B200EFFBFC /* ProfilePostView.swift */; };
@@ -387,6 +389,8 @@
 		933F61092546AC3800609E70 /* ReportVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReportVC.xib; sourceTree = "<group>"; };
 		933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteInfoVC.swift; sourceTree = "<group>"; };
 		933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteInfoVC.xib; sourceTree = "<group>"; };
+		9366156A254AECDA0030CD0A /* PostVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVM.swift; sourceTree = "<group>"; };
+		9366EC2E254ABBC20030CD0A /* PostFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFirebase.swift; sourceTree = "<group>"; };
 		936E380A2543B57D00EFFBFC /* Extension_Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension_Date.swift; sourceTree = "<group>"; };
 		936E380C2543B59100EFFBFC /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		936E380F2543B5B200EFFBFC /* ProfilePostView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePostView.swift; sourceTree = "<group>"; };
@@ -619,6 +623,7 @@
 				228F932E24C1FE4F00A7EBD9 /* Drawer.xib */,
 				22F2111624CC5324003B1F1D /* ForumCell.swift */,
 				22F2111724CC5324003B1F1D /* ForumCell.xib */,
+				9366EC2E254ABBC20030CD0A /* PostFirebase.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -852,6 +857,7 @@
 				228D421C24B3889A0077D29E /* SettingView.xib */,
 				228D421E24B38AFC0077D29E /* SettingView.swift */,
 				228D419824AA49080077D29E /* PostVC.swift */,
+				9366156A254AECDA0030CD0A /* PostVM.swift */,
 				228D41E024AD06290077D29E /* CommentCell.swift */,
 				228D41E124AD06290077D29E /* CommentCell.xib */,
 				8479ADA52540293A007CE86D /* PostSettingVC.swift */,
@@ -1162,6 +1168,7 @@
 				22EE9AA424B9840400823C83 /* Constant.swift in Sources */,
 				2276108024F8FF2C003A3F88 /* LoginFirebase.swift in Sources */,
 				22788AF22503A87600E87F7F /* UserConfig.swift in Sources */,
+				9366156B254AECDA0030CD0A /* PostVM.swift in Sources */,
 				22EDC72025134DDC0021B435 /* MailVC.swift in Sources */,
 				220D16DC24F4C841007B578E /* UserDefaultsKeys.swift in Sources */,
 				221ADB262499F5C300C25BD1 /* PostAndComment.swift in Sources */,
@@ -1187,6 +1194,7 @@
 				936E38142543B5B300EFFBFC /* ProfilePostCell.swift in Sources */,
 				22D7C39D24ECDFC9006412BE /* ImageInfo.swift in Sources */,
 				848A6CD62534285A00125138 /* DbManager.swift in Sources */,
+				9366EC2F254ABBC20030CD0A /* PostFirebase.swift in Sources */,
 				22788AF02503A0C100E87F7F /* ModelSingleton.swift in Sources */,
 				84C818A8252DC39800CFABA6 /* FriendCardVC.swift in Sources */,
 				22CAAABA250C960400CDF95B /* ChatRoomVC.swift in Sources */,

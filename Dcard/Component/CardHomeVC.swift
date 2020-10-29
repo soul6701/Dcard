@@ -51,7 +51,7 @@ class CardHomeVC: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         if self.mode == .user {
-            self.followCard = FollowCard(card: ModelSingleton.shared.userConfig.user.card)
+            self.followCard = FollowCard(card: ModelSingleton.shared.userCard)
         }
         resetData(self.followCard)
     }
@@ -120,7 +120,7 @@ class CardHomeVC: UIViewController {
     }
     
     func setContent(followCard: FollowCard? = nil, mode: CardHomeVCMode) {
-        self.followCard = followCard == nil ? FollowCard(card: ModelSingleton.shared.userConfig.user.card) : followCard
+        self.followCard = followCard == nil ? FollowCard(card: ModelSingleton.shared.userCard) : followCard
         self.mode = mode
     }
 }
@@ -216,7 +216,7 @@ extension CardHomeVC {
         self.lbID.text = "@\(followCard.card.id)"
         self.lbName.text = followCard.card.name
         self.lbIcon.backgroundColor = followCard.card.sex == "M" ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1) : #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
-        self.lbIcon.text = String(followCard.card.id.first!).uppercased()
+        self.lbIcon.text = !followCard.card.id.isEmpty ? String(followCard.card.id.first!).uppercased() : ""
         resetBellState(self.isFollowing, notifyMode: self.notifyMode)
     }
     //重置通知狀態

@@ -12,8 +12,12 @@ class ProfileVC: UIViewController {
 
     @IBOutlet var bottomSpace: NSLayoutConstraint!
     @IBOutlet weak var tableViewMain: UITableView!
+    
     private var user: User {
         return ModelSingleton.shared.userConfig.user
+    }
+    private var card: Card {
+        return ModelSingleton.shared.userCard
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,10 +54,11 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
         switch row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileOneCell", for: indexPath) as! ProfileOneCell
-            cell.setContent(name: user.lastName + user.firstName, school: user.card.school, department: user.card.department, avatar: user.avatar)
+            cell.setContent(name: self.user.lastName + self.user.firstName, school: self.card.school, department: self.card.department, avatar: self.user.avatar)
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTwoCell", for: indexPath) as! ProfileTwoCell
+            cell.setContent(postCount: self.card.post.count, replyCount: self.card.comment.count, KeepedCount: self.card.beKeeped)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileThreeCell", for: indexPath) as! ProfileThreeCell

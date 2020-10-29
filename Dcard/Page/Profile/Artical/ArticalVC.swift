@@ -19,9 +19,6 @@ class ArticalVC: UIViewController {
     private var tfAddress: UITextField?
     private var articalList = [Post]()
     private var times = 1
-    private var user: User {
-        return ModelSingleton.shared.userConfig.user
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         ToolbarView.shared.show(false)
@@ -118,7 +115,7 @@ extension ArticalVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         let vc = UIStoryboard.home.postVC
-        let post = self.user.card.post[row]
+        let post = ModelSingleton.shared.userCard.post[row]
         vc.setContent(post: post, commentList: [Comment()])
         vc.navigationItem.title = post.title
         vc.modalPresentationStyle = .formSheet

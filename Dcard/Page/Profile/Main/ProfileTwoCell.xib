@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -116,6 +116,11 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="lbKeepedCount" destination="dM9-28-wFT" id="uSD-WS-fpD"/>
+                <outlet property="lbPostCount" destination="9UA-vu-T4E" id="GgX-9u-Cuj"/>
+                <outlet property="lbReplyCount" destination="ZLw-q5-S0n" id="gDe-hS-yrh"/>
+            </connections>
             <point key="canvasLocation" x="37.681159420289859" y="87.723214285714278"/>
         </tableViewCell>
     </objects>

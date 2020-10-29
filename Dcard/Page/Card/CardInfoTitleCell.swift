@@ -49,10 +49,12 @@ class CardInfoTitleCell: UITableViewCell {
         filter.setValue(inputImage, forKey:kCIInputImageKey)
         //設置模糊半徑值（越大越模糊）
         filter.setValue(80, forKey: kCIInputRadiusKey)
-        let outputCIImage = filter.outputImage!
+        
         let rect = CGRect(origin: CGPoint.zero, size: image.size)
-        let cgImage = context.createCGImage(outputCIImage, from: rect)
-        //顯示生成的模糊圖片
-        self.photoBG.image = UIImage(cgImage: cgImage!)
+        if let output = filter.outputImage {
+            let cgImage = context.createCGImage(output, from: rect)
+            //顯示生成的模糊圖片
+            self.photoBG.image = UIImage(cgImage: cgImage!)
+        }
     }
 }

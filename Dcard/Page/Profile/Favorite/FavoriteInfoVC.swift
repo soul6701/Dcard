@@ -68,26 +68,17 @@ fileprivate class FavoriteForumVC: UIViewController {
     private var delegate: FavoriteForumVCDelegate?
     
     override func viewDidLoad() {
-        self.navigationItem.title = "看板篩選"
-        self.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(close)), animated: false)
+        self.navigationItem.title = "看板"
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "xmark"), for: .normal)
+        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
+        self.navigationItem.setLeftBarButton(UIBarButtonItem(customView: btn), animated: false)
         self.navigationItem.setRightBarButton(UIBarButtonItem(title: "常用", style: .plain, target: self, action: #selector(apply)), animated: false)
         self.btnList[0].isEnabled = !self.selectedForumNameList.isEmpty
-        
         self.btnList.forEach { (btn) in
             self.stackView.addArrangedSubview(btn)
         }
-        self.view.setFixedView(self.tableView, inSafeArea: true)
-        let view = UIView()
-        view.backgroundColor = .systemBackground
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.setFixedView(self.stackView)
-        self.view.addSubview(view)
-        view.snp.makeConstraints { (maker) in
-            maker.bottom.equalTo(self.tableView.snp.bottom)
-            maker.leading.equalTo(self.tableView.snp.leading)
-            maker.trailing.equalTo(self.tableView.snp.trailing)
-            maker.height.equalTo(60)
-        }
+        addViewAndSetupAutolayout()
     }
     func setContent(selectedForumNameList: [String]) {
         self.selectedForumNameList = selectedForumNameList
@@ -108,6 +99,26 @@ fileprivate class FavoriteForumVC: UIViewController {
             cell.isSelected = false
         }
         self.selectedCellList.removeAll()
+    }
+    private func addViewAndSetupAutolayout() {
+        self.view.setFixedView(self.tableView, inSafeArea: true)
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(self.stackView)
+        self.stackView.snp.makeConstraints { (maker) in
+            maker.leading.equalToSuperview().offset(15)
+            maker.trailing.equalToSuperview().offset(-15)
+            maker.centerY.equalToSuperview()
+            maker.height.equalTo(40)
+        }
+        self.view.addSubview(view)
+        view.snp.makeConstraints { (maker) in
+            maker.bottom.equalTo(self.tableView.snp.bottom)
+            maker.leading.equalTo(self.tableView.snp.leading)
+            maker.trailing.equalTo(self.tableView.snp.trailing)
+            maker.height.equalTo(80)
+        }
     }
 }
 // MARK: - UITableViewDelegate
@@ -157,6 +168,7 @@ class FavoriteInfoVC: UIViewController {
     @IBOutlet weak var topSpace: NSLayoutConstraint!
     @IBOutlet weak var lbTitle: UILabel!
     @IBOutlet weak var btnSelect: UIButton!
+    @IBOutlet weak var viewContainertwo: UIView!
     @IBOutlet weak var btnCatalog: UIButton!
     @IBOutlet weak var btnForumFilter: UIButton!
     //封面視窗
@@ -169,7 +181,6 @@ class FavoriteInfoVC: UIViewController {
     private var catalogSelected = false
     private var selectedForumNameList = [String]()
     private var favorite: Favorite = Favorite()
-    private var initLeftInset: CGFloat = 0
     private var favoritePostList: [Post] {
         return self.favorite.posts
     }
@@ -190,10 +201,6 @@ class FavoriteInfoVC: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.initLeftInset = self.btnForumFilter.imageEdgeInsets.left
-    }
     @IBAction func back(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -211,8 +218,8 @@ class FavoriteInfoVC: UIViewController {
             imageView.addSubview(view)
             view.snp.makeConstraints { (maker) in
                 maker.center.equalToSuperview()
-                maker.height.equalTo(imageView.bounds.height * 3 / 4)
-                maker.width.equalTo(imageView.bounds.height * 3 / 4)
+                maker.height.equalTo(imageView.bounds.height * 1.8 / 3)
+                maker.width.equalTo(imageView.bounds.height * 1.8 / 3)
             }
         } else {
             self.btnCatalog.imageView?.subviews.last?.removeFromSuperview()
@@ -235,7 +242,7 @@ class FavoriteInfoVC: UIViewController {
         nav.modalPresentationStyle = .overFullScreen
         present(nav, animated: true, completion: nil)
     }
-    func setContent(favorite: Favorite = ModelSingleton.shared.userConfig.user.card.favorite[0], mode: FavoriteInfoMode) {
+    func setContent(favorite: Favorite = ModelSingleton.shared.userCard.favorite[0], mode: FavoriteInfoMode) {
         self.mode = mode
         self.favorite = favorite
         
@@ -257,12 +264,14 @@ extension FavoriteInfoVC {
         self.filteredPostList = self.favoritePostList
     }
     private func confiTableView() {
+        let isAll = self.mode == .all
         self.tableView.backgroundColor = .clear
         self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
-        self.tableView.contentInset = UIEdgeInsets(top: 300, left: 0, bottom: 0, right: 0)
-        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 300, left: 0, bottom: 0, right: 0)
+        self.tableView.contentInset = UIEdgeInsets(top: isAll ? 300 : 260 , left: 0, bottom: 0, right: 0)
+        self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: isAll ? 300 : 260 , left: 0, bottom: 0, right: 0)
     }
     private func confiTitleView() {
+        self.viewContainertwo.isHidden = self.mode == .other
         self.lbTitle.text = self.mode == .all ? "全部收藏" : self.favorite.title
         self.btnSelect.setTitle(self.mode == .all ? "選取" : "新增文章", for: .normal)
     }
@@ -333,7 +342,7 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y
         
-        self.topSpace.constant = yOffset + 300
+        self.topSpace.constant = yOffset + (self.mode == .all ? 300 : 260)
         self.view.layoutIfNeeded()
     }
 }
@@ -343,14 +352,12 @@ extension FavoriteInfoVC: FavoriteForumVCDelegate {
         guard !selectedForumNameList.isEmpty else {
             self.filteredPostList = self.favoritePostList
             self.selectedForumNameList = []
-            self.btnForumFilter.imageEdgeInsets.left = self.initLeftInset
-            self.btnForumFilter.setTitle("看板篩選", for: .normal)
+            self.btnForumFilter.setTitle("看板篩選 ▼", for: .normal)
             self.btnForumFilter.setTitleColor(.darkGray, for: .normal)
             return
         }
         self.selectedForumNameList = selectedForumNameList
-        self.btnForumFilter.setTitle("看板篩選·\(selectedForumNameList.count)", for: .normal)
-        self.btnForumFilter.imageEdgeInsets.left = self.initLeftInset + 12
+        self.btnForumFilter.setTitle("看板篩選·\(selectedForumNameList.count) ▼", for: .normal)
         self.btnForumFilter.setTitleColor(#colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78), for: .normal)
         self.filteredPostList = self.favoritePostList.filter { return selectedForumNameList.contains($0.forumName) }
     }

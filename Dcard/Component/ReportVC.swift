@@ -16,7 +16,10 @@ class ReportVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CommonCell")
-        self.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(self.closeReportView)), animated: false)
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "xmark"), for: .normal)
+        btn.addTarget(self, action: #selector(self.closeReportView), for: .touchUpInside)
+        self.navigationItem.setLeftBarButton(UIBarButtonItem(customView: btn), animated: false)
         self.navigationItem.title = "檢舉這個話題的原因"
     }
     @objc private func closeReportView() {
@@ -27,7 +30,7 @@ extension ReportVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.rowDataList.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CommonCell", for: indexPath)
         cell.textLabel?.text = self.rowDataList[indexPath.row]

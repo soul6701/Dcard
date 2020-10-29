@@ -175,6 +175,9 @@ ID 規則
     private var user: User {
         return ModelSingleton.shared.userConfig.user
     }
+    private var card: Card {
+        return ModelSingleton.shared.userCard
+    }
     private var mode: SettingAccountMode = .setAddress
     private var oldAddress = ""
     private var newAddress = ""
@@ -239,8 +242,8 @@ extension SettingAccountVC {
         
         self.oldAddress = self.user.address
         self.oldPassword = self.user.password
-        self.cardName = self.user.card.name
-        self.cardID = self.user.card.id
+        self.cardName = self.card.name
+        self.cardID = self.card.id
         
         confiTableView()
         confiNav()
@@ -259,7 +262,10 @@ extension SettingAccountVC {
         if self.mode == .editCard || self.mode == .enterNewID {
             self.navigationItem.setRightBarButton(UIBarButtonItem(customView: self.btnHint), animated: true)
             guard self.mode == .editCard else { return }
-            self.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(self.close)), animated: false)
+            let btn = UIButton()
+            btn.setImage(UIImage(systemName: "xmark"), for: .normal)
+            btn.addTarget(self, action: #selector(self.close), for: .touchUpInside)
+            self.navigationItem.setLeftBarButton(UIBarButtonItem(customView: btn), animated: false)
         }
     }
     private func confiDoneButton() {

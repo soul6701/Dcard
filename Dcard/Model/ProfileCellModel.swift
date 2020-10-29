@@ -12,13 +12,8 @@ import Foundation
 //我的收藏
 public struct Favorite {
     
-    public var title: String
-    public var posts: [Post]
-    
-    init(title: String = "柴柴", posts: [Post] = [Post]()) {
-        self.title = title
-        self.posts = posts
-    }
+    public var title: String = "柴柴"
+    public var posts: [Post] = [Post]()
 }
 //我追蹤的話題
 public struct FollowIssue {

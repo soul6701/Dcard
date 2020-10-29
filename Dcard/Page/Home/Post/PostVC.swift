@@ -89,6 +89,9 @@ class PostVC: UIViewController {
         view.addGestureRecognizer(tap)
         return view
     }()
+    private var card: Card {
+        return ModelSingleton.shared.userCard
+    }
     private var user: User {
         return ModelSingleton.shared.userConfig.user
     }
@@ -96,6 +99,7 @@ class PostVC: UIViewController {
     private var post = Post()
     private var commentList = [Comment]()
     private var previousRect = CGRect()
+    var willBeAddedListTitle = ""
     private var show: Bool = false {
         didSet {
             self.btnShowComment.setImage(UIImage(named: show ? ImageInfo.down : ImageInfo.up), for: .normal)
@@ -107,6 +111,7 @@ class PostVC: UIViewController {
         string.append(NSMutableAttributedString(string: "B\(self.commentList.count + 1), \(Date.getCurrentDateString(true))", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.lightGray]))
         return string
     }
+    private var viewModel: PostVMInterface!
     private var posterSchoolString = ""
     private var imageAvator = UIImage()
     private var willbeOpened = false {
@@ -121,20 +126,20 @@ class PostVC: UIViewController {
         didSet {
             switch posterMode {
             case .school:
-                self.posterSchoolString = self.user.card.school
-                self.imageAvator = UIImage(named: self.user.sex == "F" ? ImageInfo.pikachu : ImageInfo.carbi)!
+                self.posterSchoolString = self.card.school
+                self.imageAvator = UIImage(named: self.card.sex == "F" ? ImageInfo.pikachu : ImageInfo.carbi)!
                 self.imageViewAvator.image = self.imageAvator
             case .school_department:
-                self.posterSchoolString = self.user.card.school + " " + self.user.card.department
-                self.imageAvator = UIImage(named: self.user.sex == "F" ? ImageInfo.pikachu : ImageInfo.carbi)!
+                self.posterSchoolString = self.card.school + " " + self.card.department
+                self.imageAvator = UIImage(named: self.card.sex == "F" ? ImageInfo.pikachu : ImageInfo.carbi)!
                 self.imageViewAvator.image = self.imageAvator
             case .cardName:
-                self.posterSchoolString = self.user.card.name
+                self.posterSchoolString = self.card.name
             }
         }
     }
     private var schoolList: [String] {
-        return [self.user.card.school, self.user.card.department, self.user.card.name]
+        return [self.card.school, self.card.department, self.card.name]
     }
     private var heart = false {
         didSet {
@@ -240,6 +245,21 @@ extension PostVC {
         self.OKConfig.presentationStyle = .bottom
     }
 }
+// MARK: - SubscribeViewModel
+extension PostVC {
+    private func confiViewModel() {
+        self.viewModel = PostVM()
+    }
+    private func subsribeViewModel() {
+        self.viewModel.ccreartFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result {
+                self.showOKView()
+            }
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+    }
+}
 // MARK: - Private Handler
 extension PostVC {
     @objc private func close() {
@@ -258,7 +278,7 @@ extension PostVC {
         }
         self.viewHeight.constant = 150
         self.view.layoutIfNeeded()
-        self.commentList.append(Comment(id: self.user.card.id, anonymous: true, content: self.tvComment.text, createdAt: "2020/05/05", floor: self.commentList.count + 1, likeCount: 0, gender: self.user.card.sex, department: self.user.card.department, school: self.user.card.school, withNickname: true, host: false, mediaMeta: []))
+        self.commentList.append(Comment(id: self.card.id, anonymous: true, content: self.tvComment.text, createdAt: "2020/05/05", floor: self.commentList.count + 1, likeCount: 0, gender: self.card.sex, department: self.card.department, school: self.card.school, withNickname: true, host: false, mediaMeta: []))
         self.tableView.reloadData()
         self.willbeOpened = false
     }
@@ -275,9 +295,9 @@ extension PostVC {
             self.view.addSubview(self.viewPosterSetting)
         }
     }
-    private func showOKView(title: String) {
+    private func showOKView() {
         self.OKConfig.duration = .seconds(seconds: 1.5)
-        self.OKView.configureContent(title: "", body: "已分類至" + "『\(title)』")
+        self.OKView.configureContent(title: "", body: "已分類至" + "『\(self.willBeAddedListTitle)』")
         SwiftMessages.show(config: self.OKConfig, view: self.OKView)
     }
 }
@@ -331,7 +351,7 @@ extension PostVC: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommonCell", for: indexPath)
             cell.textLabel?.text = self.schoolList[row]
             if row == 2 {
-                cell.imageView?.kf.setImage(with: URL(string: user.avatar))
+                cell.imageView?.kf.setImage(with: URL(string: ModelSingleton.shared.userConfig.user.avatar))
             } else {
                 cell.imageView?.image = imageAvator
             }
@@ -395,6 +415,6 @@ extension PostVC: UIViewControllerTransitioningDelegate {
 // MARK: - PostSettingCellDelegate
 extension PostVC: PostSettingCellDelegate {
     func showAddFavoriteListOKView(title: String) {
-        showOKView(title: title)
+        self.viewModel.creartFavoriteList(listName: title, post: self.post)
     }
 }

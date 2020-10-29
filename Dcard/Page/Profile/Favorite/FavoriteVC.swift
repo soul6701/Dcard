@@ -22,7 +22,7 @@ class FavoriteVC: UIViewController {
         let width = floor((Double)(self.collectionView.bounds.width - itemSpace - collectionPadding * 2) / 2)
         return CGSize(width: width, height: width)
     }
-    private var favoriteList = ModelSingleton.shared.userConfig.user.card.favorite {
+    private var favoriteList = ModelSingleton.shared.userCard.favorite {
         didSet {
             self.collectionView.reloadData()
         }
@@ -33,6 +33,16 @@ class FavoriteVC: UIViewController {
             postList += posts
         }
         return Favorite(title: "全部收藏", posts: postList)
+    }
+    private var allImageList: [String] {
+        var list = [String]()
+        for favorite in self.favoriteList {
+            if let first = favorite.posts.first(where: { return $0.mediaMeta.count > 0 }) {
+                list.append(first.mediaMeta[0].thumbnail)
+                if list.count >= 4 { break }
+            }
+        }
+        return list
     }
     private let disposeBag = DisposeBag()
     
@@ -90,14 +100,15 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let row = indexPath.row
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCell", for: indexPath) as! FavoriteCell
+        
         guard row != 0 else {
-            cell.setContent(name: self.allFavorite.title, imageString: "")
+            cell.setContent(name: self.allFavorite.title, imageStrings: self.allImageList)
             return cell
         }
         let favorite = self.favoriteList[row - 1]
         let title = favorite.title
         let mediaMeta = favorite.posts.first { $0.mediaMeta.count > 0 }?.mediaMeta[0].normalizedUrl ?? ""
-        cell.setContent(name: title, imageString: mediaMeta)
+        cell.setContent(name: title, imageStrings: [mediaMeta])
         return cell
     }
     func  collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
