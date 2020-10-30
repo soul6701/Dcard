@@ -12,12 +12,16 @@ import RxSwift
 import RxCocoa
 
 protocol PostVMInterface {
-    //創建帳戶
+    ///創建帳戶
     var ccreartFavoriteListSubject: PublishSubject<Bool> { get }
     func creartFavoriteList(listName: String, post: Post)
+    ///取得使用者貼文
+    var getPostInfoSubject: PublishSubject<FirebaseResult<[Post]>> { get }
+    func getPostInfo(uid: String)
 }
 class PostVM: PostVMInterface {
-    private (set) var ccreartFavoriteListSubject = PublishSubject<Bool>()
+    private(set) var ccreartFavoriteListSubject = PublishSubject<Bool>()
+    private(set) var getPostInfoSubject = PublishSubject<FirebaseResult<[Post]>>()
     
     private var postFirebase: PostFirebaseInterface
     private let disposeBag = DisposeBag()
@@ -34,4 +38,11 @@ extension PostVM {
             self.ccreartFavoriteListSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
+    func getPostInfo(uid: String) {
+        self.postFirebase.getPostInfo(uid: uid).subscribe(onNext: { (result) in
+                self.getPostInfoSubject.onNext(result)
+            }, onError: { (error) in
+                self.getPostInfoSubject.onError(error)
+            }).disposed(by: self.disposeBag)
+        }
 }

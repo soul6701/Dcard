@@ -173,6 +173,8 @@
 		84C818A9252DC39800CFABA6 /* FriendCardVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C818A7252DC39800CFABA6 /* FriendCardVC.xib */; };
 		89D80C542545291700EB4F18 /* FollowIssueInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D80C522545291700EB4F18 /* FollowIssueInfoVC.swift */; };
 		89D80C552545291700EB4F18 /* FollowIssueInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */; };
+		9305A000254BC41E00319E99 /* FollowCardVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93059FFF254BC41E00319E99 /* FollowCardVM.swift */; };
+		9305A002254BECA500319E99 /* APIResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9305A001254BECA500319E99 /* APIResult.swift */; };
 		933F610A2546AC3800609E70 /* ReportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933F61082546AC3800609E70 /* ReportVC.swift */; };
 		933F610B2546AC3800609E70 /* ReportVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 933F61092546AC3800609E70 /* ReportVC.xib */; };
 		933F610E2547FCD500609E70 /* FavoriteInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */; };
@@ -385,6 +387,8 @@
 		84C818A7252DC39800CFABA6 /* FriendCardVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendCardVC.xib; sourceTree = "<group>"; };
 		89D80C522545291700EB4F18 /* FollowIssueInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowIssueInfoVC.swift; sourceTree = "<group>"; };
 		89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowIssueInfoVC.xib; sourceTree = "<group>"; };
+		93059FFF254BC41E00319E99 /* FollowCardVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowCardVM.swift; sourceTree = "<group>"; };
+		9305A001254BECA500319E99 /* APIResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResult.swift; sourceTree = "<group>"; };
 		933F61082546AC3800609E70 /* ReportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportVC.swift; sourceTree = "<group>"; };
 		933F61092546AC3800609E70 /* ReportVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReportVC.xib; sourceTree = "<group>"; };
 		933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteInfoVC.swift; sourceTree = "<group>"; };
@@ -563,7 +567,9 @@
 		221ADB242499F58A00C25BD1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				848A6CD12534264600125138 /* localDatabase */,
+				93661578254BA8480030CD0A /* Firebase */,
+				93661576254BA8020030CD0A /* Repository */,
+				848A6CD12534264600125138 /* LocalDatabase */,
 				221ADB252499F5C300C25BD1 /* PostAndComment.swift */,
 				228F913024C0B47600A7EBD9 /* Forum.swift */,
 				227FD58F249F409C00BC185C /* APIManager.swift */,
@@ -582,7 +588,6 @@
 			isa = PBXGroup;
 			children = (
 				220D16DD24F4D63F007B578E /* LoginManager.swift */,
-				2276107F24F8FF2C003A3F88 /* LoginFirebase.swift */,
 				22EFC6A524FB7D21003CD570 /* LoginNAV.swift */,
 				223B21EF24F2B6B900D60299 /* LoginVC.swift */,
 				22EFC6A324F95638003CD570 /* LoginVM.swift */,
@@ -623,8 +628,6 @@
 				228F932E24C1FE4F00A7EBD9 /* Drawer.xib */,
 				22F2111624CC5324003B1F1D /* ForumCell.swift */,
 				22F2111724CC5324003B1F1D /* ForumCell.xib */,
-				2205D18124A79E04004A4F41 /* PostRepository.swift */,
-				9366EC2E254ABBC20030CD0A /* PostFirebase.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -635,7 +638,6 @@
 				22D7C39624EC2021006412BE /* MessageCell.swift */,
 				22D7C39724EC2021006412BE /* messageCell.xib */,
 				22788AED25039DBE00E87F7F /* CardManager.swift */,
-				22788AE72503900200E87F7F /* CardFirebase.swift */,
 				224E3CF624B784D9003F8F2B /* CardVC.swift */,
 				22788AEB25039B1200E87F7F /* CardVM.swift */,
 				22788AF32503BB5E00E87F7F /* CardInfoVC.swift */,
@@ -734,6 +736,7 @@
 				221A47C125105C4300DE1301 /* FollowCardCell.swift */,
 				221A47C225105C4300DE1301 /* FollowCardCell.xib */,
 				221A47C525105CF300DE1301 /* FollowCardVC.swift */,
+				93059FFF254BC41E00319E99 /* FollowCardVM.swift */,
 			);
 			path = FollowCard;
 			sourceTree = "<group>";
@@ -827,13 +830,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		848A6CD12534264600125138 /* localDatabase */ = {
+		848A6CD12534264600125138 /* LocalDatabase */ = {
 			isa = PBXGroup;
 			children = (
 				848A6CD52534285A00125138 /* DbManager.swift */,
 				848A6CDA2534298E00125138 /* DbManager+Preference.swift */,
 			);
-			path = localDatabase;
+			path = LocalDatabase;
 			sourceTree = "<group>";
 		};
 		848E16C3252EC24700FA4B4F /* Setting */ = {
@@ -864,6 +867,25 @@
 				8479ADA52540293A007CE86D /* PostSettingVC.swift */,
 			);
 			path = Post;
+			sourceTree = "<group>";
+		};
+		93661576254BA8020030CD0A /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				2205D18124A79E04004A4F41 /* PostRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		93661578254BA8480030CD0A /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				2276107F24F8FF2C003A3F88 /* LoginFirebase.swift */,
+				9366EC2E254ABBC20030CD0A /* PostFirebase.swift */,
+				22788AE72503900200E87F7F /* CardFirebase.swift */,
+				9305A001254BECA500319E99 /* APIResult.swift */,
+			);
+			name = Firebase;
 			sourceTree = "<group>";
 		};
 		936E381E2543B90900EFFBFC /* ProfilePostInfo */ = {
@@ -1166,6 +1188,7 @@
 				220D16E124F4DAC6007B578E /* DescriptionVC.swift in Sources */,
 				221ADAF62499F0A100C25BD1 /* SceneDelegate.swift in Sources */,
 				22EE9AA424B9840400823C83 /* Constant.swift in Sources */,
+				9305A000254BC41E00319E99 /* FollowCardVM.swift in Sources */,
 				2276108024F8FF2C003A3F88 /* LoginFirebase.swift in Sources */,
 				22788AF22503A87600E87F7F /* UserConfig.swift in Sources */,
 				9366156B254AECDA0030CD0A /* PostVM.swift in Sources */,
@@ -1177,6 +1200,7 @@
 				22179C8124F66BE900BAD5C4 /* SelectCountryVC.swift in Sources */,
 				224E3CF924B784E9003F8F2B /* GameVC.swift in Sources */,
 				2246035C2507EFB1008480D8 /* Extension_UIStoryboard.swift in Sources */,
+				9305A002254BECA500319E99 /* APIResult.swift in Sources */,
 				221A47C625105CF300DE1301 /* FollowCardVC.swift in Sources */,
 				224E3CF724B784D9003F8F2B /* CardVC.swift in Sources */,
 				221A47DB2512218A00DE1301 /* CardHomeVC.swift in Sources */,

@@ -29,11 +29,12 @@ protocol LoginManagerInterface {
     func showOKView(mode: LoginOKMode, handler: (() -> Void)?)
     func showAlertView(errorMessage: String, handler: (() -> Void)?)
 }
-enum LoginOKMode {
-    case login
-    case create
-    case delete
-    case required
+enum LoginOKMode: String {
+    case login = "註冊成功"
+    case create = "登入成功"
+    case delete = "刪除成功"
+    case required = "查詢成功，自動填入"
+    case other = "成功"
 }
 class LoginManager: LoginManagerInterface {
     static let shared = LoginManager()
@@ -94,18 +95,7 @@ class LoginManager: LoginManagerInterface {
     }
     func showOKView(mode: LoginOKMode, handler: (() -> Void)?) {
         self.OKconfig.duration = .seconds(seconds: mode == .create ? 2 : 1)
-        var body = ""
-        switch mode {
-        case .create:
-            body = "註冊成功"
-        case .login:
-            body = "登入成功"
-        case .delete:
-            body = "刪除成功"
-        case .required:
-            body = "查詢成功，自動填入"
-        }
-        self.OKView.configureContent(title: "", body: body)
+        self.OKView.configureContent(title: "", body: mode.rawValue)
         self.OKconfig.eventListeners = .init(arrayLiteral: { (event) in
             if event == .didHide {
                 SwiftMessages.hide(id: "success")

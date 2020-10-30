@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import RxSwift
+import RxCocoa
 
 protocol FollowCardVCDelegate {
     func showBellModeView(index: Int, followCard: FollowCard)
@@ -17,6 +18,9 @@ protocol FollowCardVCDelegate {
 class FollowCardVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    private let disposeBag = DisposeBag()
+    private var cardViewModel: CardVMInterface!
+    private var postViewModel: PostVMInterface!
     
     private var followCardList = [FollowCard]() {
         didSet {
@@ -28,14 +32,15 @@ class FollowCardVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        confiViewModel()
+        subscribeViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         ToolbarView.shared.show(false)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
-    func setContent(followCardList: [FollowCard], title: String) {
-        self.followCardList = followCardList
+    func setContent(title: String) {
         self.navigationItem.title = title
     }
 }
@@ -46,6 +51,45 @@ extension FollowCardVC {
     }
     private func confiTableView() {
         self.tableView.register(UINib(nibName: "FollowCardCell", bundle: nil), forCellReuseIdentifier: "FollowCardCell")
+    }
+}
+// MARK: - subScribeViewModel
+extension FollowCardVC {
+    private func confiViewModel() {
+        self.cardViewModel = CardVM()
+        self.postViewModel = PostVM()
+    }
+    private func subscribeViewModel() {
+        self.postViewModel.getPostInfoSubject.subscribe(onNext: { (result) in
+            //
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.cardViewModel.getCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            let vc = CardHomeVC()
+            vc.set
+            vc.setContent(followCard: self., post: self.followCardList[selectedIndex]., mode: <#T##CardHomeVCMode#>)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.cardViewModel.getfollowCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            self.followCardList = result.data
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.cardViewModel.updateCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                LoginManager.shared.showOKView(mode: .create, handler: nil)
+            }
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.cardViewModel.getfollowCardInfo()
     }
 }
 // MARK: - UITableViewDelegate
@@ -81,17 +125,16 @@ extension FollowCardVC: FollowCardVCDelegate {
         self.selectedIndex = index
         ProfileManager.shared.showBellModeView(delegate: self, notifyMode: followCard.notifyMode)
     }
-    func cancelFollowCard(index: Int, followCard: FollowCard) {
-        ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followCard.card.name + "」？") {
+    func cancelFollowCard(followCard: FollowCard) {
+        ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followCard.name + "」？") {
+            self.cardViewModel.updateCardInfo(followCard: followCard)
             self.followCardList.remove(at: index)
             self.tableView.reloadData()
             ProfileManager.shared.showOKView(mode: .cancelFollowCard, handler: nil)
         }
     }
     func toCardHome(followCard: FollowCard) {
-        let vc = CardHomeVC()
-        vc.setContent(followCard: followCard, mode: .other)
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.cardViewModel.getCardInfo(uid: followCard.uid)
     }
 }
 extension FollowCardVC: SelectNotifyViewDelegate {

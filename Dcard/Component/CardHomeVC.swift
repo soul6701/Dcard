@@ -39,7 +39,7 @@ class CardHomeVC: UIViewController {
     
     private var imageBellNameList = ["bell.circle.fill", "bell.fill", "bell.slash.fill"]
     private var followCard: FollowCard!
-    private var myPostList = ProfileManager.shared.myPostList
+    private var postList = [Post]()
     private var isFollowing = false
     private var notifyMode = 0
     private var mode: CardHomeVCMode = .user
@@ -57,9 +57,6 @@ class CardHomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        if self.mode == .user {
-            self.followCard = FollowCard(card: ModelSingleton.shared.userCard)
-        }
         resetData(self.followCard)
     }
     @IBAction func didClickBtnCancelFollow(_ sender: UIButton) {
@@ -126,8 +123,8 @@ class CardHomeVC: UIViewController {
         }
     }
     
-    func setContent(followCard: FollowCard? = nil, mode: CardHomeVCMode) {
-        self.followCard = followCard == nil ? FollowCard(card: ModelSingleton.shared.userCard) : followCard
+    func setContent(followCard: FollowCard, mode: CardHomeVCMode) {
+        self.followCard = followCard
         self.mode = mode
     }
 }

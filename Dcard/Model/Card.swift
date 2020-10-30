@@ -11,6 +11,7 @@ import UIKit
 
 public struct Card {
     
+    public var uid = ""
     public var id = ""
 //    public var post: [Post] = []
     public var name: String = ""
@@ -24,6 +25,7 @@ public struct Card {
     public var birthday: String = ""
     public var love: String = ""
     public var fans: Int = 0
+    public var followCard: [FollowCard] = []
 //    public var favorite: [Favorite] = {
 //        var _list = [Favorite]()
 //        let list = [["我像個殘廢 飛不出你的世界", "借不到一點安慰"], ["雖然暗戀讓人早熟", "也讓人多難過"], ["多麽想告訴你 我好喜歡你", "都怪我控制不了自己"], ["未來的每一步一腳印", "相知相習相依為命"]]

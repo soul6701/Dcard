@@ -22,7 +22,7 @@ class FollowCardCell: UITableViewCell
     private var imageBellNameList = ["bell.circle.fill", "bell.fill", "bell.slash.fill"]
     private var followCard: FollowCard!
     private var index = 0
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         self.selectionStyle = .none
