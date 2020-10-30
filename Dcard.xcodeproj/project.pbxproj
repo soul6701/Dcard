@@ -623,6 +623,7 @@
 				228F932E24C1FE4F00A7EBD9 /* Drawer.xib */,
 				22F2111624CC5324003B1F1D /* ForumCell.swift */,
 				22F2111724CC5324003B1F1D /* ForumCell.xib */,
+				2205D18124A79E04004A4F41 /* PostRepository.swift */,
 				9366EC2E254ABBC20030CD0A /* PostFirebase.swift */,
 			);
 			path = Home;
@@ -861,7 +862,6 @@
 				228D41E024AD06290077D29E /* CommentCell.swift */,
 				228D41E124AD06290077D29E /* CommentCell.xib */,
 				8479ADA52540293A007CE86D /* PostSettingVC.swift */,
-				2205D18124A79E04004A4F41 /* PostRepository.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";

@@ -19,6 +19,8 @@ enum DatabaseName: String {
     case user
     case card
     case favoritePost
+    case comment
+    case post
 }
 class FirebaseManager {
     static var shared = FirebaseManager()

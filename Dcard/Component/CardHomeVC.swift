@@ -6,7 +6,10 @@
 //  Copyright © 2020 Mason_Lin. All rights reserved.
 //
 
+import Foundation
 import UIKit
+import RxCocoa
+import RxSwift
 
 enum CardHomeVCMode {
     case user
@@ -42,10 +45,14 @@ class CardHomeVC: UIViewController {
     private var mode: CardHomeVCMode = .user
     private var canBeDragged = false
     
+    private let disposeBag = DisposeBag()
+    private var viewModel: CardVMInterface!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
-        ToolbarView.shared.show(false)
+        confiViewModel()
+        subsribeViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -127,6 +134,7 @@ class CardHomeVC: UIViewController {
 // MARK: - SetupUI
 extension CardHomeVC {
     private func initView() {
+        ToolbarView.shared.show(false)
         self.lbIcon.layer.cornerRadius = 45 / 2
         self.viewFollow.isHidden = self.mode == .user
         self.bottomSpace.constant = self.mode == .user ? 0 : 100
@@ -144,6 +152,21 @@ extension CardHomeVC {
             self.btnEdit.isHidden = true
         }
         self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
+    }
+}
+// MARK: - SubscribeViewModel
+extension CardHomeVC {
+    private func confiViewModel() {
+        self.viewModel = CardVM()
+    }
+    private func subsribeViewModel() {
+        self.viewModel.getCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (card) in
+            if result {
+                self.followCard = FollowCard(card: card, notifyMode: (0...2).randomElement()!, isFollowing: Bool.random()!, isNew: Bool.random()!)
+            }
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
     }
 }
 // MARK: - Private Handler

@@ -18,10 +18,14 @@ protocol CardVMInterface {
     //加入好友
     var addFriendSubject: PublishSubject<Bool> { get }
     func addFriend(name: String)
+    //取得卡稱資訊
+    var getCardInfoSubject: PublishSubject<Card> { get }
+    func getCardInfo(uid: String)
 }
 class CardVM: CardVMInterface {
-    private (set) var getRandomCardBySexSubject = PublishSubject<[Card]>()
-    private (set) var addFriendSubject = PublishSubject<Bool>()
+    private(set) var getRandomCardBySexSubject = PublishSubject<[Card]>()
+    private(set) var addFriendSubject = PublishSubject<Bool>()
+    private(set) var getCardInfoSubject = PublishSubject<Card>()
     
     private var cardFirebase: CardFirebaseInterface
     private var loginFirebase: LoginFirebaseInterface
@@ -46,6 +50,13 @@ extension CardVM {
             self.addFriendSubject.onNext(result)
         }, onError: { (error) in
             self.addFriendSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func getCardInfo(uid: String) {
+        self.cardFirebase.getCardInfo(uid: uid).subscribe(onNext: { (card) in
+            self.getCardInfoSubject.onNext(card)
+        }, onError: { (error) in
+            self.getCardInfoSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

@@ -25,7 +25,15 @@ protocol ModelSingletonInterface {
     //卡稱
     var userCard: Card { get }
     func setUserCard(_ userCard: Card)
-    
+    //收藏清單
+    var favorite: [Favorite] { get }
+    func setFavoriteList(_ favorite: [Favorite])
+    //貼文
+    var post: [Post] { get }
+    func setPostList(_ post: [Post])
+    //留言
+    var comment: [Comment] { get }
+    func setCommentList(_ comment: [Comment])
 }
 public class ModelSingleton: ModelSingletonInterface {
     public static let shared = ModelSingleton()
@@ -34,6 +42,9 @@ public class ModelSingleton: ModelSingletonInterface {
     private(set) public var preference = Preference()
     private(set) public var forum = [Forum]()
     private(set) public var userCard = Card()
+    private(set) public var favorite = [Favorite]()
+    private(set) public var post = [Post]()
+    private(set) public var comment = [Comment]()
     
     public func setCard(_ cards: [Card]) {
         self.card = cards
@@ -49,5 +60,14 @@ public class ModelSingleton: ModelSingletonInterface {
     }
     func setUserCard(_ userCard: Card) {
         self.userCard = userCard
+    }
+    func setFavoriteList(_ favorite: [Favorite]) {
+        self.favorite = favorite
+    }
+    func setPostList(_ post: [Post]) {
+        self.post = post
+    }
+    func setCommentList(_ comment: [Comment]) {
+        self.comment = comment
     }
 }

@@ -17,7 +17,6 @@ protocol PostFirebaseInterface {
     func creartFavoriteList(listName: String, post: Post) -> Observable<Bool>
 
 }
-
 public class PostFirebase: PostFirebaseInterface {
 
     public static var shared = PostFirebase()
@@ -26,21 +25,54 @@ public class PostFirebase: PostFirebaseInterface {
         return ModelSingleton.shared.userConfig.user
     }
 
-    // MARK: - 創建播放清單
+    // MARK: - 創建收藏清單
     func creartFavoriteList(listName: String, post: Post) -> Observable<Bool> {
         let subject = PublishSubject<Bool>()
         var mediaMetaList: [[String: Any]] = []
         post.mediaMeta.forEach { (mediaMeta) in
             mediaMetaList.append(["normalizedUrl": mediaMeta.normalizedUrl, "thumbnail": mediaMeta.thumbnail])
         }
-        let post: [String: Any] = ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot]
-        let setter = ["Post": [post]]
+        let _post: [String: Any] = ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot]
+        let favoriteDir: [String: Any] = ["listname": listName, "post": [_post]]
+        let setter: [String: Any] = ["favorite": favoriteDir]
         FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document("\(user.uid)").setData(setter) { (error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             } else {
                 subject.onNext(true)
+                var favoriteList = ModelSingleton.shared.favorite
+                let index = favoriteList.firstIndex { return $0.title == listName}
+                if let index = index {
+                    favoriteList[index].posts.append(post)
+                }
+                ModelSingleton.shared.setFavoriteList(favoriteList)
+            }
+        }
+        return subject.asObserver()
+    }
+    // MARK: - 創建收藏清單
+    func creartFavoriteList(listName: String, post: Post) -> Observable<Bool> {
+        let subject = PublishSubject<Bool>()
+        var mediaMetaList: [[String: Any]] = []
+        post.mediaMeta.forEach { (mediaMeta) in
+            mediaMetaList.append(["normalizedUrl": mediaMeta.normalizedUrl, "thumbnail": mediaMeta.thumbnail])
+        }
+        let _post: [String: Any] = ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot]
+        let favoriteDir: [String: Any] = ["listname": listName, "post": [_post]]
+        let setter: [String: Any] = ["favorite": favoriteDir]
+        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document("\(user.uid)").setData(setter) { (error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            } else {
+                subject.onNext(true)
+                var favoriteList = ModelSingleton.shared.favorite
+                let index = favoriteList.firstIndex { return $0.title == listName}
+                if let index = index {
+                    favoriteList[index].posts.append(post)
+                }
+                ModelSingleton.shared.setFavoriteList(favoriteList)
             }
         }
         return subject.asObserver()

@@ -19,10 +19,36 @@ enum CardType {
 }
 protocol CardFirebaseInterface {
     func getRandomCardBySex(cardMode: CardMode) -> Observable<[Card]>
+    func getCardInfo(uid: String) -> Observable<Card>
 }
 
 class CardFirebase: CardFirebaseInterface {
     public static var shared = CardFirebase()
+    
+    //取得卡稱資訊
+    func getCardInfo(uid: String) -> Observable<Card> {
+        let subject = PublishSubject<Card>()
+        
+        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(uid).getDocument { (querySnapshot, error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            }
+            var cards = [Card]()
+            if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
+                
+                let moodDir = dir["mood"] as! [String: Int]
+                let mood = Mood(heart: moodDir["heart"], haha: moodDir["haha"], angry: moodDir["angry"], cry: moodDir["cry"], surprise: moodDir["surprise"], respect: moodDir["respect"])
+                let card = Card(id: dir[""] as! String, name: dir[""] as! String, photo: dir[""] as! String, sex: dir[""] as! String, introduce: dir[""] as! String, country: dir[""] as! String, school: dir[""] as! String, department: dir[""] as! String, article: dir[""] as! String, birthday: dir[""] as! String, love: dir[""] as! String, fans: dir[""] as! Int, beKeeped: dir[""] as! Int, beReplyed: dir[""] as! Int, getHeart: dir[""] as! Int, mood: mood)
+                subject.onNext(card)
+                
+                if uid == ModelSingleton.shared.userConfig.user.uid {
+                    ModelSingleton.shared.setCard(card)
+                }
+            }
+        }
+        return subject.asObserver()
+    }
     
     //取得卡片
     func getRandomCardBySex(cardMode: CardMode) -> Observable<[Card]> {
@@ -83,4 +109,5 @@ class CardFirebase: CardFirebaseInterface {
         }
         return subject
     }
+    
 }

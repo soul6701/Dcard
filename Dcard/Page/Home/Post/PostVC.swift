@@ -157,6 +157,8 @@ class PostVC: UIViewController {
         super.viewDidLoad()
         initView()
         subscribe()
+        confiViewModel()
+        subsribeViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
