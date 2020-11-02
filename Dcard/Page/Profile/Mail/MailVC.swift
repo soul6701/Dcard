@@ -58,7 +58,7 @@ extension MailVC {
         let users = [("靜香", "https://inmywordz.com/wp-content/uploads/20180320205746_43.jpg"), ("胖虎", "https://upload.wikimedia.org/wikipedia/zh/a/a4/Gigante.png"), ("小夫", "https://inmywordz.com/wp-content/uploads/20180318115342_25.jpg"), ("哆啦A夢", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTr_MSRwLun_otpF9dm0MqWHyyFqMaT6dtk6g&usqp=CAU"), ("小衫", "https://inmywordz.com/wp-content/uploads/20171122123158_40.jpg"), ("好物研究員", "https://i.imgur.com/IRNrRdA.jpg"), ("版務小天使",  "https://stickershop.line-scdn.net/stickershop/v1/product/1239735/LINEStorePC/main.png;compress=true")]
         var myCardList = [Card]()
         (0...6).forEach { (i) in
-            myCardList.append(Card(id: "", post: [], name: users[i].0, photo: users[i].1, sex: "", introduce: "", country: "", school: "私立臺灣肥宅學院", department: "邊緣人養成學系", article: "", birthday: "", love: ""))
+            myCardList.append(Card(id: "", name: users[i].0, photo: users[i].1, sex: "", introduce: "", country: "", school: "私立臺灣肥宅學院", department: "邊緣人養成學系", article: "", birthday: "", love: ""))
         }
         
         var mailList = [Mail]()

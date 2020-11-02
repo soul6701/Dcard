@@ -29,8 +29,8 @@ protocol CardVMInterface {
     var getfollowCardInfoSubject: PublishSubject<FirebaseResult<[FollowCard]>> { get }
     
     ///修改卡稱資訊
-    func updateCardInfo(followCard: FollowCard)
-    var updateCardInfoSubject : Observable<FirebaseResult<Bool>> { get }
+    func updateCardInfo(card: [CardFieldType: Any])
+    var updateCardInfoSubject : PublishSubject<FirebaseResult<Bool>> { get }
 }
 class CardVM: CardVMInterface {
     private(set) var getRandomCardBySexSubject = PublishSubject<[Card]>()
@@ -78,12 +78,11 @@ extension CardVM {
             self.getfollowCardInfoSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
-    func updateCardInfo(followCard: FollowCard) {
-        self.cardFirebase.updateCardInfo(followCard: followCard).subscribe(onNext: { (result) in
-                self.updateCardInfoSubject.onNext(result)
-            }, onError: { (error) in
-                self.updateCardInfoSubject.onError(error)
-            }).disposed(by: self.disposeBag)
-        }
+    func updateCardInfo(card: [CardFieldType: Any]) {
+        self.cardFirebase.updateCardInfo(card: card).subscribe(onNext: { (result) in
+            self.updateCardInfoSubject.onNext(result)
+        }, onError: { (error) in
+            self.updateCardInfoSubject.onError(error)
+        }).disposed(by: self.disposeBag)
     }
 }

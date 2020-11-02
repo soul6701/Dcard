@@ -30,9 +30,9 @@ class FollowCardCell: UITableViewCell
     }
     
     @IBAction func didClickBtnFollow(_ sender: Any) {
-        self.delegate?.cancelFollowCard(index: self.index, followCard: self.followCard)
+        self.delegate?.cancelFollowCard(followCard: self.followCard)
     }
-    func setContent(index: Int, followCard: FollowCard) {
+    func setContent(index: Int, followCard: FollowCard, post: [Post]) {
         self.index = index
         self.followCard = followCard
         let id = followCard.card.id
@@ -43,9 +43,9 @@ class FollowCardCell: UITableViewCell
         
         var _description: NSMutableAttributedString = NSMutableAttributedString(string: "")
         if isNew {
-            _description = NSMutableAttributedString(string: "有\(followCard.card.post.count)篇新文章", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemBlue])
+            _description = NSMutableAttributedString(string: "有\(post.count)篇新文章", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemBlue])
         } else {
-            _description = NSMutableAttributedString(string: "有\(followCard.card.post.count)篇文章")
+            _description = NSMutableAttributedString(string: "有\(post.count)篇文章")
         }
         let combination = NSMutableAttributedString()
         combination.append(NSMutableAttributedString(string: "@\(id) | "))
@@ -68,7 +68,7 @@ class FollowCardCell: UITableViewCell
         self.viewToCardHomePage.addGestureRecognizer(tapCard)
     }
     @objc private func didClickBell() {
-        self.delegate?.showBellModeView(index: index, followCard: self.followCard)
+        self.delegate?.showBellModeView(followCard: self.followCard)
     }
     @objc private func didClickCard() {
         self.delegate?.toCardHome(followCard: self.followCard)

@@ -14,7 +14,10 @@ public enum BusinesslogicError {
     
     public var errorMessage: String {
         switch self {
-        case .card(_):
+        case .card(let i):
+            if i == 0 {
+                return "取得卡片失敗"
+            }
             return ""
         case .post(_):
             return ""

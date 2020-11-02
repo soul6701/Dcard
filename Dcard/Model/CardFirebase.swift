@@ -17,26 +17,31 @@ enum CardType {
     case success
     case error
 }
+enum CardFieldType: String {
+    case name
+    case id
+}
 protocol CardFirebaseInterface {
     func getRandomCardBySex(cardMode: CardMode) -> Observable<[Card]>
     func getCardInfo(uid: String) -> Observable<FirebaseResult<Card>>
     func createCard(card: Card) -> Observable<Bool>
     func getfollowCardInfo() -> Observable<FirebaseResult<[FollowCard]>>
-    func updateCardInfo(followCard: FollowCard) -> Observable<FirebaseResult<Bool>>
+    func insertFollowCard(followCard: FollowCard) -> Observable<FirebaseResult<Bool>>
+    func updateCardInfo(card: [CardFieldType: Any]) -> Observable<FirebaseResult<Bool>>
 }
 
 class CardFirebase: CardFirebaseInterface {
     public static var shared = CardFirebase()
-    
+    private let disposeBag = DisposeBag()
+    private var card: Card {
+        return ModelSingleton.shared.userCard
+    }
     // MARK: - 創建卡稱
     func createCard(card: Card) -> Observable<Bool> {
         let subject = PublishSubject<Bool>()
         
-        var followCardListDir: [[String: [String: Any]]] = []
-        
-        card.followCard.forEach { (followCard) in
-            followCardListDir.append([followCard.uid : ["uid": followCard.uid, "notifyMode": followCard.notifyMode, "isFollowing": followCard.isFollowing, "notifyMode": followCard.notifyMode]])
-        }
+        let followCardListDir: [[String: [String: Any]]] = []
+
         let mood: [String: Any] = ["heart": card.mood.heart, "haha": card.mood.haha, "angry": card.mood.angry, "cry": card.mood.cry, "surprise": card.mood.surprise, "respect": card.mood.respect]
         let setter: [String: Any] = ["id": card.id, "name": card.name, "photo": card.photo, "sex": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "fans": card.fans, "followCard": followCardListDir, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart, "getMood": card.getMood, "mood": mood]
         
@@ -50,6 +55,31 @@ class CardFirebase: CardFirebaseInterface {
         }
         return subject.asObservable()
     }
+    // MARK: - 追蹤卡稱
+    func insertFollowCard(followCard: FollowCard) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).getDocument { (querySnapshot, error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            } else {
+                if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
+                    var old = dir["followcard"] as! [String: [String: Any]]
+                    old[followCard.card.uid] = ["uid": followCard.card.uid, "notifyMode": followCard.notifyMode, "isFollowing": followCard.isFollowing, "isNew": followCard.isNew]
+                    FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(["followcard": old]) { (error) in
+                        if let error = error {
+                            NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                            subject.onError(error)
+                        } else {
+                            subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil))
+                        }
+                    }
+                }
+            }
+        }
+        return subject.asObservable()
+    }
     // MARK: - 取得單一卡稱資訊
     func getCardInfo(uid: String) -> Observable<FirebaseResult<Card>> {
         let subject = PublishSubject<FirebaseResult<Card>>()
@@ -58,20 +88,21 @@ class CardFirebase: CardFirebaseInterface {
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
-            }
-            if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                
-                let moodDir = dir["mood"] as! [String: Int]
-                let mood = Mood(heart: moodDir["heart"]!, haha: moodDir["haha"]!, angry: moodDir["angry"]!, cry: moodDir["cry"]!, surprise: moodDir["surprise"]!, respect: moodDir["respect"]!)
-                let card = Card(id: dir[""] as! String, name: dir[""] as! String, photo: dir[""] as! String, sex: dir[""] as! String, introduce: dir[""] as! String, country: dir[""] as! String, school: dir[""] as! String, department: dir[""] as! String, article: dir[""] as! String, birthday: dir[""] as! String, love: dir[""] as! String, fans: dir[""] as! Int, beKeeped: dir[""] as! Int, beReplyed: dir[""] as! Int, getHeart: dir[""] as! Int, mood: mood)
-                subject.onNext(FirebaseResult<Card>(data: card, errorMessage: nil))
-                
-                if uid == ModelSingleton.shared.userConfig.user.uid {
-                    ModelSingleton.shared.setUserCard(card)
-                }
             } else {
-                if uid == ModelSingleton.shared.userConfig.user.uid {
-                    subject.onNext(FirebaseResult<Card>(data: ModelSingleton.shared.userCard, errorMessage: .card(0)))
+                if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
+                    
+                    let moodDir = dir["mood"] as! [String: Int]
+                    let mood = Mood(heart: moodDir["heart"]!, haha: moodDir["haha"]!, angry: moodDir["angry"]!, cry: moodDir["cry"]!, surprise: moodDir["surprise"]!, respect: moodDir["respect"]!)
+                    let card = Card(id: dir[""] as! String, name: dir[""] as! String, photo: dir[""] as! String, sex: dir[""] as! String, introduce: dir[""] as! String, country: dir[""] as! String, school: dir[""] as! String, department: dir[""] as! String, article: dir[""] as! String, birthday: dir[""] as! String, love: dir[""] as! String, fans: dir[""] as! Int, beKeeped: dir[""] as! Int, beReplyed: dir[""] as! Int, getHeart: dir[""] as! Int, mood: mood)
+                    subject.onNext(FirebaseResult<Card>(data: card, errorMessage: nil))
+                    
+                    if uid == ModelSingleton.shared.userConfig.user.uid {
+                        ModelSingleton.shared.setUserCard(card)
+                    }
+                } else {
+                    if uid == ModelSingleton.shared.userConfig.user.uid {
+                        subject.onNext(FirebaseResult<Card>(data: ModelSingleton.shared.userCard, errorMessage: .card(0)))
+                    }
                 }
             }
         }
@@ -80,6 +111,8 @@ class CardFirebase: CardFirebaseInterface {
     // MARK: - 取得追蹤卡稱資訊
     func getfollowCardInfo() -> Observable<FirebaseResult<[FollowCard]>> {
         let subject = PublishSubject<FirebaseResult<[FollowCard]>>()
+        var subjectList = [PublishSubject<Bool>]()
+        var followCardList = [FollowCard]()
         
         FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).getDocument { (querySnapshot, error) in
             if let error = error {
@@ -87,14 +120,32 @@ class CardFirebase: CardFirebaseInterface {
                 subject.onError(error)
             }
             if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                var followCardList = [FollowCard]()
-                let followCardListDir = dir["followCard"] as! [[String: Any]]
-                followCardListDir.forEach { (followCardDir) in
-                    followCardList.append(FollowCard(uid: followCardDir["uid"] as! String, notifyMode: followCardDir["notifyMode"] as! Int, isFollowing: followCardDir["isFollowing"] as! Bool, isNew: followCardDir["isNew"] as! Bool))
+                let followCardListDir = dir["followCard"] as! [String: [String: Any]]
+                for _ in followCardList {
+                    subjectList.append(PublishSubject<Bool>())
                 }
-                subject.onNext(FirebaseResult<[FollowCard]>(data: followCardList, errorMessage: nil))
+                followCardListDir.keys.enumerated().forEach { (key, value) in
+                    let dir = followCardListDir[value]!
+                    self.getCardInfo(uid: dir["uid"] as! String).subscribe { (result) in
+                        subjectList[key].onNext(true)
+                        followCardList.append(FollowCard(card: result.data, notifyMode: dir["notifyMode"] as! Int, isFollowing: dir["isFollowing"] as! Bool, isNew: dir["isNew"] as! Bool))
+                    } onError: { (error) in
+                        subjectList[key].onNext(false)
+                    }.disposed(by: self.disposeBag)
+                }
             }
         }
+        Observable.combineLatest(subjectList).subscribe { (result) in
+            let count: Int = result.element?.reduce(Int(0)) { (result, next) -> Int in
+                return result + (next ? 1 : 0)
+            } ?? 0
+            if count == result.element?.count {
+                subject.onNext(FirebaseResult<[FollowCard]>(data: followCardList, errorMessage: nil))
+            } else {
+                subject.onNext(FirebaseResult<[FollowCard]>(data: followCardList, errorMessage: BusinesslogicError.card(0)))
+            }
+        }.disposed(by: self.disposeBag)
+
         return subject.asObserver()
     }
     
@@ -158,18 +209,31 @@ class CardFirebase: CardFirebaseInterface {
         return subject
     }
     // MARK: - 修改卡稱資訊
-    func updateCardInfo(followCard: FollowCard) -> Observable<FirebaseResult<Bool>> {
+    func updateCardInfo(card: [CardFieldType: Any]) -> Observable<FirebaseResult<Bool>> {
         let subject = PublishSubject<FirebaseResult<Bool>>()
         
-        let followCardDir: [String: Any] = ["uid": followCard.uid,  "notifyMode": followCard.notifyMode, "isFollowing": followCard.isFollowing, "isNew": followCard.isNew]
-        let setter: [String: Any] = ["followCard.\(followCard.uid)": followCardDir]
-        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
+        var setter: [String:Any] = [:]
+        
+        card.forEach { (key, value) in
+            if key == .id || key == .name {
+                setter["\(key.rawValue)"] = value as! String
+            }
+        }
+        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             } else {
-                var oldCard = ModelSingleton.shared.userCard
-                oldCard.followCard.removeAll { $0.uid == followCard.uid }
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil))
+                var oldCard = self.card
+                card.forEach { (key, value) in
+                    switch key {
+                    case .id:
+                        oldCard.id = value as! String
+                    case .name:
+                        oldCard.name = value as! String
+                    }
+                }
                 ModelSingleton.shared.setUserCard(oldCard)
             }
         }

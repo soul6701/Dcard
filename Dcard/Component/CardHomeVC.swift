@@ -38,7 +38,8 @@ class CardHomeVC: UIViewController {
     @IBOutlet weak var lbFollowing: UILabel!
     
     private var imageBellNameList = ["bell.circle.fill", "bell.fill", "bell.slash.fill"]
-    private var followCard: FollowCard!
+    private var followCard: FollowCard = FollowCard(card: Card())
+    private var card: Card = Card()
     private var postList = [Post]()
     private var isFollowing = false
     private var notifyMode = 0
@@ -124,8 +125,12 @@ class CardHomeVC: UIViewController {
         }
     }
     
-    func setContent(followCard: FollowCard, mode: CardHomeVCMode) {
-        self.followCard = followCard
+    func setContent(followCard: FollowCard? = nil, mode: CardHomeVCMode) {
+        if let followCard = followCard {
+            self.followCard = followCard
+        } else {
+            self.card = ModelSingleton.shared.userCard
+        }
         self.mode = mode
     }
 }

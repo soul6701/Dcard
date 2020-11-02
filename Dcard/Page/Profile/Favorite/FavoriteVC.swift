@@ -22,7 +22,7 @@ class FavoriteVC: UIViewController {
         let width = floor((Double)(self.collectionView.bounds.width - itemSpace - collectionPadding * 2) / 2)
         return CGSize(width: width, height: width)
     }
-    private var favoriteList = ModelSingleton.shared.userCard.favorite {
+    private var favoriteList = ModelSingleton.shared.favorite {
         didSet {
             self.collectionView.reloadData()
         }

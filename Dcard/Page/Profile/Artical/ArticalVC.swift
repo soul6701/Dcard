@@ -115,7 +115,7 @@ extension ArticalVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         let vc = UIStoryboard.home.postVC
-        let post = ModelSingleton.shared.userCard.post[row]
+        let post = ModelSingleton.shared.post[row]
         vc.setContent(post: post, commentList: [Comment()])
         vc.navigationItem.title = post.title
         vc.modalPresentationStyle = .formSheet

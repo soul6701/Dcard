@@ -29,7 +29,7 @@ protocol LoginVMInterface {
     func requirePassword(uid: String, phone: String?, address: String?)
     //修改使用者資訊
     var updateUserInfoSubject: PublishSubject<Bool> { get }
-    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType : String])
+    func updateUserInfo(user: [UserFieldType: Any])
 }
 class LoginVM: LoginVMInterface {
     private (set) var requirePasswordSubject = PublishSubject<RequirePasswordType>()
@@ -83,8 +83,8 @@ extension LoginVM {
             self.requirePasswordSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
-    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType : String]) {
-        self.loginFirebase.updateUserInfo(newAddress: newAddress, newPassword: newPassword, newCard: newCard) .subscribe(onNext: { (result) in
+    func updateUserInfo(user: [UserFieldType: Any]) {
+        self.loginFirebase.updateUserInfo(user: user).subscribe(onNext: { (result) in
             self.updateUserInfoSubject.onNext(result)
         }, onError: { (error) in
             self.updateUserInfoSubject.onError(error)

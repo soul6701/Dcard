@@ -242,7 +242,7 @@ class FavoriteInfoVC: UIViewController {
         nav.modalPresentationStyle = .overFullScreen
         present(nav, animated: true, completion: nil)
     }
-    func setContent(favorite: Favorite = ModelSingleton.shared.userCard.favorite[0], mode: FavoriteInfoMode) {
+    func setContent(favorite: Favorite = ModelSingleton.shared.favorite[0], mode: FavoriteInfoMode) {
         self.mode = mode
         self.favorite = favorite
         

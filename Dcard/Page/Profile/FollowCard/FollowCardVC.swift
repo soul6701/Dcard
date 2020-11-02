@@ -21,7 +21,7 @@ class FollowCardVC: UIViewController {
     private let disposeBag = DisposeBag()
     private var cardViewModel: CardVMInterface!
     private var postViewModel: PostVMInterface!
-    
+    private var post = [[Post]]()
     private var followCardList = [FollowCard]() {
         didSet {
             self.tableView.reloadData()
@@ -101,7 +101,7 @@ extension FollowCardVC: UITableViewDelegate, UITableViewDataSource {
         }
         let row = indexPath.row
         let cell = tableView.dequeueReusableCell(withIdentifier: "FollowCardCell", for: indexPath) as! FollowCardCell
-        cell.setContent(index: row, followCard: followCardList[indexPath.row])
+        cell.setContent(index: row, followCard: followCardList[indexPath.row], post: [])
         cell.setDelegate(self)
         return cell
     }
@@ -111,13 +111,12 @@ extension FollowCardVC: UITableViewDelegate, UITableViewDataSource {
 }
 // MARK: - FollowCardVCDelegate
 extension FollowCardVC: FollowCardVCDelegate {
-    func showBellModeView(index: Int, followCard: FollowCard) {
-        self.selectedIndex = index
+    func showBellModeView(followCard: FollowCard) {
         ProfileManager.shared.showBellModeView(delegate: self, notifyMode: followCard.notifyMode)
     }
     func cancelFollowCard(followCard: FollowCard) {
         ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followCard.card.name + "」？") {
-            self.cardViewModel.updateCardInfo(followCard: followCard)
+//            self.cardViewModel.updateCardInfo(followCard: followCard)
             ProfileManager.shared.showOKView(mode: .cancelFollowCard, handler: nil)
         }
     }

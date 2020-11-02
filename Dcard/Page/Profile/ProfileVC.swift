@@ -19,6 +19,12 @@ class ProfileVC: UIViewController {
     private var card: Card {
         return ModelSingleton.shared.userCard
     }
+    private var post: [Post] {
+        return ModelSingleton.shared.post
+    }
+    private var comment: [Comment] {
+        return ModelSingleton.shared.comment
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -58,7 +64,7 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTwoCell", for: indexPath) as! ProfileTwoCell
-            cell.setContent(postCount: self.card.post.count, replyCount: self.card.comment.count, KeepedCount: self.card.beKeeped)
+            cell.setContent(postCount: self.post.count, replyCount: self.comment.count, KeepedCount: self.card.beKeeped)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileThreeCell", for: indexPath) as! ProfileThreeCell

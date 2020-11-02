@@ -89,7 +89,7 @@ class PostSettingVC: UIViewController {
             ["分享", "轉貼到其他看板", "引用原文發文", "開啟文章通知", "檢舉文章", "複製全文", "重新整理", "我不喜歡這篇文章"]
     }
     private var keepDataList: [Favorite] {
-        return ModelSingleton.shared.userCard.favorite
+        return ModelSingleton.shared.favorite
     }
     override func viewDidLoad() {
         super.viewDidLoad()

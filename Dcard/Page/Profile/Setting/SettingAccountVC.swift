@@ -202,7 +202,9 @@ ID 規則
     }
     private let cardNameOKSubject = BehaviorSubject<Bool>(value: false)
     private var hintOpend = false
-    private var viewModel: LoginVMInterface!
+    private var viewModelUser: LoginVMInterface!
+    private var viewModelCard: CardVMInterface!
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -300,7 +302,7 @@ extension SettingAccountVC {
             } else {
                 self.newCard[.id] = self.tfCard[0].text ?? ""
             }
-            self.viewModel.updateUserInfo(newAddress: self.newAddress, newPassword: self.newPassword, newCard: self.newCard)
+            self.viewModelCard.updateCardInfo(card: [.id: self.newCard[.id], .name: self.newCard[.name]])
             return
         }
         var valid = false
@@ -328,7 +330,7 @@ extension SettingAccountVC {
             return
         }
         WaitingView.shared.show(true)
-        self.viewModel.updateUserInfo(newAddress: self.newAddress, newPassword: self.newPassword, newCard: [:])
+        self.viewModelUser.updateUserInfo(user: [.address: self.newAddress, .password: self.newPassword])
     }
     //跳出ID規則視窗
     @objc private func alert() {
@@ -391,12 +393,34 @@ extension SettingAccountVC {
 // MARK: - ConfigureViewModel
 extension SettingAccountVC {
     private func confiViewModel() {
-        self.viewModel = LoginVM()
+        self.viewModelUser = LoginVM()
+        self.viewModelCard = CardVM()
     }
     private func subsribeViewModel() {
-        self.viewModel.updateUserInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+        self.viewModelUser.updateUserInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             WaitingView.shared.show(false)
             if result {
+//                if self.mode == .editCard || self.mode == .enterNewID || self.mode == .resetPassword {
+//                    let alert = UIAlertController(title: "修改完成", message: "編輯" + (self.mode == .editCard ? "卡稱" : self.mode == .resetPassword ? "密碼" : "ID") + "成功！\n稍等一下才會同步完畢唷！", preferredStyle: .alert)
+//                    let cancelAction = UIAlertAction(title: "好", style: .default) { (action) in
+//                        if self.mode == .resetPassword {
+//                            self.navigationController?.popViewController(animated: true)
+//                        } else {
+//                            self.dismiss(animated: true, completion: nil)
+//                        }
+//                    }
+//                    alert.addAction(cancelAction)
+//                    self.present(alert, animated: true, completion: nil)
+//                } else {
+//                    self.navigationController?.popViewController(animated: true)
+//                }
+            }
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.viewModelCard.updateCardInfoSubject.observeOn(MainScheduler.instance).subscribe { (result) in
+            if result.data {
                 if self.mode == .editCard || self.mode == .enterNewID || self.mode == .resetPassword {
                     let alert = UIAlertController(title: "修改完成", message: "編輯" + (self.mode == .editCard ? "卡稱" : self.mode == .resetPassword ? "密碼" : "ID") + "成功！\n稍等一下才會同步完畢唷！", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "好", style: .default) { (action) in
@@ -412,9 +436,10 @@ extension SettingAccountVC {
                     self.navigationController?.popViewController(animated: true)
                 }
             }
-        }, onError: { (error) in
+        } onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-        }).disposed(by: self.disposeBag)
+        }.disposed(by: self.disposeBag)
+
     }
 }
 // MARK: - SubscribeRX
