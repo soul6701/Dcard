@@ -11,8 +11,8 @@ import RxSwift
 import RxCocoa
 
 protocol FollowCardVCDelegate {
-    func showBellModeView(index: Int, followCard: FollowCard)
-    func cancelFollowCard(index: Int, followCard: FollowCard)
+    func showBellModeView(followCard: FollowCard)
+    func cancelFollowCard(followCard: FollowCard)
     func toCardHome(followCard: FollowCard)
 }
 class FollowCardVC: UIViewController {
@@ -66,15 +66,6 @@ extension FollowCardVC {
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
-        self.cardViewModel.getCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
-            let vc = CardHomeVC()
-            vc.set
-            vc.setContent(followCard: self., post: self.followCardList[selectedIndex]., mode: <#T##CardHomeVCMode#>)
-            self.navigationController?.pushViewController(vc, animated: true)
-        }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-        }).disposed(by: self.disposeBag)
-        
         self.cardViewModel.getfollowCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             self.followCardList = result.data
         }, onError: { (error) in
@@ -84,12 +75,11 @@ extension FollowCardVC {
         self.cardViewModel.updateCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
                 LoginManager.shared.showOKView(mode: .create, handler: nil)
+                self.tableView.reloadData()
             }
         }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
-        
-        self.cardViewModel.getfollowCardInfo()
     }
 }
 // MARK: - UITableViewDelegate
@@ -126,15 +116,15 @@ extension FollowCardVC: FollowCardVCDelegate {
         ProfileManager.shared.showBellModeView(delegate: self, notifyMode: followCard.notifyMode)
     }
     func cancelFollowCard(followCard: FollowCard) {
-        ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followCard.name + "」？") {
+        ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followCard.card.name + "」？") {
             self.cardViewModel.updateCardInfo(followCard: followCard)
-            self.followCardList.remove(at: index)
-            self.tableView.reloadData()
             ProfileManager.shared.showOKView(mode: .cancelFollowCard, handler: nil)
         }
     }
     func toCardHome(followCard: FollowCard) {
-        self.cardViewModel.getCardInfo(uid: followCard.uid)
+        let vc = CardHomeVC()
+        vc.setContent(followCard: followCard, mode: .other)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 extension FollowCardVC: SelectNotifyViewDelegate {

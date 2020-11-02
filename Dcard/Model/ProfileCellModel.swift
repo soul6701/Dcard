@@ -29,10 +29,11 @@ public struct FollowIssue {
 //我追蹤的卡稱
 public struct FollowCard {
 
-    public var uid: String
+    public var card: Card
     public var notifyMode: Int = 0 //0: 開啟新文章通知 1: 開啟個人化文章通知 2: 關閉全部文章通知
     public var isFollowing: Bool = true
     public var isNew: Bool = false
+    public var
 }
 //我的信件
 public struct Mail {

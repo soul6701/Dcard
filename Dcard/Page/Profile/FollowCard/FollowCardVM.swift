@@ -17,7 +17,7 @@ protocol FollowCardVMInterface {
     func getFollowCardList()
     //取得貼文
     var getFollowCardPostListSubject: PublishSubject<[Post]> { get }
-    func getFollowCardPostList(cid: String)
+    func getFollowCardPostList(uid: String)
 }
 class FollowCardVM: FollowCardVMInterface {
     private(set) var getFollowCardListSubject = PublishSubject<[FollowCard]>()
@@ -36,9 +36,9 @@ extension FollowCardVM {
     func getFollowCardList() {
         //
     }
-    func getFollowCardPostList(cid: String) {
-        self.postFirebase.getPostInfo(cid: cid).subscribe(onNext: { (postList) in
-            self.getFollowCardPostListSubject.onNext(postList)
+    func getFollowCardPostList(uid: String) {
+        self.postFirebase.getPostInfo(uid: uid).subscribe(onNext: { (result) in
+            self.getFollowCardPostListSubject.onNext(result.data)
         }, onError: { (error) in
             self.getFollowCardPostListSubject.onError(error)
         }).disposed(by: self.disposeBag)

@@ -46,7 +46,7 @@ class CardHomeVC: UIViewController {
     private var canBeDragged = false
     
     private let disposeBag = DisposeBag()
-    private var viewModel: CardVMInterface!
+    private var viewModel: PostVMInterface!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +57,7 @@ class CardHomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.viewModel.getPostInfo(uid: self.followCard.card.uid)
         resetData(self.followCard)
     }
     @IBAction func didClickBtnCancelFollow(_ sender: UIButton) {
@@ -154,16 +155,16 @@ extension CardHomeVC {
 // MARK: - SubscribeViewModel
 extension CardHomeVC {
     private func confiViewModel() {
-        self.viewModel = CardVM()
+        self.viewModel = PostVM()
     }
     private func subsribeViewModel() {
-        self.viewModel.getCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (card) in
-            if result {
-                self.followCard = FollowCard(card: card, notifyMode: (0...2).randomElement()!, isFollowing: Bool.random()!, isNew: Bool.random()!)
-            }
-        }, onError: { (error) in
+        self.viewModel.getPostInfoSubject.observeOn(MainScheduler.instance).subscribe { (result) in
+            self.postList = result.data
+            self.resetPost(result.data)
+            self.resetData(self.followCard)
+        } onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-        }).disposed(by: self.disposeBag)
+        }.disposed(by: self.disposeBag)
     }
 }
 // MARK: - Private Handler
@@ -232,12 +233,16 @@ extension CardHomeVC {
     private func resetData(_ followCard: FollowCard) {
         self.isFollowing = followCard.isFollowing
         self.notifyMode = followCard.notifyMode
-        self.lbDescription.text = "\(followCard.card.post.count) 篇文章 | \(followCard.card.fans) 位粉絲"
         self.lbID.text = "@\(followCard.card.id)"
         self.lbName.text = followCard.card.name
         self.lbIcon.backgroundColor = followCard.card.sex == "M" ? #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1) : #colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)
         self.lbIcon.text = !followCard.card.id.isEmpty ? String(followCard.card.id.first!).uppercased() : ""
         resetBellState(self.isFollowing, notifyMode: self.notifyMode)
+    }
+    //重置貼文資訊
+    private func resetPost(_ postList: [Post]) {
+        self.lbDescription.text = "\(postList.count) 篇文章 | \(followCard.card.fans) 位粉絲"
+        self.tableView.reloadData()
     }
     //重置通知狀態
     private func resetBellState(_ isFollowing: Bool, notifyMode: Int) {
@@ -270,7 +275,7 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
         return 2
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? self.myPostList.count : 1
+        return section == 0 ? self.postList.count : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -278,7 +283,7 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
         let section = indexPath.section
         if section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
-            cell.setContent(post: self.myPostList[row], mode: .profile)
+            cell.setContent(post: self.postList[row], mode: .profile)
             return cell
         } else {
             let cell = UITableViewCell()
@@ -296,8 +301,8 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         let vc = UIStoryboard.home.postVC
-        vc.setContent(post: myPostList[row], commentList: [Comment()])
-        vc.navigationItem.title = myPostList[row].title
+        vc.setContent(post: self.postList[row], commentList: [Comment()])
+        vc.navigationItem.title = self.postList[row].title
         vc.modalPresentationStyle = .formSheet
         self.navigationController?.pushViewController(vc, animated: true) {
             self.navigationController?.setNavigationBarHidden(false, animated: false)
