@@ -14,46 +14,23 @@ import FirebaseFirestore
 import FirebaseStorage
 
 protocol PostFirebaseInterface {
-    func creartFavoriteList(listName: String, post: Post) -> Observable<Bool>
+    func addFavoriteList(listName: String, postID: String) -> Observable<FirebaseResult<Bool>>
     func getPostInfo(uid: String) -> Observable<FirebaseResult<[Post]>>
+    func createFavoriteList(listName: String) -> Observable<FirebaseResult<Bool>>
 }
 public class PostFirebase: PostFirebaseInterface {
 
     public static var shared = PostFirebase()
-
     private var user: User {
         return ModelSingleton.shared.userConfig.user
     }
+    private let disposeBag = DisposeBag()
 
-    // MARK: - 創建收藏清單
-    func creartFavoriteList(listName: String, post: Post) -> Observable<Bool> {
-        let subject = PublishSubject<Bool>()
-        var mediaMetaList: [[String: Any]] = []
-        post.mediaMeta.forEach { (mediaMeta) in
-            mediaMetaList.append(["normalizedUrl": mediaMeta.normalizedUrl, "thumbnail": mediaMeta.thumbnail])
-        }
-        let _post: [String: Any] = ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot]
-        let favoriteDir: [String: Any] = ["listname": listName, "post": [_post]]
-        let setter: [String: Any] = ["favorite": favoriteDir]
-        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document("\(user.uid)").setData(setter) { (error) in
-            if let error = error {
-                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-                subject.onError(error)
-            } else {
-                subject.onNext(true)
-                var favoriteList = ModelSingleton.shared.favorite
-                let index = favoriteList.firstIndex { return $0.title == listName}
-                if let index = index {
-                    favoriteList[index].posts.append(post)
-                }
-                ModelSingleton.shared.setFavoriteList(favoriteList)
-            }
-        }
-        return subject.asObserver()
-    }
     // MARK: - 取得使用者貼文
     func getPostInfo(uid: String) -> Observable<FirebaseResult<[Post]>> {
         let subject = PublishSubject<FirebaseResult<[Post]>>()
+        var postList = [Post]()
+        var subjectList = [PublishSubject<Bool>]()
         
         FirebaseManager.shared.db.collection(DatabaseName.post.rawValue).document(uid).getDocument { (querySnapshot, error) in
             if let error = error {
@@ -61,21 +38,39 @@ public class PostFirebase: PostFirebaseInterface {
                 subject.onError(error)
             }
             if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                var postList = [Post]()
-                let postListDir = dir["post"] as! [[String: Any]]
-                postListDir.forEach { (postDir) in
-                    var mediaMetaList = [MediaMeta]()
-                    let mediaMetaListDir = postDir["post"] as! [[String: Any]]
-                    mediaMetaListDir.forEach { (mediaMetaDir) in
-                        let dir = mediaMetaDir as! [String: String]
-                        mediaMetaList.append(MediaMeta(thumbnail: dir["thumbnail"]!, normalizedUrl: dir["normalizedUrl"]!))
+                let postListArray = dir["postnotRead"] as! [String]
+                for _ in postListArray {
+                    subjectList.append(PublishSubject<Bool>())
+                }
+                postListArray.enumerated().forEach { (key, value) in
+                    FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(value).getDocument { (querySnapshot, error) in
+                        if let error = error {
+                            NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                            subject.onError(error)
+                        }
+                        if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
+                            var mediaMetaList = [MediaMeta]()
+                            let mediaMetaListDir = dir["mediaMeta"] as! [[String: Any]]
+                            mediaMetaListDir.forEach { (mediaMetaDir) in
+                                let dir = mediaMetaDir as! [String: String]
+                                mediaMetaList.append(MediaMeta(thumbnail: dir["thumbnail"]!, normalizedUrl: dir["normalizedUrl"]!))
+                            }
+                            postList.append(Post(id: dir["id"] as! String, title: dir["title"] as! String, excerpt: dir["excerpt"] as! String, createdAt: dir["createdAt"] as! String, commentCount: dir["commentCount"] as! String, likeCount: dir["likeCount"] as! String, forumName: dir["forumName"] as! String, gender: dir["gender"] as! String, department: dir["department"] as! String, anonymousSchool: dir["anonymousSchool"] as! Bool, anonymousDepartment: dir["anonymousDepartment"] as! Bool, school: dir["school"] as! String, withNickname: dir["withNickname"] as! Bool, mediaMeta: mediaMetaList, host: dir["host"] as! Bool, hot: dir["hot"] as! Bool))
+                            subjectList[key].onNext(true)
+                        }
                     }
-                    postList.append(Post(id: postDir["id"] as! String, title: postDir["title"] as! String, excerpt: postDir["excerpt"] as! String, createdAt: postDir["createdAt"] as! String, commentCount: postDir["commentCount"] as! String, likeCount: postDir["likeCount"] as! String, forumName: postDir["forumName"] as! String, gender: postDir["gender"] as! String, department: postDir["department"] as! String, anonymousSchool: postDir["anonymousSchool"] as! Bool, anonymousDepartment: postDir["anonymousDepartment"] as! Bool, school: postDir["school"] as! String, withNickname: postDir["withNickname"] as! Bool, mediaMeta: mediaMetaList, host: postDir["host"] as! Bool, hot: postDir["hot"] as! Bool))
                 }
-                subject.onNext(FirebaseResult<[Post]>(data: postList, errorMessage: nil))
-                if uid == ModelSingleton.shared.userConfig.user.uid {
-                    ModelSingleton.shared.setPostList(postList)
-                }
+                Observable.combineLatest(subjectList).subscribe { (result) in
+                    let count: Int = result.element?.reduce(Int(0)) { (result, next) -> Int in
+                        return result + (next ? 1 : 0)
+                    } ?? 0
+                    if count == result.element?.count {
+                        if uid == self.user.uid {
+                            ModelSingleton.shared.setPostList(postList)
+                        }
+                        subject.onNext(FirebaseResult<[Post]>(data: postList, errorMessage: nil))
+                    }
+                }.disposed(by: self.disposeBag)
             }
         }
         return subject.asObserver()
@@ -108,90 +103,6 @@ public class PostFirebase: PostFirebaseInterface {
     func deleteUserData() -> Observable<DeleteCollectionType> {
         return FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.user.rawValue)
     }
-
-    // MARK: - 登入
-//    func login(address: String, password: String) -> Observable<FirebaseResult<Bool>> {
-//        let subject = PublishSubject<FirebaseResult<Bool>>()
-//
-//        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
-//            if let error = error {
-//                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-//                subject.onError(error)
-//            }
-//            if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
-//                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-//                    let dir = queryDocumentSnapshot.data()
-//                    if dir["address"] as! String == address && dir["password"] as! String == password {
-//                        ModelSingleton.shared.setUserConfig(UserConfig(user: User(uid: dir["uid"] as! String, lastName: dir["lastname"] as! String, firstName: dir["firstname"] as! String, birthday: dir["birthday"] as! String, sex: dir["sex"] as! String, phone: dir["phone"] as! String, address: dir["address"] as! String, password: dir["password"] as! String, avatar: dir["avatar"] as! String, friend: dir["friend"] as! [String]), cardmode: 0))
-//                        return true
-//                    }
-//                    return false
-//                }.isEmpty) {
-//                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
-//                } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-//                    let dir = queryDocumentSnapshot.data()
-//                    if (dir["address"] as! String) == address {
-//                        return true
-//                    }
-//                    return false
-//                }.isEmpty) {
-//                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(1), sender: nil))
-//                } else {
-//                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(0), sender: nil))
-//                }
-//            } else {
-//                subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(0), sender: nil))
-//            }
-//        }
-//        return subject.asObserver()
-//    }
-//
-//    // MARK: - 查詢密碼
-//    func requirePassword(uid: String, phone: String?, address: String?) -> Observable<FirebaseResult<Bool>> {
-//        let subject = PublishSubject<FirebaseResult<Bool>>()
-//        var successString = ""
-//
-//        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
-//            if let error = error {
-//                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-//                subject.onError(error)
-//            }
-//            if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
-//                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-//                    let dir = queryDocumentSnapshot.data()
-//                    if let phone = phone {
-//                        let _phone = "886-" + phone
-//                        if (dir["uid"] as! String) == uid && (dir["phone"] as! String) == _phone {
-//                            successString = dir["password"] as! String
-//                            return true
-//                        }
-//                    }
-//                    if let address = address {
-//                        if (dir["uid"] as! String) == uid && (dir["address"] as! String) == address {
-//                            successString = dir["password"] as! String
-//                            return true
-//                        }
-//                    }
-//                    return false
-//                }.isEmpty) {
-//                    subject.onNext(.success(successString))
-//                } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-//                    let dir = queryDocumentSnapshot.data()
-//                    if (dir["uid"] as! String) == uid {
-//                        return true
-//                    }
-//                    return false
-//                }.isEmpty) {
-//                    subject.onNext(.error(.phone))
-//                } else {
-//                    subject.onNext(.error(.account))
-//                }
-//            } else {
-//                subject.onNext(.error(.account))
-//            }
-//        }
-//        return subject.asObserver()
-//    }
 
     // MARK: - 取得使用者資訊
     func getUserData(uid: String) -> Observable<User> {
@@ -247,7 +158,7 @@ public class PostFirebase: PostFirebaseInterface {
                 if let querySnapshot = querySnapshot {
                     let document = querySnapshot.documents.first { (queryDocumentSnapshot) -> Bool in
                         let dir = queryDocumentSnapshot.data()
-                        return (dir["uid"] as! String) == ModelSingleton.shared.userConfig.user.uid
+                        return (dir["uid"] as! String) == self.user.uid
                     }
                     userId = document?.documentID ?? ""
                     if let dir = document?.data() {
@@ -265,7 +176,7 @@ public class PostFirebase: PostFirebaseInterface {
                         subject.onError(error)
                     } else {
                         subject.onNext(true)
-                        var (oldUser, oldCardMode) = (ModelSingleton.shared.userConfig.user, ModelSingleton.shared.userConfig.cardmode)
+                        var (oldUser, oldCardMode) = (self.user, ModelSingleton.shared.userConfig.cardmode)
                         oldUser.friend = friendList
                         ModelSingleton.shared.setUserConfig(UserConfig(user: oldUser, cardmode: oldCardMode))
                     }
@@ -274,72 +185,58 @@ public class PostFirebase: PostFirebaseInterface {
         }
         return subject.asObserver()
     }
-//    // MARK: - 修改使用者資訊
-//    func updateUserInfo(newAddress: String, newPassword: String, newCard: [CardFieldType: Any]) -> Observable<Bool> {
-//        let subject = PublishSubject<Bool>()
-//        var userId = ""
-//
-//        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
-//            if let error = error {
-//                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-//                subject.onError(error)
-//            }
-//            if let querySnapshot = querySnapshot {
-//                let document = querySnapshot.documents.first { (queryDocumentSnapshot) -> Bool in
-//                    let dir = queryDocumentSnapshot.data()
-//                    return (dir["uid"] as! String) == ModelSingleton.shared.userConfig.user.uid
-//                }
-//                userId = document?.documentID ?? ""
-//            }
-//            guard !userId.isEmpty else {
-//                subject.onNext(false)
-//                return
-//            }
-//            var setter: [String:Any] = [:]
-//
-//            if !newAddress.isEmpty {
-//                setter["address"] = newAddress
-//            } else if !newPassword.isEmpty {
-//                setter["password"] = newPassword
-//            } else if !newCard.isEmpty {
-//                newCard.forEach { (key, value) in
-//                    if key == .id || key == .name {
-//                        setter["card.\(key.rawValue)"] = value
-//                    }
-//                }
-//            }
-//            guard !setter.isEmpty else {
-//                subject.onNext(false)
-//                return
-//            }
-//            FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).document(userId).updateData(setter) { (error) in
-//                if let error = error {
-//                    NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-//                    subject.onError(error)
-//                } else {
-//                    subject.onNext(true)
-//
-//                    var oldUser = self.userConfig.user
-//                    var oldCard = self.card
-//                    if !newAddress.isEmpty {
-//                        oldUser.address = newAddress
-//                    } else if !newPassword.isEmpty {
-//                        oldUser.password = newPassword
-//                    } else if !newCard.isEmpty {
-//                        newCard.forEach { (key, value) in
-//                            switch key {
-//                            case .id:
-//                                oldCard.id = value as! String
-//                            case .name:
-//                                oldCard.name = value as! String
-//                            }
-//                        }
-//                    }
-//                     ModelSingleton.shared.setUserCard(oldCard)
-//                    ModelSingleton.shared.setUserConfig(UserConfig(user: oldUser, cardmode: self.userConfig.cardmode))
-//                }
-//            }
-//        }
-//        return subject.asObserver()
-//    }
+    
+    // MARK: - 添加收藏清單
+    func createFavoriteList(listName: String) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        let setter: [String: Any] = [listName: ["createAt": FieldValue.serverTimestamp(), "post": []]]
+        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(self.user.uid).setData(setter, merge: true) { (error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            } else {
+                var oldFavorite = ModelSingleton.shared.favorite
+                oldFavorite.append(Favorite(title: listName, posts: []))
+                ModelSingleton.shared.setFavoriteList(oldFavorite)
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+            }
+        }
+        return subject.asObserver()
+    }
+    // MARK: - 加入收藏清單
+    func addFavoriteList(listName: String, postID: String) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(user.uid).updateData(["\(listName).post": FieldValue.arrayUnion([postID])]) { (error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            } else {
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                
+                FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(postID).getDocument { (querySnapshot, error) in
+                    if let error = error {
+                        NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                        subject.onError(error)
+                    }
+                    if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
+                        var mediaMetaList = [MediaMeta]()
+                        let mediaMetaListDir = dir["mediaMeta"] as! [[String: Any]]
+                        mediaMetaListDir.forEach { (mediaMetaDir) in
+                            let dir = mediaMetaDir as! [String: String]
+                            mediaMetaList.append(MediaMeta(thumbnail: dir["thumbnail"]!, normalizedUrl: dir["normalizedUrl"]!))
+                        }
+                        let post = Post(id: dir["id"] as! String, title: dir["title"] as! String, excerpt: dir["excerpt"] as! String, createdAt: dir["createdAt"] as! String, commentCount: dir["commentCount"] as! String, likeCount: dir["likeCount"] as! String, forumName: dir["forumName"] as! String, gender: dir["gender"] as! String, department: dir["department"] as! String, anonymousSchool: dir["anonymousSchool"] as! Bool, anonymousDepartment: dir["anonymousDepartment"] as! Bool, school: dir["school"] as! String, withNickname: dir["withNickname"] as! Bool, mediaMeta: mediaMetaList, host: dir["host"] as! Bool, hot: dir["hot"] as! Bool)
+                        
+                        var favoriteList = ModelSingleton.shared.favorite
+                        let index = favoriteList.firstIndex { return $0.title == listName} ?? 0
+                        favoriteList[index].posts.append(post)
+                        ModelSingleton.shared.setFavoriteList(favoriteList)
+                    }
+                }
+            }
+        }
+        return subject.asObserver()
+    }
 }

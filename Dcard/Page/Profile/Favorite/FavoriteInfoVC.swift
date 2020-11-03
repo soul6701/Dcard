@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+
 
 enum FavoriteInfoMode {
     case all
@@ -176,6 +179,8 @@ class FavoriteInfoVC: UIViewController {
     @IBOutlet var imageViewList: [UIImageView]!
     @IBOutlet weak var stackView: UIStackView!
     
+    private var viewModel: PostVMInterface!
+    private let disposeBag = DisposeBag()
     private var itemSpace: CGFloat = 5
     private var mode: FavoriteInfoMode = .all
     private var catalogSelected = false
@@ -242,10 +247,11 @@ class FavoriteInfoVC: UIViewController {
         nav.modalPresentationStyle = .overFullScreen
         present(nav, animated: true, completion: nil)
     }
-    func setContent(favorite: Favorite = ModelSingleton.shared.favorite[0], mode: FavoriteInfoMode) {
+    func setContent(favorite: Favorite? = nil, mode: FavoriteInfoMode) {
         self.mode = mode
-        self.favorite = favorite
-        
+        if let favorite = favorite {
+            self.favorite = favorite
+        }
         if self.mode == .all {
             var posts = [Post]()
             self.favorite.posts.forEach { (post) in
@@ -298,6 +304,21 @@ extension FavoriteInfoVC {
         }
     }
 }
+// MARK: - ConfigureViewModel
+extension FavoriteInfoVC {
+    private func confiViewModel() {
+        self.viewModel = PostVM()
+    }
+    private func subsribeViewModel() {
+        self.viewModel.getPostInfoSubject.subscribe(onNext: { (result) in
+//            self.favorite = result.data
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+
+        self.viewModel.getPostInfo(uid: ModelSingleton.shared.userConfig.user.uid)
+    }
+}
 // MARK: - UITableViewDelegate
 extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -338,6 +359,9 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
         }
         vc.setContent(post: post, commentList: commonList)
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y

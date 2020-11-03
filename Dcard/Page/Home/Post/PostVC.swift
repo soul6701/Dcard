@@ -253,8 +253,8 @@ extension PostVC {
         self.viewModel = PostVM()
     }
     private func subsribeViewModel() {
-        self.viewModel.ccreartFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
-            if result {
+        self.viewModel.addFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
                 self.showOKView()
             }
         }, onError: { (error) in
@@ -417,6 +417,7 @@ extension PostVC: UIViewControllerTransitioningDelegate {
 // MARK: - PostSettingCellDelegate
 extension PostVC: PostSettingCellDelegate {
     func showAddFavoriteListOKView(title: String) {
-        self.viewModel.creartFavoriteList(listName: title, post: self.post)
+        self.willBeAddedListTitle = title
+        self.viewModel.addFavoriteList(listName: title, postID: self.post.id)
     }
 }

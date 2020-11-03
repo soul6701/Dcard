@@ -12,16 +12,20 @@ import RxSwift
 import RxCocoa
 
 protocol PostVMInterface {
-    ///創建帳戶
-    var ccreartFavoriteListSubject: PublishSubject<Bool> { get }
-    func creartFavoriteList(listName: String, post: Post)
+    ///加入收藏清單
+    func addFavoriteList(listName: String, postID: String)
+    var addFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
     ///取得使用者貼文
-    var getPostInfoSubject: PublishSubject<FirebaseResult<[Post]>> { get }
     func getPostInfo(uid: String)
+    var getPostInfoSubject: PublishSubject<FirebaseResult<[Post]>> { get }
+    ///添加收藏清單
+    func createFavoriteList(listName: String)
+    var createFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
 }
 class PostVM: PostVMInterface {
-    private(set) var ccreartFavoriteListSubject = PublishSubject<Bool>()
+    private(set) var addFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var getPostInfoSubject = PublishSubject<FirebaseResult<[Post]>>()
+    private(set) var createFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     
     private var postFirebase: PostFirebaseInterface
     private let disposeBag = DisposeBag()
@@ -31,18 +35,25 @@ class PostVM: PostVMInterface {
     }
 }
 extension PostVM {
-    func creartFavoriteList(listName: String, post: Post) {
-        self.postFirebase.creartFavoriteList(listName: listName, post: post).subscribe(onNext: { (result) in
-            self.ccreartFavoriteListSubject.onNext(result)
+    func addFavoriteList(listName: String, postID: String) {
+        self.postFirebase.addFavoriteList(listName: listName, postID: postID).subscribe(onNext: { (result) in
+            self.addFavoriteListSubject.onNext(result)
         }, onError: { (error) in
-            self.ccreartFavoriteListSubject.onError(error)
+            self.addFavoriteListSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
     func getPostInfo(uid: String) {
         self.postFirebase.getPostInfo(uid: uid).subscribe(onNext: { (result) in
-                self.getPostInfoSubject.onNext(result)
-            }, onError: { (error) in
-                self.getPostInfoSubject.onError(error)
-            }).disposed(by: self.disposeBag)
-        }
+            self.getPostInfoSubject.onNext(result)
+        }, onError: { (error) in
+            self.getPostInfoSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func createFavoriteList(listName: String) {
+        self.postFirebase.createFavoriteList(listName: listName).subscribe(onNext: { (result) in
+            self.createFavoriteListSubject.onNext(result)
+        }, onError: { (error) in
+            self.createFavoriteListSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
 }

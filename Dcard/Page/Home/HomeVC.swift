@@ -55,9 +55,9 @@ class HomeVC: UIViewController {
             return
         }
         //第一次進入頁面 或 距上次離開頁面已過60秒
-        if self.exitTime == nil || Date().timeIntervalSince(self.exitTime ?? Date()) > 60 {
-            self.viewModel.getPosts(alias: currentForum.alias)
-        }
+//        if self.exitTime == nil || Date().timeIntervalSince(self.exitTime ?? Date()) > 60 {
+//            self.viewModel.getPosts(alias: currentForum.alias)
+//        }
         //        viewModel.getRecentPost()
             
     }

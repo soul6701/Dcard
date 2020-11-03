@@ -159,25 +159,8 @@ extension PostRepository: PostRepositoryInterface {
                 self.posts += posts.data
                 self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
                     self.posts += posts.data
-                    self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-                        self.posts += posts.data
-                        self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-                            self.posts += posts.data
-                            self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-                                self.posts += posts.data
-                                self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-                                    self.posts += posts.data
-                                    self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-                                        self.posts += posts.data
-                                        self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-                                                        self.posts += posts.data
-                                                        subject.onNext(FirebaseResult<[Post]>(data: self.posts, errorMessage: nil, sender: nil))
-                                        }).disposed(by: self.disposeBag)
-                                    }).disposed(by: self.disposeBag)
-                                }).disposed(by: self.disposeBag)
-                            }).disposed(by: self.disposeBag)
-                        }).disposed(by: self.disposeBag)
-                    }).disposed(by: self.disposeBag)
+                                subject.onNext(FirebaseResult<[Post]>(data: self.posts, errorMessage: nil, sender: nil))
+                    self.saveToFireBase()
                 }).disposed(by: self.disposeBag)
             }).disposed(by: self.disposeBag)
         }, onError: { error in
@@ -185,6 +168,25 @@ extension PostRepository: PostRepositoryInterface {
         }).disposed(by: disposeBag)
         
         return subject.asObserver()
+    }
+    // MARK: - Dcard資料存入Firebase
+    private func saveToFireBase() {
+        //先移除資料
+        let _ = FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.allPost.rawValue)
+        self.posts.forEach { (post) in
+            var mediaMetaDir: [[String: Any]] = []
+            post.mediaMeta.forEach { (mediameta) in
+                mediaMetaDir.append(["normalizedUrl": mediameta.normalizedUrl, "thumbnail": mediameta.thumbnail])
+            }
+            let setter: [String: Any] = ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender
+            , "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaDir, "host": post.host
+            , "hot": post.hot]
+            FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(post.id).setData(setter) { (error) in
+                if let error = error {
+                    NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                }
+            }
+        }
     }
     // MARK: - 取得特定貼文以前貼文
     func getBeforePost(id: String) -> Observable<FirebaseResult<[Post]>> {

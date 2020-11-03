@@ -216,7 +216,7 @@ class ProfileManager {
         case .artical:
             let vc = UIStoryboard.profile.articalVC
             let _ = vc.view
-            vc.setContent(articalList: myPostList, title: next.cell.name)
+            vc.setContent(title: next.cell.name)
             self.baseNav?.pushViewController(vc, animated: true) {
                 self.baseNav?.setNavigationBarHidden(false, animated: false)
             }

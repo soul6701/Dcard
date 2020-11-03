@@ -21,14 +21,17 @@ enum DatabaseName: String {
     case favoritePost
     case comment
     case post
+    case allPost
 }
 class FirebaseManager {
     static var shared = FirebaseManager()
     
     var db: Firestore = Firestore.firestore()
     
+    ///刪除資料庫集合
     var deleteCollection = { (db: Firestore, name: String) -> PublishSubject<DeleteCollectionType> in
         let subject = PublishSubject<DeleteCollectionType>()
+        
         db.collection(name).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")

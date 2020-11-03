@@ -419,7 +419,7 @@ extension SettingAccountVC {
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
-        self.viewModelCard.updateCardInfoSubject.observeOn(MainScheduler.instance).subscribe { (result) in
+        self.viewModelCard.updateCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
                 if self.mode == .editCard || self.mode == .enterNewID || self.mode == .resetPassword {
                     let alert = UIAlertController(title: "修改完成", message: "編輯" + (self.mode == .editCard ? "卡稱" : self.mode == .resetPassword ? "密碼" : "ID") + "成功！\n稍等一下才會同步完畢唷！", preferredStyle: .alert)
@@ -436,10 +436,9 @@ extension SettingAccountVC {
                     self.navigationController?.popViewController(animated: true)
                 }
             }
-        } onError: { (error) in
+        }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-        }.disposed(by: self.disposeBag)
-
+        }).disposed(by: self.disposeBag)
     }
 }
 // MARK: - SubscribeRX

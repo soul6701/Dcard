@@ -44,11 +44,14 @@ class FavoriteVC: UIViewController {
         }
         return list
     }
+    private var viewModel: PostVMInterface!
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        confiViewModel()
+        subsribeViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -81,14 +84,26 @@ extension FavoriteVC {
         layout.minimumLineSpacing = self.lineSpace
         self.collectionView.collectionViewLayout = layout
     }
-    //添加播放清單
+    //創建播放清單
     @objc private func addList() {
         UIAlertController.showNewFavoriteCatolog(self, cancelHandler: {
             self.dismiss(animated: true, completion: nil)
         }, OKHandler: { (text) in
-            self.favoriteList.append(Favorite(title: text, posts: []))
-            self.collectionView.reloadData()
+            self.viewModel.createFavoriteList(listName: text)
         }, disposeBag: self.disposeBag)
+    }
+}
+// MARK: - ConfigureViewModel
+extension FavoriteVC {
+    private func confiViewModel() {
+        self.viewModel = PostVM()
+    }
+    private func subsribeViewModel() {
+        self.viewModel.createFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            self.favoriteList = ModelSingleton.shared.favorite
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
     }
 }
 // MARK: - UICollectionViewDelegate

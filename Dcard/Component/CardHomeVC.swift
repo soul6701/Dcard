@@ -163,13 +163,13 @@ extension CardHomeVC {
         self.viewModel = PostVM()
     }
     private func subsribeViewModel() {
-        self.viewModel.getPostInfoSubject.observeOn(MainScheduler.instance).subscribe { (result) in
+        self.viewModel.getPostInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             self.postList = result.data
             self.resetPost(result.data)
             self.resetData(self.followCard)
-        } onError: { (error) in
+        }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-        }.disposed(by: self.disposeBag)
+        }).disposed(by: self.disposeBag)
     }
 }
 // MARK: - Private Handler

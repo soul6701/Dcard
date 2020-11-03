@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol ArticalVCDelegate {
     
@@ -17,26 +19,31 @@ class ArticalVC: UIViewController {
     
     private var tfPassword: UITextField?
     private var tfAddress: UITextField?
-    private var articalList = [Post]()
+    private var articalList = ModelSingleton.shared.post {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     private var times = 1
+    private var viewModel: PostVMInterface!
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        ToolbarView.shared.show(false)
         initView()
+        confiViewModel()
+        subsribeViewModel()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        PrivacyView.shared.setDelegate(self)
-        PrivacyView.shared.show(vc: self)
-    }
-    func setContent(articalList: [Post], title: String) {
-        self.articalList = articalList
+    func setContent(title: String) {
         self.navigationItem.title = title
     }
 }
 // MARK: - SetupUI
 extension ArticalVC {
     private func initView() {
+        PrivacyView.shared.setDelegate(self)
+        PrivacyView.shared.show(vc: self)
+        ToolbarView.shared.show(false)
         confiTableView()
     }
     private func confiTableView() {
@@ -87,6 +94,21 @@ extension ArticalVC {
         self.present(alertController, animated: true)
     }
 }
+// MARK: - ConfigureViewModel
+extension ArticalVC {
+    private func confiViewModel() {
+        self.viewModel = PostVM()
+    }
+    private func subsribeViewModel() {
+        self.viewModel.getPostInfoSubject.subscribe(onNext: { (result) in
+            self.articalList = result.data
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.viewModel.getPostInfo(uid: ModelSingleton.shared.userConfig.user.uid)
+    }
+}
 // MARK: - UITableViewDelegate
 extension ArticalVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -112,6 +134,9 @@ extension ArticalVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.section == 0 ? 120 : 180
     }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         let vc = UIStoryboard.home.postVC
@@ -130,7 +155,6 @@ extension ArticalVC: ArticalVCDelegate {
 //        ProfileManager.shared.showBellModeView()
 //    }
 }
-
 // MARK: - PrivacyViewDelegate
 extension ArticalVC: PrivacyViewDelegate {
     func didClickPassword() {

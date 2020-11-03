@@ -126,12 +126,10 @@ class CardFirebase: CardFirebaseInterface {
                 }
                 followCardListDir.keys.enumerated().forEach { (key, value) in
                     let dir = followCardListDir[value]!
-                    self.getCardInfo(uid: dir["uid"] as! String).subscribe { (result) in
+                    self.getCardInfo(uid: dir["uid"] as! String).subscribe(onNext: { (result) in
                         subjectList[key].onNext(true)
                         followCardList.append(FollowCard(card: result.data, notifyMode: dir["notifyMode"] as! Int, isFollowing: dir["isFollowing"] as! Bool, isNew: dir["isNew"] as! Bool))
-                    } onError: { (error) in
-                        subjectList[key].onNext(false)
-                    }.disposed(by: self.disposeBag)
+                    }).disposed(by: self.disposeBag)
                 }
             }
         }
