@@ -40,6 +40,7 @@ class HomeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        confiViewModel()
         subscribeViewModel()
         initView()
         preloadUserdata()
@@ -67,32 +68,33 @@ class HomeVC: UIViewController {
 }
 // MARK: - SubscribeViewModel
 extension HomeVC {
+    private func confiViewModel() {
+        self.viewModel = HomeVM()
+    }
     private func subscribeViewModel() {
+//        self.viewModel.recentPostSubject.observeOn(MainScheduler.instance).subscribe(onNext: { posts in
+//            self.postList = posts
+//            self.showList = self.postList
+//            self.tableView.reloadData()
+//        }, onError: { error in
+//            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+//        }).disposed(by: disposeBag)
         
-        viewModel = HomeVM()
-        viewModel.recentPostSubject.observeOn(MainScheduler.instance).subscribe(onNext: { posts in
-            self.postList = posts
-            self.showList = self.postList
-            self.tableView.reloadData()
-        }, onError: { error in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-        }).disposed(by: disposeBag)
-        
-        viewModel.commentSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (comments) in
+        self.viewModel.commentSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             let vc = UIStoryboard.home.postVC
-            vc.setContent(post: self.selectedPost, commentList: comments)
+            vc.setContent(post: self.selectedPost, commentList: result.data)
             vc.modalPresentationStyle = .formSheet
             self.navigationController?.pushViewController(vc, animated: true)
         }, onError: { error in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: disposeBag)
         
-        viewModel.forumsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { forums in
-            self.confiDrawer(forums)
-            if !forums.isEmpty {
+        self.viewModel.forumsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { result in
+            self.confiDrawer(result.data)
+            if !result.data.isEmpty {
 //                self.viewModel.getPosts(alias: forums[0].alias)
 //                self.currentForum = forums[0]
-                let forums = forums.first { return $0.name == "穿搭"}
+                let forums = result.data.first { return $0.name == "穿搭"}
                 self.viewModel.getPosts(alias: forums?.alias ?? "")
                 self.currentForum = forums
                 self.navigationItem.title = forums?.name ?? ""
@@ -101,8 +103,8 @@ extension HomeVC {
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: disposeBag)
         
-        viewModel.postsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { posts in
-            self.postList = posts
+        self.viewModel.postsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { result in
+            self.postList = result.data
             if let currentForum = self.currentForum, currentForum.name == "廢文" {
                 self.showList = self.postList.filter({$0.school.contains("弘光") || $0.school.contains("輔仁")})
             } else {

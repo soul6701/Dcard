@@ -31,7 +31,7 @@ protocol LoginManagerInterface {
 }
 enum LoginOKMode: String {
     case login = "註冊成功"
-    case create = "登入成功"
+    case create = "創建成功"
     case delete = "刪除成功"
     case required = "查詢成功，自動填入"
     case other = "成功"

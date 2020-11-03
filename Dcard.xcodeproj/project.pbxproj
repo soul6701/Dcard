@@ -171,6 +171,7 @@
 		848E16D6252ED10C00FA4B4F /* FeedbackCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848E16D4252ED10C00FA4B4F /* FeedbackCell.xib */; };
 		84C818A8252DC39800CFABA6 /* FriendCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C818A6252DC39800CFABA6 /* FriendCardVC.swift */; };
 		84C818A9252DC39800CFABA6 /* FriendCardVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C818A7252DC39800CFABA6 /* FriendCardVC.xib */; };
+		8907762C25505B8300FF7E09 /* FavoriteFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907762B25505B8300FF7E09 /* FavoriteFirebase.swift */; };
 		89D80C542545291700EB4F18 /* FollowIssueInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D80C522545291700EB4F18 /* FollowIssueInfoVC.swift */; };
 		89D80C552545291700EB4F18 /* FollowIssueInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */; };
 		9305A000254BC41E00319E99 /* FollowCardVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93059FFF254BC41E00319E99 /* FollowCardVM.swift */; };
@@ -385,6 +386,7 @@
 		848E16D4252ED10C00FA4B4F /* FeedbackCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeedbackCell.xib; sourceTree = "<group>"; };
 		84C818A6252DC39800CFABA6 /* FriendCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCardVC.swift; sourceTree = "<group>"; };
 		84C818A7252DC39800CFABA6 /* FriendCardVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendCardVC.xib; sourceTree = "<group>"; };
+		8907762B25505B8300FF7E09 /* FavoriteFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFirebase.swift; sourceTree = "<group>"; };
 		89D80C522545291700EB4F18 /* FollowIssueInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowIssueInfoVC.swift; sourceTree = "<group>"; };
 		89D80C532545291700EB4F18 /* FollowIssueInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowIssueInfoVC.xib; sourceTree = "<group>"; };
 		93059FFF254BC41E00319E99 /* FollowCardVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowCardVM.swift; sourceTree = "<group>"; };
@@ -884,6 +886,7 @@
 				9366EC2E254ABBC20030CD0A /* PostFirebase.swift */,
 				22788AE72503900200E87F7F /* CardFirebase.swift */,
 				9305A001254BECA500319E99 /* APIResult.swift */,
+				8907762B25505B8300FF7E09 /* FavoriteFirebase.swift */,
 			);
 			name = Firebase;
 			sourceTree = "<group>";
@@ -1205,6 +1208,7 @@
 				224E3CF724B784D9003F8F2B /* CardVC.swift in Sources */,
 				221A47DB2512218A00DE1301 /* CardHomeVC.swift in Sources */,
 				22788AF42503BB5E00E87F7F /* CardInfoVC.swift in Sources */,
+				8907762C25505B8300FF7E09 /* FavoriteFirebase.swift in Sources */,
 				22433D3324E7E3C500E8D79D /* MemoVC.swift in Sources */,
 				933F610E2547FCD500609E70 /* FavoriteInfoVC.swift in Sources */,
 				22788B02250416BF00E87F7F /* FilterView.swift in Sources */,

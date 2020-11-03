@@ -399,7 +399,7 @@ extension SettingAccountVC {
     private func subsribeViewModel() {
         self.viewModelUser.updateUserInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             WaitingView.shared.show(false)
-            if result {
+            if result.data {
 //                if self.mode == .editCard || self.mode == .enterNewID || self.mode == .resetPassword {
 //                    let alert = UIAlertController(title: "修改完成", message: "編輯" + (self.mode == .editCard ? "卡稱" : self.mode == .resetPassword ? "密碼" : "ID") + "成功！\n稍等一下才會同步完畢唷！", preferredStyle: .alert)
 //                    let cancelAction = UIAlertAction(title: "好", style: .default) { (action) in

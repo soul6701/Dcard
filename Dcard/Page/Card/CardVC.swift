@@ -13,7 +13,7 @@ import RxSwift
 import FSPagerView
 
 protocol CardVCDelegate {
-    func addFriend(name: String)
+    func addFriend(card: Card)
 }
 
 class CardVC: UIViewController {
@@ -80,8 +80,8 @@ extension CardVC {
     private func subscribe() {
         self.viewModel = CardVM()
         
-        self.viewModel.getRandomCardBySexSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (cards) in
-            self.cards = cards
+        self.viewModel.getRandomCardBySexSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            self.cards = result.data
             self.pageView.reloadData()
         }, onError: { (error) in
             CardManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
@@ -91,7 +91,6 @@ extension CardVC {
             self.viewModel.getRandomCardBySex(cardMode: self.mode)
         }
         self.viewModel.addFriendSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
-            
             CardManager.shared.showOKView(mode: .becomeFriend) {
                 let vc = ChatRoomVC()
                 vc.setContent(mail: Mail(card: self.card, message: [Message](), isNew: true))
@@ -236,7 +235,7 @@ extension CardVC: FSPagerViewDataSource, FSPagerViewDelegate {
 }
 // MARK: - CardVCDelegate
 extension CardVC: CardVCDelegate {
-    func addFriend(name: String) {
-        self.viewModel.addFriend(name: name)
+    func addFriend(card: Card) {
+        self.viewModel.addFriend(card: card)
     }
 }

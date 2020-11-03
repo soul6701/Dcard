@@ -147,6 +147,8 @@ extension CardInfoVC: CardSendCellDelegate {
     func didClickBtnSend() {
         self.isFriend = true
         self.tableView.reloadData()
-        self.delegate?.addFriend(name: self.card?.name ?? "")
+        
+        guard let card = self.card else { return }
+        self.delegate?.addFriend(card: card)
     }
 }

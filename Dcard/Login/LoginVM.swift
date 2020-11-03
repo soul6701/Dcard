@@ -19,25 +19,25 @@ protocol LoginVMInterface {
     var deleteUserDataSubject: PublishSubject<DeleteCollectionType> { get }
     func deleteUserData()
     //登入
-    var loginSubject: PublishSubject<LoginType> { get }
+    var loginSubject: PublishSubject<FirebaseResult<Bool>> { get }
     func login(address: String, password: String)
     //檢查信箱重複
-    var expectAccountSubject: PublishSubject<Bool> { get }
+    var expectAccountSubject: PublishSubject<FirebaseResult<Bool>> { get }
     func expectAccount(address: String)
     //查詢密碼
-    var requirePasswordSubject: PublishSubject<RequirePasswordType> { get }
+    var requirePasswordSubject: PublishSubject<FirebaseResult<Bool>> { get }
     func requirePassword(uid: String, phone: String?, address: String?)
     //修改使用者資訊
-    var updateUserInfoSubject: PublishSubject<Bool> { get }
+    var updateUserInfoSubject: PublishSubject<FirebaseResult<Bool>> { get }
     func updateUserInfo(user: [UserFieldType: Any])
 }
 class LoginVM: LoginVMInterface {
-    private (set) var requirePasswordSubject = PublishSubject<RequirePasswordType>()
+    private (set) var requirePasswordSubject = PublishSubject<FirebaseResult<Bool>>()
     private (set) var creartUserDataSubject = PublishSubject<Bool>()
     private (set) var deleteUserDataSubject = PublishSubject<DeleteCollectionType>()
-    private (set) var loginSubject = PublishSubject<LoginType>()
-    private (set) var expectAccountSubject = PublishSubject<Bool>()
-    private (set) var updateUserInfoSubject = PublishSubject<Bool>()
+    private (set) var loginSubject = PublishSubject<FirebaseResult<Bool>>()
+    private (set) var expectAccountSubject = PublishSubject<FirebaseResult<Bool>>()
+    private (set) var updateUserInfoSubject = PublishSubject<FirebaseResult<Bool>>()
     
     private var loginFirebase: LoginFirebaseInterface
     private var disposeBag = DisposeBag()

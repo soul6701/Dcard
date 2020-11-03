@@ -22,7 +22,7 @@ enum CardFieldType: String {
     case id
 }
 protocol CardFirebaseInterface {
-    func getRandomCardBySex(cardMode: CardMode) -> Observable<[Card]>
+    func getRandomCardBySex(cardMode: CardMode) -> Observable<FirebaseResult<[Card]>>
     func getCardInfo(uid: String) -> Observable<FirebaseResult<Card>>
     func createCard(card: Card) -> Observable<Bool>
     func getfollowCardInfo() -> Observable<FirebaseResult<[FollowCard]>>
@@ -150,8 +150,8 @@ class CardFirebase: CardFirebaseInterface {
     }
     
     // MARK: - 取得卡片
-    func getRandomCardBySex(cardMode: CardMode) -> Observable<[Card]> {
-        var subject = PublishSubject<[Card]>()
+    func getRandomCardBySex(cardMode: CardMode) -> Observable<FirebaseResult<[Card]>> {
+        var subject = PublishSubject<FirebaseResult<[Card]>>()
         switch cardMode {
         case .all:
             subject = getRandomCard()
@@ -179,14 +179,14 @@ class CardFirebase: CardFirebaseInterface {
                         newQuerySnapshot = newQuerySnapshot.filter({ return $0 != selectedItem})
                     }
                     ModelSingleton.shared.setCard(cards)
-                    subject.onNext(cards)
+                    subject.onNext(FirebaseResult<[Card]>(data: cards, errorMessage: nil, sender: nil))
                 }
             }
         }
         return subject.asObserver()
     }
-    private func getRandomCard() -> PublishSubject<[Card]> {
-        let subject = PublishSubject<[Card]>()
+    private func getRandomCard() -> PublishSubject<FirebaseResult<[Card]>> {
+        let subject = PublishSubject<FirebaseResult<[Card]>>()
         FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
@@ -203,7 +203,7 @@ class CardFirebase: CardFirebaseInterface {
                     newQuerySnapshot = newQuerySnapshot.filter({ return $0 != selectedItem})
                 }
                 ModelSingleton.shared.setCard(cards)
-                subject.onNext(cards)
+                subject.onNext(FirebaseResult<[Card]>(data: cards, errorMessage: nil, sender: nil))
             }
         }
         return subject

@@ -14,11 +14,11 @@ import RxCocoa
 protocol CardVMInterface {
     ///取得卡片
     func getRandomCardBySex(cardMode: CardMode)
-    var getRandomCardBySexSubject: PublishSubject<[Card]> { get }
+    var getRandomCardBySexSubject: PublishSubject<FirebaseResult<[Card]>> { get }
     
     ///加入好友
-    func addFriend(name: String)
-    var addFriendSubject: PublishSubject<Bool> { get }
+    func addFriend(card: Card)
+    var addFriendSubject: PublishSubject<FirebaseResult<Bool>> { get }
     
     ///取得卡稱資訊
     func getCardInfo(uid: String)
@@ -33,8 +33,9 @@ protocol CardVMInterface {
     var updateCardInfoSubject : PublishSubject<FirebaseResult<Bool>> { get }
 }
 class CardVM: CardVMInterface {
-    private(set) var getRandomCardBySexSubject = PublishSubject<[Card]>()
-    private(set) var addFriendSubject = PublishSubject<Bool>()
+    
+    private(set) var getRandomCardBySexSubject = PublishSubject<FirebaseResult<[Card]>>()
+    private(set) var addFriendSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var getCardInfoSubject = PublishSubject<FirebaseResult<Card>>()
     private(set) var getfollowCardInfoSubject = PublishSubject<FirebaseResult<[FollowCard]>>()
     private(set) var updateCardInfoSubject = PublishSubject<FirebaseResult<Bool>>()
@@ -57,8 +58,8 @@ extension CardVM {
             self.getRandomCardBySexSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
-    func addFriend(name: String) {
-        self.loginFirebase.addFriend(name: name).subscribe(onNext: { (result) in
+    func addFriend(card: Card) {
+        self.loginFirebase.addFriend(card: card).subscribe(onNext: { (result) in
             self.addFriendSubject.onNext(result)
         }, onError: { (error) in
             self.addFriendSubject.onError(error)

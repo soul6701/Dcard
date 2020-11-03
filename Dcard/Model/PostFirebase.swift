@@ -110,88 +110,88 @@ public class PostFirebase: PostFirebaseInterface {
     }
 
     // MARK: - 登入
-    func login(address: String, password: String) -> Observable<LoginType> {
-        let subject = PublishSubject<LoginType>()
-
-        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-                subject.onError(error)
-            }
-            if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
-                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-                    let dir = queryDocumentSnapshot.data()
-                    if dir["address"] as! String == address && dir["password"] as! String == password {
-                        ModelSingleton.shared.setUserConfig(UserConfig(user: User(uid: dir["uid"] as! String, lastName: dir["lastname"] as! String, firstName: dir["firstname"] as! String, birthday: dir["birthday"] as! String, sex: dir["sex"] as! String, phone: dir["phone"] as! String, address: dir["address"] as! String, password: dir["password"] as! String, avatar: dir["avatar"] as! String, friend: dir["friend"] as! [String]), cardmode: 0))
-                        return true
-                    }
-                    return false
-                }.isEmpty) {
-                    subject.onNext(.success)
-                } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-                    let dir = queryDocumentSnapshot.data()
-                    if (dir["address"] as! String) == address {
-                        return true
-                    }
-                    return false
-                }.isEmpty) {
-                    subject.onNext(.error(.password))
-                } else {
-                    subject.onNext(.error(.account))
-                }
-            } else {
-                subject.onNext(.error(.account))
-            }
-        }
-        return subject.asObserver()
-    }
-
-    // MARK: - 查詢密碼
-    func requirePassword(uid: String, phone: String?, address: String?) -> Observable<RequirePasswordType> {
-        let subject = PublishSubject<RequirePasswordType>()
-        var successString = ""
-
-        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-                subject.onError(error)
-            }
-            if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
-                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-                    let dir = queryDocumentSnapshot.data()
-                    if let phone = phone {
-                        let _phone = "886-" + phone
-                        if (dir["uid"] as! String) == uid && (dir["phone"] as! String) == _phone {
-                            successString = dir["password"] as! String
-                            return true
-                        }
-                    }
-                    if let address = address {
-                        if (dir["uid"] as! String) == uid && (dir["address"] as! String) == address {
-                            successString = dir["password"] as! String
-                            return true
-                        }
-                    }
-                    return false
-                }.isEmpty) {
-                    subject.onNext(.success(successString))
-                } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-                    let dir = queryDocumentSnapshot.data()
-                    if (dir["uid"] as! String) == uid {
-                        return true
-                    }
-                    return false
-                }.isEmpty) {
-                    subject.onNext(.error(.phone))
-                } else {
-                    subject.onNext(.error(.account))
-                }
-            } else {
-                subject.onNext(.error(.account))
-            }
-        }
-        return subject.asObserver()
-    }
+//    func login(address: String, password: String) -> Observable<FirebaseResult<Bool>> {
+//        let subject = PublishSubject<FirebaseResult<Bool>>()
+//
+//        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
+//            if let error = error {
+//                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+//                subject.onError(error)
+//            }
+//            if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
+//                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+//                    let dir = queryDocumentSnapshot.data()
+//                    if dir["address"] as! String == address && dir["password"] as! String == password {
+//                        ModelSingleton.shared.setUserConfig(UserConfig(user: User(uid: dir["uid"] as! String, lastName: dir["lastname"] as! String, firstName: dir["firstname"] as! String, birthday: dir["birthday"] as! String, sex: dir["sex"] as! String, phone: dir["phone"] as! String, address: dir["address"] as! String, password: dir["password"] as! String, avatar: dir["avatar"] as! String, friend: dir["friend"] as! [String]), cardmode: 0))
+//                        return true
+//                    }
+//                    return false
+//                }.isEmpty) {
+//                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+//                } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+//                    let dir = queryDocumentSnapshot.data()
+//                    if (dir["address"] as! String) == address {
+//                        return true
+//                    }
+//                    return false
+//                }.isEmpty) {
+//                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(1), sender: nil))
+//                } else {
+//                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(0), sender: nil))
+//                }
+//            } else {
+//                subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(0), sender: nil))
+//            }
+//        }
+//        return subject.asObserver()
+//    }
+//
+//    // MARK: - 查詢密碼
+//    func requirePassword(uid: String, phone: String?, address: String?) -> Observable<FirebaseResult<Bool>> {
+//        let subject = PublishSubject<FirebaseResult<Bool>>()
+//        var successString = ""
+//
+//        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
+//            if let error = error {
+//                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+//                subject.onError(error)
+//            }
+//            if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
+//                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+//                    let dir = queryDocumentSnapshot.data()
+//                    if let phone = phone {
+//                        let _phone = "886-" + phone
+//                        if (dir["uid"] as! String) == uid && (dir["phone"] as! String) == _phone {
+//                            successString = dir["password"] as! String
+//                            return true
+//                        }
+//                    }
+//                    if let address = address {
+//                        if (dir["uid"] as! String) == uid && (dir["address"] as! String) == address {
+//                            successString = dir["password"] as! String
+//                            return true
+//                        }
+//                    }
+//                    return false
+//                }.isEmpty) {
+//                    subject.onNext(.success(successString))
+//                } else if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+//                    let dir = queryDocumentSnapshot.data()
+//                    if (dir["uid"] as! String) == uid {
+//                        return true
+//                    }
+//                    return false
+//                }.isEmpty) {
+//                    subject.onNext(.error(.phone))
+//                } else {
+//                    subject.onNext(.error(.account))
+//                }
+//            } else {
+//                subject.onNext(.error(.account))
+//            }
+//        }
+//        return subject.asObserver()
+//    }
 
     // MARK: - 取得使用者資訊
     func getUserData(uid: String) -> Observable<User> {

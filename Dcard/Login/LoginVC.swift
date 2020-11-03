@@ -147,16 +147,15 @@ extension LoginVC {
 //        }).disposed(by: self.disposeBag)
         
         self.viewModel.loginSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
-            switch result {
-            case .success:
+            if result.data {
                 LoginManager.shared.showOKView(mode: .login) {
                     if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
                         self.navigationController?.pushViewController(vc, animated: true)
                         UserDefaultsKeys.shared.setValue([self.tfAccount.text!: Date()], forKey: Login_account)
                     }
                 }
-            case .error(let error):
-                LoginManager.shared.showAlertView(errorMessage: error.rawValue, handler: nil)
+            } else {
+                LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
             }
         }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
@@ -175,7 +174,7 @@ extension LoginVC {
         
         self.viewModel.expectAccountSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             let vc = self.nav.viewControllers.first(where: { return $0 is SetPhoneAddressVC }) as! SetPhoneAddressVC
-            if result {
+            if result.data {
                 vc.toNextPage()
             } else {
                 LoginManager.shared.showAlertView(errorMessage: "信箱已被使用，請重新輸入", handler: nil)
@@ -186,14 +185,13 @@ extension LoginVC {
         }).disposed(by: self.disposeBag)
         
         self.viewModel.requirePasswordSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
-            switch result {
-                case .success(let password):
-                    LoginManager.shared.showOKView(mode: .required) {
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                    self.tfPassword.text = password
-                case .error(let error):
-                    LoginManager.shared.showAlertView(errorMessage: error.rawValue, handler: nil)
+            if result.data {
+                LoginManager.shared.showOKView(mode: .required) {
+                    self.dismiss(animated: true, completion: nil)
+                }
+                self.tfPassword.text = (result.sender?["password"] ?? "") as! String
+            } else {
+                LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
             }
         }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
