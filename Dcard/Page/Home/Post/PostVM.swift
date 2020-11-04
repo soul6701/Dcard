@@ -13,7 +13,7 @@ import RxCocoa
 
 protocol PostVMInterface {
     ///加入收藏清單
-    func addFavoriteList(listName: String, postID: String)
+    func addFavoriteList(listName: String, postID: String, alias: String)
     var addFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
     ///取得使用者貼文
     func getPostInfo(uid: String)
@@ -35,8 +35,8 @@ class PostVM: PostVMInterface {
     }
 }
 extension PostVM {
-    func addFavoriteList(listName: String, postID: String) {
-        self.postFirebase.addFavoriteList(listName: listName, postID: postID).subscribe(onNext: { (result) in
+    func addFavoriteList(listName: String, postID: String, alias: String) {
+        self.postFirebase.addFavoriteList(listName: listName, postID: postID, Alias: alias).subscribe(onNext: { (result) in
             self.addFavoriteListSubject.onNext(result)
         }, onError: { (error) in
             self.addFavoriteListSubject.onError(error)

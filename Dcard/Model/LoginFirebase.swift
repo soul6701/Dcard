@@ -20,7 +20,10 @@ enum UserFieldType: String {
 protocol LoginFirebaseInterface {
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) -> Observable<Bool>
     func login(address: String, password: String) -> Observable<FirebaseResult<Bool>>
+    func setupCardData() -> Observable<FirebaseResult<Bool>>
+    func setupFaroriteData() -> Observable<FirebaseResult<Bool>>
     func deleteUserData() -> Observable<DeleteCollectionType>
+    func deletePostData() -> Observable<DeleteCollectionType>
     func expectAccount(address: String) -> Observable<FirebaseResult<Bool>>
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<FirebaseResult<Bool>>
     func getUserData(uid: String) -> Observable<FirebaseResult<User>>
@@ -67,6 +70,7 @@ public class LoginFirebase: LoginFirebaseInterface {
         
         let subjectList: [Datatype: PublishSubject<Bool>] = [.user: userSubject, .post: postSubject, .favorite: favoriteSubject, .comment: commentSubject, .card: cardSubject]
         
+        
         var avatarUrl = ""
         
         if let avatar = avatar {
@@ -111,7 +115,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                 post.mediaMeta.forEach { (mediaMeta) in
                     mediaMetaList.append(["ormalizedUrl,": mediaMeta.normalizedUrl, "thumbnail": mediaMeta.thumbnail])
                 }
-                postList.append(["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot])
+                postList.append(["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumAlias": post.forumAlias, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot])
             }
             favariteList.append(["title": favorite.title, "posts": postList])
         }
@@ -180,7 +184,10 @@ public class LoginFirebase: LoginFirebaseInterface {
     func deleteUserData() -> Observable<DeleteCollectionType> {
         return FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.user.rawValue)
     }
-    
+    // MARK: - 刪除所有貼文資料
+    func deletePostData() -> Observable<DeleteCollectionType> {
+        return FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.allPost.rawValue)
+    }
     // MARK: - 登入
     func login(address: String, password: String) -> Observable<FirebaseResult<Bool>> {
         let subject = PublishSubject<FirebaseResult<Bool>>()
@@ -194,9 +201,8 @@ public class LoginFirebase: LoginFirebaseInterface {
                 if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
                     let dir = queryDocumentSnapshot.data()
                     if dir["address"] as! String == address && dir["password"] as! String == password {
-                        self.setupCardData(uid: dir["uid"] as! String)
-                        self.setupUserConfigData(dir: dir)
-                        self.setupFaroriteData(docID: dir["uid"] as! String)
+                        let userConfig = UserConfig(user: User(uid: dir["uid"] as! String, lastName: dir["lastname"] as! String, firstName: dir["firstname"] as! String, birthday: dir["birthday"] as! String, sex: dir["sex"] as! String, phone: dir["phone"] as! String, address: dir["address"] as! String, password: dir["password"] as! String, avatar: dir["avatar"] as! String, friend: dir["friend"] as! [String]), cardmode: 0)
+                        ModelSingleton.shared.setUserConfig(userConfig)
                         return true
                     }
                     return false
@@ -209,21 +215,44 @@ public class LoginFirebase: LoginFirebaseInterface {
                     }
                     return false
                 }.isEmpty) {
-                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(1)))
+                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(1), sender: nil))
                 } else {
-                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(0)))
+                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(0), sender: nil))
                 }
             } else {
-                subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(0)))
+                subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(0), sender: nil))
             }
         }
         return subject.asObserver()
     }
-    private func setupFaroriteData(docID: String) {
+    // MARK: - 取得卡稱資訊
+    func setupCardData() -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(self.userConfig.user.uid).getDocument { (querySnapshot, error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            }
+            if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
+                let moodDir = dir["mood"] as! [String: Any]
+                let mood = Mood(heart: moodDir["heart"] as! Int, haha: moodDir["haha"] as! Int, angry: moodDir["angry"] as! Int, cry: moodDir["cry"] as! Int, surprise: moodDir["surprise"] as! Int, respect: moodDir["respect"] as! Int)
+                let card = Card(uid: dir["uid"] as! String, id: dir["id"] as! String, name: dir["name"] as! String, photo: dir["photo"] as! String, sex: dir["sex"] as! String, introduce: dir["introduce"] as! String, country: dir["country"] as! String, school: dir["school"] as! String, department: dir["department"] as! String, article: dir["article"] as! String, birthday: dir["birthday"] as! String, love: dir["love"] as! String, fans: dir["fans"] as! Int, beKeeped: dir["beKeeped"] as! Int, beReplyed: dir["beReplyed"] as! Int, getHeart: dir["getHeart"] as! Int, mood: mood)
+                ModelSingleton.shared.setUserCard(card)
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+            } else {
+                subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(3), sender: nil))
+            }
+        }
+        return subject
+    }
+    // MARK: - 取得收藏清單
+    func setupFaroriteData() -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
         var subjectList = [PublishSubject<Bool>]()
         var favoriteList = [Favorite]()
         var count = 0
-        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(docID).getDocument { (querySnapshot, error) in
+        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(self.userConfig.user.uid).getDocument { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
             }
@@ -236,6 +265,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                     
                     if !post.isEmpty {
                         var _subjectList = [PublishSubject<Bool>]()
+                        var count = 0
                         for _ in post {
                             _subjectList.append(PublishSubject<Bool>())
                         }
@@ -253,16 +283,16 @@ public class LoginFirebase: LoginFirebaseInterface {
                                         let dir = mediaMetaDir as! [String: String]
                                         mediaMetaList.append(MediaMeta(thumbnail: dir["thumbnail"]!, normalizedUrl: dir["normalizedUrl"]!))
                                     }
-                                    let post = Post(id: dir["id"] as! String, title: dir["title"] as! String, excerpt: dir["excerpt"] as! String, createdAt: dir["createdAt"] as! String, commentCount: dir["commentCount"] as! String, likeCount: dir["likeCount"] as! String, forumName: dir["forumName"] as! String, gender: dir["gender"] as! String, department: dir["department"] as! String, anonymousSchool: dir["anonymousSchool"] as! Bool, anonymousDepartment: dir["anonymousDepartment"] as! Bool, school: dir["school"] as! String, withNickname: dir["withNickname"] as! Bool, mediaMeta: mediaMetaList, host: dir["host"] as! Bool, hot: dir["hot"] as! Bool)
+                                    let post = Post(id: dir["id"] as! String, title: dir["title"] as! String, excerpt: dir["excerpt"] as! String, createdAt: dir["createdAt"] as! String, commentCount: dir["commentCount"] as! String, likeCount: dir["likeCount"] as! String, forumAlias: dir["forumAlias"] as! String, forumName: dir["forumName"] as! String, gender: dir["gender"] as! String, department: dir["department"] as! String, anonymousSchool: dir["anonymousSchool"] as! Bool, anonymousDepartment: dir["anonymousDepartment"] as! Bool, school: dir["school"] as! String, withNickname: dir["withNickname"] as! Bool, mediaMeta: mediaMetaList, host: dir["host"] as! Bool, hot: dir["hot"] as! Bool)
                                     postList.append(post)
                                     _subjectList[key].onNext(true)
                                 }
                             }
-                            Observable.combineLatest(_subjectList).subscribe(onNext: { (result) in
-                                let count: Int = result.reduce(0) { (result, next) -> Int in
-                                    return result + (next ? 1 : 0)
-                                    }
-                                if count == result.count {
+                        }
+                        _subjectList.forEach { (_subject) in
+                            _subject.subscribe(onNext: { (result) in
+                                if result { count += 1 }
+                                if count == post.count {
                                     favoriteList.append(Favorite(title: value, posts: postList))
                                     subjectList[key].onNext(true)
                                 }
@@ -277,25 +307,16 @@ public class LoginFirebase: LoginFirebaseInterface {
                             if result { count += 1 }
                             if count == dir.keys.count {
                                 ModelSingleton.shared.setFavoriteList(favoriteList)
+                                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
                             }
                         }).disposed(by: self.disposeBag)
                     }
                 }
+            }  else {
+                subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(4), sender: nil))
             }
         }
-    }
-    private func setupCardData(uid: String) {
-        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(uid).getDocument { (querySnapshot, error) in
-            if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                let mood = Mood(heart: dir["heart"] as! Int, haha: dir["haha"] as! Int, angry: dir["angry"] as! Int, cry: dir["cry"] as! Int, surprise: dir["surprise"] as! Int, respect: dir["respect"] as! Int)
-                let card = Card(id: dir["id"] as! String, name: dir["name"] as! String, photo: dir["photo"] as! String, sex: dir["sex"] as! String, introduce: dir["introduce"] as! String, country: dir["country"] as! String, school: dir["school"] as! String, department: dir["department"] as! String, article: dir["article"] as! String, birthday: dir["birthday"] as! String, love: dir["love"] as! String, fans: dir["fans"] as! Int, beKeeped: dir["beKeeped"] as! Int, beReplyed: dir["beReplyed"] as! Int, getHeart: dir["getHeart"] as! Int, mood: mood)
-                ModelSingleton.shared.setUserCard(card)
-            }
-        }
-    }
-    private func setupUserConfigData(dir: [String: Any]) {
-        let userConfig = UserConfig(user: User(uid: dir["uid"] as! String, lastName: dir["lastname"] as! String, firstName: dir["firstname"] as! String, birthday: dir["birthday"] as! String, sex: dir["sex"] as! String, phone: dir["phone"] as! String, address: dir["address"] as! String, password: dir["password"] as! String, avatar: dir["avatar"] as! String, friend: dir["friend"] as! [String]), cardmode: 0)
-        ModelSingleton.shared.setUserConfig(userConfig)
+        return subject
     }
     // MARK: - 查詢密碼
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<FirebaseResult<Bool>> {

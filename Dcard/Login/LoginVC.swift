@@ -38,7 +38,7 @@ class LoginVC: UIViewController {
     private var oldHeight: CGFloat!
     private var newHeight: CGFloat!
     private var disposeBag = DisposeBag()
-    private var viewModel: LoginVMInterface!
+    private var viewModelLogin: LoginVMInterface!
     
     private var window: UIWindow {
         return UIApplication.shared.windows.first!
@@ -48,7 +48,7 @@ class LoginVC: UIViewController {
         initView()
         confiViewModel()
         subsribeViewModel()
-        self.viewModel.login(address: "a@a.com", password: "a12345")
+        self.viewModelLogin.login(address: "a@a.com", password: "a12345")
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -77,8 +77,8 @@ class LoginVC: UIViewController {
             self.present(nav, animated: true)
         }
     }
-    @IBAction func didClickClear(_ sender: UIButton) {
-        self.viewModel.deleteUserData()
+    @IBAction func didClickClearUserData(_ sender: UIButton) {
+        self.viewModelLogin.deleteUserData()
         UserDefaultsKeys.shared.removeKeysByString(prefix: "Login")
     }
 }
@@ -112,7 +112,7 @@ extension LoginVC {
                 }
                 return
             }
-            self.viewModel.login(address: account, password: password)
+            self.viewModelLogin.login(address: account, password: password)
         } else {
             LoginManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
         }
@@ -121,10 +121,10 @@ extension LoginVC {
 // MARK: - ConfigureViewModel
 extension LoginVC {
     private func confiViewModel() {
-        self.viewModel = LoginVM()
+        self.viewModelLogin = LoginVM()
     }
     private func subsribeViewModel() {
-        self.viewModel.creartUserDataSubject
+        self.viewModelLogin.creartUserDataSubject
             .observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
                 if result {
                     LoginManager.shared.showOKView(mode: .create) {
@@ -146,13 +146,11 @@ extension LoginVC {
 //            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
 //        }).disposed(by: self.disposeBag)
         
-        self.viewModel.loginSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+        self.viewModelLogin.loginSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
                 LoginManager.shared.showOKView(mode: .login) {
-                    if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
-                        self.navigationController?.pushViewController(vc, animated: true)
-                        UserDefaultsKeys.shared.setValue([self.tfAccount.text!: Date()], forKey: Login_account)
-                    }
+                    WaitingView.shared.show(true)
+                    self.viewModelLogin.setupCardData()
                 }
             } else {
                 LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
@@ -161,7 +159,35 @@ extension LoginVC {
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
-        self.viewModel.deleteUserDataSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+        self.viewModelLogin.setupCardDataSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                self.viewModelLogin.setupFaroriteData()
+            } else {
+                WaitingView.shared.show(false)
+                LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
+                if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    UserDefaultsKeys.shared.setValue([self.tfAccount.text!: Date()], forKey: Login_account)
+                }
+            }
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.viewModelLogin.setupFaroriteDataSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            WaitingView.shared.show(false)
+            if !result.data {
+                LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
+            }
+            if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
+                self.navigationController?.pushViewController(vc, animated: true)
+                UserDefaultsKeys.shared.setValue([self.tfAccount.text!: Date()], forKey: Login_account)
+            }
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.viewModelLogin.deleteUserDataSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             switch result {
             case .success:
                 LoginManager.shared.showOKView(mode: .delete, handler: nil)
@@ -172,7 +198,7 @@ extension LoginVC {
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
-        self.viewModel.expectAccountSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+        self.viewModelLogin.expectAccountSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             let vc = self.nav.viewControllers.first(where: { return $0 is SetPhoneAddressVC }) as! SetPhoneAddressVC
             if result.data {
                 vc.toNextPage()
@@ -184,18 +210,19 @@ extension LoginVC {
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
-        self.viewModel.requirePasswordSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+        self.viewModelLogin.requirePasswordSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
                 LoginManager.shared.showOKView(mode: .required) {
                     self.dismiss(animated: true, completion: nil)
                 }
-                self.tfPassword.text = (result.sender?["password"] ?? "") as! String
+                self.tfPassword.text = (result.sender?["password"] as? String) ?? ""
             } else {
                 LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
             }
         }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
+
     }
 }
 // MARK: - Keyboard
@@ -230,12 +257,12 @@ extension LoginVC: UITextFieldDelegate {
 }
 extension LoginVC: LoginVCDelegate {
     func expectAccount(address: String) {
-        self.viewModel.expectAccount(address: address)
+        self.viewModelLogin.expectAccount(address: address)
     }
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) {
-        self.viewModel.creartUserData(lastName: lastName, firstName: firstName, birthday: birthday, sex: sex, phone: phone, address: address, password: password, avatar: avatar)
+        self.viewModelLogin.creartUserData(lastName: lastName, firstName: firstName, birthday: birthday, sex: sex, phone: phone, address: address, password: password, avatar: avatar)
     }
     func requirePassword(uid: String, phone: String?, address: String?) {
-        self.viewModel.requirePassword(uid: uid, phone: phone, address: address)
+        self.viewModelLogin.requirePassword(uid: uid, phone: phone, address: address)
     }
 }

@@ -17,6 +17,7 @@ enum SettingAccountMode {
     case resetAddress
     case editCard
     case enterNewID
+    case createCard
     
     var rowList: [[String]] {
         switch self {
@@ -30,6 +31,8 @@ enum SettingAccountMode {
             return [["ID", "卡稱"]]
         case .enterNewID:
             return [["ID"]]
+        case .createCard:
+            return [["頭像", "ID", "卡稱", "國家", "學校", "系所", "感情狀態", "我的文章", "自我介紹"]]
         }
     }
     var sectionList: [String?] {
@@ -44,6 +47,8 @@ enum SettingAccountMode {
             return ["開始填寫 ID 與卡稱吧!"]
         case .enterNewID:
             return ["其他會員將會用此ID來辨認你，若與其他平台(Email、Line、手機號碼、Instagram、Facebook帳號等)重複，將有可能被揭露真實身份，請謹慎思考"]
+        case .createCard:
+            return ["必填資料"]
         }
     }
 }
@@ -82,16 +87,17 @@ class SettingAccountVC: UIViewController {
         return tf
     }()
     lazy private var tfCard: [UITextField] = {
-        let placeholderRowOne = "請輸入ID"
-        let placeholderRowTwo = "請輸入卡稱"
+        let placeholder = ["請輸入ID", "請輸入卡稱", "請輸入國家", "請輸入學校", "請輸入系所", "請輸入感情狀態", "我的文章", "請輸入自我介紹"]
+        
         let width = 200
         var list = [UITextField]()
-        (0...1).forEach { (i) in
+        let total = self.mode != .createCard ? 1 : 7
+        (0...total).forEach { (i) in
             let tf = UITextField(frame: CGRect(x: 0, y: 0, width: width, height: 44))
             tf.delegate = self
-            tf.placeholder = i == 0 ? placeholderRowOne : placeholderRowTwo
+            tf.placeholder = placeholder[i]
             tf.clearButtonMode = .whileEditing
-            if i == 0 {
+            if i == 0 && self.mode != .createCard {
                 if self.mode == .editCard {
                     let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
                     button.setImage(UIImage(systemName: "pencil"), for: .normal)
@@ -185,7 +191,6 @@ ID 規則
     private var newPassword = ""
     private var cardName = ""
     private var cardID = ""
-    private var newCard = [CardFieldType: String]()
     private var navigationItemTitle = ""
     private var sectionList = [String?]()
     private var rowList = [[String]]()
@@ -221,7 +226,7 @@ ID 規則
             IQKeyboardManager.shared.enableAutoToolbar = false
             IQKeyboardManager.shared.shouldResignOnTouchOutside = false
             confiDoneButton()
-            self.tfCard[self.mode == .editCard ? 1 : 0].becomeFirstResponder()
+            self.tfCard[self.mode != .enterNewID ? 0 : 1].becomeFirstResponder()
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -239,6 +244,8 @@ ID 規則
 // MARK: - SetupUI
 extension SettingAccountVC {
     private func initView() {
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        ToolbarView.shared.show(false)
         self.sectionList = mode.sectionList
         self.rowList = mode.rowList
         
@@ -258,7 +265,7 @@ extension SettingAccountVC {
     }
     private func confiNav() {
         self.navigationItem.title = self.navigationItemTitle
-        if self.mode == .resetAddress || self.mode == .resetPassword {
+        if self.mode == .resetAddress || self.mode == .resetPassword  || self.mode == .createCard {
             self.navigationItem.rightBarButtonItem = self.btnSave
         }
         if self.mode == .editCard || self.mode == .enterNewID {
@@ -273,7 +280,7 @@ extension SettingAccountVC {
     private func confiDoneButton() {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
-        let btnDone = UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(updateCardNameID))
+        let btnDone = UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(updateCard))
         let letfLexibeSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let rightLexibeSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolBar.setItems([letfLexibeSpace, btnDone, rightLexibeSpace], animated: true)
@@ -294,15 +301,18 @@ extension SettingAccountVC {
 extension SettingAccountVC {
     //重設帳號資訊
     @objc private func save() {
-        
+        guard self.mode != .createCard else {
+            let initCard = ModelSingleton.shared.userCard
+            self.viewModelCard.createCard(card: Card(uid: ModelSingleton.shared.userConfig.user.uid, id: self.tfCard[0].text ?? "", name: self.tfCard[1].text ?? "", photo: ModelSingleton.shared.userConfig.user.avatar, sex: ModelSingleton.shared.userConfig.user.sex, introduce: self.tfCard[7].text ?? "", country: self.tfCard[2].text ?? "", school: self.tfCard[3].text ?? "", department: self.tfCard[4].text ?? "", article: self.tfCard[6].text ?? "", birthday: ModelSingleton.shared.userConfig.user.birthday, love: self.tfCard[5].text ?? "", fans: initCard.fans, followCard: initCard.followCard, friendCard: initCard.friendCard, beKeeped: initCard.beKeeped, beReplyed: initCard.fans, getHeart: initCard.getHeart, mood: initCard.mood))
+            return
+        }
         guard self.mode != .editCard && self.mode != .enterNewID else {
             WaitingView.shared.show(true)
             if self.mode == .editCard {
-                self.newCard[.name] = self.tfCard[1].text ?? ""
+                self.viewModelCard.updateCardInfo(card: [.name: self.tfCard[1].text ?? ""])
             } else {
-                self.newCard[.id] = self.tfCard[0].text ?? ""
+                self.viewModelCard.updateCardInfo(card: [.id: self.tfCard[0].text ?? ""])
             }
-            self.viewModelCard.updateCardInfo(card: [.id: self.newCard[.id], .name: self.newCard[.name]])
             return
         }
         var valid = false
@@ -343,7 +353,7 @@ extension SettingAccountVC {
     @objc private func close() {
         dismiss(animated: true, completion: nil)
     }
-    @objc private func updateCardNameID() {
+    @objc private func updateCard() {
         self.view.endEditing(true)
         save()
     }
@@ -421,6 +431,7 @@ extension SettingAccountVC {
         
         self.viewModelCard.updateCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
+                WaitingView.shared.show(false)
                 if self.mode == .editCard || self.mode == .enterNewID || self.mode == .resetPassword {
                     let alert = UIAlertController(title: "修改完成", message: "編輯" + (self.mode == .editCard ? "卡稱" : self.mode == .resetPassword ? "密碼" : "ID") + "成功！\n稍等一下才會同步完畢唷！", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "好", style: .default) { (action) in
@@ -439,20 +450,39 @@ extension SettingAccountVC {
         }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
+        
+        self.viewModelCard.createCardSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                self.navigationController?.popViewController(animated: false, completion: {
+                    ProfileManager.shared.toNextPage(next: .myCard)
+                })
+            }
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
     }
 }
 // MARK: - SubscribeRX
 extension SettingAccountVC {
     private func subscribe() {
-        let newEmailValid = self.tfEmailList[0].rx.text.orEmpty.map{ $0.count > 0}
-        let confirmEmailValid = self.tfEmailList[1].rx.text.orEmpty.map{ $0.count > 0}
-        let passwordValid = self.tfPassword.rx.text.orEmpty.map{ $0.count > 0}
-        
-        let valid = Observable.combineLatest(newEmailValid, confirmEmailValid, passwordValid) { $0 && $1 && $2 }.share(replay: 1, scope: .whileConnected)
-        valid.subscribe { (result) in
-            self.btnSave.isEnabled = (result.element ?? false)
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: self.mode == .resetAddress ? 3 : 2)], with: .automatic)
-        }.disposed(by: self.disposeBag)
+        if self.mode == .resetAddress || self.mode == .resetPassword {
+            let newEmailValid = self.tfEmailList[0].rx.text.orEmpty.map{ $0.count > 0}
+            let confirmEmailValid = self.tfEmailList[1].rx.text.orEmpty.map{ $0.count > 0}
+            let passwordValid = self.tfPassword.rx.text.orEmpty.map{ $0.count > 0}
+            
+            let valid = Observable.combineLatest(newEmailValid, confirmEmailValid, passwordValid) { $0 && $1 && $2 }.share(replay: 1, scope: .whileConnected)
+            valid.subscribe { (result) in
+                self.btnSave.isEnabled = (result.element ?? false)
+                self.tableView.reloadRows(at: [IndexPath(row: 0, section: self.mode == .resetAddress ? 3 : 2)], with: .automatic)
+            }.disposed(by: self.disposeBag)
+        }
+        if self.mode == .createCard {
+            let validArray: [Observable<Bool>] = self.tfCard.map { (tf) -> Observable<Bool> in
+                return tf.rx.text.orEmpty.map { $0.count > 0}
+            }
+            let valid = Observable.combineLatest(validArray).map { return $0.filter { !$0 }.isEmpty }
+            valid.bind(to: self.btnSave.rx.isEnabled).disposed(by: self.disposeBag)
+        }
     }
 }
 extension SettingAccountVC: UITextFieldDelegate {
@@ -532,11 +562,16 @@ extension SettingAccountVC: UITableViewDelegate, UITableViewDataSource {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommonCell", for: indexPath)
             cell.selectionStyle = .none
-            let tf = self.tfCard[row]
-            tf.text = row == 0 ? self.cardID : self.cardName
+            if row != 0 && self.mode == .createCard || self.mode != .createCard {
+                let tf = self.tfCard[self.mode == .createCard ? row - 1 : row]
+                if self.mode != .createCard {
+                    tf.text = row == 0 ? self.cardID : self.cardName
+                }
+                cell.accessoryView = tf
+            }
             cell.textLabel?.text = rowData
             cell.textLabel?.textColor = .black
-            cell.accessoryView = tf
+            
             return cell
         }
     }

@@ -247,18 +247,9 @@ class FavoriteInfoVC: UIViewController {
         nav.modalPresentationStyle = .overFullScreen
         present(nav, animated: true, completion: nil)
     }
-    func setContent(favorite: Favorite? = nil, mode: FavoriteInfoMode) {
+    func setContent(favorite: Favorite, mode: FavoriteInfoMode) {
         self.mode = mode
-        if let favorite = favorite {
-            self.favorite = favorite
-        }
-        if self.mode == .all {
-            var posts = [Post]()
-            self.favorite.posts.forEach { (post) in
-                posts.append(Post(id: post.id, title: post.title, excerpt: post.excerpt, createdAt: post.createdAt, commentCount: post.commentCount, likeCount: post.likeCount, forumName: ModelSingleton.shared.forum.randomElement()?.name ?? "", gender: post.gender, department: post.department, anonymousSchool: post.anonymousSchool, anonymousDepartment: post.anonymousDepartment, school: post.school, withNickname: post.withNickname, mediaMeta: post.mediaMeta, host: post.host, hot: post.hot))
-            }
-            self.favorite.posts = posts
-        }
+        self.favorite = favorite
     }
 }
 // MARK: - SetupUI

@@ -20,7 +20,7 @@ public class DbManager {
             db = try Connection(path)
             print("與資料庫建立連線 成功")
             print("資料庫路徑: \(path)")
-            deleteAllTables()
+//            deleteAllTables()
             createAllTables()
         } catch {
             print("與資料庫建立連線 失敗：\(error)")
@@ -29,7 +29,7 @@ public class DbManager {
     //創建所有資料表
     private func createAllTables() {
         createPreferenceTable()
-        initPreference()
+        createTimeTable()
     }
     //移除所有資料表
     private func deleteAllTables() {

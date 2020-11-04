@@ -8,7 +8,7 @@
 
 import Foundation
 
-public let loginError = ["找不到此用戶", "密碼錯誤", "信箱/手機錯誤"]
+public let loginError = ["找不到此用戶", "密碼錯誤", "信箱/手機錯誤", "找不到此用戶卡稱資訊", "找不到此用戶收藏清單"]
 public let cardError = ["取得卡片失敗"]
 public let postError: [String] = []
 

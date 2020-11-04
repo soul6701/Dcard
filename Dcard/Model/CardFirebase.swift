@@ -24,7 +24,7 @@ enum CardFieldType: String {
 protocol CardFirebaseInterface {
     func getRandomCardBySex(cardMode: CardMode) -> Observable<FirebaseResult<[Card]>>
     func getCardInfo(uid: String) -> Observable<FirebaseResult<Card>>
-    func createCard(card: Card) -> Observable<Bool>
+    func createCard(card: Card) -> Observable<FirebaseResult<Bool>>
     func getfollowCardInfo() -> Observable<FirebaseResult<[FollowCard]>>
     func insertFollowCard(followCard: FollowCard) -> Observable<FirebaseResult<Bool>>
     func updateCardInfo(card: [CardFieldType: Any]) -> Observable<FirebaseResult<Bool>>
@@ -37,20 +37,21 @@ class CardFirebase: CardFirebaseInterface {
         return ModelSingleton.shared.userCard
     }
     // MARK: - 創建卡稱
-    func createCard(card: Card) -> Observable<Bool> {
-        let subject = PublishSubject<Bool>()
+    func createCard(card: Card) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
         
         let followCardListDir: [[String: [String: Any]]] = []
 
         let mood: [String: Any] = ["heart": card.mood.heart, "haha": card.mood.haha, "angry": card.mood.angry, "cry": card.mood.cry, "surprise": card.mood.surprise, "respect": card.mood.respect]
-        let setter: [String: Any] = ["id": card.id, "name": card.name, "photo": card.photo, "sex": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "fans": card.fans, "followCard": followCardListDir, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart, "getMood": card.getMood, "mood": mood]
+        let setter: [String: Any] = ["uid": card.uid, "id": card.id, "name": card.name, "photo": card.photo, "sex": card.sex, "introduce": card.introduce, "country": card.country, "school": card.school, "department": card.department, "article": card.article, "birthday": card.birthday, "love": card.love, "fans": card.fans, "followCard": followCardListDir, "beKeeped": card.beKeeped, "beReplyed": card.beReplyed, "getHeart": card.getHeart, "getMood": card.getMood, "mood": mood]
         
         FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).setData(setter) { (error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             } else {
-                subject.onNext(true)
+                ModelSingleton.shared.setUserCard(card)
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
             }
         }
         return subject.asObservable()

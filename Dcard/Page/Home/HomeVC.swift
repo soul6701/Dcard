@@ -51,6 +51,7 @@ class HomeVC: UIViewController {
         ToolbarView.shared.show(true)
         guard let currentForum = currentForum else {
 //            LoadingView.shared.show(true)
+            WaitingView.shared.show(true)
             self.viewModel.getForums()
             return
         }
@@ -95,9 +96,9 @@ extension HomeVC {
 //                self.viewModel.getPosts(alias: forums[0].alias)
 //                self.currentForum = forums[0]
                 let forums = result.data.first { return $0.name == "穿搭"}
-                self.viewModel.getPosts(alias: forums?.alias ?? "")
                 self.currentForum = forums
                 self.navigationItem.title = forums?.name ?? ""
+                self.preloadPostData(alias: forums?.alias ?? "")
             }
         }, onError: { error in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
@@ -111,7 +112,8 @@ extension HomeVC {
                 self.showList = self.postList
             }
             self.tableView.reloadData()
-            LoadingView.shared.show(false)
+            WaitingView.shared.show(false)
+//            LoadingView.shared.show(false)
             if !self.showList.isEmpty {
                 self.view.layoutIfNeeded()
                 self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
@@ -119,7 +121,6 @@ extension HomeVC {
         }, onError: { error in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: disposeBag)
-
     }
 }
 
@@ -190,6 +191,26 @@ extension HomeVC {
             self.viewModel.getUserData(uid: user.uid)
         }
     }
+    //決定請求貼文方式
+    private func preloadPostData(alias: String) {
+        WaitingView.shared.show(true)
+        
+        let currentTime = Date.getCurrentDateString(true)
+        print("after HomeVC appear, currentTime: \(currentTime)")
+        if let lastTime = DbManager.shared.getLastTime() {
+            WaitingView.shared.show(true)
+            if Date.shouldUpdatePostData(lastTime: lastTime) {
+                DbManager.shared.insertTime(time: currentTime)
+                self.viewModel.getPosts(alias: alias, fromFireBase: false)
+            } else {
+                self.viewModel.getPosts(alias: alias, fromFireBase: true)
+            }
+        } else {
+            //由Dcard API取得並加載至FireBase，記錄時間於本地
+            DbManager.shared.insertTime(time: currentTime)
+            self.viewModel.getPosts(alias: alias, fromFireBase: false)
+        }
+    }
 }
 // MARK: - UITableViewDelegate
 extension HomeVC: UITableViewDelegate, UITableViewDataSource {
@@ -216,7 +237,7 @@ extension HomeVC: DrawerDelegate {
         self.currentForum = page
         self.navigationItem.title = page.name
         self.close()
-        viewModel.getPosts(alias: page.alias)
+        viewModel.getPosts(alias: page.alias, fromFireBase: false)
     }
 }
 // MARK: - ToolbarViewDelegate

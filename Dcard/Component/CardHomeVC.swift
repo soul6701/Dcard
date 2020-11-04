@@ -39,8 +39,12 @@ class CardHomeVC: UIViewController {
     
     private var imageBellNameList = ["bell.circle.fill", "bell.fill", "bell.slash.fill"]
     private var followCard: FollowCard = FollowCard(card: Card())
-    private var card: Card = Card()
-    private var postList = [Post]()
+    private var postList = [Post]() {
+        didSet {
+            self.lbDescription.text = "\(self.postList.count) 篇文章 | \(self.followCard.card.fans) 位粉絲"
+            self.tableView.reloadData()
+        }
+    }
     private var isFollowing = false
     private var notifyMode = 0
     private var mode: CardHomeVCMode = .user
@@ -58,7 +62,9 @@ class CardHomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.viewModel.getPostInfo(uid: self.followCard.card.uid)
+        if self.followCard.card.uid != "" {
+            self.viewModel.getPostInfo(uid: self.followCard.card.uid)
+        }
         resetData(self.followCard)
     }
     @IBAction func didClickBtnCancelFollow(_ sender: UIButton) {
@@ -129,7 +135,7 @@ class CardHomeVC: UIViewController {
         if let followCard = followCard {
             self.followCard = followCard
         } else {
-            self.card = ModelSingleton.shared.userCard
+            self.followCard  = FollowCard(card: ModelSingleton.shared.userCard)
         }
         self.mode = mode
     }
@@ -165,7 +171,6 @@ extension CardHomeVC {
     private func subsribeViewModel() {
         self.viewModel.getPostInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             self.postList = result.data
-            self.resetPost(result.data)
             self.resetData(self.followCard)
         }, onError: { (error) in
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
@@ -244,11 +249,6 @@ extension CardHomeVC {
         self.lbIcon.text = !followCard.card.id.isEmpty ? String(followCard.card.id.first!).uppercased() : ""
         resetBellState(self.isFollowing, notifyMode: self.notifyMode)
     }
-    //重置貼文資訊
-    private func resetPost(_ postList: [Post]) {
-        self.lbDescription.text = "\(postList.count) 篇文章 | \(followCard.card.fans) 位粉絲"
-        self.tableView.reloadData()
-    }
     //重置通知狀態
     private func resetBellState(_ isFollowing: Bool, notifyMode: Int) {
         if isFollowing {
@@ -299,6 +299,9 @@ extension CardHomeVC: UITableViewDelegate, UITableViewDataSource {
             cell.separatorInset = .init(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude) //隱藏分隔線
             return cell
         }
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.section == 0 ? 120 : 180

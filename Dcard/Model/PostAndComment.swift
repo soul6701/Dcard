@@ -19,6 +19,7 @@ public struct Post {
     var createdAt: String = ""
     var commentCount: String = ""
     var likeCount: String = ""
+    var forumAlias: String = ""
     var forumName: String = ""
     var gender: String = ""
     var department: String = ""

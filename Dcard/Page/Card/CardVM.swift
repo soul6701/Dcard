@@ -20,6 +20,10 @@ protocol CardVMInterface {
     func addFriend(card: Card)
     var addFriendSubject: PublishSubject<FirebaseResult<Bool>> { get }
     
+    ///創建卡稱
+    func createCard(card: Card)
+    var createCardSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    
     ///取得卡稱資訊
     func getCardInfo(uid: String)
     var getCardInfoSubject: PublishSubject<FirebaseResult<Card>> { get }
@@ -36,6 +40,7 @@ class CardVM: CardVMInterface {
     
     private(set) var getRandomCardBySexSubject = PublishSubject<FirebaseResult<[Card]>>()
     private(set) var addFriendSubject = PublishSubject<FirebaseResult<Bool>>()
+    private(set) var createCardSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var getCardInfoSubject = PublishSubject<FirebaseResult<Card>>()
     private(set) var getfollowCardInfoSubject = PublishSubject<FirebaseResult<[FollowCard]>>()
     private(set) var updateCardInfoSubject = PublishSubject<FirebaseResult<Bool>>()
@@ -51,6 +56,13 @@ class CardVM: CardVMInterface {
 }
 extension CardVM {
     
+    func createCard(card: Card) {
+        self.cardFirebase.createCard(card: card).subscribe(onNext: { (result) in
+            self.createCardSubject.onNext(result)
+        }, onError: { (error) in
+            self.createCardSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
     func getRandomCardBySex(cardMode: CardMode) {
         self.cardFirebase.getRandomCardBySex(cardMode: cardMode).subscribe(onNext: { (result) in
             self.getRandomCardBySexSubject.onNext(result)

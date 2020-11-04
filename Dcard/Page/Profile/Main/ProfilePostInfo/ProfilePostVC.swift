@@ -52,7 +52,6 @@ class ProfilePostVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
-        ProfileManager.shared.setupMaintainBaseVC(target: self)
     }
 }
 // MARK: - SetupUI

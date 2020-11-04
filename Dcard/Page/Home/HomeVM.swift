@@ -11,21 +11,21 @@ import RxCocoa
 import RxSwift
 
 protocol HomeVMInterface {
-    //取得最近貼文
+    ///取得最近貼文
 //    var recentPostSubject: PublishSubject<FirebaseResult<[Post]>> { get }
 //    func getRecentPost()
-    //取得話題貼文
+    ///取得話題貼文
+    func getPosts(alias: String, fromFireBase: Bool)
     var postsSubject: PublishSubject<FirebaseResult<[Post]>> { get }
-    func getPosts(alias: String)
-    //取得留言
-    var commentSubject: PublishSubject<FirebaseResult<[Comment]>> { get }
+    ///取得留言
     func getComment(post: Post)
-    //取得話題
-    var forumsSubject: PublishSubject<FirebaseResult<[Forum]>> { get }
+    var commentSubject: PublishSubject<FirebaseResult<[Comment]>> { get }
+    ///取得話題
     func getForums()
-    //取得使用者資訊
-    var userDataSubject: PublishSubject<FirebaseResult<User>> { get }
+    var forumsSubject: PublishSubject<FirebaseResult<[Forum]>> { get }
+    ///取得使用者資訊
     func getUserData(uid: String)
+    var userDataSubject: PublishSubject<FirebaseResult<User>> { get }
 }
 class HomeVM {
 //    private(set) var recentPostSubject = PublishSubject<FirebaseResult<[Post]>>()
@@ -37,10 +37,12 @@ class HomeVM {
     
     private var postRepository: PostRepositoryInterface
     private var loginFirebase: LoginFirebaseInterface
+    private var postFirebase: PostFirebaseInterface
     
-    init(loginFirebase: LoginFirebaseInterface = LoginFirebase.shared, postRepository: PostRepositoryInterface = PostRepository.shared) {
+    init(loginFirebase: LoginFirebaseInterface = LoginFirebase.shared, postRepository: PostRepositoryInterface = PostRepository.shared, postFirebase: PostFirebaseInterface = PostFirebase.shared) {
         self.postRepository = postRepository
         self.loginFirebase = loginFirebase
+        self.postFirebase = postFirebase
     }
 }
 extension HomeVM: HomeVMInterface {
@@ -66,12 +68,20 @@ extension HomeVM: HomeVMInterface {
         self.forumsSubject.onError(error)
             }).disposed(by: disposeBag)
     }
-    func getPosts(alias: String) {
-        self.postRepository.getPosts(alias: alias, limit: "100").subscribe(onNext: { result in
-            self.postsSubject.onNext(result)
-        }, onError: { error in
-            self.postsSubject.onError(error)
-            }).disposed(by: disposeBag)
+    func getPosts(alias: String, fromFireBase: Bool) {
+        if fromFireBase {
+            self.postFirebase.getPosts(alias: alias, limit: "100").subscribe(onNext: { (result) in
+                self.postsSubject.onNext(result)
+            }, onError: { (error) in
+                self.postsSubject.onError(error)
+            }).disposed(by: self.disposeBag)
+        } else {
+            self.postRepository.getPosts(alias: alias, limit: "100").subscribe(onNext: { result in
+                self.postsSubject.onNext(result)
+            }, onError: { error in
+                self.postsSubject.onError(error)
+                }).disposed(by: disposeBag)
+        }
     }
     func getUserData(uid: String) {
         self.loginFirebase.getUserData(uid: uid).subscribe(onNext: { result in

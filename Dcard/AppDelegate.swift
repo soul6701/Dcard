@@ -32,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        NSLog("😏😏😏😏😏😏😏😏😏😏app opened!!😏😏😏😏😏😏😏😏😏😏")
         print("height: \(UIScreen.main.bounds.height) width: \(UIScreen.main.bounds.width)")
         Thread.sleep(forTimeInterval: 1)
         IQKeyboardManager.shared.enable = true
@@ -42,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.disabledTouchResignedClasses = [ChatRoomVC.self, SelectCountryVC.self]
         FirebaseApp.configure()
         
-        let _ = DbManager.shared
+        DbManager.shared.getPreference()
         
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]

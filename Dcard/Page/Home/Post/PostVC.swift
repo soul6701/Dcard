@@ -418,6 +418,6 @@ extension PostVC: UIViewControllerTransitioningDelegate {
 extension PostVC: PostSettingCellDelegate {
     func showAddFavoriteListOKView(title: String) {
         self.willBeAddedListTitle = title
-        self.viewModel.addFavoriteList(listName: title, postID: self.post.id)
+        self.viewModel.addFavoriteList(listName: title, postID: self.post.id, alias: self.post.forumAlias)
     }
 }

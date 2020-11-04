@@ -181,6 +181,7 @@
 		933F610E2547FCD500609E70 /* FavoriteInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */; };
 		933F610F2547FCD500609E70 /* FavoriteInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */; };
 		934A0551A1012375356ACBFD /* Pods_Dcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */; };
+		9357BEE825525C4F00C45386 /* DbManager+Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9357BEE725525C4F00C45386 /* DbManager+Time.swift */; };
 		9366156B254AECDA0030CD0A /* PostVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9366156A254AECDA0030CD0A /* PostVM.swift */; };
 		9366EC2F254ABBC20030CD0A /* PostFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9366EC2E254ABBC20030CD0A /* PostFirebase.swift */; };
 		936E380B2543B57D00EFFBFC /* Extension_Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936E380A2543B57D00EFFBFC /* Extension_Date.swift */; };
@@ -395,6 +396,7 @@
 		933F61092546AC3800609E70 /* ReportVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReportVC.xib; sourceTree = "<group>"; };
 		933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteInfoVC.swift; sourceTree = "<group>"; };
 		933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteInfoVC.xib; sourceTree = "<group>"; };
+		9357BEE725525C4F00C45386 /* DbManager+Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DbManager+Time.swift"; path = "Dcard/Model/localDatabase/DbManager+Time.swift"; sourceTree = SOURCE_ROOT; };
 		9366156A254AECDA0030CD0A /* PostVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVM.swift; sourceTree = "<group>"; };
 		9366EC2E254ABBC20030CD0A /* PostFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFirebase.swift; sourceTree = "<group>"; };
 		936E380A2543B57D00EFFBFC /* Extension_Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension_Date.swift; sourceTree = "<group>"; };
@@ -837,6 +839,7 @@
 			children = (
 				848A6CD52534285A00125138 /* DbManager.swift */,
 				848A6CDA2534298E00125138 /* DbManager+Preference.swift */,
+				9357BEE725525C4F00C45386 /* DbManager+Time.swift */,
 			);
 			path = LocalDatabase;
 			sourceTree = "<group>";
@@ -1219,6 +1222,7 @@
 				89D80C542545291700EB4F18 /* FollowIssueInfoVC.swift in Sources */,
 				22788B052504EDB000E87F7F /* CardSendCell.swift in Sources */,
 				22788AE82503900200E87F7F /* CardFirebase.swift in Sources */,
+				9357BEE825525C4F00C45386 /* DbManager+Time.swift in Sources */,
 				936E38142543B5B300EFFBFC /* ProfilePostCell.swift in Sources */,
 				22D7C39D24ECDFC9006412BE /* ImageInfo.swift in Sources */,
 				848A6CD62534285A00125138 /* DbManager.swift in Sources */,

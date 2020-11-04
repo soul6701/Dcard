@@ -133,7 +133,7 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         let row = indexPath.row
          let vc = FavoriteInfoVC()
         if row == 0 {
-            vc.setContent(mode: .all)
+            vc.setContent(favorite: allFavorite, mode: .all)
         } else {
             vc.setContent(favorite: self.favoriteList[row - 1], mode: .other)
         }

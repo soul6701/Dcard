@@ -38,12 +38,12 @@ extension DbManager {
         } catch {
             print("創建偏好設定資料表 失敗")
         }
+        initPreference()
     }
-    func initPreference() {
+    private func initPreference() {
         do {
             try db?.run(_preference.insert(_newReply <- 0, _getMood <- false, _getLiked <- false, _getFollowed <- false, _newMail <- false, _showTheme <- 0, _autoPlayVedio <- 0, _touchIDOn <- false))
             print("新增偏好設定資料表 成功")
-            ModelSingleton.shared.setPreference(Preference())
         } catch {
             print("新增偏好設定資料表 失敗")
         }
@@ -55,6 +55,17 @@ extension DbManager {
             ModelSingleton.shared.setPreference(preference)
         } catch {
             print("更新偏好設定資料表 失敗")
+        }
+    }
+    func getPreference() {
+        do {
+            if let row = try db.pluck(_preference) {
+                let preference = Preference(newReply: row[_newReply], getMood: row[_getMood], getLiked: row[_getLiked], getFollowed: row[_getFollowed], newMail: row[_newMail], showTheme: row[_showTheme], autoPlayVedio: row[_autoPlayVedio], touchIDOn: row[_touchIDOn])
+                ModelSingleton.shared.setPreference(preference)
+                print("取得偏好設定資料表 成功")
+            }
+        } catch {
+            print("取得偏好設定資料表 失敗")
         }
     }
 }

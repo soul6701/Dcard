@@ -12,30 +12,38 @@ import RxSwift
 import RxCocoa
 
 protocol LoginVMInterface {
-    //創建帳戶
-    var creartUserDataSubject: PublishSubject<Bool> { get }
+    ///創建帳戶
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?)
-    //刪除所有帳戶
-    var deleteUserDataSubject: PublishSubject<DeleteCollectionType> { get }
+    var creartUserDataSubject: PublishSubject<Bool> { get }
+    ///刪除所有帳戶
     func deleteUserData()
-    //登入
-    var loginSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    var deleteUserDataSubject: PublishSubject<DeleteCollectionType> { get }
+    ///登入
     func login(address: String, password: String)
-    //檢查信箱重複
-    var expectAccountSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    var loginSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///取得喜好清單
+    func setupFaroriteData()
+    var setupFaroriteDataSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ////取得卡稱資訊
+    func setupCardData()
+    var setupCardDataSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///檢查信箱重複
     func expectAccount(address: String)
-    //查詢密碼
-    var requirePasswordSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    var expectAccountSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///查詢密碼
     func requirePassword(uid: String, phone: String?, address: String?)
-    //修改使用者資訊
-    var updateUserInfoSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    var requirePasswordSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///修改使用者資訊
     func updateUserInfo(user: [UserFieldType: Any])
+    var updateUserInfoSubject: PublishSubject<FirebaseResult<Bool>> { get }
 }
 class LoginVM: LoginVMInterface {
     private (set) var requirePasswordSubject = PublishSubject<FirebaseResult<Bool>>()
     private (set) var creartUserDataSubject = PublishSubject<Bool>()
     private (set) var deleteUserDataSubject = PublishSubject<DeleteCollectionType>()
     private (set) var loginSubject = PublishSubject<FirebaseResult<Bool>>()
+    private (set) var setupFaroriteDataSubject = PublishSubject<FirebaseResult<Bool>>()
+    private (set) var setupCardDataSubject = PublishSubject<FirebaseResult<Bool>>()
     private (set) var expectAccountSubject = PublishSubject<FirebaseResult<Bool>>()
     private (set) var updateUserInfoSubject = PublishSubject<FirebaseResult<Bool>>()
     
@@ -88,6 +96,20 @@ extension LoginVM {
             self.updateUserInfoSubject.onNext(result)
         }, onError: { (error) in
             self.updateUserInfoSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func setupCardData() {
+        self.loginFirebase.setupCardData().subscribe(onNext: { (result) in
+            self.setupCardDataSubject.onNext(result)
+        }, onError: { (error) in
+            self.setupCardDataSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func setupFaroriteData() {
+        self.loginFirebase.setupFaroriteData().subscribe(onNext: { (result) in
+            self.setupFaroriteDataSubject.onNext(result)
+        }, onError: { (error) in
+            self.setupFaroriteDataSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

@@ -31,7 +31,6 @@ class ProfileManager {
     private var alertView: MessageView!
     private var alertconfig: SwiftMessages.Config!
     private var baseNav: UINavigationController?
-    private var maintainBaseVC: UIViewController?
     //假值
     var card: Card {
         return ModelSingleton.shared.userCard
@@ -162,14 +161,24 @@ class ProfileManager {
         }
     }
     //維護視窗
-    func setupMaintainBaseVC(target viewController: UIViewController) {
-        self.maintainBaseVC = viewController
-    }
     func showMaintainView() {
         let alert = UIAlertController(title: "這邊還沒有東西！", message: "進階功能還在努力開發中，以後再回來看看😎", preferredStyle: .alert)
         let OKAction = UIAlertAction(title: "好", style: .cancel, handler: nil)
         alert.addAction(OKAction)
-        self.maintainBaseVC?.present(alert, animated: true, completion: nil)
+        self.baseNav?.viewControllers.last?.present(alert, animated: true, completion: nil)
+    }
+    //新建卡稱
+    func showNoCardAlertView() {
+        let alert = UIAlertController(title: "無卡稱", message: "您是否需要開通卡稱？", preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "是", style: .default) { (action) in
+            let vc = SettingAccountVC()
+            vc.setContent(mode: .createCard, title: "新建卡稱")
+            self.baseNav?.pushViewController(vc, animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "否", style: .cancel, handler: nil)
+        alert.addAction(OKAction)
+        alert.addAction(cancelAction)
+        self.baseNav?.viewControllers.last?.present(alert, animated: true, completion: nil)
     }
     //跳轉卡友頁面
     func toFriendCardPage(mail: Mail) {
@@ -229,9 +238,13 @@ class ProfileManager {
                 self.baseNav?.setNavigationBarHidden(false, animated: false)
             }
         case .myCard:
-            let vc = CardHomeVC()
-            vc.setContent(mode: .user)
-            self.baseNav?.pushViewController(vc, animated: true)
+            if ModelSingleton.shared.userCard.uid == "" {
+                showNoCardAlertView()
+            } else {
+                let vc = CardHomeVC()
+                vc.setContent(mode: .user)
+                self.baseNav?.pushViewController(vc, animated: true)
+            }
         case .mail:
             let vc = UIStoryboard.profile.mailVC
             self.baseNav?.pushViewController(vc, animated: true)

@@ -46,6 +46,7 @@ extension PostRepository: PostRepositoryInterface {
                 let createdAt = result.json![index]["createdAt"].stringValue
                 let commentCount = result.json![index]["commentCount"].stringValue
                 let likeCount = result.json![index]["likeCount"].stringValue
+                let forumAlias = result.json![index]["forumAlias"].stringValue
                 let forumName = result.json![index]["forumName"].stringValue
                 let gender = result.json![index]["gender"].stringValue
                 let school = result.json![index]["school"].stringValue
@@ -58,7 +59,7 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
+                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumAlias: forumAlias, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
             }
             subject.onNext(FirebaseResult<[Post]>(data: self.posts, errorMessage: nil, sender: nil))
         }, onError: { error in
@@ -141,6 +142,7 @@ extension PostRepository: PostRepositoryInterface {
                 let createdAt = result.json![index]["createdAt"].stringValue
                 let commentCount = result.json![index]["commentCount"].stringValue
                 let likeCount = result.json![index]["likeCount"].stringValue
+                let forumAlias = result.json![index]["forumAlias"].stringValue
                 let forumName = result.json![index]["forumName"].stringValue
                 let gender = result.json![index]["gender"].stringValue
                 let school = result.json![index]["school"].stringValue
@@ -153,16 +155,13 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
+                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumAlias: forumAlias, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
             }
-            self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-                self.posts += posts.data
-                self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
-                    self.posts += posts.data
-                                subject.onNext(FirebaseResult<[Post]>(data: self.posts, errorMessage: nil, sender: nil))
-                    self.saveToFireBase()
-                }).disposed(by: self.disposeBag)
-            }).disposed(by: self.disposeBag)
+//            self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
+//                self.posts += posts.data
+//                self.saveToFireBase(alias: alias, limit: limit, subject: subject)
+//            }).disposed(by: self.disposeBag)
+            self.saveToFireBase(alias: alias, limit: limit, subject: subject)
         }, onError: { error in
             subject.onError(error)
         }).disposed(by: disposeBag)
@@ -170,23 +169,35 @@ extension PostRepository: PostRepositoryInterface {
         return subject.asObserver()
     }
     // MARK: - Dcard資料存入Firebase
-    private func saveToFireBase() {
-        //先移除資料
-        let _ = FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.allPost.rawValue)
-        self.posts.forEach { (post) in
+    private func saveToFireBase(alias: String, limit: String, subject: PublishSubject<FirebaseResult<[Post]>>) {
+        var subjectList = [PublishSubject<Bool>]()
+        for _ in self.posts {
+            subjectList.append(PublishSubject<Bool>())
+        }
+        self.posts.enumerated().forEach { (key, post) in
             var mediaMetaDir: [[String: Any]] = []
             post.mediaMeta.forEach { (mediameta) in
                 mediaMetaDir.append(["normalizedUrl": mediameta.normalizedUrl, "thumbnail": mediameta.thumbnail])
             }
-            let setter: [String: Any] = ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumName": post.forumName, "gender": post.gender
+            let setter: [String: Any] = ["\(post.id)": ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumAlias": post.forumAlias, "forumName": post.forumName, "gender": post.gender
             , "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaDir, "host": post.host
-            , "hot": post.hot]
-            FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(post.id).setData(setter) { (error) in
+                , "hot": post.hot]]
+            FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(alias).setData(setter, merge: true) { (error) in
                 if let error = error {
                     NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                    subjectList[key].onNext(false)
+                } else {
+                    subjectList[key].onNext(true)
                 }
             }
         }
+        Observable.combineLatest(subjectList).subscribe(onNext: { (result) in
+            if result.filter({ return !$0}).isEmpty {
+                subject.onNext(FirebaseResult<[Post]>(data: self.posts, errorMessage: nil, sender: nil))
+            }
+        }, onError: { (error) in
+            subject.onError(error)
+        }).disposed(by: self.disposeBag)
     }
     // MARK: - 取得特定貼文以前貼文
     func getBeforePost(id: String) -> Observable<FirebaseResult<[Post]>> {
@@ -204,6 +215,7 @@ extension PostRepository: PostRepositoryInterface {
                 let createdAt = result.json![index]["createdAt"].stringValue
                 let commentCount = result.json![index]["commentCount"].stringValue
                 let likeCount = result.json![index]["likeCount"].stringValue
+                let forumAlias = result.json![index]["forumAlias"].stringValue
                 let forumName = result.json![index]["forumName"].stringValue
                 let gender = result.json![index]["gender"].stringValue
                 let school = result.json![index]["school"].stringValue
@@ -216,7 +228,7 @@ extension PostRepository: PostRepositoryInterface {
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
+                posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumAlias: forumAlias, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
             }
             subject.onNext(FirebaseResult<[Post]>(data: posts, errorMessage: nil, sender: nil))
         }, onError: { error in
