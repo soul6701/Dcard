@@ -96,32 +96,12 @@ public class LoginFirebase: LoginFirebaseInterface {
             addDocument(subject: subjectList, uid: "", firstName: firstName, lastName: lastName, birthday: birthday, sex: sex, phone: phone, address: address, password: password, avatarUrl: avatarUrl)
         }
         
-        return Observable.combineLatest(userSubject, postSubject, postSubject, commentSubject).map { return $0 && $1 && $2 && $3 }
+        return Observable.combineLatest(userSubject, postSubject, favoriteSubject, commentSubject, cardSubject).map { return $0 && $1 && $2 && $3 && $4 }
     }
     private func addDocument(subject: [Datatype: PublishSubject<Bool>], uid: String, firstName: String, lastName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatarUrl: String) {
-        var commentList: [[String: Any]] = []
-        self.comment.forEach { (comment) in
-            var mediaMetaList: [[String: Any]] = []
-            comment.mediaMeta.forEach { (mediaMeta) in
-                mediaMetaList.append(["ormalizedUrl,": mediaMeta.normalizedUrl, "thumbnail": mediaMeta.thumbnail])
-            }
-            commentList.append(["id": comment.id, "anonymous": comment.anonymous, "content": comment.content, "createdAt": comment.createdAt, "floor": comment.floor, "likeCount": comment.likeCount, "gender": comment.gender, "department": comment.department, "school": comment.school, "withNickname": comment.withNickname, "host": comment.host, "mediaMeta": mediaMetaList])
-        }
-        var favariteList: [[String: Any]] = []
-        self.favorite.forEach { (favorite) in
-            var postList: [[String: Any]] = []
-            favorite.posts.forEach { (post) in
-                var mediaMetaList: [[String: Any]] = []
-                post.mediaMeta.forEach { (mediaMeta) in
-                    mediaMetaList.append(["ormalizedUrl,": mediaMeta.normalizedUrl, "thumbnail": mediaMeta.thumbnail])
-                }
-                postList.append(["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumAlias": post.forumAlias, "forumName": post.forumName, "gender": post.gender, "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaList, "host": post.host, "hot": post.hot])
-            }
-            favariteList.append(["title": favorite.title, "posts": postList])
-        }
         
-        let setterFavoritePost: [String: Any] = ["uid": uid, "firstname": firstName, "lastname": lastName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password, "avatar": avatarUrl, "friend": [String](), "createAt": FieldValue.serverTimestamp()]
-        let docID = FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).addDocument(data: setterFavoritePost) { (error) in
+        let setter: [String: Any] = ["uid": uid, "firstname": firstName, "lastname": lastName, "birthday": birthday, "sex": sex, "phone": phone, "address": address, "password": password, "avatar": avatarUrl, "friend": [String](), "createAt": Date.getCurrentDateString(true)]
+        let docID = FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).addDocument(data: setter) { (error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject[.user]?.onError(error)
@@ -249,70 +229,22 @@ public class LoginFirebase: LoginFirebaseInterface {
     // MARK: - 取得收藏清單
     func setupFaroriteData() -> Observable<FirebaseResult<Bool>> {
         let subject = PublishSubject<FirebaseResult<Bool>>()
-        var subjectList = [PublishSubject<Bool>]()
         var favoriteList = [Favorite]()
-        var count = 0
         FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(self.userConfig.user.uid).getDocument { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
             }
             if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                for _ in dir {
-                    subjectList.append(PublishSubject<Bool>())
+                let favoriteArray = dir["favorite"] as! Array<[String: Any]>
+                favoriteArray.forEach { (favoriteDir) in
+                    let title = favoriteDir["title"] as! String
+                    let createAt = favoriteDir["createAt"] as! String
+                    let postIDList = favoriteDir["post"] as! [String]
+                    favoriteList.append(Favorite(title: title, createAt: createAt, postIDList: postIDList))
                 }
-                dir.keys.enumerated().forEach { (key, value) in
-                    let post = (dir[value] as! [String: Any])["post"] as! [String]
-                    
-                    if !post.isEmpty {
-                        var _subjectList = [PublishSubject<Bool>]()
-                        var count = 0
-                        for _ in post {
-                            _subjectList.append(PublishSubject<Bool>())
-                        }
-                        var postList = [Post]()
-                        post.enumerated().forEach { (key, value) in
-                            FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(value).getDocument { (querySnapshot, error) in
-                                if let error = error {
-                                    NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-                                    _subjectList[key].onNext(false)
-                                }
-                                if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                                    var mediaMetaList = [MediaMeta]()
-                                    let mediaMetaListDir = dir["mediaMeta"] as! [[String: Any]]
-                                    mediaMetaListDir.forEach { (mediaMetaDir) in
-                                        let dir = mediaMetaDir as! [String: String]
-                                        mediaMetaList.append(MediaMeta(thumbnail: dir["thumbnail"]!, normalizedUrl: dir["normalizedUrl"]!))
-                                    }
-                                    let post = Post(id: dir["id"] as! String, title: dir["title"] as! String, excerpt: dir["excerpt"] as! String, createdAt: dir["createdAt"] as! String, commentCount: dir["commentCount"] as! String, likeCount: dir["likeCount"] as! String, forumAlias: dir["forumAlias"] as! String, forumName: dir["forumName"] as! String, gender: dir["gender"] as! String, department: dir["department"] as! String, anonymousSchool: dir["anonymousSchool"] as! Bool, anonymousDepartment: dir["anonymousDepartment"] as! Bool, school: dir["school"] as! String, withNickname: dir["withNickname"] as! Bool, mediaMeta: mediaMetaList, host: dir["host"] as! Bool, hot: dir["hot"] as! Bool)
-                                    postList.append(post)
-                                    _subjectList[key].onNext(true)
-                                }
-                            }
-                        }
-                        _subjectList.forEach { (_subject) in
-                            _subject.subscribe(onNext: { (result) in
-                                if result { count += 1 }
-                                if count == post.count {
-                                    favoriteList.append(Favorite(title: value, posts: postList))
-                                    subjectList[key].onNext(true)
-                                }
-                            }).disposed(by: self.disposeBag)
-                        }
-                    } else {
-                        favoriteList.append(Favorite(title: value, posts: []))
-                        subjectList[key].onNext(true)
-                    }
-                    subjectList.forEach { (_subject) in
-                        _subject.subscribe(onNext: { (result) in
-                            if result { count += 1 }
-                            if count == dir.keys.count {
-                                ModelSingleton.shared.setFavoriteList(favoriteList)
-                                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
-                            }
-                        }).disposed(by: self.disposeBag)
-                    }
-                }
-            }  else {
+                ModelSingleton.shared.setFavoriteList(favoriteList)
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+            } else {
                 subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(4), sender: nil))
             }
         }

@@ -186,21 +186,19 @@ class FavoriteInfoVC: UIViewController {
     private var catalogSelected = false
     private var selectedForumNameList = [String]()
     private var favorite: Favorite = Favorite()
-    private var favoritePostList: [Post] {
-        return self.favorite.posts
+    private var favoritePostList: [String] {
+        return self.favorite.postIDList
     }
     private var filteredPostList = [Post]() {
         didSet {
             self.tableView.reloadData()
         }
     }
-    private var hotFavoritePostList: [Post] {
-        return self.favorite.posts.filter { return $0.hot }
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
-
+        confiViewModel()
+        subsribeViewModel()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -258,7 +256,6 @@ extension FavoriteInfoVC {
         confiTableView()
         confiTitleView()
         confiContainerView()
-        self.filteredPostList = self.favoritePostList
     }
     private func confiTableView() {
         let isAll = self.mode == .all
@@ -274,23 +271,13 @@ extension FavoriteInfoVC {
     }
     private func confiContainerView() {
         if self.mode == .all {
-            let postList: [Post] = self.favorite.posts.filter { $0.mediaMeta.count > 0}
-            if postList.count > 4 {
-                postList[0...3].enumerated().forEach { (key, value) in
-                    let mediaMeta = value.mediaMeta[0]
-                    self.imageViewList[key].kf.setImage(with: URL(string: mediaMeta.normalizedUrl))
-                }
-            } else {
-                self.imageViewList.enumerated().forEach { (key, value) in
-                    if key < postList.count {
-                        value.kf.setImage(with: URL(string: postList[key].mediaMeta[0].normalizedUrl))
-                    }
-                }
+            zip(self.favorite.coverImage, self.imageViewList).forEach { (urlString, imageView) in
+                imageView.kf.setImage(with: URL(string: urlString))
             }
         } else {
             self.stackView.isHidden = true
             self.imageViewList[1].isHidden = true
-            let firstMediaMeta = self.favorite.posts.first { return $0.mediaMeta.count > 0 }?.mediaMeta[0].normalizedUrl ?? ""
+            let firstMediaMeta = self.favorite.coverImage.first ?? ""
             self.imageViewList[0].kf.setImage(with: URL(string: firstMediaMeta))
         }
     }
@@ -307,7 +294,16 @@ extension FavoriteInfoVC {
             LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
 
-        self.viewModel.getPostInfo(uid: ModelSingleton.shared.userConfig.user.uid)
+        
+//        self.viewModel.getPostInfo(uid: ModelSingleton.shared.userConfig.user.uid)
+        
+        self.viewModel.getPostInfoOfListSubject.subscribe(onNext: { (result) in
+            self.filteredPostList = result.data
+        }, onError: { (error) in
+            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.viewModel.getPostInfoOfList(postIDs: self.favorite.postIDList)
     }
 }
 // MARK: - UITableViewDelegate
@@ -365,7 +361,8 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
 extension FavoriteInfoVC: FavoriteForumVCDelegate {
     func filterForum(selectedForumNameList: [String]) {
         guard !selectedForumNameList.isEmpty else {
-            self.filteredPostList = self.favoritePostList
+            let oldfilteredPostList = self.filteredPostList
+            self.filteredPostList = oldfilteredPostList
             self.selectedForumNameList = []
             self.btnForumFilter.setTitle("看板篩選 ▼", for: .normal)
             self.btnForumFilter.setTitleColor(.darkGray, for: .normal)
@@ -374,6 +371,6 @@ extension FavoriteInfoVC: FavoriteForumVCDelegate {
         self.selectedForumNameList = selectedForumNameList
         self.btnForumFilter.setTitle("看板篩選·\(selectedForumNameList.count) ▼", for: .normal)
         self.btnForumFilter.setTitleColor(#colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78), for: .normal)
-        self.filteredPostList = self.favoritePostList.filter { return selectedForumNameList.contains($0.forumName) }
+        self.filteredPostList = self.filteredPostList.filter { return selectedForumNameList.contains($0.forumName) }
     }
 }

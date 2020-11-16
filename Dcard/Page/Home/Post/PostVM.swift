@@ -13,7 +13,7 @@ import RxCocoa
 
 protocol PostVMInterface {
     ///加入收藏清單
-    func addFavoriteList(listName: String, postID: String, alias: String)
+    func addFavoriteList(listName: String, postID: String)
     var addFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
     ///取得使用者貼文
     func getPostInfo(uid: String)
@@ -21,11 +21,15 @@ protocol PostVMInterface {
     ///添加收藏清單
     func createFavoriteList(listName: String)
     var createFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///取得所有貼文
+    func getPostInfoOfList(postIDs: [String])
+    var getPostInfoOfListSubject: PublishSubject<FirebaseResult<[Post]>> { get }
 }
 class PostVM: PostVMInterface {
     private(set) var addFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var getPostInfoSubject = PublishSubject<FirebaseResult<[Post]>>()
     private(set) var createFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
+    private(set) var getPostInfoOfListSubject = PublishSubject<FirebaseResult<[Post]>>()
     
     private var postFirebase: PostFirebaseInterface
     private let disposeBag = DisposeBag()
@@ -35,8 +39,8 @@ class PostVM: PostVMInterface {
     }
 }
 extension PostVM {
-    func addFavoriteList(listName: String, postID: String, alias: String) {
-        self.postFirebase.addFavoriteList(listName: listName, postID: postID, Alias: alias).subscribe(onNext: { (result) in
+    func addFavoriteList(listName: String, postID: String) {
+        self.postFirebase.addFavoriteList(listName: listName, postID: postID).subscribe(onNext: { (result) in
             self.addFavoriteListSubject.onNext(result)
         }, onError: { (error) in
             self.addFavoriteListSubject.onError(error)
@@ -54,6 +58,13 @@ extension PostVM {
             self.createFavoriteListSubject.onNext(result)
         }, onError: { (error) in
             self.createFavoriteListSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func getPostInfoOfList(postIDs: [String]) {
+        self.postFirebase.getPostInfoOfList(postIDs: postIDs).subscribe(onNext: { (result) in
+            self.getPostInfoOfListSubject.onNext(result)
+        }, onError: { (error) in
+            self.getPostInfoOfListSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

@@ -11,8 +11,8 @@ import UIKit
 
 extension Date {
     
-    static let containTimeString = "yyyy/MM/dd HH:mm"
-    static let notContainTimeString = "yyyy/MM/dd"
+    static private let containTimeString = "yyyy/MM/dd HH:mm"
+    static private let notContainTimeString = "yyyy/MM/dd"
     static let monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     
     static var calendar: Calendar {

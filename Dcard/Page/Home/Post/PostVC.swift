@@ -207,7 +207,7 @@ extension PostVC {
     private func initView() {
         ToolbarView.shared.show(false)
         self.btnShowComment.isHidden = self.commentList.isEmpty
-        self.btnSetting.imageView?.tintColor = self.post.host ? .systemBlue : .systemGray2
+        self.btnSetting.imageView?.tintColor = (self.post.host == self.user.uid) ? .systemBlue : .systemGray2
         self.navigationItem.title = self.post.title
         self.heart = false
         self.keep = false
@@ -418,6 +418,6 @@ extension PostVC: UIViewControllerTransitioningDelegate {
 extension PostVC: PostSettingCellDelegate {
     func showAddFavoriteListOKView(title: String) {
         self.willBeAddedListTitle = title
-        self.viewModel.addFavoriteList(listName: title, postID: self.post.id, alias: self.post.forumAlias)
+        self.viewModel.addFavoriteList(listName: title, postID: self.post.id)
     }
 }

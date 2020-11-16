@@ -150,12 +150,15 @@ extension PostRepository: PostRepositoryInterface {
                 let anonymousSchool = result.json![index]["anonymousSchool"].boolValue
                 let anonymousDepartment = result.json![index]["anonymousDepartment"].boolValue
                 let withNickname = result.json![index]["withNickname"].boolValue
+                let host = ["KOPKOPKOPKDLKSD", "gKwkws2WlFrxGaUukrO4"].randomElement()! //自定義
+                let hot = Bool.random()
                 var mediaMeta = [MediaMeta]()
                 let list = result.json![index]["mediaMeta"].arrayValue
+                
                 for mediaMetaJson in list {
                     mediaMeta.append(MediaMeta(thumbnail: mediaMetaJson["thumbnail"].stringValue, normalizedUrl: mediaMetaJson["normalizedUrl"].stringValue))
                 }
-                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumAlias: forumAlias, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta))
+                self.posts.append(Post(id: id, title: title, excerpt: excerpt, createdAt: createdAt, commentCount: commentCount, likeCount: likeCount, forumAlias: forumAlias, forumName: forumName, gender: gender, department: department, anonymousSchool: anonymousSchool, anonymousDepartment: anonymousDepartment, school: school, withNickname: withNickname, mediaMeta: mediaMeta, host: host, hot: hot))
             }
 //            self.getBeforePost(id: self.posts[self.posts.count - 1].id).subscribe(onNext: { posts in
 //                self.posts += posts.data
@@ -171,7 +174,7 @@ extension PostRepository: PostRepositoryInterface {
     // MARK: - Dcard資料存入Firebase
     private func saveToFireBase(alias: String, limit: String, subject: PublishSubject<FirebaseResult<[Post]>>) {
         var subjectList = [PublishSubject<Bool>]()
-        for _ in self.posts {
+        for _ in 0...self.posts.count {
             subjectList.append(PublishSubject<Bool>())
         }
         self.posts.enumerated().forEach { (key, post) in
@@ -179,16 +182,26 @@ extension PostRepository: PostRepositoryInterface {
             post.mediaMeta.forEach { (mediameta) in
                 mediaMetaDir.append(["normalizedUrl": mediameta.normalizedUrl, "thumbnail": mediameta.thumbnail])
             }
-            let setter: [String: Any] = ["\(post.id)": ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumAlias": post.forumAlias, "forumName": post.forumName, "gender": post.gender
+            let setter: [String: Any] = ["id": post.id, "title": post.title, "excerpt": post.excerpt, "createdAt": post.createdAt, "commentCount": post.commentCount, "likeCount": post.likeCount, "forumAlias": post.forumAlias, "forumName": post.forumName, "gender": post.gender
             , "department": post.department, "anonymousSchool": post.anonymousSchool, "anonymousDepartment": post.anonymousDepartment, "school": post.school, "withNickname": post.withNickname, "mediaMeta": mediaMetaDir, "host": post.host
-                , "hot": post.hot]]
-            FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(alias).setData(setter, merge: true) { (error) in
+                , "hot": post.hot]
+            FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(post.id).setData(setter, merge: true) { (error) in
                 if let error = error {
                     NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                     subjectList[key].onNext(false)
                 } else {
                     subjectList[key].onNext(true)
                 }
+            }
+        }
+        let postIDList: [String] = self.posts.map( { return $0.id} )
+        let setter = ["postList": postIDList]
+        FirebaseManager.shared.db.collection(DatabaseName.forum.rawValue).document(alias).setData(setter, merge: true) { (error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subjectList.last?.onNext(false)
+            } else {
+                subjectList.last?.onNext(true)
             }
         }
         Observable.combineLatest(subjectList).subscribe(onNext: { (result) in

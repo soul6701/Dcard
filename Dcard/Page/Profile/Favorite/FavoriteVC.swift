@@ -28,17 +28,17 @@ class FavoriteVC: UIViewController {
         }
     }
     private var allFavorite: Favorite {
-        var postList = [Post]()
-        self.favoriteList.map { return $0.posts }.forEach { (posts) in
-            postList += posts
+        var allPostIDList = [String]()
+        self.favoriteList.map { return $0.postIDList }.forEach { (postIDList) in
+            allPostIDList += postIDList
         }
-        return Favorite(title: "全部收藏", posts: postList)
+        return Favorite(title: "全部收藏", postIDList: allPostIDList)
     }
     private var allImageList: [String] {
         var list = [String]()
         for favorite in self.favoriteList {
-            if let first = favorite.posts.first(where: { return $0.mediaMeta.count > 0 }) {
-                list.append(first.mediaMeta[0].thumbnail)
+            if let first = favorite.coverImage.first {
+                list.append(first)
                 if list.count >= 4 { break }
             }
         }
@@ -122,8 +122,8 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         }
         let favorite = self.favoriteList[row - 1]
         let title = favorite.title
-        let mediaMeta = favorite.posts.first { $0.mediaMeta.count > 0 }?.mediaMeta[0].normalizedUrl ?? ""
-        cell.setContent(name: title, imageStrings: [mediaMeta])
+        let mediaMetas = favorite.coverImage
+        cell.setContent(name: title, imageStrings: mediaMetas)
         return cell
     }
     func  collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

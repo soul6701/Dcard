@@ -28,7 +28,7 @@ public struct Post {
     var school: String = ""
     var withNickname: Bool = false
     var mediaMeta: [MediaMeta] = []
-    var host: Bool = false
+    var host: String = ""
     var hot: Bool = false
 }
 public struct Comment {

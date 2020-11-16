@@ -22,6 +22,7 @@ enum DatabaseName: String {
     case comment
     case post
     case allPost
+    case forum
 }
 class FirebaseManager {
     static var shared = FirebaseManager()

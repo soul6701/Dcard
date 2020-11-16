@@ -51,7 +51,7 @@ class ProfileManager {
         var _myPostList = [Post]()
         (0...7).forEach { (i) in
             let withNickname = Bool.random()
-            _myPostList.append(Post(id: user.lastName + "_" + user.firstName , title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15", "2018-02-21"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: "M", department: withNickname ? "K" : "邊緣人養成系", anonymousSchool: false, anonymousDepartment: false, school: withNickname ? "野比大雄" : "私立台灣肥宅學院", withNickname: withNickname, mediaMeta: _mediaMeta[i % 4], host: true, hot: Bool.random()))
+            _myPostList.append(Post(id: user.lastName + "_" + user.firstName , title: list[i % 4][0], excerpt: list[i % 4][1], createdAt: ["2020-12-31", "2020-09-15", "2018-02-21"].randomElement()!, commentCount: String((0...5).randomElement()!), likeCount: String((0...5).randomElement()!), forumName: ["廢文", "NBA", "穿搭", "寵物"].randomElement()!, gender: "M", department: withNickname ? "K" : "邊緣人養成系", anonymousSchool: false, anonymousDepartment: false, school: withNickname ? "野比大雄" : "私立台灣肥宅學院", withNickname: withNickname, mediaMeta: _mediaMeta[i % 4], host: ["qdqw", "qwdqwdqw"].randomElement()!, hot: Bool.random()))
         }
         return _myPostList
     }

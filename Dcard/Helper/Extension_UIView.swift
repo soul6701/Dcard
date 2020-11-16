@@ -19,10 +19,10 @@ extension UIView {
             if !inSafeArea {
                 maker.bottom.top.leading.trailing.equalToSuperview()
             } else {
-                 maker.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
-                 maker.top.equalTo(self.safeAreaLayoutGuide.snp.top)
-                 maker.leading.equalTo(self.safeAreaLayoutGuide.snp.leading)
-                 maker.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing)
+                maker.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+                maker.top.equalTo(self.safeAreaLayoutGuide.snp.top)
+                maker.leading.equalTo(self.safeAreaLayoutGuide.snp.leading)
+                maker.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing)
             }
         }
     }

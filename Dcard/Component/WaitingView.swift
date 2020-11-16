@@ -25,7 +25,7 @@ class WaitingView: UIView {
         self.loadingView.stopAnimating()
         
         if willShow {
-            loadingView.startAnimating()
+            self.loadingView.startAnimating()
             let window = UIApplication.shared.windows.first!
             layer.zPosition = 6
             window.addSubview(self)

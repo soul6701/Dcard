@@ -78,14 +78,14 @@ class PostSettingVC: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    private var host = false
+    private var host: String = ""
     private var mode: PostSettingMode = .setting
     private var disposeBag = DisposeBag()
     private var delegate: PostSettingCellDelegate?
     private var post: Post = Post()
     
     private var settingDataList: [String] {
-        return host ? ["分享", "轉貼到其他看板", "引用原文發文", "關閉文章通知", "刪除文章", "編輯文章", "編輯話題", "複製全文", "重新整理", "我不喜歡這篇文章"] :
+        return host == ModelSingleton.shared.userConfig.user.uid ? ["分享", "轉貼到其他看板", "引用原文發文", "關閉文章通知", "刪除文章", "編輯文章", "編輯話題", "複製全文", "重新整理", "我不喜歡這篇文章"] :
             ["分享", "轉貼到其他看板", "引用原文發文", "開啟文章通知", "檢舉文章", "複製全文", "重新整理", "我不喜歡這篇文章"]
     }
     private var keepDataList: [Favorite] {
@@ -95,7 +95,7 @@ class PostSettingVC: UIViewController {
         super.viewDidLoad()
         initView()
     }
-    func setContent(post: Post, mode: PostSettingMode, host: Bool = false) {
+    func setContent(post: Post, mode: PostSettingMode, host: String = "") {
         self.post = post
         self.mode = mode
         self.host = host
@@ -143,7 +143,7 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
         let isSystemImage = self.mode == .keep && row == 0 || self.mode == .setting
         let title = self.mode == .keep ? (row == 0 ? "建立收藏分類" : self.keepDataList[row - 1].title) : self.settingDataList[indexPath.row]
         let favorite: Favorite? = row == 0 ? nil : self.keepDataList[row - 1]
-        let mediaMeta = favorite?.posts.first { $0.mediaMeta.count > 0 }?.mediaMeta[0].normalizedUrl ?? ""
+        let mediaMeta = favorite?.coverImage.first ?? ""
         let image = isSystemImage ? self.mode == .keep ? "plus" : "book.fill" : mediaMeta
         cell.setContent(isSystemImage: isSystemImage, image: image, title: title)
         return cell
