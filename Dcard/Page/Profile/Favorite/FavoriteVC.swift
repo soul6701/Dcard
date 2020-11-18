@@ -37,7 +37,7 @@ class FavoriteVC: UIViewController {
     private var allImageList: [String] {
         var list = [String]()
         for favorite in self.favoriteList {
-            if let first = favorite.coverImage.first {
+            if let first = favorite.coverImage.first(where: { return !$0.isEmpty }) {
                 list.append(first)
                 if list.count >= 4 { break }
             }
@@ -102,7 +102,7 @@ extension FavoriteVC {
         self.viewModel.createFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             self.favoriteList = ModelSingleton.shared.favorite
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
     }
 }
@@ -111,19 +111,17 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.favoriteList.count + 1
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let row = indexPath.row
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCell", for: indexPath) as! FavoriteCell
-        
-        guard row != 0 else {
+        if row == 0 {
             cell.setContent(name: self.allFavorite.title, imageStrings: self.allImageList)
-            return cell
+        } else {
+            let favorite = self.favoriteList[row - 1]
+            let title = favorite.title
+            let mediaMetas = favorite.coverImage.first { return !$0.isEmpty }
+            cell.setContent(name: title, imageStrings: [mediaMetas ?? ""])
         }
-        let favorite = self.favoriteList[row - 1]
-        let title = favorite.title
-        let mediaMetas = favorite.coverImage
-        cell.setContent(name: title, imageStrings: mediaMetas)
         return cell
     }
     func  collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -131,11 +129,13 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let row = indexPath.row
-         let vc = FavoriteInfoVC()
+        let vc = FavoriteInfoVC()
         if row == 0 {
-            vc.setContent(favorite: allFavorite, mode: .all)
+            vc.setContent(.all, title: self.allFavorite.title, postIDList: self.allFavorite.postIDList, imageStrings: self.allImageList)
         } else {
-            vc.setContent(favorite: self.favoriteList[row - 1], mode: .other)
+            let favorite = self.favoriteList[row - 1]
+            let mediaMetas = favorite.coverImage.first { return !$0.isEmpty }
+            vc.setContent(.other, title: favorite.title, postIDList: favorite.postIDList, imageStrings: [mediaMetas ?? ""])
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }

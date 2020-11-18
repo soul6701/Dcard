@@ -91,7 +91,7 @@ extension FollowIssueVC: FollowIssueVCDelegate {
         ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followIssue.listName + "」？") {
             self.followIssueList.remove(at: index)
             self.tableView.reloadData()
-            ProfileManager.shared.showOKView(mode: .cancelFollowIssue, handler: nil)
+            AlertManager.shared.showOKView(mode: .profile(.cancelFollowIssue), handler: nil)
         }
     }
 }

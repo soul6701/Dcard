@@ -87,7 +87,7 @@ extension HomeVC {
             vc.modalPresentationStyle = .formSheet
             self.navigationController?.pushViewController(vc, animated: true)
         }, onError: { error in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: disposeBag)
         
         self.viewModel.forumsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { result in
@@ -101,7 +101,7 @@ extension HomeVC {
                 self.preloadPostData(alias: forums?.alias ?? "")
             }
         }, onError: { error in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: disposeBag)
         
         self.viewModel.postsSubject.observeOn(MainScheduler.instance).subscribe(onNext: { result in
@@ -119,7 +119,7 @@ extension HomeVC {
                 self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .top)
             }
         }, onError: { error in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: disposeBag)
     }
 }

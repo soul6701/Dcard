@@ -48,10 +48,14 @@ class LoginVM: LoginVMInterface {
     private (set) var updateUserInfoSubject = PublishSubject<FirebaseResult<Bool>>()
     
     private var loginFirebase: LoginFirebaseInterface
+    private var cardFirebase: CardFirebaseInterface
+    private var favoriteFirebase: FavoriteFirebaseInterface
     private var disposeBag = DisposeBag()
     
-    init(loginFirebase: LoginFirebaseInterface = LoginFirebase.shared) {
+    init(loginFirebase: LoginFirebaseInterface = LoginFirebase.shared, cardFirebase: CardFirebaseInterface = CardFirebase.shared, favoriteFirebase: FavoriteFirebase = FavoriteFirebase.shared) {
         self.loginFirebase = loginFirebase
+        self.cardFirebase = cardFirebase
+        self.favoriteFirebase = favoriteFirebase
     }
 }
 extension LoginVM {
@@ -99,14 +103,14 @@ extension LoginVM {
         }).disposed(by: self.disposeBag)
     }
     func setupCardData() {
-        self.loginFirebase.setupCardData().subscribe(onNext: { (result) in
+        self.cardFirebase.setupCardData().subscribe(onNext: { (result) in
             self.setupCardDataSubject.onNext(result)
         }, onError: { (error) in
             self.setupCardDataSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
     func setupFaroriteData() {
-        self.loginFirebase.setupFaroriteData().subscribe(onNext: { (result) in
+        self.favoriteFirebase.setupFaroriteData().subscribe(onNext: { (result) in
             self.setupFaroriteDataSubject.onNext(result)
         }, onError: { (error) in
             self.setupFaroriteDataSubject.onError(error)

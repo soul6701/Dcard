@@ -179,7 +179,7 @@ extension SetPhoneAddressVC {
             self.address = text
         }
         guard !self.phone.isEmpty && !self.address.isEmpty else {
-            LoginManager.shared.showAlertView(errorMessage: (self.phone.isEmpty ? "手機" : "信箱") + "不得為空", handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: (self.phone.isEmpty ? "手機" : "信箱") + "不得為空", handler: nil)
             return
         }
         let addressPattern = "^[A-z0-9]+@[A-z0-9]+.com$"
@@ -195,7 +195,7 @@ extension SetPhoneAddressVC {
             }
             self.tfPhoneAddress.text = ""
             hide()
-            LoginManager.shared.showAlertView(errorMessage: "請填寫完整/格式錯誤", handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: "請填寫完整/格式錯誤", handler: nil)
             return
         }
         self.nav._delegate?.expectAccount(address: self.mode == .phone ? self.address : text)

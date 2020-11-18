@@ -37,7 +37,6 @@ private class PresentationController : UIPresentationController {
     }
     override func presentationTransitionWillBegin() {
         guard let containerView = containerView, let presentedView = self.presentedView else { return }
-        self.bgButton.frame = containerView.frame
         containerView.setFixedView(self.bgButton)
         presentedView.layer.masksToBounds = true
         presentedView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -73,28 +72,11 @@ class PostVC: UIViewController {
     private var OKView: MessageView!
     private var OKConfig: SwiftMessages.Config!
     
-    lazy private var viewCommentSetting: SettingView = {
-        return UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
-    }()
-    lazy private var viewPosterSetting: SettingView = {
-        return UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
-    }()
-    lazy private var viewBg: UIView = {
-        let height = navigationController?.navigationBar.bounds.height ?? 0
-        let insetTop = UIApplication.shared.windows.first!.safeAreaInsets.top
-        let view = UIView(frame: CGRect(x: 0, y: height + insetTop, width: self.view.bounds.width, height: self.view.bounds.height - height - insetTop))
-        view.backgroundColor = .black
-        view.alpha = 0.5
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.close))
-        view.addGestureRecognizer(tap)
-        return view
-    }()
-    private var card: Card {
-        return ModelSingleton.shared.userCard
-    }
-    private var user: User {
-        return ModelSingleton.shared.userConfig.user
-    }
+    lazy private var viewCommentSetting: SettingView = UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
+    lazy private var viewPosterSetting: SettingView = UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
+    lazy private var viewBg: UIView = self.confiViewBG()
+    private var card: Card = ModelSingleton.shared.userCard
+    private var user: User = ModelSingleton.shared.userConfig.user
     private let disposeBag = DisposeBag()
     private var post = Post()
     private var commentList = [Comment]()
@@ -153,6 +135,8 @@ class PostVC: UIViewController {
             self.btnKeep.imageView?.tintColor = self.keep ? .systemBlue : .systemGray2
         }
     }
+    private var postSettingVC: PostSettingVC?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -181,21 +165,23 @@ class PostVC: UIViewController {
     }
     @IBAction func didClickBtnKeep(_ sender: UIButton) {
         if !keep {
-            let vc = PostSettingVC()
-            vc.modalPresentationStyle = .custom
-            vc.transitioningDelegate = self
-            vc.setDelegate(self)
-            vc.setContent(post: self.post, mode: .keep)
-            present(vc, animated: true, completion: nil)
+            self.postSettingVC = PostSettingVC()
+            guard let postSettingVC = self.postSettingVC else { return }
+            postSettingVC.modalPresentationStyle = .custom
+            postSettingVC.transitioningDelegate = self
+            postSettingVC.setDelegate(self)
+            postSettingVC.setContent(post: self.post, mode: .keep)
+            present(postSettingVC, animated: true, completion: nil)
         }
         self.keep = !self.keep
     }
     @IBAction func didClickBtnSetting(_ sender: UIButton) {
-        let vc = PostSettingVC()
-        vc.modalPresentationStyle = .custom
-        vc.transitioningDelegate = self
-        vc.setContent(post: self.post, mode: .setting, host: self.post.host)
-        present(vc, animated: true, completion: nil)
+        self.postSettingVC = PostSettingVC()
+        guard let postSettingVC = self.postSettingVC else { return }
+        postSettingVC.modalPresentationStyle = .custom
+        postSettingVC.transitioningDelegate = self
+        postSettingVC.setContent(post: self.post, mode: .setting, host: self.post.host)
+        present(postSettingVC, animated: true, completion: nil)
     }
     func setContent(post: Post, commentList: [Comment]) {
         self.post = post
@@ -241,10 +227,29 @@ extension PostVC {
         self.OKView.button?.setTitle("查看收藏", for: .normal)
         self.OKView.button?.setTitleColor(.link, for: .normal)
         self.OKView.button?.backgroundColor = .clear
-        
+        self.OKView.buttonTapHandler = { (button) in
+            if let favorite = ModelSingleton.shared.favorite.first(where: { return $0.title == self.willBeAddedListTitle }) {
+                SwiftMessages.hide(id: "success")
+                let vc = FavoriteInfoVC()
+                let mediaMetas = favorite.coverImage.first { return !$0.isEmpty }
+                vc.setContent(.other, title: favorite.title, postIDList: favorite.postIDList, imageStrings: [mediaMetas ?? ""])
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
         self.OKConfig = SwiftMessages.Config()
         self.OKConfig.presentationContext = .window(windowLevel: .normal)
         self.OKConfig.presentationStyle = .bottom
+        self.OKConfig.duration = .seconds(seconds: 2)
+    }
+    private func confiViewBG() -> UIView {
+        let height = navigationController?.navigationBar.bounds.height ?? 0
+        let insetTop = UIApplication.shared.windows.first!.safeAreaInsets.top
+        let view = UIView(frame: CGRect(x: 0, y: height + insetTop, width: self.view.bounds.width, height: self.view.bounds.height - height - insetTop))
+        view.backgroundColor = .black
+        view.alpha = 0.5
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.close))
+        view.addGestureRecognizer(tap)
+        return view
     }
 }
 // MARK: - SubscribeViewModel
@@ -255,10 +260,24 @@ extension PostVC {
     private func subsribeViewModel() {
         self.viewModel.addFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
-                self.showOKView()
+                self.dismiss(animated: true) {
+                    if !self.willBeAddedListTitle.isEmpty {
+                        self.OKView.configureContent(title: "", body: "已分類至" + "『\(self.willBeAddedListTitle)』")
+                    } else {
+                        self.OKView.configureContent(title: "", body: "文章已收藏。")
+                    }
+                    SwiftMessages.show(config: self.OKConfig, view: self.OKView)
+                }
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        self.viewModel.createFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                self.viewModel.addFavoriteList(listName: self.willBeAddedListTitle, postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
+            }
+        }, onError: { (error) in
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
     }
 }
@@ -296,11 +315,6 @@ extension PostVC {
             self.view.addSubview(self.viewBg)
             self.view.addSubview(self.viewPosterSetting)
         }
-    }
-    private func showOKView() {
-        self.OKConfig.duration = .seconds(seconds: 1.5)
-        self.OKView.configureContent(title: "", body: "已分類至" + "『\(self.willBeAddedListTitle)』")
-        SwiftMessages.show(config: self.OKConfig, view: self.OKView)
     }
 }
 // MARK: - SubscribeRX
@@ -415,9 +429,13 @@ extension PostVC: UIViewControllerTransitioningDelegate {
     }
 }
 // MARK: - PostSettingCellDelegate
-extension PostVC: PostSettingCellDelegate {
+extension PostVC: PostSettingVCDelegate {
     func showAddFavoriteListOKView(title: String) {
         self.willBeAddedListTitle = title
-        self.viewModel.addFavoriteList(listName: title, postID: self.post.id)
+        self.viewModel.addFavoriteList(listName: title, postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
+    }
+    func createFavoriteListAndInsert(title: String) {
+        self.willBeAddedListTitle = title
+        self.viewModel.createFavoriteList(listName: title)
     }
 }

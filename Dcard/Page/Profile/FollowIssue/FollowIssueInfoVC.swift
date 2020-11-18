@@ -89,7 +89,7 @@ class FollowIssueInfoVC: UIViewController {
             ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + self.followIssue.listName + "」？") {
                 self.isFollowing = false
                 self.resetBellState(false, notifyMode: self.notifyMode)
-                ProfileManager.shared.showOKView(mode: .cancelFollowCard, handler: nil)
+                AlertManager.shared.showOKView(mode: .profile(.cancelFollowCard), handler: nil)
             }
         } else {
             let loadingView = UIActivityIndicatorView(style: .medium)
@@ -336,10 +336,10 @@ extension FollowIssueInfoVC: UITableViewDelegate, UITableViewDataSource {
                 let vc = UIActivityViewController(activityItems: [self.followIssue.listName], applicationActivities: nil)
                 vc.completionWithItemsHandler = { (_, completed, _, error) in
                     if let error = error {
-                        ProfileManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+                        AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
                     }
                     if completed {
-                        ProfileManager.shared.showOKView(mode: .shareCardInfoAndIssueInfo, handler: nil)
+                        AlertManager.shared.showOKView(mode: .profile(.shareCardInfoAndIssueInfo), handler: nil)
                     }
                 }
                 present(vc, animated: true, completion: nil)

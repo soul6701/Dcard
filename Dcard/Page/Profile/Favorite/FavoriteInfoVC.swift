@@ -15,154 +15,6 @@ enum FavoriteInfoMode {
     case all
     case other
 }
-protocol FavoriteForumVCDelegate {
-    func filterForum(selectedForumNameList: [String])
-}
-fileprivate class FavoriteForumCell: UITableViewCell {
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        self.accessoryType = selected ? .checkmark : .none
-        self.textLabel?.textColor = selected ? #colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78) : .label
-    }
-}
-fileprivate class FavoriteForumVC: UIViewController {
-    lazy private var tableView: UITableView = {
-       let tableView = UITableView()
-        tableView.register(FavoriteForumCell.self, forCellReuseIdentifier: "FavoriteForumCell")
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.allowsMultipleSelection = true
-        tableView.delegate = self
-        tableView.dataSource = self
-        return tableView
-    }()
-    lazy private var stackView: UIStackView = {
-       let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 5
-        stackView.alignment = .fill
-        return stackView
-    }()
-    lazy private var btnList: [UIButton] = {
-        var buttonList = [UIButton]()
-        (0...1).forEach { (i) in
-            let button = UIButton(type: .system)
-            button.setTitle(i == 0 ? "清除條件" : "套用", for: .normal)
-            button.backgroundColor = i == 0 ? .clear : #colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78)
-            button.setTitleColor(i == 0 ? .darkGray : .white, for: .normal)
-            button.setTitleColor(i == 0 ? .systemGray3 : nil, for: .disabled)
-            button.layer.cornerRadius = 10
-            if i == 0 {
-                button.addTarget(self, action: #selector(clearFilter), for: .touchUpInside)
-            } else {
-                button.addTarget(self, action: #selector(self.apply), for: .touchUpInside)
-            }
-            
-            buttonList.append(button)
-        }
-        return buttonList
-    }()
-    private var forumList: [Forum] {
-        return ModelSingleton.shared.forum
-    }
-    private var selectedCellList = [IndexPath: FavoriteForumCell]()
-    private var selectedForumNameList = [String]()
-    private var delegate: FavoriteForumVCDelegate?
-    
-    override func viewDidLoad() {
-        self.navigationItem.title = "看板"
-        let btn = UIButton()
-        btn.setImage(UIImage(systemName: "xmark"), for: .normal)
-        btn.addTarget(self, action: #selector(close), for: .touchUpInside)
-        self.navigationItem.setLeftBarButton(UIBarButtonItem(customView: btn), animated: false)
-        self.navigationItem.setRightBarButton(UIBarButtonItem(title: "常用", style: .plain, target: self, action: #selector(apply)), animated: false)
-        self.btnList[0].isEnabled = !self.selectedForumNameList.isEmpty
-        self.btnList.forEach { (btn) in
-            self.stackView.addArrangedSubview(btn)
-        }
-        addViewAndSetupAutolayout()
-    }
-    func setContent(selectedForumNameList: [String]) {
-        self.selectedForumNameList = selectedForumNameList
-    }
-    func setDelegate(_ delegate: FavoriteForumVCDelegate) {
-        self.delegate = delegate
-    }
-    @objc private func close() {
-        self.dismiss(animated: true, completion: nil)
-    }
-    @objc private func apply() {
-        let nameList: [String] = self.selectedCellList.map { return self.forumList[$0.key.row].name }
-        self.delegate?.filterForum(selectedForumNameList: nameList)
-        dismiss(animated: true, completion: nil)
-    }
-    @objc private func clearFilter() {
-        self.selectedCellList.forEach { (_, cell) in
-            cell.isSelected = false
-        }
-        self.selectedCellList.removeAll()
-    }
-    private func addViewAndSetupAutolayout() {
-        self.view.setFixedView(self.tableView, inSafeArea: true)
-        let view = UIView()
-        view.backgroundColor = .systemBackground
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(self.stackView)
-        self.stackView.snp.makeConstraints { (maker) in
-            maker.leading.equalToSuperview().offset(15)
-            maker.trailing.equalToSuperview().offset(-15)
-            maker.centerY.equalToSuperview()
-            maker.height.equalTo(40)
-        }
-        self.view.addSubview(view)
-        view.snp.makeConstraints { (maker) in
-            maker.bottom.equalTo(self.tableView.snp.bottom)
-            maker.leading.equalTo(self.tableView.snp.leading)
-            maker.trailing.equalTo(self.tableView.snp.trailing)
-            maker.height.equalTo(80)
-        }
-    }
-}
-// MARK: - UITableViewDelegate
-extension FavoriteForumVC: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.forumList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = indexPath.row
-        let forum = self.forumList[row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteForumCell", for: indexPath) as! FavoriteForumCell
-        cell.textLabel?.text = forum.name
-        cell.selectionStyle = .none
-        return cell
-    }
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView()
-    }
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 100
-    }
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let row = indexPath.row
-        let forum = self.forumList[row]
-        if self.selectedForumNameList.contains(forum.name) {
-            self.selectedCellList[indexPath] = (cell as! FavoriteForumCell)
-            cell.accessoryType = .checkmark
-            cell.textLabel?.textColor = #colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78)
-        }
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! FavoriteForumCell
-        self.selectedCellList[indexPath] = cell
-        self.btnList[0].isEnabled = self.selectedCellList.count > 0
-    }
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        self.selectedCellList[indexPath] = nil
-        self.btnList[0].isEnabled = self.selectedCellList.count > 0
-    }
-}
 
 class FavoriteInfoVC: UIViewController {
     
@@ -181,19 +33,19 @@ class FavoriteInfoVC: UIViewController {
     
     private var viewModel: PostVMInterface!
     private let disposeBag = DisposeBag()
-    private var itemSpace: CGFloat = 5
     private var mode: FavoriteInfoMode = .all
-    private var catalogSelected = false
-    private var selectedForumNameList = [String]()
-    private var favorite: Favorite = Favorite()
-    private var favoritePostList: [String] {
-        return self.favorite.postIDList
-    }
-    private var filteredPostList = [Post]() {
+    private var catalogSelected: Bool = false
+    private var selectedForumNameList: [String] = []
+    private var postIDList: [String] = []
+    private var titleFavorite: String = ""
+    private var filteredPostList = [Post]() { //過濾後貼文
         didSet {
             self.tableView.reloadData()
         }
     }
+    private var postList: [Post] = [] //全部貼文
+    private var imageStrings: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -245,9 +97,11 @@ class FavoriteInfoVC: UIViewController {
         nav.modalPresentationStyle = .overFullScreen
         present(nav, animated: true, completion: nil)
     }
-    func setContent(favorite: Favorite, mode: FavoriteInfoMode) {
+    func setContent(_ mode: FavoriteInfoMode, title: String, postIDList: [String], imageStrings: [String]) {
         self.mode = mode
-        self.favorite = favorite
+        self.titleFavorite = title
+        self.postIDList = postIDList
+        self.imageStrings = imageStrings
     }
 }
 // MARK: - SetupUI
@@ -266,19 +120,20 @@ extension FavoriteInfoVC {
     }
     private func confiTitleView() {
         self.viewContainertwo.isHidden = self.mode == .other
-        self.lbTitle.text = self.mode == .all ? "全部收藏" : self.favorite.title
+        self.lbTitle.text = self.titleFavorite
         self.btnSelect.setTitle(self.mode == .all ? "選取" : "新增文章", for: .normal)
     }
     private func confiContainerView() {
         if self.mode == .all {
-            zip(self.favorite.coverImage, self.imageViewList).forEach { (urlString, imageView) in
+            zip(self.imageStrings, self.imageViewList).forEach { (urlString, imageView) in
                 imageView.kf.setImage(with: URL(string: urlString))
             }
         } else {
             self.stackView.isHidden = true
             self.imageViewList[1].isHidden = true
-            let firstMediaMeta = self.favorite.coverImage.first ?? ""
-            self.imageViewList[0].kf.setImage(with: URL(string: firstMediaMeta))
+            if let firstMediaMeta = self.imageStrings.first {
+                self.imageViewList[0].kf.setImage(with: URL(string: firstMediaMeta))
+            }
         }
     }
 }
@@ -288,22 +143,14 @@ extension FavoriteInfoVC {
         self.viewModel = PostVM()
     }
     private func subsribeViewModel() {
-        self.viewModel.getPostInfoSubject.subscribe(onNext: { (result) in
-//            self.favorite = result.data
-        }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
-        }).disposed(by: self.disposeBag)
-
-        
-//        self.viewModel.getPostInfo(uid: ModelSingleton.shared.userConfig.user.uid)
-        
         self.viewModel.getPostInfoOfListSubject.subscribe(onNext: { (result) in
+            self.postList = result.data
             self.filteredPostList = result.data
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
-        self.viewModel.getPostInfoOfList(postIDs: self.favorite.postIDList)
+        self.viewModel.getPostInfoOfList(postIDs: self.postIDList)
     }
 }
 // MARK: - UITableViewDelegate
@@ -361,8 +208,7 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
 extension FavoriteInfoVC: FavoriteForumVCDelegate {
     func filterForum(selectedForumNameList: [String]) {
         guard !selectedForumNameList.isEmpty else {
-            let oldfilteredPostList = self.filteredPostList
-            self.filteredPostList = oldfilteredPostList
+            self.filteredPostList = self.postList
             self.selectedForumNameList = []
             self.btnForumFilter.setTitle("看板篩選 ▼", for: .normal)
             self.btnForumFilter.setTitleColor(.darkGray, for: .normal)

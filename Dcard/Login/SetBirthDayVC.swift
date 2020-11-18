@@ -141,7 +141,7 @@ extension SetBirthDayVC {
     @objc private func toNextPage() {
         guard !self.birthday.isEmpty else {
             self.view.endEditing(true)
-            LoginManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
             return
         }
         LoginManager.shared.toNextPage(.SetSexVC)

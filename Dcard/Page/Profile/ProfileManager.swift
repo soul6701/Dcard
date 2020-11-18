@@ -55,33 +55,6 @@ class ProfileManager {
         }
         return _myPostList
     }
-    
-    init() {
-        confiOKView()
-        confiAlertView()
-    }
-
-    func confiOKView() {
-        self.OKView = MessageView.viewFromNib(layout: .centeredView)
-        self.OKView.id = "success"
-        self.OKView.configureTheme(backgroundColor: #colorLiteral(red: 0.8711531162, green: 0.4412498474, blue: 0.8271986842, alpha: 1), foregroundColor: .black)
-        self.OKView.button?.removeFromSuperview()
-        
-        self.OKConfig = SwiftMessages.Config()
-        self.OKConfig.presentationContext = .window(windowLevel: .normal)
-        self.OKConfig.presentationStyle = .center
-    }
-    func confiAlertView() {
-        self.alertView = MessageView.viewFromNib(layout: .centeredView)
-        self.alertView.id = "alert"
-        self.alertView.configureTheme(backgroundColor: #colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1), foregroundColor: .black)
-        
-        self.alertconfig = SwiftMessages.Config()
-        self.alertconfig.presentationContext = .window(windowLevel: .alert)
-        self.alertconfig.presentationStyle = .center
-        self.alertconfig.duration = .forever
-        
-    }
     //存入本地資料庫
     func saveToDataBase(preference: Preference) {
         DbManager.shared.updatePreference(preference: preference)
@@ -89,34 +62,6 @@ class ProfileManager {
     //設置NavigationController
     func setBaseNav(_ nav: UINavigationController) {
         self.baseNav = nav
-    }
-    func showOKView(mode: ProfileOKMode, handler: (() -> Void)?) {
-        self.OKConfig.duration = .seconds(seconds: 1)
-        var body = ""
-        switch mode {
-        case .sendVefifymail:
-            body = "已成功發送"
-        case .cancelFollowCard, .cancelFollowIssue:
-            body = "成功取消追蹤"
-        case .shareCardInfoAndIssueInfo:
-            body = "分享成功"
-        }
-        self.OKView.configureContent(title: "", body: body)
-        self.OKConfig.eventListeners = .init(arrayLiteral: { (event) in
-            if event == .didHide {
-                SwiftMessages.hide(id: "success")
-                handler?()
-            }
-        })
-        SwiftMessages.show(config: self.OKConfig, view: self.OKView)
-    }
-    //警告視窗
-    func showAlertView(errorMessage: String, handler: (() -> Void)?) {
-        self.alertView.configureContent(title: "錯誤", body: errorMessage, iconImage: nil, iconText: nil, buttonImage: nil, buttonTitle: "OK") { (btn) in
-            SwiftMessages.hide(id: "alert")
-            handler?()
-        }
-        SwiftMessages.show(config: self.alertconfig, view: self.alertView)
     }
     //通知視窗
     func showBellModeView(delegate: SelectNotifyViewDelegate, notifyMode: Int) {

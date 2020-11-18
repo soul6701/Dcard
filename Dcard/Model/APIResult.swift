@@ -8,23 +8,25 @@
 
 import Foundation
 
-public let loginError = ["找不到此用戶", "密碼錯誤", "信箱/手機錯誤", "找不到此用戶卡稱資訊", "找不到此用戶收藏清單"]
-public let cardError = ["取得卡片失敗"]
-public let postError: [String] = []
+
 
 public enum BusinesslogicError {
     case login(Int)
     case card(Int)
     case post(Int)
     
+    static let loginError = ["找不到此用戶", "密碼錯誤", "信箱/手機錯誤", "找不到此用戶卡稱資訊", "找不到此用戶收藏清單"]
+    static let cardError = ["取得卡片失敗"]
+    static let postError: [String] = []
+    
     public var errorMessage: String {
         switch self {
         case .login(let i):
-            return loginError[i]
+            return BusinesslogicError.loginError[i]
         case .card(let i):
-            return cardError[i]
+            return BusinesslogicError.cardError[i]
         case .post(let i):
-            return postError[i]
+            return BusinesslogicError.postError[i]
         }
     }
 }

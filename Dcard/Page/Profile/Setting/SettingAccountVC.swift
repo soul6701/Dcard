@@ -329,7 +329,7 @@ extension SettingAccountVC {
         let passwordIsRight = self.tfPassword.text == ModelSingleton.shared.userConfig.user.password
         guard passwordIsRight && valid && isSame else {
             if !passwordIsRight {
-                ProfileManager.shared.showAlertView(errorMessage: "密碼錯誤", handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: "密碼錯誤", handler: nil)
                 self.tfPassword.text = ""
             }
             let formatErrorString = self.mode == .resetAddress ? "信箱格式錯誤" : "密碼格式錯誤"
@@ -426,7 +426,7 @@ extension SettingAccountVC {
 //                }
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.viewModelCard.updateCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
@@ -448,7 +448,7 @@ extension SettingAccountVC {
                 }
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.viewModelCard.createCardSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
@@ -458,7 +458,7 @@ extension SettingAccountVC {
                 })
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
     }
 }

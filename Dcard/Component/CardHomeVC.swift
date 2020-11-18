@@ -72,7 +72,7 @@ class CardHomeVC: UIViewController {
             ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followCard.card.name + "」？") {
                 self.isFollowing = false
                 self.resetBellState(false, notifyMode: self.notifyMode)
-                ProfileManager.shared.showOKView(mode: .cancelFollowCard, handler: nil)
+                AlertManager.shared.showOKView(mode: .profile(.cancelFollowCard), handler: nil)
             }
         } else {
             let loadingView = UIActivityIndicatorView(style: .medium)
@@ -111,10 +111,10 @@ class CardHomeVC: UIViewController {
         let vc = UIActivityViewController(activityItems: [self.followCard.card.name], applicationActivities: nil)
         vc.completionWithItemsHandler = { (_, completed, _, error) in
             if let error = error {
-                ProfileManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
             }
             if completed {
-                ProfileManager.shared.showOKView(mode: .shareCardInfoAndIssueInfo, handler: nil)
+                AlertManager.shared.showOKView(mode: .profile(.shareCardInfoAndIssueInfo), handler: nil)
             }
         }
         if mode == .user {
@@ -173,7 +173,7 @@ extension CardHomeVC {
             self.postList = result.data
             self.resetData(self.followCard)
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
     }
 }

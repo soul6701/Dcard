@@ -37,7 +37,7 @@ class SetPasswordVC: UIViewController {
     }
     @IBAction func didClickBtnNext(_ sender: UIButton) {
         guard let password = self.tfPassword.text, expectPasswordFormat(password) else {
-            LoginManager.shared.showAlertView(errorMessage: "含有數字、英文字母和標點符號（如！和＆）的密碼組合，且至少由六個字組成", handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: "含有數字、英文字母和標點符號（如！和＆）的密碼組合，且至少由六個字組成", handler: nil)
             return
         }
         toNextPage()

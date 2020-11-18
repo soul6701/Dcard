@@ -73,7 +73,7 @@ extension ArticalVC {
                     let cancelAction = UIAlertAction(title: "取消", style: .cancel)
                     let sendAction = UIAlertAction(title: "發送", style: .default) { (action) in
                         if self.tfAddress?.text == ModelSingleton.shared.userConfig.user.address {
-                            ProfileManager.shared.showOKView(mode: .sendVefifymail) {
+                            AlertManager.shared.showOKView(mode: .profile(.sendVefifymail)) {
                                 alertController.dismiss(animated: true, completion: nil)
                             }
                         }
@@ -103,7 +103,7 @@ extension ArticalVC {
         self.viewModel.getPostInfoSubject.subscribe(onNext: { (result) in
             self.articalList = result.data
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.viewModel.getPostInfo(uid: ModelSingleton.shared.userConfig.user.uid)

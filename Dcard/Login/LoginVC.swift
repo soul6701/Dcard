@@ -106,7 +106,7 @@ extension LoginVC {
     private func expect() {
         if let password = self.tfPassword.text, let account = self.tfAccount.text, !password.isEmpty && !account.isEmpty {
             guard !(account.match("^[A-z0-9]+@[A-z0-9]+.com$", options: .caseInsensitive).isEmpty) else {
-                LoginManager.shared.showAlertView(errorMessage: "格式錯誤", handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: "格式錯誤", handler: nil)
                 [self.tfAccount, self.tfPassword].forEach { (tf) in
                     tf.text = ""
                 }
@@ -114,7 +114,7 @@ extension LoginVC {
             }
             self.viewModelLogin.login(address: account, password: password)
         } else {
-            LoginManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
         }
     }
 }
@@ -127,12 +127,12 @@ extension LoginVC {
         self.viewModelLogin.creartUserDataSubject
             .observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
                 if result {
-                    LoginManager.shared.showOKView(mode: .create) {
+                    AlertManager.shared.showOKView(mode: .login(.create)) {
                         self.dismiss(animated: true, completion: nil)
                     }
                 }
             }, onError: { (error) in
-                LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
             }).disposed(by: self.disposeBag)
         
 //        self.viewModel.readFromUserDataSubject.subscribe(onNext: { (user) in
@@ -148,15 +148,15 @@ extension LoginVC {
         
         self.viewModelLogin.loginSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
-                LoginManager.shared.showOKView(mode: .login) {
+                AlertManager.shared.showOKView(mode: .login(.login)) {
                     WaitingView.shared.show(true)
                     self.viewModelLogin.setupCardData()
                 }
             } else {
-                LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.viewModelLogin.setupCardDataSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
@@ -164,38 +164,38 @@ extension LoginVC {
                 self.viewModelLogin.setupFaroriteData()
             } else {
                 WaitingView.shared.show(false)
-                LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
                 if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
                     self.navigationController?.pushViewController(vc, animated: true)
                     UserDefaultsKeys.shared.setValue([self.tfAccount.text!: Date()], forKey: Login_account)
                 }
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.viewModelLogin.setupFaroriteDataSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             WaitingView.shared.show(false)
             if !result.data {
-                LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
             }
             if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
                 self.navigationController?.pushViewController(vc, animated: true)
                 UserDefaultsKeys.shared.setValue([self.tfAccount.text!: Date()], forKey: Login_account)
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.viewModelLogin.deleteUserDataSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             switch result {
             case .success:
-                LoginManager.shared.showOKView(mode: .delete, handler: nil)
+                AlertManager.shared.showOKView(mode: .login(.delete), handler: nil)
             case .error(let error):
-                LoginManager.shared.showAlertView(errorMessage: error, handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: error, handler: nil)
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.viewModelLogin.expectAccountSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
@@ -203,24 +203,24 @@ extension LoginVC {
             if result.data {
                 vc.toNextPage()
             } else {
-                LoginManager.shared.showAlertView(errorMessage: "信箱已被使用，請重新輸入", handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: "信箱已被使用，請重新輸入", handler: nil)
                 vc.clear()
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.viewModelLogin.requirePasswordSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
-                LoginManager.shared.showOKView(mode: .required) {
+                AlertManager.shared.showOKView(mode: .login(.required)) {
                     self.dismiss(animated: true, completion: nil)
                 }
                 self.tfPassword.text = (result.sender?["password"] as? String) ?? ""
             } else {
-                LoginManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
 
     }

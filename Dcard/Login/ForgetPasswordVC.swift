@@ -39,7 +39,7 @@ class ForgetPasswordVC: UIViewController {
     }
     @IBAction func didClickSend(_ sender: UIButton) {
         guard let account = self.tfAccount.text, let phoneAddress = self.tfPhoneAddress.text, !account.isEmpty && !phoneAddress.isEmpty else {
-            LoginManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
             return
         }
         let isPhone = phoneAddress.contains("@")
@@ -63,7 +63,7 @@ extension ForgetPasswordVC {
             if !self.accountList.dataSource.isEmpty {
                 self.accountList.show()
             } else {
-                LoginManager.shared.showAlertView(errorMessage: "近期無任何登入紀錄", handler: nil)
+                AlertManager.shared.showAlertView(errorMessage: "近期無任何登入紀錄", handler: nil)
             }
             
         }).disposed(by: self.disposebag)

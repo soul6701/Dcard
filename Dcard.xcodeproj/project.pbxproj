@@ -182,6 +182,9 @@
 		933F610F2547FCD500609E70 /* FavoriteInfoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */; };
 		934A0551A1012375356ACBFD /* Pods_Dcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538C2ABFE0B65C9AE89F9B5D /* Pods_Dcard.framework */; };
 		9357BEE825525C4F00C45386 /* DbManager+Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9357BEE725525C4F00C45386 /* DbManager+Time.swift */; };
+		9357BEEA2564E8C000C45386 /* FavoriteForumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9357BEE92564E8C000C45386 /* FavoriteForumVC.swift */; };
+		9357BEED25650A6600C45386 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9357BEEC25650A6600C45386 /* AlertManager.swift */; };
+		9357BEEF25650F8E00C45386 /* PostSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9357BEEE25650F8E00C45386 /* PostSettingCell.swift */; };
 		9366156B254AECDA0030CD0A /* PostVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9366156A254AECDA0030CD0A /* PostVM.swift */; };
 		9366EC2F254ABBC20030CD0A /* PostFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9366EC2E254ABBC20030CD0A /* PostFirebase.swift */; };
 		936E380B2543B57D00EFFBFC /* Extension_Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936E380A2543B57D00EFFBFC /* Extension_Date.swift */; };
@@ -397,6 +400,9 @@
 		933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteInfoVC.swift; sourceTree = "<group>"; };
 		933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteInfoVC.xib; sourceTree = "<group>"; };
 		9357BEE725525C4F00C45386 /* DbManager+Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DbManager+Time.swift"; path = "Dcard/Model/localDatabase/DbManager+Time.swift"; sourceTree = SOURCE_ROOT; };
+		9357BEE92564E8C000C45386 /* FavoriteForumVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteForumVC.swift; sourceTree = "<group>"; };
+		9357BEEC25650A6600C45386 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		9357BEEE25650F8E00C45386 /* PostSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSettingCell.swift; sourceTree = "<group>"; };
 		9366156A254AECDA0030CD0A /* PostVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVM.swift; sourceTree = "<group>"; };
 		9366EC2E254ABBC20030CD0A /* PostFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFirebase.swift; sourceTree = "<group>"; };
 		936E380A2543B57D00EFFBFC /* Extension_Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension_Date.swift; sourceTree = "<group>"; };
@@ -453,6 +459,7 @@
 		2205D17A24A7725E004A4F41 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				9357BEEB25650A3800C45386 /* Manager */,
 				223F8D552507F69E00B11868 /* customView.swift */,
 				224E3CB124B76E85003F8F2B /* ToolbarView.xib */,
 				224E3CB324B76EA7003F8F2B /* ToolbarView.swift */,
@@ -822,6 +829,7 @@
 				22349E6D250E924600DBE94E /* FavoriteCell.xib */,
 				933F610C2547FCD500609E70 /* FavoriteInfoVC.swift */,
 				933F610D2547FCD500609E70 /* FavoriteInfoVC.xib */,
+				9357BEE92564E8C000C45386 /* FavoriteForumVC.swift */,
 			);
 			path = Favorite;
 			sourceTree = "<group>";
@@ -870,8 +878,17 @@
 				228D41E024AD06290077D29E /* CommentCell.swift */,
 				228D41E124AD06290077D29E /* CommentCell.xib */,
 				8479ADA52540293A007CE86D /* PostSettingVC.swift */,
+				9357BEEE25650F8E00C45386 /* PostSettingCell.swift */,
 			);
 			path = Post;
+			sourceTree = "<group>";
+		};
+		9357BEEB25650A3800C45386 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				9357BEEC25650A6600C45386 /* AlertManager.swift */,
+			);
+			name = Manager;
 			sourceTree = "<group>";
 		};
 		93661576254BA8020030CD0A /* Repository */ = {
@@ -888,8 +905,8 @@
 				2276107F24F8FF2C003A3F88 /* LoginFirebase.swift */,
 				9366EC2E254ABBC20030CD0A /* PostFirebase.swift */,
 				22788AE72503900200E87F7F /* CardFirebase.swift */,
-				9305A001254BECA500319E99 /* APIResult.swift */,
 				8907762B25505B8300FF7E09 /* FavoriteFirebase.swift */,
+				9305A001254BECA500319E99 /* APIResult.swift */,
 			);
 			name = Firebase;
 			sourceTree = "<group>";
@@ -1201,6 +1218,7 @@
 				22EDC72025134DDC0021B435 /* MailVC.swift in Sources */,
 				220D16DC24F4C841007B578E /* UserDefaultsKeys.swift in Sources */,
 				221ADB262499F5C300C25BD1 /* PostAndComment.swift in Sources */,
+				9357BEEA2564E8C000C45386 /* FavoriteForumVC.swift in Sources */,
 				22EFC6AC24FC2980003CD570 /* ForgetPasswordVC.swift in Sources */,
 				228D421F24B38AFC0077D29E /* SettingView.swift in Sources */,
 				22179C8124F66BE900BAD5C4 /* SelectCountryVC.swift in Sources */,
@@ -1220,6 +1238,7 @@
 				22788AEE25039DBE00E87F7F /* CardManager.swift in Sources */,
 				22CD379C25145E1B0066AA7D /* MailAllVC.swift in Sources */,
 				89D80C542545291700EB4F18 /* FollowIssueInfoVC.swift in Sources */,
+				9357BEEF25650F8E00C45386 /* PostSettingCell.swift in Sources */,
 				22788B052504EDB000E87F7F /* CardSendCell.swift in Sources */,
 				22788AE82503900200E87F7F /* CardFirebase.swift in Sources */,
 				9357BEE825525C4F00C45386 /* DbManager+Time.swift in Sources */,
@@ -1260,6 +1279,7 @@
 				22EFC6A424F95638003CD570 /* LoginVM.swift in Sources */,
 				221A47D82512160000DE1301 /* Extension_UIAlertAction.swift in Sources */,
 				221A47C325105C4300DE1301 /* FollowCardCell.swift in Sources */,
+				9357BEED25650A6600C45386 /* AlertManager.swift in Sources */,
 				228F913124C0B47600A7EBD9 /* Forum.swift in Sources */,
 				22CAAACE250D267600CDF95B /* ProfileTwoCell.swift in Sources */,
 				22349E6E250E924600DBE94E /* FavoriteCell.swift in Sources */,

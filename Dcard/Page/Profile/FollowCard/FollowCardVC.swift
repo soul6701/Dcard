@@ -63,22 +63,22 @@ extension FollowCardVC {
         self.postViewModel.getPostInfoSubject.subscribe(onNext: { (result) in
             //
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.cardViewModel.getfollowCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             self.followCardList = result.data
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
         self.cardViewModel.updateCardInfoSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
-                LoginManager.shared.showOKView(mode: .create, handler: nil)
+                AlertManager.shared.showOKView(mode: .login(.create), handler: nil)
                 self.tableView.reloadData()
             }
         }, onError: { (error) in
-            LoginManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
     }
 }
@@ -117,7 +117,7 @@ extension FollowCardVC: FollowCardVCDelegate {
     func cancelFollowCard(followCard: FollowCard) {
         ProfileManager.shared.showCancelFollowCardView(self, title: "取追追蹤" + "「" + followCard.card.name + "」？") {
 //            self.cardViewModel.updateCardInfo(followCard: followCard)
-            ProfileManager.shared.showOKView(mode: .cancelFollowCard, handler: nil)
+            AlertManager.shared.showOKView(mode: .profile(.cancelFollowCard), handler: nil)
         }
     }
     func toCardHome(followCard: FollowCard) {

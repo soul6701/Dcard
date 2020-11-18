@@ -18,16 +18,21 @@ enum UserFieldType: String {
     case password
 }
 protocol LoginFirebaseInterface {
+    ///創建帳戶
     func creartUserData(lastName: String, firstName: String, birthday: String, sex: String, phone: String, address: String, password: String, avatar: Data?) -> Observable<Bool>
+    ///登入
     func login(address: String, password: String) -> Observable<FirebaseResult<Bool>>
-    func setupCardData() -> Observable<FirebaseResult<Bool>>
-    func setupFaroriteData() -> Observable<FirebaseResult<Bool>>
+    ///刪除所有使用者資料
     func deleteUserData() -> Observable<DeleteCollectionType>
+    ///刪除所有貼文資料
     func deletePostData() -> Observable<DeleteCollectionType>
+    ///檢查帳號是否重複
     func expectAccount(address: String) -> Observable<FirebaseResult<Bool>>
+    ///查詢密碼
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<FirebaseResult<Bool>>
+    ///取得使用者資訊
     func getUserData(uid: String) -> Observable<FirebaseResult<User>>
-    func addFriend(card: Card) -> Observable<FirebaseResult<Bool>>
+    ///修改使用者資訊
     func updateUserInfo(user: [UserFieldType: Any]) -> Observable<FirebaseResult<Bool>>
 }
 
@@ -41,22 +46,6 @@ public class LoginFirebase: LoginFirebaseInterface {
         case card
     }
     public static var shared = LoginFirebase()
-    
-    private var userConfig: UserConfig {
-        return ModelSingleton.shared.userConfig
-    }
-    private var card: Card {
-        return ModelSingleton.shared.userCard
-    }
-    private var post: [Post] {
-        return ModelSingleton.shared.post
-    }
-    private var comment: [Comment] {
-        return ModelSingleton.shared.comment
-    }
-    private var favorite: [Favorite] {
-        return ModelSingleton.shared.favorite
-    }
     private let disposeBag = DisposeBag()
     
     // MARK: - 創建帳戶
@@ -69,7 +58,6 @@ public class LoginFirebase: LoginFirebaseInterface {
         let cardSubject = PublishSubject<Bool>()
         
         let subjectList: [Datatype: PublishSubject<Bool>] = [.user: userSubject, .post: postSubject, .favorite: favoriteSubject, .comment: commentSubject, .card: cardSubject]
-        
         
         var avatarUrl = ""
         
@@ -138,36 +126,6 @@ public class LoginFirebase: LoginFirebaseInterface {
             }
         }
     }
-    // MARK: - 檢查帳號是否重複
-    func expectAccount(address: String) -> Observable<FirebaseResult<Bool>> {
-        let subject = PublishSubject<FirebaseResult<Bool>>()
-        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-                subject.onError(error)
-            }
-            if let querySnapshot = querySnapshot {
-                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
-                    let dir = queryDocumentSnapshot.data()
-                    return (dir["address"] as! String) == address ? true : false
-                }.isEmpty) {
-                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: nil, sender: nil))
-                } else {
-                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
-                }
-            }
-        }
-        return subject.asObserver()
-    }
-    
-    // MARK: - 刪除所有使用者資料
-    func deleteUserData() -> Observable<DeleteCollectionType> {
-        return FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.user.rawValue)
-    }
-    // MARK: - 刪除所有貼文資料
-    func deletePostData() -> Observable<DeleteCollectionType> {
-        return FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.allPost.rawValue)
-    }
     // MARK: - 登入
     func login(address: String, password: String) -> Observable<FirebaseResult<Bool>> {
         let subject = PublishSubject<FirebaseResult<Bool>>()
@@ -205,50 +163,34 @@ public class LoginFirebase: LoginFirebaseInterface {
         }
         return subject.asObserver()
     }
-    // MARK: - 取得卡稱資訊
-    func setupCardData() -> Observable<FirebaseResult<Bool>> {
+    // MARK: - 刪除所有使用者資料
+    func deleteUserData() -> Observable<DeleteCollectionType> {
+        return FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.user.rawValue)
+    }
+    // MARK: - 刪除所有貼文資料
+    func deletePostData() -> Observable<DeleteCollectionType> {
+        return FirebaseManager.shared.deleteCollection(FirebaseManager.shared.db, DatabaseName.allPost.rawValue)
+    }
+    // MARK: - 檢查帳號是否重複
+    func expectAccount(address: String) -> Observable<FirebaseResult<Bool>> {
         let subject = PublishSubject<FirebaseResult<Bool>>()
-        
-        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(self.userConfig.user.uid).getDocument { (querySnapshot, error) in
+        FirebaseManager.shared.db.collection(DatabaseName.user.rawValue).getDocuments { (querySnapshot, error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             }
-            if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                let moodDir = dir["mood"] as! [String: Any]
-                let mood = Mood(heart: moodDir["heart"] as! Int, haha: moodDir["haha"] as! Int, angry: moodDir["angry"] as! Int, cry: moodDir["cry"] as! Int, surprise: moodDir["surprise"] as! Int, respect: moodDir["respect"] as! Int)
-                let card = Card(uid: dir["uid"] as! String, id: dir["id"] as! String, name: dir["name"] as! String, photo: dir["photo"] as! String, sex: dir["sex"] as! String, introduce: dir["introduce"] as! String, country: dir["country"] as! String, school: dir["school"] as! String, department: dir["department"] as! String, article: dir["article"] as! String, birthday: dir["birthday"] as! String, love: dir["love"] as! String, fans: dir["fans"] as! Int, beKeeped: dir["beKeeped"] as! Int, beReplyed: dir["beReplyed"] as! Int, getHeart: dir["getHeart"] as! Int, mood: mood)
-                ModelSingleton.shared.setUserCard(card)
-                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
-            } else {
-                subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(3), sender: nil))
-            }
-        }
-        return subject
-    }
-    // MARK: - 取得收藏清單
-    func setupFaroriteData() -> Observable<FirebaseResult<Bool>> {
-        let subject = PublishSubject<FirebaseResult<Bool>>()
-        var favoriteList = [Favorite]()
-        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(self.userConfig.user.uid).getDocument { (querySnapshot, error) in
-            if let error = error {
-                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-            }
-            if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                let favoriteArray = dir["favorite"] as! Array<[String: Any]>
-                favoriteArray.forEach { (favoriteDir) in
-                    let title = favoriteDir["title"] as! String
-                    let createAt = favoriteDir["createAt"] as! String
-                    let postIDList = favoriteDir["post"] as! [String]
-                    favoriteList.append(Favorite(title: title, createAt: createAt, postIDList: postIDList))
+            if let querySnapshot = querySnapshot {
+                if !(querySnapshot.documents.filter { (queryDocumentSnapshot) -> Bool in
+                    let dir = queryDocumentSnapshot.data()
+                    return (dir["address"] as! String) == address ? true : false
+                }.isEmpty) {
+                    subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: nil, sender: nil))
+                } else {
+                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
                 }
-                ModelSingleton.shared.setFavoriteList(favoriteList)
-                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
-            } else {
-                subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(4), sender: nil))
             }
         }
-        return subject
+        return subject.asObserver()
     }
     // MARK: - 查詢密碼
     func requirePassword(uid: String, phone: String?, address: String?) -> Observable<FirebaseResult<Bool>> {
@@ -313,36 +255,6 @@ public class LoginFirebase: LoginFirebaseInterface {
         }
         return subject.asObserver()
     }
-    
-    // MARK: - 加入好友
-    func addFriend(card: Card) -> Observable<FirebaseResult<Bool>> {
-        let subject = PublishSubject<FirebaseResult<Bool>>()
-        var cardId = ""
-        var userId = ""
-        var friendList = [String]()
-        
-        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).getDocument { (querySnapshot, error) in
-            if let error = error {
-                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-                subject.onError(error)
-            }
-            if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                var friend = dir["friend"] as! [String]
-                friend.append(card.uid)
-                var userCard = ModelSingleton.shared.userCard
-                userCard.friendCard = friend
-                ModelSingleton.shared.setUserCard(userCard)
-                FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(["friend": friend]) { (error) in
-                    if let error = error {
-                        NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
-                        subject.onError(error)
-                    }
-                }
-            }
-        }
-        return subject.asObserver()
-    }
-        
     // MARK: - 修改使用者資訊
     func updateUserInfo(user: [UserFieldType : Any]) -> Observable<FirebaseResult<Bool>> {
         let subject = PublishSubject<FirebaseResult<Bool>>()
@@ -360,7 +272,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                 subject.onError(error)
             } else {
                 subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
-                var oldUser = self.userConfig.user
+                var oldUser = ModelSingleton.shared.userConfig.user
                 user.forEach { (key, value) in
                     switch key {
                     case .address:
@@ -369,7 +281,7 @@ public class LoginFirebase: LoginFirebaseInterface {
                         oldUser.password = value as! String
                     }
                 }
-                ModelSingleton.shared.setUserConfig(UserConfig(user: oldUser, cardmode: self.userConfig.cardmode))
+                ModelSingleton.shared.setUserConfig(UserConfig(user: oldUser, cardmode: ModelSingleton.shared.userConfig.cardmode))
             }
         }
         return subject.asObserver()

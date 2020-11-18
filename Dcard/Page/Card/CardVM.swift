@@ -71,7 +71,7 @@ extension CardVM {
         }).disposed(by: self.disposeBag)
     }
     func addFriend(card: Card) {
-        self.loginFirebase.addFriend(card: card).subscribe(onNext: { (result) in
+        self.cardFirebase.addFriend(card: card).subscribe(onNext: { (result) in
             self.addFriendSubject.onNext(result)
         }, onError: { (error) in
             self.addFriendSubject.onError(error)

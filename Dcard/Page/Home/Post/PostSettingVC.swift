@@ -10,87 +10,30 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-enum PostSettingMode {
-    case keep
-    case setting
-}
-protocol PostSettingCellDelegate {
+protocol PostSettingVCDelegate {
     func showAddFavoriteListOKView(title: String)
-}
-private class PostSettingCell: UITableViewCell {
-    
-    lazy private var lbTitle: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-    lazy private var imageViewCatalog: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
-    override func layoutSubviews() {
-        self.backgroundColor = .clear
-        self.addSubview(self.imageViewCatalog)
-        self.imageViewCatalog.snp.makeConstraints { (maker) in
-            maker.leading.equalToSuperview().offset(40)
-            maker.width.height.equalTo(40)
-            maker.centerY.equalToSuperview()
-        }
-        self.addSubview(self.lbTitle)
-        self.lbTitle.snp.makeConstraints { (maker) in
-            maker.leading.equalTo(self.imageViewCatalog.snp.trailing).offset(30)
-            maker.height.equalTo(self.imageViewCatalog.snp.height)
-            maker.centerY.equalToSuperview()
-        }
-    }
-    func setContent(isSystemImage: Bool, image: String, title: String) {
-        if isSystemImage {
-            self.imageViewCatalog.image = UIImage(systemName: image)!
-            self.imageViewCatalog.snp.remakeConstraints { (maker) in
-                maker.width.height.equalTo(30)
-            }
-            self.imageViewCatalog.layer.cornerRadius = 15
-        } else {
-            self.imageViewCatalog.kf.setImage(with: URL(string: image))
-        }
-        self.lbTitle.text = title
-    }
+    func createFavoriteListAndInsert(title: String)
 }
 class PostSettingVC: UIViewController {
-
-    lazy private var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(PostSettingCell.self, forCellReuseIdentifier: "PostSettingCell")
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
-        tableView.isScrollEnabled = self.mode == .keep
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
-    lazy private var lbTitle: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.textAlignment = .center
-        label.attributedText = NSAttributedString(string: "已收藏，試試將文章加入...", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)])
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    enum PostSettingMode {
+        case keep
+        case setting
+    }
+    
+    lazy private var tableView: UITableView = self.confiTableView()
+    lazy private var lbTitle: UILabel = self.confiLbTitle()
     private var host: String = ""
     private var mode: PostSettingMode = .setting
     private var disposeBag = DisposeBag()
-    private var delegate: PostSettingCellDelegate?
+    private var delegate: PostSettingVCDelegate?
     private var post: Post = Post()
+    private var viewModel: PostVMInterface!
     
     private var settingDataList: [String] {
         return host == ModelSingleton.shared.userConfig.user.uid ? ["分享", "轉貼到其他看板", "引用原文發文", "關閉文章通知", "刪除文章", "編輯文章", "編輯話題", "複製全文", "重新整理", "我不喜歡這篇文章"] :
             ["分享", "轉貼到其他看板", "引用原文發文", "開啟文章通知", "檢舉文章", "複製全文", "重新整理", "我不喜歡這篇文章"]
     }
-    private var keepDataList: [Favorite] {
-        return ModelSingleton.shared.favorite
-    }
+    private var keepDataList: [Favorite] = ModelSingleton.shared.favorite
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -100,7 +43,7 @@ class PostSettingVC: UIViewController {
         self.mode = mode
         self.host = host
     }
-    func setDelegate(_ delegate: PostSettingCellDelegate) {
+    func setDelegate(_ delegate: PostSettingVCDelegate) {
         self.delegate = delegate
     }
 }
@@ -128,6 +71,25 @@ extension PostSettingVC {
             }
         }
     }
+    private func confiTableView() -> UITableView {
+        let tableView = UITableView()
+        tableView.register(PostSettingCell.self, forCellReuseIdentifier: "PostSettingCell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.isScrollEnabled = self.mode == .keep
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }
+    private func confiLbTitle() -> UILabel {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textAlignment = .center
+        label.attributedText = NSAttributedString(string: "已收藏，試試將文章加入...", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)])
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }
 }
 // MARK: - UITableViewDelegate
 extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
@@ -140,11 +102,27 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
         let cell = tableView.dequeueReusableCell(withIdentifier: "PostSettingCell", for: indexPath) as! PostSettingCell
-        let isSystemImage = self.mode == .keep && row == 0 || self.mode == .setting
-        let title = self.mode == .keep ? (row == 0 ? "建立收藏分類" : self.keepDataList[row - 1].title) : self.settingDataList[indexPath.row]
-        let favorite: Favorite? = row == 0 ? nil : self.keepDataList[row - 1]
-        let mediaMeta = favorite?.coverImage.first ?? ""
-        let image = isSystemImage ? self.mode == .keep ? "plus" : "book.fill" : mediaMeta
+        
+        var isSystemImage: Bool
+        var title: String
+        var image: String
+        if self.mode == .keep {
+            if row == 0 {
+                isSystemImage = true
+                title = "建立收藏分類"
+                image = "plus"
+            } else {
+                isSystemImage = false
+                title = self.keepDataList[row - 1].title
+                let favorite = self.keepDataList[row - 1]
+                let mediaMeta = favorite.coverImage.first ?? ""
+                image =  mediaMeta
+            }
+        } else {
+            isSystemImage = true
+            title = self.settingDataList[indexPath.row]
+            image = "book.fill"
+        }
         cell.setContent(isSystemImage: isSystemImage, image: image, title: title)
         return cell
     }
@@ -161,16 +139,22 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
                 UIAlertController.showNewFavoriteCatolog(self, cancelHandler: {
                     self.dismiss(animated: true, completion: nil)
                 }, OKHandler: { (text) in
-                    //創建收藏清單
+                    self.delegate?.createFavoriteListAndInsert(title: text)
                 }, disposeBag: self.disposeBag)
             } else {
                 let favorite = self.keepDataList[row - 1]
-                self.dismiss(animated: true) {
-                    self.delegate?.showAddFavoriteListOKView(title: favorite.title)
-                }
+                self.delegate?.showAddFavoriteListOKView(title: favorite.title)
             }
         } else {
-            
+            let vc = UIActivityViewController(activityItems: [self.post.title], applicationActivities: nil)
+            vc.completionWithItemsHandler = { (_, completed, _, error) in
+                if let error = error {
+                    AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+                }
+                if completed {
+                    AlertManager.shared.showOKView(mode: .profile(.shareCardInfoAndIssueInfo), handler: nil)
+                }
+            }
         }
     }
 }
