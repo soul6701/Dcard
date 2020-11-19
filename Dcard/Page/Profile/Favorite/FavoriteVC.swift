@@ -56,7 +56,7 @@ class FavoriteVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        
+        self.favoriteList = ModelSingleton.shared.favorite
     }
     func setContent(title: String) {
         self.navigationItem.title = title
@@ -100,7 +100,10 @@ extension FavoriteVC {
     }
     private func subsribeViewModel() {
         self.viewModel.createFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
-            self.favoriteList = ModelSingleton.shared.favorite
+            if result.data {
+                AlertManager.shared.showOKView(mode: .favorite(.create), handler: nil)
+                self.favoriteList = ModelSingleton.shared.favorite
+            }
         }, onError: { (error) in
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)

@@ -11,6 +11,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 import SwiftMessages
+import SnapKit
 
 public class AlertManager {
     enum LoginOKMode: String {
@@ -25,9 +26,15 @@ public class AlertManager {
         case cancelFollowCard, cancelFollowIssue = "成功取消追蹤"
         case shareCardInfoAndIssueInfo = "分享成功"
     }
+    enum FavoriteOKMode: String {
+        case remove = "移除收藏清單成功"
+        case create = "創建收藏清單成功"
+        case update = "更新收藏清單名字成功"
+    }
     enum OKMode {
         case login(LoginOKMode)
         case profile(ProfileOKMode)
+        case favorite(FavoriteOKMode)
     }
     public static let shared = AlertManager()
     
@@ -58,8 +65,10 @@ public class AlertManager {
             self.OKView.configureContent(title: "", body: mode.rawValue)
         case .profile(let mode):
             self.OKView.configureContent(title: "", body: mode.rawValue)
+        case .favorite(let mode):
+            self.OKView.configureContent(title: "", body: mode.rawValue)
         }
-        
+    
         self.OKconfig.eventListeners = .init(arrayLiteral: { (event) in
             if event == .didHide {
                 SwiftMessages.hide(id: "success")
@@ -86,5 +95,7 @@ public class AlertManager {
         }
         SwiftMessages.show(config: self.alertconfig, view: self.alertView)
     }
+    
 }
+
 

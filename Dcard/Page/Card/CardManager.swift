@@ -99,7 +99,7 @@ class CardManager: CardManagerInterface {
     func showFilterView(in viewController: UIViewController, handler: @escaping ((CardMode) -> Void)) {
         confiFilterView(viewContoller: viewController)
         self.filterHandler = handler
-        self.filterView.setDelegate(delegate: self)
+        self.filterView.setDelegate(self)
         SwiftMessages.show(config: self.filterConfig, view: self.filterView)
     }
 }

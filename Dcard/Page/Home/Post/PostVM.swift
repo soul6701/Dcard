@@ -24,12 +24,20 @@ protocol PostVMInterface {
     ///取得所有貼文
     func getPostInfoOfList(postIDs: [String])
     var getPostInfoOfListSubject: PublishSubject<FirebaseResult<[Post]>> { get }
+    ///移除收藏清單
+    func removeFavoriteList(listName: String)
+    var removeFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///更改收藏清單名字
+    func updateFavoriteList(oldListName: String, newListName: String)
+    var updateFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
 }
 class PostVM: PostVMInterface {
     private(set) var addFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var getPostInfoSubject = PublishSubject<FirebaseResult<[Post]>>()
     private(set) var createFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var getPostInfoOfListSubject = PublishSubject<FirebaseResult<[Post]>>()
+    private(set) var removeFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
+    private(set) var updateFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     
     private var postFirebase: PostFirebaseInterface
     private var favoriteFirebase: FavoriteFirebaseInterface
@@ -67,6 +75,20 @@ extension PostVM {
             self.getPostInfoOfListSubject.onNext(result)
         }, onError: { (error) in
             self.getPostInfoOfListSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func removeFavoriteList(listName: String) {
+        self.favoriteFirebase.removeFavoriteList(listName: listName).subscribe(onNext: { (result) in
+            self.removeFavoriteListSubject.onNext(result)
+        }, onError: { (error) in
+            self.removeFavoriteListSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func updateFavoriteList(oldListName: String, newListName: String) {
+        self.favoriteFirebase.updateFavoriteList(oldListName: oldListName, newListName: newListName).subscribe(onNext: { (result) in
+            self.updateFavoriteListSubject.onNext(result)
+        }, onError: { (error) in
+            self.updateFavoriteListSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

@@ -9,13 +9,14 @@
 import UIKit
 import Kingfisher
 
-enum PostCellMode {
-    case home
-    case profile
+protocol PostCellDelegate {
+    func edit(post: Post)
 }
-
 class PostCell: UITableViewCell {
-
+    enum PostCellMode {
+        case home
+        case profile
+    }
     @IBOutlet weak var imageViewUser: UIImageView!
     @IBOutlet weak var lbForumAndSchool: UILabel!
     @IBOutlet weak var lbExcerpt: UILabel!
@@ -23,6 +24,9 @@ class PostCell: UITableViewCell {
     @IBOutlet weak var imageViewThumbnail: UIImageView!
     @IBOutlet weak var LikeAndcommentCount: UILabel!
     @IBOutlet weak var lbTitle: UILabel!
+    
+    private var post: Post = Post()
+    private var delegate: PostCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,9 +40,10 @@ class PostCell: UITableViewCell {
         self.backgroundColor = highlighted ? #colorLiteral(red: 0.9995340705, green: 0.988355577, blue: 0.4726552367, alpha: 0.8842572774) : nil
     }
     @IBAction func didClickBtnSetting(_ sender: UIButton) {
-        //
+        self.delegate?.edit(post: self.post)
     }
     func setContent(post: Post, mode: PostCellMode) {
+        self.post = post
         if post.mediaMeta.count != 0 {
             self.lbExcerpt.isHidden = false
             self._lbExcerpt.isHidden = true
@@ -71,5 +76,8 @@ class PostCell: UITableViewCell {
             }
             self.imageViewUser.image = post.gender == "F" ? UIImage(named: ImageInfo.pikachu) : UIImage(named: ImageInfo.carbi)
         }
+    }
+    func setDelegate(_ delegate: PostCellDelegate) {
+        self.delegate = delegate
     }
 }

@@ -20,6 +20,10 @@ protocol FavoriteFirebaseInterface {
     func createFavoriteList(listName: String) -> Observable<FirebaseResult<Bool>>
     ///加入收藏清單
     func addFavoriteList(listName: String, postID: String, coverImage: String) -> Observable<FirebaseResult<Bool>>
+    ///移除收藏清單
+    func removeFavoriteList(listName: String) -> Observable<FirebaseResult<Bool>>
+    ///更改收藏清單名字
+    func updateFavoriteList(oldListName: String, newListName: String) -> Observable<FirebaseResult<Bool>>
 }
 public class FavoriteFirebase: FavoriteFirebaseInterface {
     
@@ -66,7 +70,7 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                 subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
             }
         }
-        return subject.asObservable()
+        return subject
     }
     // MARK: - 加入收藏清單
     func addFavoriteList(listName: String, postID: String, coverImage: String) -> Observable<FirebaseResult<Bool>> {
@@ -86,6 +90,48 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                 }
             }
         }
-        return subject.asObservable()
+        return subject
+    }
+    // MARK: - 移除收藏清單
+    func removeFavoriteList(listName: String) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        let setter: [String: Any] = [listName : FieldValue.delete()]
+        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            } else {
+                var oldFavoriteList = ModelSingleton.shared.favorite
+                if let index = oldFavoriteList.firstIndex(where: { $0.title == listName }) {
+                    oldFavoriteList.remove(at: index)
+                    ModelSingleton.shared.setFavoriteList(oldFavoriteList)
+                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                }
+            }
+        }
+        return subject
+    }
+    // MARK: - 更改收藏清單名字
+    func updateFavoriteList(oldListName: String, newListName: String) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        guard let copyIndex = (ModelSingleton.shared.favorite.firstIndex { return $0.title == oldListName }) else { return subject }
+        let copy = ModelSingleton.shared.favorite[copyIndex]
+        let setter: [String: Any] = [newListName : ["createAt" : copy.createAt, "post" : copy.postIDList, "coverImage" : copy.coverImage], oldListName : FieldValue.delete()]
+        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            } else {
+                var oldFavoriteList = ModelSingleton.shared.favorite
+                oldFavoriteList.remove(at: copyIndex)
+                let newFavorite = Favorite(title: newListName, createAt: copy.createAt, postIDList: copy.postIDList, coverImage: copy.coverImage)
+                oldFavoriteList.append(newFavorite)
+                ModelSingleton.shared.setFavoriteList(oldFavoriteList)
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+            }
+        }
+        return subject
     }
 }

@@ -167,6 +167,18 @@
                         <action selector="back:" destination="-1" eventType="touchUpInside" id="bRP-kP-nCj"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ncF-a7-diY">
+                    <rect key="frame" x="379" y="49" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="Gby-XZ-aKt"/>
+                        <constraint firstAttribute="width" constant="30" id="i0V-Sr-oDA"/>
+                    </constraints>
+                    <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <state key="normal" image="ellipsis" catalog="system"/>
+                    <connections>
+                        <action selector="edit:" destination="-1" eventType="touchUpInside" id="wM4-EL-oeV"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
@@ -175,7 +187,9 @@
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Nxf-ET-1XO" secondAttribute="trailing" id="5fg-NL-8tD"/>
                 <constraint firstItem="Nxf-ET-1XO" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="300" id="827-96-NjV"/>
                 <constraint firstItem="WzF-68-w8e" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="5" id="B2L-Na-q01"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="ncF-a7-diY" secondAttribute="trailing" constant="5" id="HWV-En-8BD"/>
                 <constraint firstItem="cJP-bX-XEV" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Iak-IL-dWf"/>
+                <constraint firstItem="ncF-a7-diY" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="5" id="PZe-kT-BNd"/>
                 <constraint firstItem="MCk-dm-o9X" firstAttribute="top" secondItem="l98-Z3-S1L" secondAttribute="bottom" id="Sg9-jY-aG7"/>
                 <constraint firstItem="WzF-68-w8e" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="5" id="X2p-2l-bw3"/>
                 <constraint firstItem="cJP-bX-XEV" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="XYZ-0W-Itl"/>
@@ -188,11 +202,12 @@
                 <constraint firstItem="MCk-dm-o9X" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="xLt-xN-TP5"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <point key="canvasLocation" x="-220" y="97"/>
+            <point key="canvasLocation" x="-688" y="77"/>
         </view>
     </objects>
     <resources>
         <image name="arrow.left" catalog="system" width="128" height="98"/>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="square" catalog="system" width="128" height="114"/>
     </resources>
 </document>

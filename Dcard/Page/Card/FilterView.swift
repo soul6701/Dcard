@@ -24,7 +24,7 @@ class FilterView: MessageView {
             btn.layer.cornerRadius = 12
         }
     }
-    func setDelegate(delegate: FilterViewDelegate) {
+    func setDelegate(_ delegate: FilterViewDelegate) {
         self.delegate = delegate
     }
     @IBAction func didClickBtnSex(_ sender: UIButton) {

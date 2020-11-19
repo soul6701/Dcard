@@ -38,6 +38,9 @@ class FavoriteInfoVC: UIViewController {
     private var selectedForumNameList: [String] = []
     private var postIDList: [String] = []
     private var titleFavorite: String = ""
+    private var newTitleFavorite: String = ""
+    private var selectedPost: Post = Post()
+    
     private var filteredPostList = [Post]() { //過濾後貼文
         didSet {
             self.tableView.reloadData()
@@ -58,6 +61,10 @@ class FavoriteInfoVC: UIViewController {
     }
     @IBAction func back(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
+    }
+    @IBAction func edit(_ sender: UIButton) {
+        OptionView.shared.configure(self, mode: .editFavorite)
+        OptionView.shared.show()
     }
     @IBAction func didClickBtnSelect(_ sender: UIButton) {
         self.btnSelect.setTitle(self.btnForumFilter.isEnabled ? "完成" : "選取", for: .normal)
@@ -143,9 +150,28 @@ extension FavoriteInfoVC {
         self.viewModel = PostVM()
     }
     private func subsribeViewModel() {
-        self.viewModel.getPostInfoOfListSubject.subscribe(onNext: { (result) in
+        self.viewModel.getPostInfoOfListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             self.postList = result.data
             self.filteredPostList = result.data
+        }, onError: { (error) in
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        self.viewModel.removeFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                AlertManager.shared.showOKView(mode: .favorite(.remove), handler: nil)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }, onError: { (error) in
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.viewModel.updateFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                AlertManager.shared.showOKView(mode: .favorite(.update), handler: nil)
+                self.lbTitle.text = self.newTitleFavorite
+            } else {
+                self.newTitleFavorite = ""
+            }
         }, onError: { (error) in
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
@@ -167,6 +193,7 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
         if section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
             cell.setContent(post: self.filteredPostList[row], mode: .profile)
+            cell.setDelegate(self)
             return cell
         } else {
             let cell = UITableViewCell()
@@ -218,5 +245,61 @@ extension FavoriteInfoVC: FavoriteForumVCDelegate {
         self.btnForumFilter.setTitle("看板篩選·\(selectedForumNameList.count) ▼", for: .normal)
         self.btnForumFilter.setTitleColor(#colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78), for: .normal)
         self.filteredPostList = self.filteredPostList.filter { return selectedForumNameList.contains($0.forumName) }
+    }
+}
+// MARK: - PostCellDelegate
+extension FavoriteInfoVC: PostCellDelegate {
+    func edit(post: Post) {
+        self.selectedPost = post
+        OptionView.shared.configure(self, mode: .editPost)
+        OptionView.shared.show()
+    }
+}
+// MARK: - OptionViewDelegate
+extension FavoriteInfoVC: OptionViewDelegate {
+    func didClickAt(_ mode: OptionView.Mode, indexPath: IndexPath) {
+        let row = indexPath.row
+        if mode == .editFavorite {
+            if row == 0 {
+                self.viewModel.removeFavoriteList(listName: self.titleFavorite)
+            } else {
+                var tfName: UITextField!
+                let alert = UIAlertController(title: "請輸入新名字😄", message: "", preferredStyle: .alert)
+                alert.addTextField { (tf) in
+                    tf.clearButtonMode = .whileEditing
+                    tfName = tf
+                }
+                let OKAction = UIAlertAction(title: "確認", style: .default) { (action) in
+                    self.newTitleFavorite = tfName.text ?? ""
+                    self.viewModel.updateFavoriteList(oldListName: self.titleFavorite, newListName: self.newTitleFavorite)
+                }
+                let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+                tfName.rx.text.orEmpty.map { !$0.isEmpty }.bind(to: OKAction.rx.isEnabled).disposed(by: self.disposeBag)
+                alert.addAction(OKAction)
+                alert.addAction(cancelAction)
+                present(alert, animated: true)
+            }
+        } else {
+            switch row {
+            case 0:
+                let vc = UIActivityViewController(activityItems: [self.selectedPost.title], applicationActivities: nil)
+                vc.completionWithItemsHandler = { (_, completed, _, error) in
+                    if let error = error {
+                        AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+                    }
+                    if completed {
+                        AlertManager.shared.showOKView(mode: .profile(.shareCardInfoAndIssueInfo), handler: nil)
+                    }
+                }
+            case 1:
+                break
+            case 2:
+                break
+            case 3:
+                break
+            default:
+                break
+            }
+        }
     }
 }
