@@ -147,7 +147,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jIE-lK-WEq">
                                                         <rect key="frame" x="0.0" y="0.0" width="68" height="50"/>
                                                         <color key="tintColor" systemColor="systemGray2Color" red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <state key="normal" image="heart" catalog="system">
+                                                        <state key="normal" title="🤍">
                                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                                         </state>
                                                         <connections>
@@ -245,7 +245,6 @@
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="folder" catalog="system" width="128" height="95"/>
-        <image name="heart" catalog="system" width="128" height="109"/>
         <image name="up" width="48" height="48"/>
     </resources>
 </document>

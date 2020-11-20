@@ -30,7 +30,7 @@ public struct Card {
     public var beReplyed = Int.random(in: 0...10000)
     public var getHeart = Int.random(in: 0...10000)
     public var getMood: Int {
-        return mood.angry + mood.cry + mood.haha + mood.heart + mood.respect + mood.surprise
+        return mood.angry.count + mood.cry.count + mood.haha.count + mood.heart.count + mood.respect.count + mood.surprise.count
     }
     public var mood: Mood = Mood()
     

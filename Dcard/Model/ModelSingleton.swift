@@ -34,17 +34,21 @@ protocol ModelSingletonInterface {
     //留言
     var comment: [Comment] { get }
     func setCommentList(_ comment: [Comment])
+    //表情
+    var mood: Mood { get }
+    func setMood(_ mood: Mood)
 }
 public class ModelSingleton: ModelSingletonInterface {
     public static let shared = ModelSingleton()
-    private(set) public var card = [Card]()
-    private(set) public var userConfig = UserConfig(user: User(), cardmode: 0)
-    private(set) public var preference = Preference()
-    private(set) public var forum = [Forum]()
-    private(set) public var userCard = Card()
-    private(set) public var favorite = [Favorite]()
-    private(set) public var post = [Post]()
-    private(set) public var comment = [Comment]()
+    private(set) public var card: [Card] = []
+    private(set) public var userConfig: UserConfig = UserConfig(user: User(), cardmode: 0)
+    private(set) public var preference: Preference = Preference()
+    private(set) public var forum: [Forum] = []
+    private(set) public var userCard: Card = Card()
+    private(set) public var favorite: [Favorite] = []
+    private(set) public var post: [Post] = []
+    private(set) public var comment: [Comment] = []
+    private(set) public var mood: Mood = Mood()
     
     public var allFavoritePostID: [String] {
         var allPostIDList = [String]()
@@ -78,5 +82,8 @@ public class ModelSingleton: ModelSingletonInterface {
     }
     func setCommentList(_ comment: [Comment]) {
         self.comment = comment
+    }
+    func setMood(_ mood: Mood) {
+        self.mood = mood
     }
 }

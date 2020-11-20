@@ -33,6 +33,12 @@ protocol PostVMInterface {
     ///移除收藏清單貼文
     func removePostFromFavoriteList(postID: String)
     var removePostFromFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///加入表情符號
+    func addMood(emotion: Mood.EmotionType, postID: String)
+    var addMoodSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///移除表情符號
+    func removeMood(emotion: Mood.EmotionType, postID: String)
+    var removeMoodSubject: PublishSubject<FirebaseResult<Bool>> { get }
 }
 class PostVM: PostVMInterface {
     private(set) var addFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
@@ -42,14 +48,18 @@ class PostVM: PostVMInterface {
     private(set) var removeFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var updateFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var removePostFromFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
+    private(set) var addMoodSubject = PublishSubject<FirebaseResult<Bool>>()
+    private(set) var removeMoodSubject = PublishSubject<FirebaseResult<Bool>>()
     
     private var postFirebase: PostFirebaseInterface
     private var favoriteFirebase: FavoriteFirebaseInterface
+    private var cardFirbase: CardFirebaseInterface
     private let disposeBag = DisposeBag()
     
-    init(postFirebase: PostFirebaseInterface = PostFirebase.shared, favoriteFirebase: FavoriteFirebaseInterface = FavoriteFirebase.shared) {
+    init(postFirebase: PostFirebaseInterface = PostFirebase.shared, favoriteFirebase: FavoriteFirebaseInterface = FavoriteFirebase.shared, cardFirbase: CardFirebaseInterface = CardFirebase.shared) {
         self.postFirebase = postFirebase
         self.favoriteFirebase = favoriteFirebase
+        self.cardFirbase = cardFirbase
     }
 }
 extension PostVM {
@@ -100,6 +110,20 @@ extension PostVM {
             self.removePostFromFavoriteListSubject.onNext(result)
         }, onError: { (error) in
             self.removePostFromFavoriteListSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func addMood(emotion: Mood.EmotionType, postID: String) {
+        self.cardFirbase.addMood(emotion: emotion, postID: postID).subscribe(onNext: { (result) in
+            self.addMoodSubject.onNext(result)
+        }, onError: { (error) in
+            self.addMoodSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func removeMood(emotion: Mood.EmotionType, postID: String) {
+        self.cardFirbase.removeMood(emotion: emotion, postID: postID).subscribe(onNext: { (result) in
+            self.removeMoodSubject .onNext(result)
+        }, onError: { (error) in
+            self.removeMoodSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

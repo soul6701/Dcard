@@ -38,6 +38,10 @@ protocol CardFirebaseInterface {
     func updateCardInfo(card: [CardFieldType: Any]) -> Observable<FirebaseResult<Bool>>
     ///加入好友
      func addFriend(card: Card) -> Observable<FirebaseResult<Bool>>
+    ///加入表情符號
+    func addMood(emotion: Mood.EmotionType, postID: String) -> Observable<FirebaseResult<Bool>>
+    ///移除表情符號
+    func removeMood(emotion: Mood.EmotionType, postID: String) -> Observable<FirebaseResult<Bool>>
 }
 
 class CardFirebase: CardFirebaseInterface {
@@ -75,7 +79,7 @@ class CardFirebase: CardFirebaseInterface {
             }
             if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
                 
-                let moodDir = dir["mood"] as! [String: Int]
+                let moodDir = dir["mood"] as! [String: [String]]
                 let mood = Mood(heart: moodDir["heart"]!, haha: moodDir["haha"]!, angry: moodDir["angry"]!, cry: moodDir["cry"]!, surprise: moodDir["surprise"]!, respect: moodDir["respect"]!)
                 let card = Card(id: dir[""] as! String, name: dir[""] as! String, photo: dir[""] as! String, sex: dir[""] as! String, introduce: dir[""] as! String, country: dir[""] as! String, school: dir[""] as! String, department: dir[""] as! String, article: dir[""] as! String, birthday: dir[""] as! String, love: dir[""] as! String, fans: dir[""] as! Int, beKeeped: dir[""] as! Int, beReplyed: dir[""] as! Int, getHeart: dir[""] as! Int, mood: mood)
                 subject.onNext(FirebaseResult<Card>(data: card, errorMessage: nil))
@@ -101,10 +105,11 @@ class CardFirebase: CardFirebaseInterface {
                 subject.onError(error)
             }
             if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
-                let moodDir = dir["mood"] as! [String: Any]
-                let mood = Mood(heart: moodDir["heart"] as! Int, haha: moodDir["haha"] as! Int, angry: moodDir["angry"] as! Int, cry: moodDir["cry"] as! Int, surprise: moodDir["surprise"] as! Int, respect: moodDir["respect"] as! Int)
+                let moodDir = dir["mood"] as! [String: [String]]
+                let mood = Mood(heart: moodDir["heart"]!, haha: moodDir["haha"]!, angry: moodDir["angry"]!, cry: moodDir["cry"]!, surprise: moodDir["surprise"]!, respect: moodDir["respect"]!)
                 let card = Card(uid: dir["uid"] as! String, id: dir["id"] as! String, name: dir["name"] as! String, photo: dir["photo"] as! String, sex: dir["sex"] as! String, introduce: dir["introduce"] as! String, country: dir["country"] as! String, school: dir["school"] as! String, department: dir["department"] as! String, article: dir["article"] as! String, birthday: dir["birthday"] as! String, love: dir["love"] as! String, fans: dir["fans"] as! Int, beKeeped: dir["beKeeped"] as! Int, beReplyed: dir["beReplyed"] as! Int, getHeart: dir["getHeart"] as! Int, mood: mood)
                 ModelSingleton.shared.setUserCard(card)
+                ModelSingleton.shared.setMood(mood)
                 subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
             } else {
                 subject.onNext(FirebaseResult<Bool>(data: false, errorMessage: .login(3), sender: nil))
@@ -293,5 +298,67 @@ class CardFirebase: CardFirebaseInterface {
             }
         }
         return subject.asObserver()
+    }
+    // MARK: - 加入表情符號
+    func addMood(emotion: Mood.EmotionType, postID: String) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        let setter: [String:Any] = ["mood.\(emotion.rawValue)": FieldValue.arrayUnion([postID])]
+        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            } else {
+                var mood = ModelSingleton.shared.mood
+                switch emotion {
+                case .haha:
+                    mood.haha.append(postID)
+                case .angry:
+                    mood.angry.append(postID)
+                case .cry:
+                    mood.cry.append(postID)
+                case .heart:
+                    mood.heart.append(postID)
+                case .respect:
+                    mood.respect.append(postID)
+                case .surprise:
+                    mood.surprise.append(postID)
+                }
+                ModelSingleton.shared.setMood(mood)
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: ["emotion": emotion]))
+            }
+        }
+        return subject
+    }
+    // MARK: - 移除表情符號
+    func removeMood(emotion: Mood.EmotionType, postID: String) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        let setter: [String:Any] = ["mood.\(emotion.rawValue)": FieldValue.arrayRemove([postID])]
+        FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            } else {
+                var mood = ModelSingleton.shared.mood
+                switch emotion {
+                case .haha:
+                    mood.haha = mood.haha.filter({ $0 != postID })
+                case .angry:
+                    mood.haha = mood.angry.filter({ $0 != postID })
+                case .cry:
+                    mood.haha = mood.cry.filter({ $0 != postID })
+                case .heart:
+                    mood.haha = mood.heart.filter({ $0 != postID })
+                case .respect:
+                    mood.haha = mood.respect.filter({ $0 != postID })
+                case .surprise:
+                    mood.haha = mood.surprise.filter({ $0 != postID })
+                }
+                ModelSingleton.shared.setMood(mood)
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+            }
+        }
+        return subject
     }
 }

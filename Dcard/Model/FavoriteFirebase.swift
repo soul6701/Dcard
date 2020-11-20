@@ -83,7 +83,6 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
     // MARK: - 加入收藏清單
     func addFavoriteList(listName: String, postID: String, coverImage: String) -> Observable<FirebaseResult<Bool>> {
         let subject = PublishSubject<FirebaseResult<Bool>>()
-        
         let setter: [String:Any] = !listName.isEmpty ? ["\(listName).post": FieldValue.arrayUnion([postID]), "\(listName).coverImage": FieldValue.arrayUnion([coverImage])] :
             ["notSorted": FieldValue.arrayUnion([postID])]
         FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
@@ -91,12 +90,20 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             } else {
-                var oldFavoriteList = ModelSingleton.shared.favorite
-                if let index = oldFavoriteList.firstIndex(where: { $0.title == listName }) {
-                    oldFavoriteList[index].postIDList.append(postID)
-                    oldFavoriteList[index].coverImage.append(coverImage)
-                    ModelSingleton.shared.setFavoriteList(oldFavoriteList)
-                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                let setter: [String:Any] = ["favoritePosts": FieldValue.arrayUnion([postID])]
+                FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
+                    if let error = error {
+                        NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                        subject.onError(error)
+                    } else {
+                        var oldFavoriteList = ModelSingleton.shared.favorite
+                        if let index = oldFavoriteList.firstIndex(where: { $0.title == listName }) {
+                            oldFavoriteList[index].postIDList.append(postID)
+                            oldFavoriteList[index].coverImage.append(coverImage)
+                            ModelSingleton.shared.setFavoriteList(oldFavoriteList)
+                            subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                        }
+                    }
                 }
             }
         }
@@ -168,7 +175,6 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                                         ModelSingleton.shared.setFavoriteList(oldFavoriteList)
                                         subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
                                     }
-                                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
                                 }
                             }
                         }
@@ -185,7 +191,6 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                                         ModelSingleton.shared.setFavoriteList(oldFavoriteList)
                                         subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
                                     }
-                                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
                                 }
                             }
                         }

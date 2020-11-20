@@ -31,17 +31,17 @@ public enum ProfilePostMoodCellMode: Int {
         case .title:
             break
         case .heart:
-            data = ProfilePostMoodCellModel(icon: "❤️", count: card.mood.heart)
+            data = ProfilePostMoodCellModel(icon: "❤️", count: card.mood.heart.count)
         case .haha:
-            data = ProfilePostMoodCellModel(icon: "🤣", count: card.mood.haha)
+            data = ProfilePostMoodCellModel(icon: "🤣", count: card.mood.haha.count)
         case .angry:
-            data = ProfilePostMoodCellModel(icon: "😡", count: card.mood.angry)
+            data = ProfilePostMoodCellModel(icon: "😡", count: card.mood.angry.count)
         case .cry:
-            data = ProfilePostMoodCellModel(icon: "😭", count: card.mood.cry)
+            data = ProfilePostMoodCellModel(icon: "😭", count: card.mood.cry.count)
         case .surprise:
-            data = ProfilePostMoodCellModel(icon: "😮", count: card.mood.surprise)
+            data = ProfilePostMoodCellModel(icon: "😮", count: card.mood.surprise.count)
         case .respect:
-            data = ProfilePostMoodCellModel(icon: "🙇‍♂️", count: card.mood.respect)
+            data = ProfilePostMoodCellModel(icon: "🙇‍♂️", count: card.mood.respect.count)
         }
         return data
     }
@@ -59,14 +59,40 @@ class ProfilePostMoodCell: UITableViewCell {
     
     static private var width: CGFloat = 0 //由最大心情數量決定線條寬度
     private var mode: ProfilePostMoodCellMode = .title
-    private var mood: Mood {
-        return ModelSingleton.shared.userCard.mood
+    private var mood: Mood = ModelSingleton.shared.userCard.mood
+    public var sortedMoods: [(ProfilePostMoodCellMode, [String])] {
+        var list = [(ProfilePostMoodCellMode, [String])]()
+        list.append((.heart, self.mood.heart))
+        list.append((.haha, self.mood.haha))
+        list.append((.angry, self.mood.angry))
+        list.append((.cry, self.mood.cry))
+        list.append((.surprise, self.mood.surprise))
+        list.append((.respect, self.mood.respect))
+        list.sort { return $0.1.count < $1.1.count }
+        return list
+    }
+    public var largest: ProfilePostMoodCellMode {
+        return self.sortedMoods.last!.0
+    }
+    public var secondLargest: ProfilePostMoodCellMode {
+        return self.sortedMoods[self.sortedMoods.count - 2].0
+    }
+    
+    //計算心情數比例
+    public var contrast: Bool {
+        let largest = self.sortedMoods.first { return $0.0 == self.largest }!
+        let secondLargest = self.sortedMoods.first { return $0.0 == self.secondLargest }!
+        let difference = largest.1.count.findMultipleBaseTen() - secondLargest.1.count.findMultipleBaseTen()
+        return difference >= 1 || difference == 0 && (secondLargest.1.count == 0 ? true : (largest.1.count / secondLargest.1.count > 2))
+    }
+    public var scale: [ProfilePostMoodCellMode: CGFloat] {
+        return calculateScale(self.contrast ? self.sortedMoods.dropLast() : self.sortedMoods)
     }
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     func setContent(rank: Int) {
-        let mode = rank == 0 ? .title : mood.sortedMoods.reversed()[rank - 1].0
+        let mode = rank == 0 ? .title : self.sortedMoods.reversed()[rank - 1].0
         let data = mode.data
         
         if mode != .title {
@@ -77,20 +103,20 @@ class ProfilePostMoodCell: UITableViewCell {
             self.lbCount.isHidden = false
             self.lbEmoji.isHidden = false
             self.viewLine.isHidden = false
-            if self.mood.contrast {
-                if mode == self.mood.largest {
+            if self.contrast {
+                if mode == self.largest {
                     print("aaaaaa\(self.viewLine.frame.width)")
                     self.viewLine.layoutIfNeeded() //因為lable加入文字自適應寬度，為了新增分隔線，須立即更新layout
                     makeSeperatorView(in: self.viewLine)
                     ProfilePostMoodCell.width = self.lbCount.frame.minX - self.lbEmoji.frame.maxX
                 } else {
                     self.viewLine.snp.remakeConstraints { (maker) in
-                        maker.width.equalTo((ProfilePostMoodCell.width) * (self.mood.scale[mode]!))
+                        maker.width.equalTo((ProfilePostMoodCell.width) * (self.scale[mode]!))
                     }
                 }
             } else {
                 self.viewLine.snp.remakeConstraints { (maker) in
-                    maker.width.equalTo((ProfilePostMoodCell.width) * (self.mood.scale[mode]!))
+                    maker.width.equalTo((ProfilePostMoodCell.width) * (self.scale[mode]!))
                 }
             }
         } else {
@@ -117,5 +143,16 @@ class ProfilePostMoodCell: UITableViewCell {
         containerView.backgroundColor = .white
         containerView.layer.mask = seperatorLayer
         view.addSubview(containerView)
+    }
+}
+extension ProfilePostMoodCell {
+    private func calculateScale(_ list: [(ProfilePostMoodCellMode, [String])]) -> [ProfilePostMoodCellMode: CGFloat] {
+        var scale = [ProfilePostMoodCellMode: CGFloat]()
+        let countList: [Int] = list.map { return $0.1.count }
+        let total = countList.reduce(0) { return $0 + $1 }
+        list.forEach { (mode, list) in
+            scale[mode] = total != 0 ? CGFloat(Double(list.count) / Double(total)) : 0
+        }
+        return scale
     }
 }

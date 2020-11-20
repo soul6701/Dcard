@@ -53,137 +53,17 @@ enum SettingAccountMode {
     }
 }
 class SettingAccountVC: UIViewController {
-    lazy private var btnSave: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(title: "儲存", style: .plain, target: self, action: #selector(self.save))
-        barButtonItem.isEnabled = false
-        return barButtonItem
-    }()
-    lazy private var btnHint: UIButton = {
-        let button = UIButton(type: .infoLight)
-        button.addTarget(self, action: #selector(self.alert), for: .touchUpInside)
-        return button
-    }()
-    lazy private var tfEmailList: [UITextField] = {
-        let placeholderRowOne = self.mode == .resetAddress ? "請輸入欲修改的信箱" : "請輸入新密碼"
-        let placeholderRowTwo = self.mode == .resetAddress ? "再次輸入新信箱" : "再次輸入新密碼"
-        let width = self.mode == .resetAddress ? 200 : 150
-        var list = [UITextField]()
-        (0...1).forEach { (i) in
-            let tf = UITextField(frame: CGRect(x: 0, y: 0, width: width, height: 44))
-            tf.placeholder = i == 0 ? placeholderRowOne : placeholderRowTwo
-            tf.clearButtonMode = .whileEditing
-            tf.isSecureTextEntry = self.mode == .resetPassword
-            list.append(tf)
-        }
-        return list
-    }()
-    lazy private var tfPassword: UITextField = {
-        let placeholder = self.mode == .resetAddress ? "請輸入密碼" : "請輸入目前密碼"
-        let width = self.mode == .resetAddress ? 200 : 150
-        let tf = UITextField(frame: CGRect(x: 0, y: 0, width: width, height: 44))
-        tf.placeholder = placeholder
-        tf.isSecureTextEntry = true
-        tf.clearButtonMode = .whileEditing
-        return tf
-    }()
-    lazy private var tfCard: [UITextField] = {
-        let placeholder = ["請輸入ID", "請輸入卡稱", "請輸入國家", "請輸入學校", "請輸入系所", "請輸入感情狀態", "我的文章", "請輸入自我介紹"]
-        
-        let width = 200
-        var list = [UITextField]()
-        let total = self.mode != .createCard ? 1 : 7
-        (0...total).forEach { (i) in
-            let tf = UITextField(frame: CGRect(x: 0, y: 0, width: width, height: 44))
-            tf.delegate = self
-            tf.placeholder = placeholder[i]
-            tf.clearButtonMode = .whileEditing
-            if i == 0 && self.mode != .createCard {
-                if self.mode == .editCard {
-                    let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-                    button.setImage(UIImage(systemName: "pencil"), for: .normal)
-                    button.tintColor = #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)
-                    button.addTarget(self, action: #selector(showCardIDPage), for: .touchUpInside)
-                    tf.rightViewMode = .always
-                    tf.rightView = button
-                    tf.textColor = .systemGray3
-                } else {
-                    tf.textColor = .darkText
-                }
-            }
-            list.append(tf)
-        }
-        return list
-    }()
-    lazy private var viewOK: UIView = {
-        let view = customView()
-        view.viewBorderWidth = 1
-        view.viewBorderColor = #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(confirm))
-        view.addGestureRecognizer(tap)
-        return view
-    }()
-    lazy private var hintVC: UIViewController = {
-        let vc = UIViewController()
-        guard let view = vc.view else { return vc }
-        view.layer.cornerRadius = 15
-        view.backgroundColor = .white
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.attributedText = NSAttributedString(string: "規則", attributes: [.font: UIFont.boldSystemFont(ofSize: 16)])
-        view.addSubview(label)
-        label.snp.makeConstraints { (maker) in
-            maker.centerX.equalToSuperview()
-            maker.top.equalToSuperview().offset(5)
-            maker.height.equalTo(40)
-            maker.width.equalToSuperview()
-        }
-        let button = UIButton(type: .custom)
-        button.backgroundColor = .link
-        button.layer.cornerRadius = 15
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("好", for: .normal)
-        button.addTarget(self, action: #selector(self.close), for: .touchUpInside)
-        view.addSubview(button)
-        button.snp.makeConstraints { (maker) in
-            maker.width.equalToSuperview().dividedBy(2)
-            maker.centerX.equalToSuperview()
-            maker.height.equalTo(30)
-            maker.bottom.equalToSuperview().offset(-5)
-        }
-        let textView = UITextView()
-        textView.contentInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 10)
-        textView.backgroundColor = .clear
-        textView.attributedText = NSAttributedString(string: """
-ID 規則
-1. 不可與他人重複
-2. 首字為英文字母
-3. 只可以用小寫字母、數字、半形底線、點
-4. 不可含dcard字串
-5.長度不可超過15個字元
-
-卡稱規則
-1. 卡稱不可超過12個字元
-2. 不可包含 dcard、Dcard、狄卡字串
-""", attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .light)])
-        textView.isEditable = false
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(textView)
-        textView.snp.makeConstraints { (maker) in
-            maker.centerX.equalToSuperview()
-            maker.top.equalTo(label.snp.bottom)
-            maker.width.equalTo(label.snp.width)
-            maker.bottom.equalTo(button.snp.top).offset(-5)
-        }
-        return vc
-    }()
+    lazy private var btnSave: UIBarButtonItem = self.confiBtnSave()
+    lazy private var btnHint: UIButton = self.confiBtnHint()
+    lazy private var tfEmailList: [UITextField] = self.confiTfEmailList()
+    lazy private var tfPassword: UITextField = self.confiTfPassword()
+    lazy private var tfCard: [UITextField] = self.confiTfCard()
+    lazy private var viewOK: UIView = self.confiViewOK()
+    lazy private var hintVC: UIViewController = self.confiHintVC()
+    @IBOutlet weak var tableView: UITableView!
     
-    private var user: User {
-        return ModelSingleton.shared.userConfig.user
-    }
-    private var card: Card {
-        return ModelSingleton.shared.userCard
-    }
+    private var user: User = ModelSingleton.shared.userConfig.user
+    private var card: Card = ModelSingleton.shared.userCard
     private var mode: SettingAccountMode = .setAddress
     private var oldAddress = ""
     private var newAddress = ""
@@ -209,8 +89,6 @@ ID 規則
     private var hintOpend = false
     private var viewModelUser: LoginVMInterface!
     private var viewModelCard: CardVMInterface!
-    
-    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -295,6 +173,130 @@ extension SettingAccountVC {
             idValid.bind(to: btnDone.rx.isEnabled).disposed(by: self.disposeBag)
             self.tfCard[0].inputAccessoryView = toolBar
         }
+    }
+    private func confiBtnSave() -> UIBarButtonItem {
+        let barButtonItem = UIBarButtonItem(title: "儲存", style: .plain, target: self, action: #selector(self.save))
+        barButtonItem.isEnabled = false
+        return barButtonItem
+    }
+    private func confiBtnHint() -> UIButton {
+        let button = UIButton(type: .infoLight)
+        button.addTarget(self, action: #selector(self.alert), for: .touchUpInside)
+        return button
+    }
+    private func confiTfEmailList() -> [UITextField] {
+        let placeholderRowOne = self.mode == .resetAddress ? "請輸入欲修改的信箱" : "請輸入新密碼"
+        let placeholderRowTwo = self.mode == .resetAddress ? "再次輸入新信箱" : "再次輸入新密碼"
+        let width = self.mode == .resetAddress ? 200 : 150
+        var list = [UITextField]()
+        (0...1).forEach { (i) in
+            let tf = UITextField(frame: CGRect(x: 0, y: 0, width: width, height: 44))
+            tf.placeholder = i == 0 ? placeholderRowOne : placeholderRowTwo
+            tf.clearButtonMode = .whileEditing
+            tf.isSecureTextEntry = self.mode == .resetPassword
+            list.append(tf)
+        }
+        return list
+    }
+    private func confiTfPassword() -> UITextField {
+        let placeholder = self.mode == .resetAddress ? "請輸入密碼" : "請輸入目前密碼"
+        let width = self.mode == .resetAddress ? 200 : 150
+        let tf = UITextField(frame: CGRect(x: 0, y: 0, width: width, height: 44))
+        tf.placeholder = placeholder
+        tf.isSecureTextEntry = true
+        tf.clearButtonMode = .whileEditing
+        return tf
+    }
+    private func confiTfCard() -> [UITextField] {
+        let placeholder = ["請輸入ID", "請輸入卡稱", "請輸入國家", "請輸入學校", "請輸入系所", "請輸入感情狀態", "我的文章", "請輸入自我介紹"]
+        
+        let width = 200
+        var list = [UITextField]()
+        let total = self.mode != .createCard ? 1 : 7
+        (0...total).forEach { (i) in
+            let tf = UITextField(frame: CGRect(x: 0, y: 0, width: width, height: 44))
+            tf.delegate = self
+            tf.placeholder = placeholder[i]
+            tf.clearButtonMode = .whileEditing
+            if i == 0 && self.mode != .createCard {
+                if self.mode == .editCard {
+                    let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+                    button.setImage(UIImage(systemName: "pencil"), for: .normal)
+                    button.tintColor = #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)
+                    button.addTarget(self, action: #selector(showCardIDPage), for: .touchUpInside)
+                    tf.rightViewMode = .always
+                    tf.rightView = button
+                    tf.textColor = .systemGray3
+                } else {
+                    tf.textColor = .darkText
+                }
+            }
+            list.append(tf)
+        }
+        return list
+    }
+    private func confiViewOK() -> UIView {
+        let view = customView()
+        view.viewBorderWidth = 1
+        view.viewBorderColor = #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(confirm))
+        view.addGestureRecognizer(tap)
+        return view
+    }
+    private func confiHintVC() -> UIViewController {
+        let vc = UIViewController()
+        guard let view = vc.view else { return vc }
+        view.layer.cornerRadius = 15
+        view.backgroundColor = .white
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.attributedText = NSAttributedString(string: "規則", attributes: [.font: UIFont.boldSystemFont(ofSize: 16)])
+        view.addSubview(label)
+        label.snp.makeConstraints { (maker) in
+            maker.centerX.equalToSuperview()
+            maker.top.equalToSuperview().offset(5)
+            maker.height.equalTo(40)
+            maker.width.equalToSuperview()
+        }
+        let button = UIButton(type: .custom)
+        button.backgroundColor = .link
+        button.layer.cornerRadius = 15
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("好", for: .normal)
+        button.addTarget(self, action: #selector(self.close), for: .touchUpInside)
+        view.addSubview(button)
+        button.snp.makeConstraints { (maker) in
+            maker.width.equalToSuperview().dividedBy(2)
+            maker.centerX.equalToSuperview()
+            maker.height.equalTo(30)
+            maker.bottom.equalToSuperview().offset(-5)
+        }
+        let textView = UITextView()
+        textView.contentInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 10)
+        textView.backgroundColor = .clear
+        textView.attributedText = NSAttributedString(string: """
+        ID 規則
+        1. 不可與他人重複
+        2. 首字為英文字母
+        3. 只可以用小寫字母、數字、半形底線、點
+        4. 不可含dcard字串
+        5.長度不可超過15個字元
+
+        卡稱規則
+        1. 卡稱不可超過12個字元
+        2. 不可包含 dcard、Dcard、狄卡字串
+        """, attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .light)])
+        textView.isEditable = false
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(textView)
+        textView.snp.makeConstraints { (maker) in
+            maker.centerX.equalToSuperview()
+            maker.top.equalTo(label.snp.bottom)
+            maker.width.equalTo(label.snp.width)
+            maker.bottom.equalTo(button.snp.top).offset(-5)
+        }
+        return vc
     }
 }
 // MARK: - Private Handler
@@ -485,6 +487,7 @@ extension SettingAccountVC {
         }
     }
 }
+// MARK: - UITextFieldDelegate
 extension SettingAccountVC: UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return !(self.mode == .editCard && textField === self.tfCard[0])
@@ -683,6 +686,7 @@ extension SettingAccountVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
 }
+// MARK: - UIPopoverPresentationControllerDelegate
 extension SettingAccountVC: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none

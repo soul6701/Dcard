@@ -548,7 +548,6 @@
 				221ADB012499F0A300C25BD1 /* Info.plist */,
 				2276108124F90470003A3F88 /* GoogleService-Info.plist */,
 				220D16DB24F4C841007B578E /* UserDefaultsKeys.swift */,
-				22EFC6A724FB907A003CD570 /* FirebaseManager.swift */,
 			);
 			path = Dcard;
 			sourceTree = "<group>";
@@ -914,6 +913,7 @@
 		93661578254BA8480030CD0A /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				22EFC6A724FB907A003CD570 /* FirebaseManager.swift */,
 				2276107F24F8FF2C003A3F88 /* LoginFirebase.swift */,
 				9366EC2E254ABBC20030CD0A /* PostFirebase.swift */,
 				22788AE72503900200E87F7F /* CardFirebase.swift */,

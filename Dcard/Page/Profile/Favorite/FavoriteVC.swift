@@ -31,8 +31,8 @@ class FavoriteVC: UIViewController {
         }
     }
     private var allFavorite: Favorite {
-        var allPostIDList = [String]()
-        self.favoriteList.map { return $0.postIDList }.forEach { (postIDList) in
+        var allPostIDList: [String] = []
+         ModelSingleton.shared.favorite.map { return $0.postIDList }.forEach { (postIDList) in
             allPostIDList += postIDList
         }
         return Favorite(title: "全部收藏", postIDList: allPostIDList)
