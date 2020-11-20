@@ -81,7 +81,7 @@ class PostVC: UIViewController {
     private var post = Post()
     private var commentList = [Comment]()
     private var previousRect = CGRect()
-    var willBeAddedListTitle = ""
+    private var willBeAddedList: Favorite?
     private var show: Bool = false {
         didSet {
             self.btnShowComment.setImage(UIImage(named: show ? ImageInfo.down : ImageInfo.up), for: .normal)
@@ -172,6 +172,8 @@ class PostVC: UIViewController {
             postSettingVC.setDelegate(self)
             postSettingVC.setContent(post: self.post, mode: .keep)
             present(postSettingVC, animated: true, completion: nil)
+        } else {
+            self.viewModel.removePostFromFavoriteList(postID: self.post.id)
         }
         self.keep = !self.keep
     }
@@ -196,7 +198,7 @@ extension PostVC {
         self.btnSetting.imageView?.tintColor = (self.post.host == self.user.uid) ? .systemBlue : .systemGray2
         self.navigationItem.title = self.post.title
         self.heart = false
-        self.keep = false
+        self.keep = ModelSingleton.shared.allFavoritePostID.contains(self.post.id)
         self.posterMode = .school
         confiTextFieldView()
         confiTableView()
@@ -228,7 +230,8 @@ extension PostVC {
         self.OKView.button?.setTitleColor(.link, for: .normal)
         self.OKView.button?.backgroundColor = .clear
         self.OKView.buttonTapHandler = { (button) in
-            if let favorite = ModelSingleton.shared.favorite.first(where: { return $0.title == self.willBeAddedListTitle }) {
+            guard let willBeAddedList = self.willBeAddedList?.title else { return }
+            if let favorite = ModelSingleton.shared.favorite.first(where: { return $0.title == willBeAddedList }) {
                 SwiftMessages.hide(id: "success")
                 let vc = FavoriteInfoVC()
                 let mediaMetas = favorite.coverImage.first { return !$0.isEmpty }
@@ -261,8 +264,9 @@ extension PostVC {
         self.viewModel.addFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
                 self.dismiss(animated: true) {
-                    if !self.willBeAddedListTitle.isEmpty {
-                        self.OKView.configureContent(title: "", body: "已分類至" + "『\(self.willBeAddedListTitle)』")
+                    if let willBeAddedList = self.willBeAddedList {
+                        self.OKView.configureContent(title: "", body: "已分類至" + "『\(willBeAddedList.title)』")
+                        self.willBeAddedList = nil
                     } else {
                         self.OKView.configureContent(title: "", body: "文章已收藏。")
                     }
@@ -274,7 +278,18 @@ extension PostVC {
         }).disposed(by: self.disposeBag)
         self.viewModel.createFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
-                self.viewModel.addFavoriteList(listName: self.willBeAddedListTitle, postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
+                if let sender = result.sender, let favorite = sender["new"] as? Favorite {
+                    self.viewModel.addFavoriteList(listName: favorite.title, postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
+                    self.willBeAddedList = favorite
+                }
+            }
+        }, onError: { (error) in
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.viewModel.removePostFromFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                AlertManager.shared.showOKView(mode: .favorite(.removePost), handler: nil)
             }
         }, onError: { (error) in
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
@@ -430,12 +445,14 @@ extension PostVC: UIViewControllerTransitioningDelegate {
 }
 // MARK: - PostSettingCellDelegate
 extension PostVC: PostSettingVCDelegate {
-    func showAddFavoriteListOKView(title: String) {
-        self.willBeAddedListTitle = title
-        self.viewModel.addFavoriteList(listName: title, postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
+    func showAddFavoriteListOKView(favorite: Favorite) {
+        self.willBeAddedList = favorite
+        self.viewModel.addFavoriteList(listName: favorite.title, postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
     }
     func createFavoriteListAndInsert(title: String) {
-        self.willBeAddedListTitle = title
         self.viewModel.createFavoriteList(listName: title)
+    }
+    func addNotSorted() {
+        self.viewModel.addFavoriteList(listName: "", postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
     }
 }

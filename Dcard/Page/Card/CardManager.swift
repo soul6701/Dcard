@@ -12,6 +12,22 @@ import RxSwift
 import SwiftMessages
 import SwiftyJSON
 
+enum CardMode: Int {
+    case all = 0
+    case male
+    case female
+    
+    var stringValue: String {
+        switch self {
+        case .all:
+            return "all"
+        case .male:
+            return "male"
+        case .female:
+            return "female"
+        }
+    }
+}
 private protocol CardManagerInterface {
     func confiOKView()
     func confiAlertView()

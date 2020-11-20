@@ -46,6 +46,15 @@ public class ModelSingleton: ModelSingletonInterface {
     private(set) public var post = [Post]()
     private(set) public var comment = [Comment]()
     
+    public var allFavoritePostID: [String] {
+        var allPostIDList = [String]()
+        ModelSingleton.shared.favorite.filter { !$0.title.isEmpty }.map { return $0.postIDList }.forEach { (postIDList) in
+            allPostIDList += postIDList
+        }
+        let notSortedIDList = ModelSingleton.shared.favorite.first(where: { return $0.title.isEmpty })?.postIDList ?? []
+        return allPostIDList + notSortedIDList
+    }
+    
     public func setCard(_ cards: [Card]) {
         self.card = cards
     }

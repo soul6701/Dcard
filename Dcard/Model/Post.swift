@@ -8,10 +8,6 @@
 
 import UIKit
 
-public struct MediaMeta {
-    let thumbnail: String
-    let normalizedUrl: String
-}
 public struct Post {
     var id: String = ""
     var title: String = ""
@@ -30,18 +26,4 @@ public struct Post {
     var mediaMeta: [MediaMeta] = []
     var host: String = ""
     var hot: Bool = false
-}
-public struct Comment {
-    var id: String = ""
-    var anonymous: Bool = false
-    var content: String = ""
-    var createdAt: String = ""
-    var floor: Int = 0
-    var likeCount: Int = 0
-    var gender: String = ""
-    var department: String = ""
-    var school: String = ""
-    var withNickname: Bool = false
-    var host: Bool = false
-    var mediaMeta: [MediaMeta] = []
 }

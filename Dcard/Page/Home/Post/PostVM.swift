@@ -30,6 +30,9 @@ protocol PostVMInterface {
     ///更改收藏清單名字
     func updateFavoriteList(oldListName: String, newListName: String)
     var updateFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
+    ///移除收藏清單貼文
+    func removePostFromFavoriteList(postID: String)
+    var removePostFromFavoriteListSubject: PublishSubject<FirebaseResult<Bool>> { get }
 }
 class PostVM: PostVMInterface {
     private(set) var addFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
@@ -38,6 +41,7 @@ class PostVM: PostVMInterface {
     private(set) var getPostInfoOfListSubject = PublishSubject<FirebaseResult<[Post]>>()
     private(set) var removeFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     private(set) var updateFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
+    private(set) var removePostFromFavoriteListSubject = PublishSubject<FirebaseResult<Bool>>()
     
     private var postFirebase: PostFirebaseInterface
     private var favoriteFirebase: FavoriteFirebaseInterface
@@ -89,6 +93,13 @@ extension PostVM {
             self.updateFavoriteListSubject.onNext(result)
         }, onError: { (error) in
             self.updateFavoriteListSubject.onError(error)
+        }).disposed(by: self.disposeBag)
+    }
+    func removePostFromFavoriteList(postID: String) {
+        self.favoriteFirebase.removePostFromFavoriteList(postID: postID).subscribe(onNext: { (result) in
+            self.removePostFromFavoriteListSubject.onNext(result)
+        }, onError: { (error) in
+            self.removePostFromFavoriteListSubject.onError(error)
         }).disposed(by: self.disposeBag)
     }
 }

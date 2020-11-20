@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -66,9 +64,9 @@
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="glY-5V-Px0">
-                        <rect key="frame" x="292" y="6" width="23" height="18"/>
-                        <color key="tintColor" systemColor="systemGrayColor"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="glY-5V-Px0">
+                        <rect key="frame" x="282" y="6" width="23" height="18"/>
+                        <color key="tintColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <state key="normal" image="ellipsis" catalog="system"/>
                         <connections>
                             <action selector="didClickBtnSetting:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="MNL-9e-rJM"/>
@@ -93,7 +91,7 @@
                     <constraint firstItem="vgf-vp-4mF" firstAttribute="centerY" secondItem="eeu-vG-nQc" secondAttribute="centerY" id="lRG-u8-jOn"/>
                     <constraint firstItem="BeC-FN-Bkw" firstAttribute="top" secondItem="KaW-6w-dcV" secondAttribute="bottom" id="lW5-z6-5Za"/>
                     <constraint firstItem="glY-5V-Px0" firstAttribute="centerY" secondItem="eeu-vG-nQc" secondAttribute="centerY" id="lwF-eD-biD"/>
-                    <constraint firstItem="glY-5V-Px0" firstAttribute="trailing" secondItem="i7u-ay-ycH" secondAttribute="trailing" id="sF2-Dc-cQe"/>
+                    <constraint firstItem="glY-5V-Px0" firstAttribute="trailing" secondItem="i7u-ay-ycH" secondAttribute="trailing" constant="-10" id="sF2-Dc-cQe"/>
                     <constraint firstItem="vgf-vp-4mF" firstAttribute="height" secondItem="eeu-vG-nQc" secondAttribute="height" id="trF-kN-CB6"/>
                     <constraint firstAttribute="trailing" secondItem="KaW-6w-dcV" secondAttribute="trailing" constant="5" id="xG2-BV-r2q"/>
                     <constraint firstItem="KaW-6w-dcV" firstAttribute="top" secondItem="oDN-Sa-Tl3" secondAttribute="bottom" id="xTb-qS-533"/>
@@ -117,8 +115,5 @@
     </objects>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
-        <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
     </resources>
 </document>

@@ -102,13 +102,14 @@ public class LoginFirebase: LoginFirebaseInterface {
     }
     private func initData(databaseName: [String], subject: [Datatype: PublishSubject<Bool>], docID: DocumentReference) {
         databaseName.forEach { (name) in
-            let setterBlank: [String: Any] = [:]
+            var setterBlank: [String:Any] = [:]
             var _subject = PublishSubject<Bool>()
             switch name {
             case DatabaseName.card.rawValue:
                 _subject = subject[.card]!
             case DatabaseName.favoritePost.rawValue:
                 _subject = subject[.favorite]!
+                setterBlank = ["notSorted": [String]()]
             case DatabaseName.comment.rawValue:
                 _subject = subject[.comment]!
             case DatabaseName.post.rawValue:

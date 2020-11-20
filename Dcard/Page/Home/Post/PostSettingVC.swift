@@ -11,15 +11,15 @@ import RxSwift
 import RxCocoa
 
 protocol PostSettingVCDelegate {
-    func showAddFavoriteListOKView(title: String)
+    func showAddFavoriteListOKView(favorite: Favorite)
     func createFavoriteListAndInsert(title: String)
+    func addNotSorted()
 }
 class PostSettingVC: UIViewController {
     enum PostSettingMode {
         case keep
         case setting
     }
-    
     lazy private var tableView: UITableView = self.confiTableView()
     lazy private var lbTitle: UILabel = self.confiLbTitle()
     private var host: String = ""
@@ -28,15 +28,24 @@ class PostSettingVC: UIViewController {
     private var delegate: PostSettingVCDelegate?
     private var post: Post = Post()
     private var viewModel: PostVMInterface!
+    private var notSorted: Bool = true //未分類
     
     private var settingDataList: [String] {
         return host == ModelSingleton.shared.userConfig.user.uid ? ["分享", "轉貼到其他看板", "引用原文發文", "關閉文章通知", "刪除文章", "編輯文章", "編輯話題", "複製全文", "重新整理", "我不喜歡這篇文章"] :
             ["分享", "轉貼到其他看板", "引用原文發文", "開啟文章通知", "檢舉文章", "複製全文", "重新整理", "我不喜歡這篇文章"]
     }
-    private var keepDataList: [Favorite] = ModelSingleton.shared.favorite
+    private var favoriteList: [Favorite] {
+        return ModelSingleton.shared.favorite.filter { !$0.title.isEmpty }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.notSorted {
+            self.delegate?.addNotSorted()
+        }
     }
     func setContent(post: Post, mode: PostSettingMode, host: String = "") {
         self.post = post
@@ -50,7 +59,7 @@ class PostSettingVC: UIViewController {
 // MARK: - SetupUI
 extension PostSettingVC {
     private func initView() {
-        self.view.backgroundColor = #colorLiteral(red: 0.8321695924, green: 0.985483706, blue: 0.4733308554, alpha: 0.8150684932)
+        self.view.backgroundColor = .systemBackground
         if self.mode == .keep {
             self.view.addSubview(self.lbTitle)
             self.lbTitle.snp.makeConstraints { (maker) in
@@ -97,7 +106,7 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.mode == .keep ? 1 + self.keepDataList.count : self.settingDataList.count
+        return self.mode == .keep ? 1 + self.favoriteList.count : self.settingDataList.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
@@ -113,8 +122,8 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
                 image = "plus"
             } else {
                 isSystemImage = false
-                title = self.keepDataList[row - 1].title
-                let favorite = self.keepDataList[row - 1]
+                title = self.favoriteList[row - 1].title
+                let favorite = self.favoriteList[row - 1]
                 let mediaMeta = favorite.coverImage.first ?? ""
                 image =  mediaMeta
             }
@@ -135,6 +144,7 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         if self.mode == .keep {
+            self.notSorted = false
             if row == 0 {
                 UIAlertController.showNewFavoriteCatolog(self, cancelHandler: {
                     self.dismiss(animated: true, completion: nil)
@@ -142,8 +152,8 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
                     self.delegate?.createFavoriteListAndInsert(title: text)
                 }, disposeBag: self.disposeBag)
             } else {
-                let favorite = self.keepDataList[row - 1]
-                self.delegate?.showAddFavoriteListOKView(title: favorite.title)
+                let favorite = self.favoriteList[row - 1]
+                self.delegate?.showAddFavoriteListOKView(favorite: favorite)
             }
         } else {
             let vc = UIActivityViewController(activityItems: [self.post.title], applicationActivities: nil)

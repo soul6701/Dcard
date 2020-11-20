@@ -22,8 +22,11 @@ class FavoriteVC: UIViewController {
         let width = floor((Double)(self.collectionView.bounds.width - itemSpace - collectionPadding * 2) / 2)
         return CGSize(width: width, height: width)
     }
-    private var favoriteList = ModelSingleton.shared.favorite {
-        didSet {
+    private var favoriteList: [Favorite] {
+        get {
+            return ModelSingleton.shared.favorite.filter { !$0.title.isEmpty }
+        }
+        set {
             self.collectionView.reloadData()
         }
     }
@@ -56,7 +59,7 @@ class FavoriteVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.favoriteList = ModelSingleton.shared.favorite
+        self.favoriteList = ModelSingleton.shared.favorite.filter { !$0.title.isEmpty }
     }
     func setContent(title: String) {
         self.navigationItem.title = title
@@ -102,7 +105,7 @@ extension FavoriteVC {
         self.viewModel.createFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
                 AlertManager.shared.showOKView(mode: .favorite(.create), handler: nil)
-                self.favoriteList = ModelSingleton.shared.favorite
+                self.favoriteList = ModelSingleton.shared.favorite.filter { !$0.title.isEmpty }
             }
         }, onError: { (error) in
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)

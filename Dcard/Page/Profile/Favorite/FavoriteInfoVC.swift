@@ -17,8 +17,8 @@ enum FavoriteInfoMode {
 }
 
 class FavoriteInfoVC: UIViewController {
-    
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var heightRelative: NSLayoutConstraint!
     //標題視窗
     @IBOutlet weak var topSpace: NSLayoutConstraint!
     @IBOutlet weak var lbTitle: UILabel!
@@ -37,6 +37,7 @@ class FavoriteInfoVC: UIViewController {
     private var catalogSelected: Bool = false
     private var selectedForumNameList: [String] = []
     private var postIDList: [String] = []
+    private var postList: [Post] = [] //全部貼文
     private var titleFavorite: String = ""
     private var newTitleFavorite: String = ""
     private var selectedPost: Post = Post()
@@ -46,7 +47,12 @@ class FavoriteInfoVC: UIViewController {
             self.tableView.reloadData()
         }
     }
-    private var postList: [Post] = [] //全部貼文
+    private var notSortedIDList: [String] {
+        return ModelSingleton.shared.favorite.first(where: { return $0.title.isEmpty })?.postIDList ?? []
+    }
+    private var notSortedPostList: [Post] { //未分類貼文
+        return self.postList.filter { self.notSortedIDList.contains($0.id) }
+    }
     private var imageStrings: [String] = []
     
     override func viewDidLoad() {
@@ -83,8 +89,10 @@ class FavoriteInfoVC: UIViewController {
                 maker.height.equalTo(imageView.bounds.height * 1.8 / 3)
                 maker.width.equalTo(imageView.bounds.height * 1.8 / 3)
             }
+            self.filteredPostList = self.notSortedPostList
         } else {
             self.btnCatalog.imageView?.subviews.last?.removeFromSuperview()
+            self.filteredPostList = self.postList
         }
         self.catalogSelected = !self.catalogSelected
         self.btnSelect.alpha = 0
@@ -117,6 +125,9 @@ extension FavoriteInfoVC {
         confiTableView()
         confiTitleView()
         confiContainerView()
+        
+        let isAll = self.mode == .all
+        self.heightRelative.constant = isAll ? 300 : 260
     }
     private func confiTableView() {
         let isAll = self.mode == .all
@@ -176,7 +187,7 @@ extension FavoriteInfoVC {
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
-        self.viewModel.getPostInfoOfList(postIDs: self.postIDList)
+        self.viewModel.getPostInfoOfList(postIDs: self.postIDList + self.notSortedIDList)
     }
 }
 // MARK: - UITableViewDelegate
@@ -291,6 +302,7 @@ extension FavoriteInfoVC: OptionViewDelegate {
                         AlertManager.shared.showOKView(mode: .profile(.shareCardInfoAndIssueInfo), handler: nil)
                     }
                 }
+                present(vc, animated: true)
             case 1:
                 break
             case 2:

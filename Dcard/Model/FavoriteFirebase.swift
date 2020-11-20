@@ -24,6 +24,8 @@ protocol FavoriteFirebaseInterface {
     func removeFavoriteList(listName: String) -> Observable<FirebaseResult<Bool>>
     ///更改收藏清單名字
     func updateFavoriteList(oldListName: String, newListName: String) -> Observable<FirebaseResult<Bool>>
+    ///移除收藏清單貼文
+    func removePostFromFavoriteList(postID: String) -> Observable<FirebaseResult<Bool>>
 }
 public class FavoriteFirebase: FavoriteFirebaseInterface {
     
@@ -41,6 +43,11 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
             if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
                 dir.keys.forEach { (key) in
                     let title: String = key
+                    guard key != "notSorted" else {
+                        let notSortedPostList: [String] = dir[key] as! [String]
+                        favoriteList.append(Favorite(title: "", createAt: "", postIDList: notSortedPostList, coverImage: [String]()))
+                        return
+                    }
                     let favoriteDir: [String: Any] = dir[key] as! [String : Any]
                     let createAt: String = favoriteDir["createAt"] as! String
                     let postIDList: [String] = favoriteDir["post"] as! [String]
@@ -64,10 +71,11 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             } else {
-                var oldFavorite = ModelSingleton.shared.favorite
-                oldFavorite.append(Favorite(title: listName, createAt: Date.getCurrentDateString(true), postIDList: [String](), coverImage: [String]()))
-                ModelSingleton.shared.setFavoriteList(oldFavorite)
-                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                var oldFavoriteList = ModelSingleton.shared.favorite
+                let newFavorite = Favorite(title: listName, createAt: Date.getCurrentDateString(true), postIDList: [String](), coverImage: [String]())
+                oldFavoriteList.append(newFavorite)
+                ModelSingleton.shared.setFavoriteList(oldFavoriteList)
+                subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: ["new": newFavorite]))
             }
         }
         return subject
@@ -76,7 +84,9 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
     func addFavoriteList(listName: String, postID: String, coverImage: String) -> Observable<FirebaseResult<Bool>> {
         let subject = PublishSubject<FirebaseResult<Bool>>()
         
-        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(["\(listName).post": FieldValue.arrayUnion([postID]), "\(listName).coverImage": FieldValue.arrayUnion([coverImage])]) { (error) in
+        let setter: [String:Any] = !listName.isEmpty ? ["\(listName).post": FieldValue.arrayUnion([postID]), "\(listName).coverImage": FieldValue.arrayUnion([coverImage])] :
+            ["notSorted": FieldValue.arrayUnion([postID])]
+        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
@@ -130,6 +140,57 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                 oldFavoriteList.append(newFavorite)
                 ModelSingleton.shared.setFavoriteList(oldFavoriteList)
                 subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+            }
+        }
+        return subject
+    }
+    // MARK: - 移除收藏清單貼文
+    func removePostFromFavoriteList(postID: String) -> Observable<FirebaseResult<Bool>> {
+        let subject = PublishSubject<FirebaseResult<Bool>>()
+        
+        FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).getDocument { (querySnapshot, error) in
+            if let error = error {
+                NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                subject.onError(error)
+            }
+            if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
+                for key in dir.keys {
+                    if key != "notSorted" {
+                        if let favorite = dir[key] as? [String:Any], (favorite["post"] as! [String]).contains(postID) {
+                            FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(["\(key).post": FieldValue.arrayRemove([postID])]) { (error) in
+                                if let error = error {
+                                    NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                                    subject.onError(error)
+                                } else {
+                                    var oldFavoriteList = ModelSingleton.shared.favorite
+                                    if let index = oldFavoriteList.firstIndex (where: { $0.title == key }) {
+                                        oldFavoriteList[index].postIDList.removeAll(where: { return $0 == postID })
+                                        ModelSingleton.shared.setFavoriteList(oldFavoriteList)
+                                        subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                                    }
+                                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                                }
+                            }
+                        }
+                    } else {
+                        if let notSortedIDList = dir[key] as? [String], notSortedIDList.contains(postID) {
+                            FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData([key: FieldValue.arrayRemove([postID])]) { (error) in
+                                if let error = error {
+                                    NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
+                                    subject.onError(error)
+                                } else {
+                                    var oldFavoriteList = ModelSingleton.shared.favorite
+                                    if let index = oldFavoriteList.firstIndex (where: { $0.title == "" }) {
+                                        oldFavoriteList[index].postIDList.removeAll(where: { return $0 == postID })
+                                        ModelSingleton.shared.setFavoriteList(oldFavoriteList)
+                                        subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                                    }
+                                    subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         return subject

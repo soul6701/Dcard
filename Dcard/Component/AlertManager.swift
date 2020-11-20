@@ -30,6 +30,7 @@ public class AlertManager {
         case remove = "移除收藏清單成功"
         case create = "創建收藏清單成功"
         case update = "更新收藏清單名字成功"
+        case removePost = "從收藏清單移除貼文成功"
     }
     enum OKMode {
         case login(LoginOKMode)
