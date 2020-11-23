@@ -124,15 +124,16 @@ extension SetBirthDayVC {
     }
     private func confiTextfield() {
         self.tfBirthday.inputView = self.pickerView
-        let imageView = UIImageView(image: UIImage(named: ImageInfo.arrow_open))
+        let imageView = UIImageView(image: UIImage(named: ImageInfo.arrow_show))
+        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         let view = UIView()
         view.addSubview(imageView)
-        view.addConstraint(NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: -20))
-        view.addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0))
-        view.widthAnchor.constraint(equalToConstant: self.tfBirthday.bounds.width / 12).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: imageView.bounds.height / 2).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: imageView.bounds.height / 2).isActive = true
+        imageView.snp.makeConstraints { (maker) in
+            maker.trailing.equalToSuperview().offset(-20)
+            maker.center.equalToSuperview()
+            maker.width.equalTo(self.tfBirthday.bounds.width / 12)
+        }
         self.tfBirthday.rightView = view
         self.tfBirthday.rightViewMode = .always
         self.tfBirthday.tintColor = .clear

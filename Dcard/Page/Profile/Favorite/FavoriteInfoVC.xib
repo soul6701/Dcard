@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -33,7 +35,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nxf-ET-1XO">
                     <rect key="frame" x="0.0" y="344" width="414" height="518"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cJP-bX-XEV">
                     <rect key="frame" x="0.0" y="44" width="414" height="818"/>
@@ -73,7 +75,7 @@
                             </subviews>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="mef-A2-U6m" firstAttribute="top" secondItem="l98-Z3-S1L" secondAttribute="top" id="52G-CK-ZOs"/>
                         <constraint firstAttribute="trailing" secondItem="mef-A2-U6m" secondAttribute="trailing" id="N0w-Qi-4Ul"/>
@@ -88,7 +90,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TTB-T7-Lhj">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fEa-fb-KO1">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fEa-fb-KO1">
                                     <rect key="frame" x="369" y="15" width="30" height="29"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                     <state key="normal" title="選取"/>
@@ -103,7 +105,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="fEa-fb-KO1" firstAttribute="top" secondItem="WQp-ms-oUd" secondAttribute="top" id="7EN-KV-dZt"/>
                                 <constraint firstItem="WQp-ms-oUd" firstAttribute="leading" secondItem="TTB-T7-Lhj" secondAttribute="leading" constant="15" id="AmQ-Je-Vxy"/>
@@ -115,8 +117,8 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YSt-ld-Dlx">
                             <rect key="frame" x="0.0" y="60" width="414" height="40"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyN-Wn-z06">
-                                    <rect key="frame" x="299" y="9" width="100" height="22"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyN-Wn-z06">
+                                    <rect key="frame" x="299" y="15" width="100" height="22"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="100" id="2fR-ZF-wfr"/>
                                     </constraints>
@@ -129,16 +131,20 @@
                                         <action selector="didClickBtnCatalog:" destination="-1" eventType="touchUpInside" id="2XB-OC-J1Y"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwv-3q-Nva">
-                                    <rect key="frame" x="15" y="5" width="77" height="30"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwv-3q-Nva">
+                                    <rect key="frame" x="15" y="17" width="75.5" height="18"/>
                                     <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <state key="normal" title="看板篩選 ▼"/>
+                                    <inset key="titleEdgeInsets" minX="-7" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="imageEdgeInsets" minX="75" minY="0.0" maxX="-15" maxY="0.0"/>
+                                    <state key="normal" title="看板篩選" image="arrowtriangle.down.fill" catalog="system">
+                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small"/>
+                                    </state>
                                     <connections>
                                         <action selector="didClickBtnForumFilter:" destination="-1" eventType="touchUpInside" id="d3e-x4-00N"/>
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="gwv-3q-Nva" firstAttribute="leading" secondItem="YSt-ld-Dlx" secondAttribute="leading" constant="15" id="5UK-dJ-GNW"/>
                                 <constraint firstAttribute="trailing" secondItem="pyN-Wn-z06" secondAttribute="trailing" constant="15" id="5j2-Jv-QxT"/>
@@ -174,7 +180,8 @@
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="Nxf-ET-1XO" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="0r6-EJ-i4K"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="cJP-bX-XEV" secondAttribute="trailing" id="2Xq-LJ-orl"/>
@@ -195,13 +202,16 @@
                 <constraint firstItem="qf2-au-qg8" firstAttribute="top" secondItem="l98-Z3-S1L" secondAttribute="bottom" id="smP-hg-n3n"/>
                 <constraint firstItem="l98-Z3-S1L" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="tVI-Sm-6gG"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="-688" y="77"/>
         </view>
     </objects>
     <resources>
         <image name="arrow.left" catalog="system" width="128" height="98"/>
+        <image name="arrowtriangle.down.fill" catalog="system" width="128" height="124"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="square" catalog="system" width="128" height="114"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

@@ -14,6 +14,7 @@ protocol PostSettingVCDelegate {
     func showAddFavoriteListOKView(favorite: Favorite)
     func createFavoriteListAndInsert(title: String)
     func addNotSorted()
+    func willdismiss()
 }
 class PostSettingVC: UIViewController {
     enum PostSettingMode {
@@ -21,7 +22,7 @@ class PostSettingVC: UIViewController {
         case setting
     }
     lazy private var tableView: UITableView = self.confiTableView()
-    lazy private var lbTitle: UILabel = self.confiLbTitle()
+    lazy private var lbTitle: UILabel = self.confiLabel()
     private var host: String = ""
     private var mode: PostSettingMode = .setting
     private var disposeBag = DisposeBag()
@@ -34,17 +35,24 @@ class PostSettingVC: UIViewController {
         return host == ModelSingleton.shared.userConfig.user.uid ? ["分享", "轉貼到其他看板", "引用原文發文", "關閉文章通知", "刪除文章", "編輯文章", "編輯話題", "複製全文", "重新整理", "我不喜歡這篇文章"] :
             ["分享", "轉貼到其他看板", "引用原文發文", "開啟文章通知", "檢舉文章", "複製全文", "重新整理", "我不喜歡這篇文章"]
     }
+    var preferredHeight: CGFloat {
+        return CGFloat(self.settingDataList.count * 50 + 50)
+    }
     private var favoriteList: [Favorite] {
         return ModelSingleton.shared.favorite.filter { !$0.title.isEmpty }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if self.notSorted {
             self.delegate?.addNotSorted()
+        }
+        if self.mode == .setting {
+            self.delegate?.willdismiss()
         }
     }
     func setContent(post: Post, mode: PostSettingMode, host: String = "") {
@@ -91,7 +99,7 @@ extension PostSettingVC {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }
-    private func confiLbTitle() -> UILabel {
+    private func confiLabel() -> UILabel {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center

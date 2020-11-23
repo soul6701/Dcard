@@ -13,15 +13,9 @@ import RxSwift
 import IQKeyboardManagerSwift
 import SwiftMessages
 
-private class PresentationController : UIPresentationController {
+fileprivate class PresentationController : UIPresentationController {
     
-    lazy private var bgButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .black
-        button.alpha = 0.8
-        button.addTarget(self, action: #selector(self.willDismiss), for: .touchUpInside)
-        return button
-    }()
+    lazy private var buttonBG: UIButton = self.confiButtonBG()
     
     private var height: CGFloat
     
@@ -37,13 +31,20 @@ private class PresentationController : UIPresentationController {
     }
     override func presentationTransitionWillBegin() {
         guard let containerView = containerView, let presentedView = self.presentedView else { return }
-        containerView.setFixedView(self.bgButton)
+        containerView.setFixedView(self.buttonBG)
         presentedView.layer.masksToBounds = true
         presentedView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         presentedView.layer.cornerRadius = 40
     }
     @objc private func willDismiss() {
         self.presentedViewController.dismiss(animated: true, completion: nil)
+    }
+    private func confiButtonBG() -> UIButton {
+        let button = UIButton()
+        button.backgroundColor = .black
+        button.alpha = 0.8
+        button.addTarget(self, action: #selector(self.willDismiss), for: .touchUpInside)
+        return button
     }
 }
 
@@ -75,7 +76,6 @@ class PostVC: UIViewController {
     lazy private var viewCommentSetting: SettingView = UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
     lazy private var viewPosterSetting: SettingView = UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
     lazy private var viewBg: UIView = self.confiViewBG()
-    lazy private var emotionVC: UIViewController = self.confiEmotionVC()
     
     private var card: Card = ModelSingleton.shared.userCard
     private var user: User = ModelSingleton.shared.userConfig.user
@@ -86,7 +86,7 @@ class PostVC: UIViewController {
     private var willBeAddedList: Favorite?
     private var show: Bool = false {
         didSet {
-            self.btnShowComment.setImage(UIImage(named: show ? ImageInfo.down : ImageInfo.up), for: .normal)
+            self.btnShowComment.setImage(UIImage(named: show ? ImageInfo.arrow_hide : ImageInfo.arrow_show), for: .normal)
         }
     }
     private let beforeString = NSMutableAttributedString(string: "反應...", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
@@ -106,24 +106,10 @@ class PostVC: UIViewController {
                 self.btnHeart.setTitle("🤍", for: .normal)
                 return
             }
-            switch emotion {
-            case _ where self.mood.heart.contains(self.post.id):
-                self.btnHeart.setTitle(Mood.EmotionType.heart.imageText, for: .normal)
-            case _ where self.mood.angry.contains(self.post.id):
-                self.btnHeart.setTitle(Mood.EmotionType.angry.imageText, for: .normal)
-            case _ where self.mood.haha.contains(self.post.id):
-                self.btnHeart.setTitle(Mood.EmotionType.haha.imageText, for: .normal)
-            case _ where self.mood.cry.contains(self.post.id):
-                self.btnHeart.setTitle(Mood.EmotionType.cry.imageText, for: .normal)
-            case _ where self.mood.respect.contains(self.post.id):
-                self.btnHeart.setTitle(Mood.EmotionType.respect.imageText, for: .normal)
-            case _ where self.mood.surprise.contains(self.post.id):
-                self.btnHeart.setTitle(Mood.EmotionType.surprise.imageText, for: .normal)
-            default:
-                break
-            }
+            self.btnHeart.setTitle(emotion.imageText, for: .normal)
         }
     }
+    private var longpress: UILongPressGestureRecognizer!
     private var imageAvator = UIImage()
     private var willbeOpened = false {
         didSet {
@@ -158,7 +144,7 @@ class PostVC: UIViewController {
             self.btnKeep.imageView?.tintColor = self.keep ? .systemBlue : .systemGray2
         }
     }
-    private var postSettingVC: PostSettingVC?
+    private var preferredHeightForSettingVC: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,11 +156,6 @@ class PostVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        addObserverToKeyboard()
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        removerObserverFromKeyboard()
     }
     @IBAction func didClickBtnShowComment(_ sender: UIButton) {
         self.show = !self.show
@@ -183,17 +164,9 @@ class PostVC: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
-    @IBAction func didClickBtnHeart(_ sender: UIButton) {
-        guard let emotion = self.emotion else {
-            self.viewModel.addMood(emotion: .heart, postID: self.post.id)
-            return
-        }
-        self.viewModel.removeMood(emotion: emotion, postID: self.post.id)
-    }
     @IBAction func didClickBtnKeep(_ sender: UIButton) {
         if !keep {
-            self.postSettingVC = PostSettingVC()
-            guard let postSettingVC = self.postSettingVC else { return }
+            let postSettingVC = PostSettingVC()
             postSettingVC.modalPresentationStyle = .custom
             postSettingVC.transitioningDelegate = self
             postSettingVC.setDelegate(self)
@@ -204,11 +177,11 @@ class PostVC: UIViewController {
         }
     }
     @IBAction func didClickBtnSetting(_ sender: UIButton) {
-        self.postSettingVC = PostSettingVC()
-        guard let postSettingVC = self.postSettingVC else { return }
+        let postSettingVC = PostSettingVC()
         postSettingVC.modalPresentationStyle = .custom
         postSettingVC.transitioningDelegate = self
         postSettingVC.setContent(post: self.post, mode: .setting, host: self.post.host)
+        self.preferredHeightForSettingVC = postSettingVC.preferredHeight
         present(postSettingVC, animated: true, completion: nil)
     }
     func setContent(post: Post, commentList: [Comment]) {
@@ -220,30 +193,37 @@ class PostVC: UIViewController {
 extension PostVC {
     private func initView() {
         ToolbarView.shared.show(false)
+        self.navigationItem.title = self.post.title
+        confiTextView()
+        confiTableView()
+        confiView()
+        confiButton()
+        
+        setupData()
+    }
+    private func setupData() {
+        self.tvExcerpt.text = self.post.excerpt
+        self.willbeOpened = false
         self.btnShowComment.isHidden = self.commentList.isEmpty
         self.btnSetting.imageView?.tintColor = (self.post.host == self.user.uid) ? .systemBlue : .systemGray2
-        self.navigationItem.title = self.post.title
         self.keep = ModelSingleton.shared.allFavoritePostID.contains(self.post.id)
         self.posterMode = .school
         searchWhichEmotion()
-        confiTextFieldView()
-        confiTableView()
-        confiView()
-        confiOKView()
-        confiBtnHeart()
     }
-    private func confiTextFieldView() {
+    private func confiTextView() {
         self.tvExcerpt.isEditable = false
-        self.tvExcerpt.text = self.post.excerpt
         self.tvComment.delegate = self
         self.tvComment.text = "回應..."                                         
         self.tvComment.textColor = .lightGray
         self.tvComment.addRightButtonOnKeyboardWithText("取消", target: self, action: #selector(cancel), titleText: nil)
     }
-    private func confiBtnHeart() {
-        let longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showEmotionView))
-        longPress.minimumPressDuration = 1
-        self.btnHeart.addGestureRecognizer(longPress)
+    private func confiButton() {
+        self.longpress = UILongPressGestureRecognizer(target: self, action: #selector(showEmotionView))
+        self.longpress.minimumPressDuration = 1
+        self.btnHeart.addGestureRecognizer(self.longpress)
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(changeHeart))
+        self.btnHeart.addGestureRecognizer(tap)
     }
     private func confiTableView() {
         self.tableView.register(UINib(nibName: "CommentCell", bundle: nil), forCellReuseIdentifier: "cell")
@@ -252,7 +232,8 @@ extension PostVC {
         self.imageViewAvator.layer.cornerRadius = 20
         let tap = UITapGestureRecognizer(target: self, action: #selector(addNewComment))
         self.viewAddNewComment.addGestureRecognizer(tap)
-        self.willbeOpened = false
+        
+        confiOKView()
     }
     private func confiOKView() {
         self.OKView = MessageView.viewFromNib(layout: .cardView)
@@ -372,6 +353,7 @@ extension PostVC {
             if result.data {
                 if let sender = result.sender, let data = sender["emotion"] as? Mood.EmotionType {
                     self.emotion = data
+                    self.dismiss(animated: true, completion: nil)
                 }
             }
         }, onError: { (error) in
@@ -387,7 +369,7 @@ extension PostVC {
         }).disposed(by: self.disposeBag)
     }
 }
-// MARK: - Private Handler
+// MARK: - Business Logic
 extension PostVC {
     @objc private func close() {
         self.viewBg.removeFromSuperview()
@@ -422,14 +404,25 @@ extension PostVC {
             self.view.addSubview(self.viewPosterSetting)
         }
     }
+    @objc private func changeHeart() {
+        guard let emotion = self.emotion else {
+            self.viewModel.addMood(emotion: .heart, postID: self.post.id)
+            return
+        }
+        self.viewModel.removeMood(emotion: emotion, postID: self.post.id)
+    }
     @objc private func showEmotionView() {
-        self.emotionVC.modalPresentationStyle = .popover
-        self.emotionVC.preferredContentSize = CGSize(width: 200, height: 50)
-        self.emotionVC.popoverPresentationController?.delegate = self
-        self.emotionVC.popoverPresentationController?.sourceView = self.btnHeart
-        present(self.emotionVC, animated: true, completion: nil)
+        let vc = self.confiEmotionVC()
+        vc.modalPresentationStyle = .popover
+        vc.preferredContentSize = CGSize(width: self.view.bounds.width * 2 / 3, height: 60)
+        vc.popoverPresentationController?.delegate = self
+        vc.popoverPresentationController?.sourceView = self.btnHeart
+        self.present(vc, animated: true, completion: nil)
     }
     @objc private func selectEmotion(_ sender: UIButton) {
+        if let emotion = self.emotion {
+            self.viewModel.removeMood(emotion: emotion, postID: self.post.id)
+        }
         self.emotion = Mood.EmotionType.allCases[sender.tag]
         self.viewModel.addMood(emotion: self.emotion!, postID: self.post.id)
     }
@@ -469,26 +462,17 @@ extension PostVC {
                 self.tvComment.addRightButtonOnKeyboardWithText("取消", target: self, action: #selector(self.cancel), titleText: nil)
             }
         }.disposed(by: self.disposeBag)
-    }
-}
-// MARK: - Keyboard
-extension PostVC {
-    private func addObserverToKeyboard() {
-        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboard(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    private func removerObserverFromKeyboard() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    @objc private func showKeyboard(_ noti: NSNotification) {
-        self._bottomSpace.constant = 0
-        self.view.layoutIfNeeded()
-    }
-    @objc private func hideKeyboard(_ noti: NSNotification) {
-        self.willbeOpened = false
-        self._bottomSpace.constant = -100
-        self.view.layoutIfNeeded()
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification).observeOn(MainScheduler.instance).subscribe { (_) in
+            self._bottomSpace.constant = 0
+            self.view.layoutIfNeeded()
+        }.disposed(by: self.disposeBag)
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification).observeOn(MainScheduler.instance).subscribe { (_) in
+            self.willbeOpened = false
+            self._bottomSpace.constant = -100
+            self.view.layoutIfNeeded()
+        }.disposed(by: self.disposeBag)
     }
 }
 // MARK: - UITableViewDelegate
@@ -566,7 +550,7 @@ extension PostVC: SettingViewDelegate {
 // MARK: - UIViewControllerTransitioningDelegate
 extension PostVC: UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return PresentationController(height: 450, presentedViewController: presented, presenting: presenting )
+        return PresentationController(height: self.preferredHeightForSettingVC != 0 ? self.preferredHeightForSettingVC : self.view.bounds.height * 2 / 3, presentedViewController: presented, presenting: presenting )
     }
 }
 // MARK: - PostSettingCellDelegate
@@ -580,5 +564,8 @@ extension PostVC: PostSettingVCDelegate {
     }
     func addNotSorted() {
         self.viewModel.addFavoriteList(listName: "", postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
+    }
+    func willdismiss() {
+        self.preferredHeightForSettingVC = 0
     }
 }

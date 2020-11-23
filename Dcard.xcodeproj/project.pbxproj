@@ -138,7 +138,6 @@
 		22D7C39824EC2021006412BE /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D7C39624EC2021006412BE /* MessageCell.swift */; };
 		22D7C39924EC2021006412BE /* messageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22D7C39724EC2021006412BE /* messageCell.xib */; };
 		22D7C39B24ECBA83006412BE /* 熊貓.gif in Resources */ = {isa = PBXBuildFile; fileRef = 22D7C39A24ECBA83006412BE /* 熊貓.gif */; };
-		22D7C39D24ECDFC9006412BE /* ImageInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D7C39C24ECDFC9006412BE /* ImageInfo.swift */; };
 		22D7C39F24ED1EC8006412BE /* LoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22D7C39E24ED1EC8006412BE /* LoadingView.xib */; };
 		22DCB54824EED99400EE2DDD /* 哭泣.gif in Resources */ = {isa = PBXBuildFile; fileRef = 22DCB54724EED99400EE2DDD /* 哭泣.gif */; };
 		22DCB55024EF9F7200EE2DDD /* Extension_UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DCB54F24EF9F7200EE2DDD /* Extension_UITextField.swift */; };
@@ -360,7 +359,6 @@
 		22D7C39624EC2021006412BE /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		22D7C39724EC2021006412BE /* messageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = messageCell.xib; sourceTree = "<group>"; };
 		22D7C39A24ECBA83006412BE /* 熊貓.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "熊貓.gif"; sourceTree = "<group>"; };
-		22D7C39C24ECDFC9006412BE /* ImageInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInfo.swift; sourceTree = "<group>"; };
 		22D7C39E24ED1EC8006412BE /* LoadingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingView.xib; sourceTree = "<group>"; };
 		22DCB54724EED99400EE2DDD /* 哭泣.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "哭泣.gif"; sourceTree = "<group>"; };
 		22DCB54F24EF9F7200EE2DDD /* Extension_UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_UITextField.swift; sourceTree = "<group>"; };
@@ -810,7 +808,6 @@
 				22DCB54724EED99400EE2DDD /* 哭泣.gif */,
 				22433D3424E847C500E8D79D /* 柴犬2.gif */,
 				22A75F1724E5189C00287460 /* 柴犬.gif */,
-				22D7C39C24ECDFC9006412BE /* ImageInfo.swift */,
 				22EFC6A924FBB16F003CD570 /* country.json */,
 			);
 			path = resourse;
@@ -1255,7 +1252,6 @@
 				22788AE82503900200E87F7F /* CardFirebase.swift in Sources */,
 				9357BEE825525C4F00C45386 /* DbManager+Time.swift in Sources */,
 				936E38142543B5B300EFFBFC /* ProfilePostCell.swift in Sources */,
-				22D7C39D24ECDFC9006412BE /* ImageInfo.swift in Sources */,
 				848A6CD62534285A00125138 /* DbManager.swift in Sources */,
 				9366EC2F254ABBC20030CD0A /* PostFirebase.swift in Sources */,
 				22788AF02503A0C100E87F7F /* ModelSingleton.swift in Sources */,

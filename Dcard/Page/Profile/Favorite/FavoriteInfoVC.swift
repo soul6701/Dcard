@@ -74,8 +74,10 @@ class FavoriteInfoVC: UIViewController {
     }
     @IBAction func didClickBtnSelect(_ sender: UIButton) {
         self.btnSelect.setTitle(self.btnForumFilter.isEnabled ? "完成" : "選取", for: .normal)
-        self.btnCatalog.isEnabled = self.btnCatalog.isEnabled
-        self.btnForumFilter.isEnabled = self.btnForumFilter.isEnabled
+        self.btnCatalog.isEnabled = !self.btnCatalog.isEnabled
+        self.btnForumFilter.isEnabled = !self.btnForumFilter.isEnabled
+        
+        self.tableView.setEditing(true, animated: true)
     }
     @IBAction func didClickBtnCatalog(_ sender: UIButton) {
         if !self.catalogSelected {
@@ -237,10 +239,10 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y
-        
         self.topSpace.constant = yOffset + (self.mode == .all ? 300 : 260)
         self.view.layoutIfNeeded()
     }
+    
 }
 // MARK: - FavoriteForumVCDelegate
 extension FavoriteInfoVC: FavoriteForumVCDelegate {

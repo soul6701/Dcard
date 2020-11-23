@@ -126,7 +126,7 @@ extension SetPhoneAddressVC {
         self.lbCountryAlias.text = self.alias
         
         let openIconView = UIView()
-        let imageView = UIImageView(image: UIImage(named: ImageInfo.arrow_open))
+        let imageView = UIImageView(image: UIImage(named: ImageInfo.arrow_show))
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         openIconView.addSubview(imageView)

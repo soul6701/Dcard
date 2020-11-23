@@ -41,7 +41,7 @@ extension Date {
         self.dateFormatter.dateFormat = containTimeString
         let date = dateFormatter.date(from: dateString) ?? Date()
         let components = self.calendar.dateComponents([.minute], from: date, to: Date())
-        if (components.minute ?? 0) > 30 {
+        if (components.minute ?? 0) > 60 {
             return true
         }
         return false
