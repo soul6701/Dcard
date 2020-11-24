@@ -11,7 +11,7 @@ import UIKit
 class PostSettingCell: UITableViewCell {
     
     lazy private var lbTitle: UILabel = UILabel()
-    lazy private var imageViewCatalog: UIImageView = self.confiImageViewCatalog()
+    lazy private var imageViewCatalog: UIImageView = self.confiImageView()
     
     override func layoutSubviews() {
         self.backgroundColor = .clear
@@ -31,6 +31,7 @@ class PostSettingCell: UITableViewCell {
     func setContent(isSystemImage: Bool, image: String, title: String) {
         if isSystemImage {
             self.imageViewCatalog.image = UIImage(systemName: image)!
+            self.imageViewCatalog.tintColor = .systemGray3
         } else {
             self.imageViewCatalog.kf.setImage(with: URL(string: image))
         }
@@ -39,10 +40,11 @@ class PostSettingCell: UITableViewCell {
 }
 // MARK: - SetupUI
 extension PostSettingCell {
-    private func confiImageViewCatalog() -> UIImageView {
+    private func confiImageView() -> UIImageView {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }
 }

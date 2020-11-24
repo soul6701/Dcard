@@ -13,7 +13,7 @@ import RxSwift
 import IQKeyboardManagerSwift
 import SwiftMessages
 
-fileprivate class PresentationController : UIPresentationController {
+class PresentationController : UIPresentationController {
     
     lazy private var buttonBG: UIButton = self.confiButtonBG()
     
@@ -53,6 +53,7 @@ class PostVC: UIViewController {
     @IBOutlet weak var tvExcerpt: UITextView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var btnShowComment: UIButton!
+    @IBOutlet weak var tvComment: UITextView!
     
     @IBOutlet weak var imageViewAvator: UIImageView!
     @IBOutlet weak var viewAddNewComment: UIView!
@@ -60,25 +61,26 @@ class PostVC: UIViewController {
     @IBOutlet weak var lbSchool: UILabel!
     @IBOutlet weak var viewSeparator: UIView!
     @IBOutlet weak var viewOption: UIStackView!
-    @IBOutlet weak var tvComment: UITextView!
     @IBOutlet weak var btnHeart: UIButton!
     @IBOutlet weak var btnKeep: UIButton!
     @IBOutlet weak var btnSetting: UIButton!
     
-    @IBOutlet weak var bottomSpace: NSLayoutConstraint!
+    @IBOutlet weak var bottomSpace: NSLayoutConstraint! //留言顯示
     @IBOutlet weak var _bottomSpace: NSLayoutConstraint!
     @IBOutlet weak var viewHeight: NSLayoutConstraint!
     
-    //收藏文章提示視窗
-    private var OKView: MessageView!
-    private var OKConfig: SwiftMessages.Config!
     
+    
+    //留言編輯視窗
     lazy private var viewCommentSetting: SettingView = UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
     lazy private var viewPosterSetting: SettingView = UINib(nibName: "SettingView", bundle: nil).instantiate(withOwner: nil, options: nil).first as! SettingView
     lazy private var viewBg: UIView = self.confiViewBG()
     
     private var card: Card = ModelSingleton.shared.userCard
-    private var user: User = ModelSingleton.shared.userConfig.user
+    private var schoolList: [String] {
+        return [self.card.school, self.card.department, self.card.name]
+    }
+    
     private let disposeBag = DisposeBag()
     private var post = Post()
     private var commentList = [Comment]()
@@ -86,7 +88,7 @@ class PostVC: UIViewController {
     private var willBeAddedList: Favorite?
     private var show: Bool = false {
         didSet {
-            self.btnShowComment.setImage(UIImage(named: show ? ImageInfo.arrow_hide : ImageInfo.arrow_show), for: .normal)
+            self.btnShowComment.setImage(UIImage(named: !self.show ? ImageInfo.arrow_hide : ImageInfo.arrow_show), for: .normal)
         }
     }
     private let beforeString = NSMutableAttributedString(string: "反應...", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
@@ -95,11 +97,18 @@ class PostVC: UIViewController {
         string.append(NSMutableAttributedString(string: "B\(self.commentList.count + 1), \(Date.getCurrentDateString(true))", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.lightGray]))
         return string
     }
+    private var willbeOpened = false {
+        didSet {
+            self.viewOption.isHidden = self.willbeOpened
+            self.viewSeparator.isHidden = self.willbeOpened
+            self.lbSchool.attributedText = self.willbeOpened ? afterString : beforeString
+            _ = self.willbeOpened ? self.tvComment.becomeFirstResponder() : self.view.endEditing(true)
+        }
+    }
+    
     private var viewModel: PostVMInterface!
     private var posterSchoolString = ""
-    private var mood: Mood {
-        return ModelSingleton.shared.mood
-    }
+
     private var emotion: Mood.EmotionType? = nil {
         didSet {
             guard let emotion = emotion else {
@@ -109,16 +118,10 @@ class PostVC: UIViewController {
             self.btnHeart.setTitle(emotion.imageText, for: .normal)
         }
     }
-    private var longpress: UILongPressGestureRecognizer!
+//    private
+    
     private var imageAvator = UIImage()
-    private var willbeOpened = false {
-        didSet {
-            self.viewOption.isHidden = self.willbeOpened
-            self.viewSeparator.isHidden = self.willbeOpened
-            self.lbSchool.attributedText = self.willbeOpened ? afterString : beforeString
-            _ = self.willbeOpened ? self.tvComment.becomeFirstResponder() : self.view.endEditing(true)
-        }
-    }
+    
     private var posterMode: PosterMode = .school {
         didSet {
             switch posterMode {
@@ -135,16 +138,12 @@ class PostVC: UIViewController {
             }
         }
     }
-    private var schoolList: [String] {
-        return [self.card.school, self.card.department, self.card.name]
-    }
     private var keep = false {
         didSet {
             self.btnKeep.setImage(UIImage(systemName: self.keep ? "folder.fill" : "folder"), for: .normal)
             self.btnKeep.imageView?.tintColor = self.keep ? .systemBlue : .systemGray2
         }
     }
-    private var preferredHeightForSettingVC: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -181,7 +180,6 @@ class PostVC: UIViewController {
         postSettingVC.modalPresentationStyle = .custom
         postSettingVC.transitioningDelegate = self
         postSettingVC.setContent(post: self.post, mode: .setting, host: self.post.host)
-        self.preferredHeightForSettingVC = postSettingVC.preferredHeight
         present(postSettingVC, animated: true, completion: nil)
     }
     func setContent(post: Post, commentList: [Comment]) {
@@ -205,7 +203,7 @@ extension PostVC {
         self.tvExcerpt.text = self.post.excerpt
         self.willbeOpened = false
         self.btnShowComment.isHidden = self.commentList.isEmpty
-        self.btnSetting.imageView?.tintColor = (self.post.host == self.user.uid) ? .systemBlue : .systemGray2
+        self.btnSetting.imageView?.tintColor = (self.post.host == ModelSingleton.shared.userConfig.user.uid) ? .systemBlue : .systemGray2
         self.keep = ModelSingleton.shared.allFavoritePostID.contains(self.post.id)
         self.posterMode = .school
         searchWhichEmotion()
@@ -218,9 +216,9 @@ extension PostVC {
         self.tvComment.addRightButtonOnKeyboardWithText("取消", target: self, action: #selector(cancel), titleText: nil)
     }
     private func confiButton() {
-        self.longpress = UILongPressGestureRecognizer(target: self, action: #selector(showEmotionView))
-        self.longpress.minimumPressDuration = 1
-        self.btnHeart.addGestureRecognizer(self.longpress)
+        let longpress = UILongPressGestureRecognizer(target: self, action: #selector(showEmotionView))
+        longpress.minimumPressDuration = 1
+        self.btnHeart.addGestureRecognizer(longpress)
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(changeHeart))
         self.btnHeart.addGestureRecognizer(tap)
@@ -232,47 +230,8 @@ extension PostVC {
         self.imageViewAvator.layer.cornerRadius = 20
         let tap = UITapGestureRecognizer(target: self, action: #selector(addNewComment))
         self.viewAddNewComment.addGestureRecognizer(tap)
-        
-        confiOKView()
     }
-    private func confiOKView() {
-        self.OKView = MessageView.viewFromNib(layout: .cardView)
-        self.OKView.id = "success"
-        self.OKView.configureTheme(backgroundColor: .darkGray, foregroundColor: .white)
-        self.OKView.button?.setTitle("查看收藏", for: .normal)
-        self.OKView.button?.setTitleColor(.link, for: .normal)
-        self.OKView.button?.backgroundColor = .clear
-        self.OKView.buttonTapHandler = { (button) in
-            guard let willBeAddedList = self.willBeAddedList?.title else {
-                let vc = FavoriteInfoVC()
-                var allPostIDList: [String] = []
-                ModelSingleton.shared.favorite.map { return $0.postIDList }.forEach { (postIDList) in
-                    allPostIDList += postIDList
-                }
-                var list = [String]()
-                for favorite in ModelSingleton.shared.favorite {
-                    if let first = favorite.coverImage.first(where: { return !$0.isEmpty }) {
-                        list.append(first)
-                        if list.count >= 4 { break }
-                    }
-                }
-                vc.setContent(.all, title: "全部收藏", postIDList: allPostIDList, imageStrings: list)
-                self.navigationController?.pushViewController(vc, animated: true)
-                return
-            }
-            if let favorite = ModelSingleton.shared.favorite.first(where: { return $0.title == willBeAddedList }) {
-                SwiftMessages.hide(id: "success")
-                let vc = FavoriteInfoVC()
-                let mediaMetas = favorite.coverImage.first { return !$0.isEmpty }
-                vc.setContent(.other, title: favorite.title, postIDList: favorite.postIDList, imageStrings: [mediaMetas ?? ""])
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-        }
-        self.OKConfig = SwiftMessages.Config()
-        self.OKConfig.presentationContext = .window(windowLevel: .normal)
-        self.OKConfig.presentationStyle = .bottom
-        self.OKConfig.duration = .seconds(seconds: 2)
-    }
+    
     private func confiViewBG() -> UIView {
         let height = navigationController?.navigationBar.bounds.height ?? 0
         let insetTop = UIApplication.shared.windows.first!.safeAreaInsets.top
@@ -317,13 +276,12 @@ extension PostVC {
             if result.data {
                 self.keep = !self.keep
                 self.dismiss(animated: true) {
-                    if let willBeAddedList = self.willBeAddedList {
-                        self.OKView.configureContent(title: "", body: "已分類至" + "『\(willBeAddedList.title)』")
+                    if let willBeAddedListTitle = self.willBeAddedList?.title {
+                        AlertManager.shared.showHintView(target: self, body: "已分類至" + "『\(willBeAddedListTitle)』", willBeAddedListTitle: willBeAddedListTitle)
                         self.willBeAddedList = nil
                     } else {
-                        self.OKView.configureContent(title: "", body: "文章已收藏。")
+                        AlertManager.shared.showHintView(target: self, body: "文章已收藏。", willBeAddedListTitle: nil)
                     }
-                    SwiftMessages.show(config: self.OKConfig, view: self.OKView)
                 }
             }
         }, onError: { (error) in
@@ -332,7 +290,7 @@ extension PostVC {
         self.viewModel.createFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
                 if let sender = result.sender, let favorite = sender["new"] as? Favorite {
-                    self.viewModel.addFavoriteList(listName: favorite.title, postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
+                    self.viewModel.addFavoriteList(listName: favorite.title, post: [(self.post.id, !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")])
                     self.willBeAddedList = favorite
                 }
             }
@@ -422,28 +380,31 @@ extension PostVC {
     @objc private func selectEmotion(_ sender: UIButton) {
         if let emotion = self.emotion {
             self.viewModel.removeMood(emotion: emotion, postID: self.post.id)
+        } else {
+            
         }
         self.emotion = Mood.EmotionType.allCases[sender.tag]
         self.viewModel.addMood(emotion: self.emotion!, postID: self.post.id)
     }
     private func searchWhichEmotion() {
+        let mood = ModelSingleton.shared.mood
         switch self.post.id {
-        case _ where self.mood.heart.contains(self.post.id):
+        case _ where mood.heart.contains(self.post.id):
             self.btnHeart.setTitle(Mood.EmotionType.heart.imageText, for: .normal)
             self.emotion = .heart
-        case _ where self.mood.angry.contains(self.post.id):
+        case _ where mood.angry.contains(self.post.id):
             self.btnHeart.setTitle(Mood.EmotionType.angry.imageText, for: .normal)
             self.emotion = .angry
-        case _ where self.mood.haha.contains(self.post.id):
+        case _ where mood.haha.contains(self.post.id):
             self.btnHeart.setTitle(Mood.EmotionType.haha.imageText, for: .normal)
             self.emotion = .haha
-        case _ where self.mood.cry.contains(self.post.id):
+        case _ where mood.cry.contains(self.post.id):
             self.btnHeart.setTitle(Mood.EmotionType.cry.imageText, for: .normal)
             self.emotion = .cry
-        case _ where self.mood.respect.contains(self.post.id):
+        case _ where mood.respect.contains(self.post.id):
             self.btnHeart.setTitle(Mood.EmotionType.respect.imageText, for: .normal)
             self.emotion = .respect
-        case _ where self.mood.surprise.contains(self.post.id):
+        case _ where mood.surprise.contains(self.post.id):
             self.btnHeart.setTitle(Mood.EmotionType.surprise.imageText, for: .normal)
             self.emotion = .surprise
         default:
@@ -499,6 +460,9 @@ extension PostVC: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return tableView === self.tableView ? 200 : 30
     }
@@ -519,9 +483,9 @@ extension PostVC: UITextViewDelegate {
         let pos = textView.endOfDocument
         let currentRect = textView.caretRect(for: pos)
         let willBeExtend = self.viewHeight.constant <= 190
-        if previousRect != CGRect.zero && willBeExtend {
-            if currentRect.origin.y > previousRect.origin.y {
-                self.viewHeight.constant += 20
+        if self.previousRect != CGRect.zero && willBeExtend {
+            self.viewHeight.constant += 20
+            if currentRect.origin.y > self.previousRect.origin.y {
                 self.view.layoutIfNeeded()
             }
         }
@@ -542,30 +506,29 @@ extension PostVC: SettingViewDelegate {
         if mode != .cardName {
             self.imageViewAvator.image = imageAvator
         } else {
-            self.imageViewAvator.kf.setImage(with: URL(string: self.user.avatar))
+            self.imageViewAvator.kf.setImage(with: URL(string: ModelSingleton.shared.userConfig.user.avatar))
         }
         close()
     }
 }
+
 // MARK: - UIViewControllerTransitioningDelegate
 extension PostVC: UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return PresentationController(height: self.preferredHeightForSettingVC != 0 ? self.preferredHeightForSettingVC : self.view.bounds.height * 2 / 3, presentedViewController: presented, presenting: presenting )
+        return PresentationController(height:  self.view.bounds.height * 1 / 2, presentedViewController: presented, presenting: presenting )
     }
 }
 // MARK: - PostSettingCellDelegate
 extension PostVC: PostSettingVCDelegate {
     func showAddFavoriteListOKView(favorite: Favorite) {
         self.willBeAddedList = favorite
-        self.viewModel.addFavoriteList(listName: favorite.title, postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
+        self.viewModel.addFavoriteList(listName: favorite.title, post: [(self.post.id, !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")])
     }
     func createFavoriteListAndInsert(title: String) {
         self.viewModel.createFavoriteList(listName: title)
     }
     func addNotSorted() {
-        self.viewModel.addFavoriteList(listName: "", postID: self.post.id, coverImage: !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")
-    }
-    func willdismiss() {
-        self.preferredHeightForSettingVC = 0
+        self.viewModel.addFavoriteList(listName: "", post: [(self.post.id, !self.post.mediaMeta.isEmpty ? self.post.mediaMeta[0].thumbnail : "")])
+
     }
 }

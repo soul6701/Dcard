@@ -19,7 +19,7 @@ protocol FavoriteFirebaseInterface {
     ///添加收藏清單
     func createFavoriteList(listName: String) -> Observable<FirebaseResult<Bool>>
     ///加入收藏清單
-    func addFavoriteList(listName: String, postID: String, coverImage: String) -> Observable<FirebaseResult<Bool>>
+    func addFavoriteList(listName: String, post: [(id: String, coverImage: String)]) -> Observable<FirebaseResult<Bool>>
     ///移除收藏清單
     func removeFavoriteList(listName: String) -> Observable<FirebaseResult<Bool>>
     ///更改收藏清單名字
@@ -81,16 +81,24 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
         return subject
     }
     // MARK: - 加入收藏清單
-    func addFavoriteList(listName: String, postID: String, coverImage: String) -> Observable<FirebaseResult<Bool>> {
+    func addFavoriteList(listName: String, post: [(id: String, coverImage: String)]) -> Observable<FirebaseResult<Bool>> {
+        
+        let idList: [String] = post.map { (id, _) -> String in
+            return id
+        }
+        let coverImageList: [String] = post.map { (_, coverImage) -> String in
+            return coverImage
+        }
         let subject = PublishSubject<FirebaseResult<Bool>>()
-        let setter: [String:Any] = !listName.isEmpty ? ["\(listName).post": FieldValue.arrayUnion([postID]), "\(listName).coverImage": FieldValue.arrayUnion([coverImage])] :
-            ["notSorted": FieldValue.arrayUnion([postID])]
+        
+        let setter: [String:Any] = !listName.isEmpty ? ["\(listName).post": FieldValue.arrayUnion(idList), "\(listName).coverImage": FieldValue.arrayUnion(coverImageList)] :
+            ["notSorted": FieldValue.arrayUnion(idList)]
         FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
             if let error = error {
                 NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                 subject.onError(error)
             } else {
-                let setter: [String:Any] = ["favoritePosts": FieldValue.arrayUnion([postID])]
+                let setter: [String:Any] = ["favoritePosts": FieldValue.arrayUnion(idList)]
                 FirebaseManager.shared.db.collection(DatabaseName.card.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
                     if let error = error {
                         NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
@@ -98,8 +106,12 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                     } else {
                         var oldFavoriteList = ModelSingleton.shared.favorite
                         if let index = oldFavoriteList.firstIndex(where: { $0.title == listName }) {
-                            oldFavoriteList[index].postIDList.append(postID)
-                            oldFavoriteList[index].coverImage.append(coverImage)
+                            idList.forEach { (id) in
+                                oldFavoriteList[index].postIDList.append(id)
+                            }
+                            coverImageList.forEach { (coverImage) in
+                                oldFavoriteList[index].coverImage.append(coverImage)
+                            }
                             ModelSingleton.shared.setFavoriteList(oldFavoriteList)
                             subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
                         }
@@ -163,8 +175,9 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
             if let querySnapshot = querySnapshot, let dir = querySnapshot.data() {
                 for key in dir.keys {
                     if key != "notSorted" {
-                        if let favorite = dir[key] as? [String:Any], (favorite["post"] as! [String]).contains(postID) {
-                            FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(["\(key).post": FieldValue.arrayRemove([postID])]) { (error) in
+                        if let favorite = dir[key] as? [String:Any], let index = (favorite["post"] as! [String]).firstIndex(of: postID) {
+                            let coverImage = (favorite["coverImage"] as! [String])[index]
+                            FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(["\(key).post": FieldValue.arrayRemove([postID]), "\(key).coverImage": FieldValue.arrayRemove([coverImage])]) { (error) in
                                 if let error = error {
                                     NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")
                                     subject.onError(error)
@@ -172,6 +185,7 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
                                     var oldFavoriteList = ModelSingleton.shared.favorite
                                     if let index = oldFavoriteList.firstIndex (where: { $0.title == key }) {
                                         oldFavoriteList[index].postIDList.removeAll(where: { return $0 == postID })
+                                        oldFavoriteList[index].coverImage.removeAll(where: { return $0 == coverImage })
                                         ModelSingleton.shared.setFavoriteList(oldFavoriteList)
                                         subject.onNext(FirebaseResult<Bool>(data: true, errorMessage: nil, sender: nil))
                                     }

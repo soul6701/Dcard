@@ -14,7 +14,6 @@ protocol PostSettingVCDelegate {
     func showAddFavoriteListOKView(favorite: Favorite)
     func createFavoriteListAndInsert(title: String)
     func addNotSorted()
-    func willdismiss()
 }
 class PostSettingVC: UIViewController {
     enum PostSettingMode {
@@ -35,9 +34,6 @@ class PostSettingVC: UIViewController {
         return host == ModelSingleton.shared.userConfig.user.uid ? ["分享", "轉貼到其他看板", "引用原文發文", "關閉文章通知", "刪除文章", "編輯文章", "編輯話題", "複製全文", "重新整理", "我不喜歡這篇文章"] :
             ["分享", "轉貼到其他看板", "引用原文發文", "開啟文章通知", "檢舉文章", "複製全文", "重新整理", "我不喜歡這篇文章"]
     }
-    var preferredHeight: CGFloat {
-        return CGFloat(self.settingDataList.count * 50 + 50)
-    }
     private var favoriteList: [Favorite] {
         return ModelSingleton.shared.favorite.filter { !$0.title.isEmpty }
     }
@@ -51,11 +47,8 @@ class PostSettingVC: UIViewController {
         if self.notSorted {
             self.delegate?.addNotSorted()
         }
-        if self.mode == .setting {
-            self.delegate?.willdismiss()
-        }
     }
-    func setContent(post: Post, mode: PostSettingMode, host: String = "") {
+    func setContent(post: Post = Post(), mode: PostSettingMode, host: String = "") {
         self.post = post
         self.mode = mode
         self.host = host
@@ -83,8 +76,9 @@ extension PostSettingVC {
         } else {
             self.view.addSubview(self.tableView)
             self.tableView.snp.makeConstraints { (maker) in
-                maker.bottom.leading.trailing.equalToSuperview()
+                maker.leading.trailing.equalToSuperview()
                 maker.top.equalToSuperview().offset(20)
+                maker.bottom.equalToSuperview().offset(-10)
             }
         }
     }
@@ -144,7 +138,7 @@ extension PostSettingVC: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return self.mode == .keep ? 50 : (self.view.bounds.height - self.view.safeAreaInsets.bottom - 20 - 10) / CGFloat(self.settingDataList.count)
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()

@@ -11,7 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FavoriteInfoVC" customModule="ChaiCard" customModuleProvider="target">
             <connections>
+                <outlet property="btnAddPost" destination="quF-a8-si4" id="pY8-Dm-h5l"/>
                 <outlet property="btnCatalog" destination="pyN-Wn-z06" id="SpP-YP-K9t"/>
+                <outlet property="btnEdit" destination="ncF-a7-diY" id="mtf-4R-UN1"/>
                 <outlet property="btnForumFilter" destination="gwv-3q-Nva" id="Yat-J7-IXk"/>
                 <outlet property="btnSelect" destination="fEa-fb-KO1" id="T95-UR-kGn"/>
                 <outlet property="heightRelative" destination="827-96-NjV" id="QwZ-7o-EbI"/>
@@ -118,7 +120,7 @@
                             <rect key="frame" x="0.0" y="60" width="414" height="40"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyN-Wn-z06">
-                                    <rect key="frame" x="299" y="15" width="100" height="22"/>
+                                    <rect key="frame" x="299" y="9" width="100" height="22"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="100" id="2fR-ZF-wfr"/>
                                     </constraints>
@@ -132,13 +134,9 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwv-3q-Nva">
-                                    <rect key="frame" x="15" y="17" width="75.5" height="18"/>
+                                    <rect key="frame" x="15" y="5" width="62" height="30"/>
                                     <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <inset key="titleEdgeInsets" minX="-7" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                    <inset key="imageEdgeInsets" minX="75" minY="0.0" maxX="-15" maxY="0.0"/>
-                                    <state key="normal" title="看板篩選" image="arrowtriangle.down.fill" catalog="system">
-                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small"/>
-                                    </state>
+                                    <state key="normal" title="看板篩選"/>
                                     <connections>
                                         <action selector="didClickBtnForumFilter:" destination="-1" eventType="touchUpInside" id="d3e-x4-00N"/>
                                     </connections>
@@ -179,6 +177,26 @@
                         <action selector="edit:" destination="-1" eventType="touchUpInside" id="wM4-EL-oeV"/>
                     </connections>
                 </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="quF-a8-si4" customClass="customButton" customModule="ChaiCard" customModuleProvider="target">
+                    <rect key="frame" x="20" y="812" width="374" height="50"/>
+                    <color key="backgroundColor" systemColor="linkColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="4id-nt-vJJ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
+                    <state key="normal" title="加入 ５ 篇文章">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="10"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="underline" value="NO"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="addPost:" destination="-1" eventType="touchUpInside" id="AhW-Ye-d6P"/>
+                    </connections>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -191,10 +209,13 @@
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="ncF-a7-diY" secondAttribute="trailing" constant="5" id="HWV-En-8BD"/>
                 <constraint firstItem="cJP-bX-XEV" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Iak-IL-dWf"/>
                 <constraint firstItem="ncF-a7-diY" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="5" id="PZe-kT-BNd"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="quF-a8-si4" secondAttribute="bottom" id="Pcp-vc-6Em"/>
                 <constraint firstItem="Nxf-ET-1XO" firstAttribute="top" secondItem="qf2-au-qg8" secondAttribute="bottom" id="Wvb-b7-P0a"/>
                 <constraint firstItem="WzF-68-w8e" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="5" id="X2p-2l-bw3"/>
                 <constraint firstItem="cJP-bX-XEV" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="XYZ-0W-Itl"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="quF-a8-si4" secondAttribute="trailing" constant="20" id="aTi-N5-Q3F"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Nxf-ET-1XO" secondAttribute="bottom" id="bzx-0P-ghV"/>
+                <constraint firstItem="quF-a8-si4" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="cm3-fs-UYQ"/>
                 <constraint firstItem="qf2-au-qg8" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="egP-8h-brB"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="cJP-bX-XEV" secondAttribute="bottom" id="fZZ-Tn-ojO"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="l98-Z3-S1L" secondAttribute="trailing" id="qJr-SU-k0T"/>
@@ -205,11 +226,18 @@
             <point key="canvasLocation" x="-688" y="77"/>
         </view>
     </objects>
+    <designables>
+        <designable name="quF-a8-si4">
+            <size key="intrinsicContentSize" width="126" height="35"/>
+        </designable>
+    </designables>
     <resources>
         <image name="arrow.left" catalog="system" width="128" height="98"/>
-        <image name="arrowtriangle.down.fill" catalog="system" width="128" height="124"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="square" catalog="system" width="128" height="114"/>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

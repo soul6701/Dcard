@@ -43,10 +43,13 @@ public class AlertManager {
     private var OKconfig: SwiftMessages.Config!
     private var alertView: MessageView!
     private var alertconfig: SwiftMessages.Config!
+    private var hintView: MessageView!
+    private var hintConfig: SwiftMessages.Config!
     
     init() {
         confiOKView()
         confiAlertView()
+        confiHintView()
     }
     //成功視窗
     func confiOKView() {
@@ -96,7 +99,57 @@ public class AlertManager {
         }
         SwiftMessages.show(config: self.alertconfig, view: self.alertView)
     }
-    
+    //提示視窗
+    private func confiHintView() {
+        self.hintView = MessageView.viewFromNib(layout: .cardView)
+        self.hintView.id = "success"
+        self.hintView.configureTheme(backgroundColor: .darkGray, foregroundColor: .white)
+        self.hintView.button?.setTitle("查看收藏", for: .normal)
+        self.hintView.button?.setTitleColor(.link, for: .normal)
+        self.hintView.button?.backgroundColor = .clear
+        
+        self.hintConfig = SwiftMessages.Config()
+        self.hintConfig.presentationContext = .window(windowLevel: .normal)
+        self.hintConfig.presentationStyle = .bottom
+        self.hintConfig.duration = .seconds(seconds: 2)
+    }
+    func showHintView(target viewController: UIViewController, body: String, willBeAddedListTitle: String?) {
+        
+        self.hintView.configureContent(title: "", body: body)
+        self.hintView.buttonTapHandler = self.makeShowFavotiteInfoHandler(target: viewController, willBeAddedListTitle: willBeAddedListTitle)
+        SwiftMessages.show(config: self.hintConfig, view: self.hintView)
+    }
+    private func makeShowFavotiteInfoHandler(target viewController: UIViewController, willBeAddedListTitle: String?) -> (UIButton) -> Void {
+        if let willBeAddedListTitle = willBeAddedListTitle {
+            return { (UIButton) in
+                if let favorite = ModelSingleton.shared.favorite.first(where: { return $0.title == willBeAddedListTitle }) {
+                    SwiftMessages.hide(id: "success")
+                    let vc = FavoriteInfoVC()
+                    let mediaMetas = favorite.coverImage.first { return !$0.isEmpty }
+                    vc.setContent(.other, title: favorite.title, postIDList: favorite.postIDList, imageStrings: [mediaMetas ?? ""])
+                    viewController.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        } else {
+            return { (UIButton) in
+                let vc = FavoriteInfoVC()
+                let allPostIDList: [String] = ModelSingleton.shared.favorite.reduce([String]()) { (result, favorite) -> [String] in
+                    var list = result
+                    list.append(contentsOf: favorite.postIDList)
+                    return list
+                }
+                var list = [String]()
+                for favorite in ModelSingleton.shared.favorite {
+                    if let first = favorite.coverImage.first(where: { return !$0.isEmpty }) {
+                        list.append(first)
+                        if list.count >= 4 { break }
+                    }
+                }
+                vc.setContent(.all, title: "全部收藏", postIDList: allPostIDList, imageStrings: list)
+                viewController.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+    }
 }
 
 

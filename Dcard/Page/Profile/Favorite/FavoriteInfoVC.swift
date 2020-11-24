@@ -30,7 +30,9 @@ class FavoriteInfoVC: UIViewController {
     @IBOutlet weak var viewContainer: UIView!
     @IBOutlet var imageViewList: [UIImageView]!
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var btnEdit: UIButton!
     
+    @IBOutlet weak var btnAddPost: customButton!
     private var viewModel: PostVMInterface!
     private let disposeBag = DisposeBag()
     private var mode: FavoriteInfoMode = .all
@@ -41,6 +43,18 @@ class FavoriteInfoVC: UIViewController {
     private var titleFavorite: String = ""
     private var newTitleFavorite: String = ""
     private var selectedPost: Post = Post()
+    private var willBeAddedPostList: [Int] = [] {
+        didSet {
+            if self.willBeAddedPostList.isEmpty {
+                self.btnAddPost.isEnabled = false
+                self.btnAddPost.backgroundColor = .systemGray3
+            } else {
+                self.btnAddPost.isEnabled = true
+                self.btnAddPost.backgroundColor = .link
+                self.btnAddPost.setTitle("加入 \(self.willBeAddedPostList.count) 篇文章", for: .normal)
+            }
+        }
+    }
     
     private var filteredPostList = [Post]() { //過濾後貼文
         didSet {
@@ -51,9 +65,26 @@ class FavoriteInfoVC: UIViewController {
         return ModelSingleton.shared.favorite.first(where: { return $0.title.isEmpty })?.postIDList ?? []
     }
     private var notSortedPostList: [Post] { //未分類貼文
-        return self.postList.filter { self.notSortedIDList.contains($0.id) }
+        return self.filteredPostList.filter { self.notSortedIDList.contains($0.id) }
+    }
+    private var mainPostIDList: [String] {
+        if self.mode == .all {
+            let allPostIDlist = self.notSortedIDList + self.postIDList
+            return allPostIDlist.reduce([String]()) { (result, id) -> [String] in
+                if !result.contains(id) {
+                    var list = result
+                    list.append(id)
+                    return list
+                }
+                return result
+            }
+        } else {
+            return self.postIDList
+        }
     }
     private var imageStrings: [String] = []
+    private var willbeDeletedID: String = ""
+    private var willBeAddedList: Favorite?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +108,8 @@ class FavoriteInfoVC: UIViewController {
         self.btnCatalog.isEnabled = !self.btnCatalog.isEnabled
         self.btnForumFilter.isEnabled = !self.btnForumFilter.isEnabled
         
-        self.tableView.setEditing(true, animated: true)
+        self.btnAddPost.isHidden = self.tableView.isEditing
+        self.tableView.setEditing(!self.tableView.isEditing, animated: true)
     }
     @IBAction func didClickBtnCatalog(_ sender: UIButton) {
         if !self.catalogSelected {
@@ -94,7 +126,9 @@ class FavoriteInfoVC: UIViewController {
             self.filteredPostList = self.notSortedPostList
         } else {
             self.btnCatalog.imageView?.subviews.last?.removeFromSuperview()
-            self.filteredPostList = self.postList
+            self.btnForumFilter.setTitle("看板篩選·\(selectedForumNameList.count)", for: .normal)
+            self.btnForumFilter.setTitleColor(#colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78), for: .normal)
+            self.filteredPostList = self.postList.filter { return self.selectedForumNameList.contains($0.forumName) }
         }
         self.catalogSelected = !self.catalogSelected
         self.btnSelect.alpha = 0
@@ -114,6 +148,14 @@ class FavoriteInfoVC: UIViewController {
         nav.modalPresentationStyle = .overFullScreen
         present(nav, animated: true, completion: nil)
     }
+    @IBAction func addPost(_ sender: customButton) {
+        let postSettingVC = PostSettingVC()
+        postSettingVC.modalPresentationStyle = .custom
+        postSettingVC.transitioningDelegate = self
+        postSettingVC.setDelegate(self)
+        postSettingVC.setContent(mode: .keep)
+        present(postSettingVC, animated: true, completion: nil)
+    }
     func setContent(_ mode: FavoriteInfoMode, title: String, postIDList: [String], imageStrings: [String]) {
         self.mode = mode
         self.titleFavorite = title
@@ -127,9 +169,9 @@ extension FavoriteInfoVC {
         confiTableView()
         confiTitleView()
         confiContainerView()
+        confiButton()
         
-        let isAll = self.mode == .all
-        self.heightRelative.constant = isAll ? 300 : 260
+        self.heightRelative.constant = self.mode == .all ? 300 : 260
     }
     private func confiTableView() {
         let isAll = self.mode == .all
@@ -137,11 +179,19 @@ extension FavoriteInfoVC {
         self.tableView.register(UINib(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "PostCell")
         self.tableView.contentInset = UIEdgeInsets(top: isAll ? 300 : 260 , left: 0, bottom: 0, right: 0)
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: isAll ? 300 : 260 , left: 0, bottom: 0, right: 0)
+        self.tableView.allowsMultipleSelectionDuringEditing = true
     }
     private func confiTitleView() {
         self.viewContainertwo.isHidden = self.mode == .other
         self.lbTitle.text = self.titleFavorite
         self.btnSelect.setTitle(self.mode == .all ? "選取" : "新增文章", for: .normal)
+    }
+    private func confiButton() {
+        self.btnEdit.isHidden = self.mode == .all
+        self.btnAddPost.setTitle("加入 ０ 篇文章", for: .disabled)
+        self.btnAddPost.setTitleColor(.white, for: .disabled)
+        self.btnAddPost.setTitleColor(.white, for: .normal)
+        self.willBeAddedPostList = []
     }
     private func confiContainerView() {
         if self.mode == .all {
@@ -166,6 +216,10 @@ extension FavoriteInfoVC {
         self.viewModel.getPostInfoOfListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             self.postList = result.data
             self.filteredPostList = result.data
+            if self.mode != .all {
+                self.imageStrings = [self.postList.first { return !$0.mediaMeta.isEmpty }?.mediaMeta.first?.thumbnail ?? ""]
+                self.confiContainerView()
+            }
         }, onError: { (error) in
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
@@ -189,7 +243,46 @@ extension FavoriteInfoVC {
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
         }).disposed(by: self.disposeBag)
         
-        self.viewModel.getPostInfoOfList(postIDs: self.postIDList + self.notSortedIDList)
+        self.viewModel.removePostFromFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                AlertManager.shared.showOKView(mode: .favorite(.removePost), handler: nil)
+                self.viewModel.getPostInfoOfList(postIDs: self.mainPostIDList.filter( { return $0 != self.willbeDeletedID}))
+            }
+        }, onError: { (error) in
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        self.viewModel.createFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                if let sender = result.sender, let favorite = sender["new"] as? Favorite {
+                    let postList: [(String, String)] = self.willBeAddedPostList.map { (index) -> (String, String) in
+                        let mediaMetaArray = self.filteredPostList[index].mediaMeta
+                        return (self.filteredPostList[index].id, !mediaMetaArray.isEmpty ? mediaMetaArray[0].thumbnail : "")
+                    }
+                    self.viewModel.addFavoriteList(listName: favorite.title, post: postList)
+                    self.willBeAddedList = favorite
+                }
+            }
+        }, onError: { (error) in
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        self.viewModel.addFavoriteListSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
+            if result.data {
+                self.dismiss(animated: true) {
+                    if let willBeAddedListTitle = self.willBeAddedList?.title {
+                        AlertManager.shared.showHintView(target: self, body: "已分類至" + "『\(willBeAddedListTitle)』", willBeAddedListTitle: willBeAddedListTitle)
+                        self.willBeAddedList = nil
+                    } else {
+                        AlertManager.shared.showHintView(target: self, body: "文章已收藏。", willBeAddedListTitle: nil)
+                    }
+                    self.btnAddPost.isHidden = true
+                    self.tableView.setEditing(!self.tableView.isEditing, animated: true)
+                }
+            }
+        }, onError: { (error) in
+            AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
+        }).disposed(by: self.disposeBag)
+        
+        self.viewModel.getPostInfoOfList(postIDs: self.mainPostIDList)
     }
 }
 // MARK: - UITableViewDelegate
@@ -205,7 +298,7 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
         let section = indexPath.section
         if section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
-            cell.setContent(post: self.filteredPostList[row], mode: .profile)
+            cell.setContent(post: self.filteredPostList[row], mode: .favorite)
             cell.setDelegate(self)
             return cell
         } else {
@@ -223,9 +316,14 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
-        let vc = UIStoryboard.home.postVC
         let post = self.filteredPostList[row]
-        //假植
+        guard !tableView.isEditing else {
+            var newList = self.willBeAddedPostList
+            newList.append(row)
+            self.willBeAddedPostList = newList
+            return
+        }
+        let vc = UIStoryboard.home.postVC
         var commonList = [Comment]()
         let random = (0...100).randomElement()!
         (0...random).forEach { (_) in
@@ -234,15 +332,37 @@ extension FavoriteInfoVC: UITableViewDelegate, UITableViewDataSource {
         vc.setContent(post: post, commentList: commonList)
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let row = indexPath.row
+        guard !tableView.isEditing else {
+            self.willBeAddedPostList = self.willBeAddedPostList.filter( { $0 != row })
+            return
+        }
+    }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let row = indexPath.row
+        let id = self.filteredPostList[row].id
+        if editingStyle == .delete {
+            self.viewModel.removePostFromFavoriteList(postID: id)
+            self.willbeDeletedID = id
+        }
+    }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let section = indexPath.section
+        return tableView.isEditing && section == 0
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y
         self.topSpace.constant = yOffset + (self.mode == .all ? 300 : 260)
         self.view.layoutIfNeeded()
     }
-    
 }
 // MARK: - FavoriteForumVCDelegate
 extension FavoriteInfoVC: FavoriteForumVCDelegate {
@@ -250,12 +370,13 @@ extension FavoriteInfoVC: FavoriteForumVCDelegate {
         guard !selectedForumNameList.isEmpty else {
             self.filteredPostList = self.postList
             self.selectedForumNameList = []
-            self.btnForumFilter.setTitle("看板篩選 ▼", for: .normal)
+            self.btnForumFilter.setTitle("看板篩選", for: .normal)
             self.btnForumFilter.setTitleColor(.darkGray, for: .normal)
+            self.btnForumFilter.imageView?.isHidden = false
             return
         }
         self.selectedForumNameList = selectedForumNameList
-        self.btnForumFilter.setTitle("看板篩選·\(selectedForumNameList.count) ▼", for: .normal)
+        self.btnForumFilter.setTitle("看板篩選·\(selectedForumNameList.count)", for: .normal)
         self.btnForumFilter.setTitleColor(#colorLiteral(red: 0, green: 0.3294117647, blue: 0.5764705882, alpha: 0.78), for: .normal)
         self.filteredPostList = self.filteredPostList.filter { return selectedForumNameList.contains($0.forumName) }
     }
@@ -315,5 +436,38 @@ extension FavoriteInfoVC: OptionViewDelegate {
                 break
             }
         }
+    }
+}
+// MARK: - UIPopoverPresentationControllerDelegate
+extension FavoriteInfoVC: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+}
+// MARK: - UIViewControllerTransitioningDelegate
+extension FavoriteInfoVC: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return PresentationController(height:  self.view.bounds.height * 1 / 2, presentedViewController: presented, presenting: presenting )
+    }
+}
+// MARK: - PostSettingCellDelegate
+extension FavoriteInfoVC: PostSettingVCDelegate {
+    func showAddFavoriteListOKView(favorite: Favorite) {
+        self.willBeAddedList = favorite
+        let postList: [(String, String)] = self.willBeAddedPostList.map { (index) -> (String, String) in
+            let mediaMetaArray = self.filteredPostList[index].mediaMeta
+            return (self.filteredPostList[index].id, !mediaMetaArray.isEmpty ? mediaMetaArray[0].thumbnail : "")
+        }
+        self.viewModel.addFavoriteList(listName: favorite.title, post: postList)
+    }
+    func createFavoriteListAndInsert(title: String) {
+        self.viewModel.createFavoriteList(listName: title)
+    }
+    func addNotSorted() {
+        let postList: [(String, String)] = self.willBeAddedPostList.map { (index) -> (String, String) in
+            let mediaMetaArray = self.filteredPostList[index].mediaMeta
+            return (self.filteredPostList[index].id, !mediaMetaArray.isEmpty ? mediaMetaArray[0].thumbnail : "")
+        }
+        self.viewModel.addFavoriteList(listName: "", post: postList)
     }
 }
