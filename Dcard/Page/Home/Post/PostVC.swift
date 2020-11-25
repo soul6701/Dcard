@@ -118,8 +118,8 @@ class PostVC: UIViewController {
             self.btnHeart.setTitle(emotion.imageText, for: .normal)
         }
     }
-//    private
-    
+    private var step = 0
+    private var selectedIndex = 0
     private var imageAvator = UIImage()
     
     private var posterMode: PosterMode = .school {
@@ -313,6 +313,7 @@ extension PostVC {
                     self.emotion = data
                     self.dismiss(animated: true, completion: nil)
                 }
+                self.step = 0
             }
         }, onError: { (error) in
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
@@ -320,7 +321,12 @@ extension PostVC {
         
         self.viewModel.removeMoodSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
-                self.emotion = nil
+                if self.step == 0 {
+                    self.emotion = nil
+                } else {
+                    self.emotion = Mood.EmotionType.allCases[self.selectedIndex]
+                    self.viewModel.addMood(emotion: self.emotion!, postID: self.post.id)
+                }
             }
         }, onError: { (error) in
             AlertManager.shared.showAlertView(errorMessage: error.localizedDescription, handler: nil)
@@ -380,11 +386,12 @@ extension PostVC {
     @objc private func selectEmotion(_ sender: UIButton) {
         if let emotion = self.emotion {
             self.viewModel.removeMood(emotion: emotion, postID: self.post.id)
+            step += 1
+            selectedIndex = sender.tag
         } else {
-            
+            self.emotion = Mood.EmotionType.allCases[sender.tag]
+            self.viewModel.addMood(emotion: self.emotion!, postID: self.post.id)
         }
-        self.emotion = Mood.EmotionType.allCases[sender.tag]
-        self.viewModel.addMood(emotion: self.emotion!, postID: self.post.id)
     }
     private func searchWhichEmotion() {
         let mood = ModelSingleton.shared.mood

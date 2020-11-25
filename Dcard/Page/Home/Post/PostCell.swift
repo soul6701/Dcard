@@ -18,6 +18,7 @@ class PostCell: UITableViewCell {
         case profile
         case favorite
     }
+    @IBOutlet weak var btnEdit: UIButton!
     @IBOutlet weak var imageViewUser: UIImageView!
     @IBOutlet weak var lbForumAndSchool: UILabel!
     @IBOutlet weak var lbExcerpt: UILabel!
@@ -42,7 +43,7 @@ class PostCell: UITableViewCell {
         
     }
     override func setEditing(_ editing: Bool, animated: Bool) {
-        self.shouldHide = true
+        self.shouldHide = editing
         super.setEditing(editing, animated: animated)
         
         UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
@@ -122,6 +123,7 @@ class PostCell: UITableViewCell {
     }
     func setDelegate(_ delegate: PostCellDelegate) {
         self.delegate = delegate
+        self.btnEdit.isHidden = false
     }
 }
 // MARK: SetupUI

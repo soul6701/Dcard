@@ -70,15 +70,44 @@ class OptionView: UIView {
         }
         animator.addCompletion { (position) in
             if position == .end {
-                self.reset()
+                self.removeFromSuperview()
+                OptionView._shared = nil
             }
         }
         return animator
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if self.shouldupdateConstraint {
+            self.confiView()
+            self.setFixedView(self.viewBG)
+            self.addSubview(self.tableView)
+            self.tableView.snp.makeConstraints { (maker) in
+                self.topConstraint = maker.top.equalTo(self.snp.bottom).constraint
+                maker.leading.trailing.equalToSuperview()
+                maker.height.equalTo(self.height)
+            }
+            self.shouldupdateConstraint = false
+        }
+    }
+    func show(_ delegate: OptionViewDelegate, mode: Mode) {
+        self.delegate = delegate
+        self.mode = mode
+        guard let window = UIApplication.shared.windows.first else { return }
+        window.setFixedView(self)
+        self.layoutIfNeeded() //很重要 要先執行 不然會之後的動畫也會影window
+
+        DispatchQueue.main.async {
+            self.showAnimaor.startAnimation()
+        }
+    }
+    @objc private func hide() {
+        DispatchQueue.main.async {
+            self.hideAnimaor.startAnimation()
+        }
+    }
+    private func confiView() {
         self.viewBG = UIView()
         self.viewBG.backgroundColor = .black
         self.viewBG.alpha = 0.6
@@ -91,42 +120,6 @@ class OptionView: UIView {
         self.tableView.layer.cornerRadius = 15
         self.tableView.separatorStyle = .none
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if self.shouldupdateConstraint {
-            self.setFixedView(self.viewBG)
-            self.addSubview(self.tableView)
-            self.tableView.snp.makeConstraints { (maker) in
-                self.topConstraint = maker.top.equalTo(self.snp.bottom).constraint
-                maker.leading.trailing.equalToSuperview()
-                maker.height.equalTo(self.height)
-            }
-            self.shouldupdateConstraint = false
-        }
-    }
-    func configure(_ delegate: OptionViewDelegate, mode: Mode) {
-        self.delegate = delegate
-        self.mode = mode
-    }
-    func show() {
-        guard let window = UIApplication.shared.windows.first else { return }
-        window.setFixedView(self)
-        DispatchQueue.main.async {
-            self.showAnimaor.startAnimation()
-        }
-    }
-    @objc private func hide() {
-        DispatchQueue.main.async {
-            self.hideAnimaor.startAnimation()
-        }
-    }
-    private func reset() {
-        self.removeFromSuperview()
-        OptionView._shared = nil
     }
 }
 // MARK: - UITableViewDelegate

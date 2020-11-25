@@ -126,7 +126,9 @@ public class AlertManager {
                     SwiftMessages.hide(id: "success")
                     let vc = FavoriteInfoVC()
                     let mediaMetas = favorite.coverImage.first { return !$0.isEmpty }
-                    vc.setContent(.other, title: favorite.title, postIDList: favorite.postIDList, imageStrings: [mediaMetas ?? ""])
+                    var _favorite = favorite
+                    _favorite.coverImage = [mediaMetas ?? ""]
+                    vc.setContent(.other, favorite: _favorite)
                     viewController.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -145,7 +147,8 @@ public class AlertManager {
                         if list.count >= 4 { break }
                     }
                 }
-                vc.setContent(.all, title: "全部收藏", postIDList: allPostIDList, imageStrings: list)
+                let favorite = Favorite(title: "全部收藏", createAt: "", postIDList: allPostIDList, coverImage: list)
+                vc.setContent(.all, favorite: favorite)
                 viewController.navigationController?.pushViewController(vc, animated: true)
             }
         }

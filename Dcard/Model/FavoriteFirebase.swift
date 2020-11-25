@@ -91,7 +91,18 @@ public class FavoriteFirebase: FavoriteFirebaseInterface {
         }
         let subject = PublishSubject<FirebaseResult<Bool>>()
         
-        let setter: [String:Any] = !listName.isEmpty ? ["\(listName).post": FieldValue.arrayUnion(idList), "\(listName).coverImage": FieldValue.arrayUnion(coverImageList)] :
+        var notCatologPostIDList = [String]()
+        // 從未分類清單中移除
+        post.forEach { (post) in
+            if let index = ModelSingleton.shared.favorite.firstIndex(where: { return $0.title == ""}), ModelSingleton.shared.favorite[index].postIDList.contains(post.id) {
+                var favorite = ModelSingleton.shared.favorite
+                favorite[index].postIDList = favorite[index].postIDList.filter( { return $0 == post.id})
+                ModelSingleton.shared.setFavoriteList(favorite)
+                notCatologPostIDList.append(post.id)
+            }
+        }
+        
+        let setter: [String:Any] = !listName.isEmpty ? ["\(listName).post": FieldValue.arrayUnion(idList), "\(listName).coverImage": FieldValue.arrayUnion(coverImageList), "notSorted": FieldValue.arrayRemove(notCatologPostIDList)] :
             ["notSorted": FieldValue.arrayUnion(idList)]
         FirebaseManager.shared.db.collection(DatabaseName.favoritePost.rawValue).document(ModelSingleton.shared.userConfig.user.uid).updateData(setter) { (error) in
             if let error = error {

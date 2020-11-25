@@ -100,7 +100,7 @@ public class PostFirebase: PostFirebaseInterface {
         let subject = PublishSubject<FirebaseResult<[Post]>>()
         var postList = [Post]()
         
-        postIDs.forEach { (id) in
+        postIDs.enumerated().forEach { (index, id) in
             FirebaseManager.shared.db.collection(DatabaseName.allPost.rawValue).document(id).getDocument { (querySnapshot, error) in
                 if let error = error {
                     NSLog("🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶\(error.localizedDescription)🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶")

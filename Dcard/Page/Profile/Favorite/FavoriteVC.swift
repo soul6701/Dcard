@@ -137,11 +137,14 @@ extension FavoriteVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         let row = indexPath.row
         let vc = FavoriteInfoVC()
         if row == 0 {
-            vc.setContent(.all, title: self.allFavorite.title, postIDList: self.allFavorite.postIDList, imageStrings: self.allImageList)
+            var favorite = self.allFavorite
+            favorite.coverImage = self.allImageList
+            vc.setContent(.all, favorite: favorite)
         } else {
-            let favorite = self.favoriteList[row - 1]
+            var favorite = self.favoriteList[row - 1]
             let mediaMetas = favorite.coverImage.first { return !$0.isEmpty }
-            vc.setContent(.other, title: favorite.title, postIDList: favorite.postIDList, imageStrings: [mediaMetas ?? ""])
+            favorite.coverImage = [mediaMetas ?? ""]
+            vc.setContent(.other, favorite: favorite)
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
