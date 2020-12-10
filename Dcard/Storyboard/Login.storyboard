@@ -42,6 +42,7 @@
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="帳號 (信箱)" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="W2e-CL-Eum">
                                                                 <rect key="frame" x="0.0" y="0.0" width="334" height="40"/>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="o5L-R2-VBU"/>
                                                                 </constraints>
@@ -50,13 +51,15 @@
                                                             </textField>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="密碼" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="bsf-c5-wF6">
                                                                 <rect key="frame" x="0.0" y="40" width="334" height="40"/>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                             </textField>
                                                         </subviews>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </stackView>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="KrN-Yx-Gfm" firstAttribute="top" secondItem="Xh2-C9-us4" secondAttribute="top" id="2hr-mx-Ide"/>
                                                     <constraint firstAttribute="trailing" secondItem="KrN-Yx-Gfm" secondAttribute="trailing" constant="20" id="7I7-Gv-9a5"/>
@@ -77,7 +80,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="Xh2-C9-us4" firstAttribute="leading" secondItem="Sq6-8l-7Na" secondAttribute="leading" constant="20" id="6AT-nC-kX7"/>
                                             <constraint firstAttribute="bottom" secondItem="Xh2-C9-us4" secondAttribute="bottom" constant="5" id="DE7-Xq-sUh"/>
@@ -112,7 +115,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="NhG-8S-sjK" firstAttribute="centerY" secondItem="GcK-k1-WXf" secondAttribute="centerY" id="4oO-GQ-Usa"/>
                                                     <constraint firstItem="NhG-8S-sjK" firstAttribute="top" secondItem="GcK-k1-WXf" secondAttribute="top" id="Beb-Bm-dSc"/>
@@ -124,6 +127,7 @@
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ARh-LD-ijm">
                                                         <rect key="frame" x="40" y="0.0" width="334" height="50"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                         <state key="normal" title="忘記密碼？"/>
                                                         <connections>
@@ -131,7 +135,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="ARh-LD-ijm" secondAttribute="bottom" id="Nmf-o4-UkG"/>
                                                     <constraint firstItem="ARh-LD-ijm" firstAttribute="top" secondItem="aPs-gY-bWu" secondAttribute="top" id="YTC-X9-cjK"/>
@@ -143,6 +147,7 @@
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hD1-jP-DmF">
                                                         <rect key="frame" x="40" y="0.0" width="334" height="50"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                         <state key="normal" title="一鍵清除使用者資料"/>
                                                         <userDefinedRuntimeAttributes>
@@ -158,7 +163,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="hD1-jP-DmF" firstAttribute="centerX" secondItem="buB-r9-05t" secondAttribute="centerX" id="Bcy-NS-5JZ"/>
                                                     <constraint firstItem="hD1-jP-DmF" firstAttribute="top" secondItem="buB-r9-05t" secondAttribute="top" id="Jhi-4Q-TvX"/>
@@ -208,12 +213,13 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
                                                         </subviews>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstItem="m8B-6r-dbo" firstAttribute="centerX" secondItem="ING-bg-edv" secondAttribute="centerX" id="W5d-pg-Sef"/>
                                                         </constraints>
                                                     </stackView>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="ING-bg-edv" secondAttribute="bottom" id="2fh-pX-pbs"/>
                                                     <constraint firstItem="ING-bg-edv" firstAttribute="leading" secondItem="fLY-Cl-SDd" secondAttribute="leading" constant="50" id="3LT-Wu-Ahq"/>
@@ -226,13 +232,13 @@
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVe-df-K5Y" customClass="customButton" customModule="ChaiCard" customModuleProvider="target">
                                                         <rect key="frame" x="40" y="0.0" width="334" height="40"/>
-                                                        <color key="backgroundColor" red="0.022270373999999999" green="0.41976428030000001" blue="0.90201145410000005" alpha="0.39584225171232879" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <color key="backgroundColor" systemColor="linkColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="MMU-hW-3sc"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                         <state key="normal" title="建立新帳號">
-                                                            <color key="titleColor" systemColor="systemBlueColor"/>
+                                                            <color key="titleColor" systemColor="systemGray5Color"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -244,7 +250,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="PVe-df-K5Y" firstAttribute="top" secondItem="Jq2-Xo-UWg" secondAttribute="top" id="1w0-Mt-IHE"/>
                                                     <constraint firstItem="PVe-df-K5Y" firstAttribute="centerX" secondItem="Jq2-Xo-UWg" secondAttribute="centerX" id="ENW-7j-RLp"/>

@@ -31,7 +31,16 @@ class LoginVC: UIViewController {
     @IBOutlet weak var tfPassword: UITextField!
     @IBOutlet var viewWidth: [NSLayoutConstraint]!
     
-    
+    private var currentColor: [CGColor]! = [UIColor.cyan.cgColor , UIColor.systemPink.cgColor]
+    private var gradientLayer: CAGradientLayer!
+    private var pointList: [(startPoint: CGPoint, endPoint: CGPoint)] = {
+        return [(CGPoint(x: 0, y: 0.5), CGPoint(x: 1, y: 0.5)), (CGPoint(x: 0, y: 0), CGPoint(x: 1, y: 1)), (CGPoint(x: 0.5, y: 0), CGPoint(x: 0.5, y: 1))]
+    }()
+    private var timer: Timer!
+    private var startPointCount: Int = 0
+    private var endPointCount: Int = 0
+    private var startPointAnimation: CABasicAnimation!
+    private var endPointAnimation: CABasicAnimation!
     private var nav: LoginNAV!
     private var _centerLine: UIView?
     private var centerLine: UIView!
@@ -55,11 +64,14 @@ class LoginVC: UIViewController {
         addObserverToKeyboard()
         ToolbarView.shared.show(false)
         IQKeyboardManager.shared.toolbarDoneBarButtonItemText = "完成"
+        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.change), userInfo: ["view": gradientLayer], repeats: true)
+        RunLoop.current.add(timer, forMode: .common)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
         removerObserverFromKeyboard()
+        timer.invalidate()
     }
     @IBAction func didClickForgetPassword(_ sender: UIButton) {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "ForgetPasswordVC") as? ForgetPasswordVC {
@@ -99,6 +111,14 @@ extension LoginVC {
         self.centerLine = UIView(frame: CGRect(x: 0, y: Int(self.viewForTf.bounds.height / 2 - 0.5), width: Int(self.view.bounds.width - 40), height: 1))
         self.centerLine!.backgroundColor = .lightGray
         self.viewForTf.addSubview(self.centerLine!)
+        
+        gradientLayer = CAGradientLayer()
+        gradientLayer.frame = UIScreen.main.bounds
+        gradientLayer.colors = self.currentColor
+        gradientLayer.startPoint =  self.pointList[self.startPointCount % 3].startPoint
+        gradientLayer.endPoint =  self.pointList[self.endPointCount % 3].endPoint
+        
+        self.view.layer.insertSublayer(gradientLayer, at: 0)
     }
 }
 // MARK: - Private Fun
@@ -115,6 +135,44 @@ extension LoginVC {
             self.viewModelLogin.login(address: account, password: password)
         } else {
             AlertManager.shared.showAlertView(errorMessage: "欄位不得為空", handler: nil)
+        }
+    }
+    @objc private func change(_ timer: Timer) {
+        DispatchQueue.main.async {
+            if let userInfo = timer.userInfo as? [String: Any], let layer = userInfo["view"] as? CAGradientLayer {
+                let gradientChangeAnimation = CABasicAnimation(keyPath: "colors")
+                gradientChangeAnimation.fromValue = self.currentColor
+                self.currentColor = [UIColor.randomColor().cgColor, UIColor.randomColor().cgColor]
+                gradientChangeAnimation.toValue = self.currentColor
+                gradientChangeAnimation.duration = timer.timeInterval
+                gradientChangeAnimation.isRemovedOnCompletion = true
+                gradientChangeAnimation.fillMode = .forwards
+                gradientChangeAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                layer.add(gradientChangeAnimation, forKey: "animateGradientColorChange")
+                
+                self.startPointAnimation = CABasicAnimation(keyPath: "startPoint")
+                self.endPointAnimation = CABasicAnimation(keyPath: "endPoint")
+                self.startPointAnimation.delegate = self
+                self.endPointAnimation.delegate = self
+                self.startPointAnimation.fromValue = self.pointList[self.startPointCount % 3].startPoint
+                self.endPointAnimation.fromValue = self.pointList[self.endPointCount % 3].endPoint
+                
+                self.startPointAnimation.toValue = self.pointList[(self.startPointCount + 1) % 3].startPoint
+                self.endPointAnimation.toValue = self.pointList[(self.endPointCount + 1) % 3].endPoint
+                
+                self.startPointAnimation.duration = timer.timeInterval + 0.1
+                self.startPointAnimation.isRemovedOnCompletion = true
+                self.startPointAnimation.fillMode = .forwards
+                self.startPointAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                
+                self.endPointAnimation.duration = timer.timeInterval + 0.1
+                self.endPointAnimation.isRemovedOnCompletion = true
+                self.endPointAnimation.fillMode = .forwards
+                self.endPointAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                
+                layer.add(self.startPointAnimation, forKey: "startPointAnimation")
+                layer.add(self.endPointAnimation, forKey: "endPointAnimation")
+            }
         }
     }
 }
@@ -149,7 +207,7 @@ extension LoginVC {
         self.viewModelLogin.loginSubject.observeOn(MainScheduler.instance).subscribe(onNext: { (result) in
             if result.data {
                 AlertManager.shared.showOKView(mode: .login(.login)) {
-                    WaitingView.shared.show(true)
+//                    WaitingView.shared.show(true)
                     self.viewModelLogin.setupCardData()
                 }
             } else {
@@ -163,7 +221,7 @@ extension LoginVC {
             if result.data {
                 self.viewModelLogin.setupFaroriteData()
             } else {
-                WaitingView.shared.show(false)
+//                WaitingView.shared.show(false)
                 AlertManager.shared.showAlertView(errorMessage: result.errorMessage?.errorMessage ?? "", handler: nil)
                 if let vc = UIStoryboard(name: "Home", bundle: nil).instantiateInitialViewController() as? HomeVC {
                     self.navigationController?.pushViewController(vc, animated: true)
@@ -255,6 +313,7 @@ extension LoginVC: UITextFieldDelegate {
         return true
     }
 }
+// MARK: - LoginVCDelegate
 extension LoginVC: LoginVCDelegate {
     func expectAccount(address: String) {
         self.viewModelLogin.expectAccount(address: address)
@@ -264,5 +323,18 @@ extension LoginVC: LoginVCDelegate {
     }
     func requirePassword(uid: String, phone: String?, address: String?) {
         self.viewModelLogin.requirePassword(uid: uid, phone: phone, address: address)
+    }
+}
+// MARK: - CAAnimationDelegate
+extension LoginVC: CAAnimationDelegate {
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if flag {
+            if anim === startPointAnimation {
+                startPointCount += 1
+            }
+            if anim === endPointAnimation {
+                endPointCount += 1
+            }
+        }
     }
 }

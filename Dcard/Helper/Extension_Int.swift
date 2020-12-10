@@ -9,7 +9,8 @@
 import Foundation
 
 extension Int {
-    func findMultipleBaseTen() -> Int {
+    ///找到10的Ｎ倍
+    func getPowByTen() -> Int {
         var initValue = self
         var count = 0
         while initValue / 10 > 0 {

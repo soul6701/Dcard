@@ -82,7 +82,7 @@ class ProfilePostMoodCell: UITableViewCell {
     public var contrast: Bool {
         let largest = self.sortedMoods.first { return $0.0 == self.largest }!
         let secondLargest = self.sortedMoods.first { return $0.0 == self.secondLargest }!
-        let difference = largest.1.count.findMultipleBaseTen() - secondLargest.1.count.findMultipleBaseTen()
+        let difference = largest.1.count.getPowByTen() - secondLargest.1.count.getPowByTen()
         return difference >= 1 || difference == 0 && (secondLargest.1.count == 0 ? true : (largest.1.count / secondLargest.1.count > 2))
     }
     public var scale: [ProfilePostMoodCellMode: CGFloat] {

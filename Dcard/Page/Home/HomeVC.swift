@@ -10,8 +10,8 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+
 class HomeVC: UIViewController {
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bottomSpace: NSLayoutConstraint!
     private var viewModel: HomeVMInterface!
@@ -44,14 +44,16 @@ class HomeVC: UIViewController {
         subscribeViewModel()
         initView()
         preloadUserdata()
+        
+       
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         ToolbarView.shared.show(true)
         guard let currentForum = currentForum else {
-//            LoadingView.shared.show(true)
-            WaitingView.shared.show(true)
+            LoadingView.shared.show(true)
+//            WaitingView.shared.show(true)
             self.viewModel.getForums()
             return
         }

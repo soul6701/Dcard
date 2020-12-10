@@ -188,6 +188,7 @@
 		9357BEEA2564E8C000C45386 /* FavoriteForumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9357BEE92564E8C000C45386 /* FavoriteForumVC.swift */; };
 		9357BEED25650A6600C45386 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9357BEEC25650A6600C45386 /* AlertManager.swift */; };
 		9357BEEF25650F8E00C45386 /* PostSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9357BEEE25650F8E00C45386 /* PostSettingCell.swift */; };
+		935D7619256F884A007C099C /* Extension_Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935D7618256F884A007C099C /* Extension_Double.swift */; };
 		9366156B254AECDA0030CD0A /* PostVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9366156A254AECDA0030CD0A /* PostVM.swift */; };
 		9366EC2F254ABBC20030CD0A /* PostFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9366EC2E254ABBC20030CD0A /* PostFirebase.swift */; };
 		936E380B2543B57D00EFFBFC /* Extension_Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936E380A2543B57D00EFFBFC /* Extension_Date.swift */; };
@@ -202,6 +203,7 @@
 		936E38222543B94900EFFBFC /* ProfilePostMoodCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 936E38202543B94900EFFBFC /* ProfilePostMoodCell.xib */; };
 		93A1F7E02543C37300CFC907 /* Extension_String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A1F7DF2543C37300CFC907 /* Extension_String.swift */; };
 		93A1F7E22543F6E400CFC907 /* Extension_Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A1F7E12543F6E400CFC907 /* Extension_Int.swift */; };
+		93E373772581BAB700E706D8 /* Extension_Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E373762581BAB700E706D8 /* Extension_Color.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -409,6 +411,7 @@
 		9357BEE92564E8C000C45386 /* FavoriteForumVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteForumVC.swift; sourceTree = "<group>"; };
 		9357BEEC25650A6600C45386 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		9357BEEE25650F8E00C45386 /* PostSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSettingCell.swift; sourceTree = "<group>"; };
+		935D7618256F884A007C099C /* Extension_Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_Double.swift; sourceTree = "<group>"; };
 		9366156A254AECDA0030CD0A /* PostVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVM.swift; sourceTree = "<group>"; };
 		9366EC2E254ABBC20030CD0A /* PostFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFirebase.swift; sourceTree = "<group>"; };
 		936E380A2543B57D00EFFBFC /* Extension_Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension_Date.swift; sourceTree = "<group>"; };
@@ -423,6 +426,7 @@
 		936E38202543B94900EFFBFC /* ProfilePostMoodCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfilePostMoodCell.xib; sourceTree = "<group>"; };
 		93A1F7DF2543C37300CFC907 /* Extension_String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_String.swift; sourceTree = "<group>"; };
 		93A1F7E12543F6E400CFC907 /* Extension_Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_Int.swift; sourceTree = "<group>"; };
+		93E373762581BAB700E706D8 /* Extension_Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension_Color.swift; sourceTree = "<group>"; };
 		94CD125306D27448D8A0CBAD /* Pods-Dcard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dcard.debug.xcconfig"; path = "Target Support Files/Pods-Dcard/Pods-Dcard.debug.xcconfig"; sourceTree = "<group>"; };
 		B2E0A8FC2B2910AA863AA7DC /* Pods-Dcard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dcard.release.xcconfig"; path = "Target Support Files/Pods-Dcard/Pods-Dcard.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -492,6 +496,7 @@
 			isa = PBXGroup;
 			children = (
 				22EE9AA324B9840400823C83 /* Constant.swift */,
+				935D7618256F884A007C099C /* Extension_Double.swift */,
 				22F2111424CC3535003B1F1D /* Extension_UIView.swift */,
 				224E002924E59DE600E77048 /* Extension_Uimage.swift */,
 				936E380A2543B57D00EFFBFC /* Extension_Date.swift */,
@@ -503,6 +508,7 @@
 				22EDC725251367A20021B435 /* Extension_UINavigation.swift */,
 				93A1F7DF2543C37300CFC907 /* Extension_String.swift */,
 				93A1F7E12543F6E400CFC907 /* Extension_Int.swift */,
+				93E373762581BAB700E706D8 /* Extension_Color.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1192,6 +1198,7 @@
 				2271888F250F838D00AAA166 /* FollowIssueVC.swift in Sources */,
 				848A6CE025342B9600125138 /* Preference.swift in Sources */,
 				22664E2F24EB7BB70080BAF8 /* MemoPageTwoVC.swift in Sources */,
+				93E373772581BAB700E706D8 /* Extension_Color.swift in Sources */,
 				2241D36B24E3DCC900529BC8 /* SkitchVC.swift in Sources */,
 				22CAAABD250CF03400CDF95B /* ProfileVC.swift in Sources */,
 				848A6D1125346D0300125138 /* SettingAccountVC.swift in Sources */,
@@ -1275,6 +1282,7 @@
 				8470A43E253D845300B5E766 /* WaitingView.swift in Sources */,
 				22CAAACA250D21E800CDF95B /* ProfileThreeTbCell.swift in Sources */,
 				22CAAAD4250D2EF100CDF95B /* ProfileThreeCell.swift in Sources */,
+				935D7619256F884A007C099C /* Extension_Double.swift in Sources */,
 				22A75F2524E54C7800287460 /* WeekHeaderView.swift in Sources */,
 				223F8D562507F69E00B11868 /* customView.swift in Sources */,
 				22EDC726251367A20021B435 /* Extension_UINavigation.swift in Sources */,
